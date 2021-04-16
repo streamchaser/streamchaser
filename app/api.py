@@ -16,5 +16,23 @@ def get_trending_movies(media_type: str = 'all',
 
 
 def get_genres() -> dict:
-    url = f'https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_KEY}'
-    return requests.get(url).json()
+    """Gets genres from movies and tv-series to translate genre_ids
+    """
+    movie_url = f'https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_KEY}'
+    tv_url = f'https://api.themoviedb.org/3/genre/tv/list?api_key={TMDB_KEY}'
+
+    movie_genres = requests.get(movie_url).json()
+    tv_genres = requests.get(tv_url).json()
+
+    # Gets genres from movies and tv-series
+    movie_genre_dict = {
+        genre['id']: genre['name'] for genre in movie_genres['genres']
+    }
+    tv_genre_dict = {
+        genre['id']: genre['name'] for genre in tv_genres['genres']
+    }
+
+    # Only keeps the unique keys
+    piped_dicts = movie_genre_dict | tv_genre_dict
+
+    return piped_dicts
