@@ -2,6 +2,7 @@ FROM python:3.9
 
 COPY ./app /app/app
 COPY ./requirements.txt /app
+COPY ./.env /app
 
 WORKDIR /app
 

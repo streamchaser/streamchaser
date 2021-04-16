@@ -2,3 +2,5 @@ fastapi
 uvicorn
 jinja2
 sqlalchemy
+python-dotenv
+requests

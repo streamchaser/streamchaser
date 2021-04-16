@@ -1,8 +1,8 @@
 version: "3"
 services:
-    core-api:
+    placeholder:
         build: .
-        container_name: "core-api"
+        container_name: "placeholder"
         ports:
             - "1337:1337"
         volumes:
