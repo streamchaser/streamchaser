@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from .api import get_trending_movies, get_genres
 from .helpers import valid_title, valid_release_date
+from .api import get_trending_movies, get_genres, get_all_movies
 from .search import index
 import json
 
@@ -9,7 +9,7 @@ app = FastAPI()
 
 # Saves the trending moves to 'movies.json'
 with open('movies.json', 'w') as output:
-    json.dump(get_trending_movies(), output)
+    json.dump(get_all_movies(), output)
 
 # Makes a dict to translate genre ids to their names
 genre_dict = get_genres()
@@ -24,16 +24,16 @@ with open('movies.json') as json_file:
             'title': valid_title(movie),
             'release_date': valid_release_date(movie),
             'genres': [
-                genre_dict[genre_id] for genre_id in movie.get('genre_ids')
-                # genre_dict[genre_id] for genre_id in movie.get('genre_ids') if movie.get('genre_ids')  # Translates the ids
+                genre_dict[genre_id] for genre_id in movie.get('genre_ids')  # Translates the ids
             ]
         }
-        for movie in data['results']
+        for movie in data
     ]
 
 
 # Meilisearch indexing of trending_movies
 index.add_documents(trending_movies)
+
 
 @app.get('/')
 async def root() -> list[dict]:
