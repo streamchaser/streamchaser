@@ -4,3 +4,4 @@ jinja2
 sqlalchemy
 python-dotenv
 requests
+meilisearch

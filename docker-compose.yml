@@ -1,9 +1,14 @@
-version: "3"
+version: '3'
 services:
-    placeholder:
+    api:
         build: .
-        container_name: "placeholder"
+        container_name: api
         ports:
-            - "1337:1337"
+            - 1337:1337
         volumes:
-            - ./app/:/app/app
+            -   ./app/:/app/app
+    search:
+        image: getmeili/meilisearch:latest
+        container_name: meilisearch
+        ports:
+            - 7700:7700
