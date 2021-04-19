@@ -14,3 +14,6 @@ venv.bak/
 
 # VSCode
 .vscode
+
+# JetBrains
+.idea
