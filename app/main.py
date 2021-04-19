@@ -19,8 +19,8 @@ with open('movies.json') as json_file:
     trending_movies = [
         {
             'id': movie.get('id'),
-            'title': movie.get('title'),
-            'release_date': movie.get('release_date'),
+            'title': valid_title(movie),
+            'release_date': valid_release_date(movie),
             'genres': [
                 genre_dict[genre_id] for genre_id in movie.get('genre_ids')
                 # genre_dict[genre_id] for genre_id in movie.get('genre_ids') if movie.get('genre_ids')  # Translates the ids
@@ -29,9 +29,20 @@ with open('movies.json') as json_file:
         for movie in data['results']
     ]
 
+def valid_title(movie: dict) -> str:
+    if movie.get('media_type') == 'movie':
+        return movie.get('title')
+
+    return movie.get('name')
+
+def valid_release_date(movie: dict) -> str:
+    if movie.get('media_type') == 'movie':
+        return movie.get('release_date')
+
+    return movie.get('first_air_date')
+
 # Meilisearch indexing of trending_movies
 index.add_documents(trending_movies)
-
 
 @app.get('/')
 async def root() -> list[dict]:
