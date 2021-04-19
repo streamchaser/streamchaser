@@ -38,13 +38,13 @@ def get_genres() -> dict:
     return movie_genre_dict | tv_genre_dict
 
 
-def get_all_movies(total_pages: int = 10) -> list:
+def get_all_movies(total_pages: int = 25) -> list:
     page_num = 1
     movie_list = []
 
     while page_num < total_pages:
-        movie_dict = get_trending_movies('movie', 'week', total_pages)
-        tv_dict = get_trending_movies('tv', 'week', total_pages)
+        movie_dict = get_trending_movies('movie', 'week', page_num)
+        tv_dict = get_trending_movies('tv', 'week', page_num)
 
         for page in movie_dict['results']:
             movie_list.append(page)

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from .helpers import valid_title, valid_release_date
 from .api import get_trending_movies, get_genres, get_all_movies
-from .search import index
+from .search import movies_tv_index
 import json
 
 
@@ -30,14 +30,12 @@ with open('movies.json') as json_file:
         for movie in data
     ]
 
-
 # Meilisearch indexing of trending_movies
-index.add_documents(trending_movies)
+movies_tv_index.add_documents(trending_movies)
 
 
 @app.get('/')
 async def root() -> list[dict]:
-    print(index.search('thunder'))
     """Home page
     """
     return trending_movies
