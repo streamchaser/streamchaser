@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from .api import get_trending_movies, get_genres
+from .helpers import valid_title, valid_release_date
 from .search import index
 import json
 
@@ -12,6 +13,7 @@ with open('movies.json', 'w') as output:
 
 # Makes a dict to translate genre ids to their names
 genre_dict = get_genres()
+
 
 # Reads through 'movies.json' and builds a list of dicts with the desired fields
 with open('movies.json') as json_file:
@@ -29,17 +31,6 @@ with open('movies.json') as json_file:
         for movie in data['results']
     ]
 
-def valid_title(movie: dict) -> str:
-    if movie.get('media_type') == 'movie':
-        return movie.get('title')
-
-    return movie.get('name')
-
-def valid_release_date(movie: dict) -> str:
-    if movie.get('media_type') == 'movie':
-        return movie.get('release_date')
-
-    return movie.get('first_air_date')
 
 # Meilisearch indexing of trending_movies
 index.add_documents(trending_movies)
