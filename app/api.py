@@ -33,6 +33,4 @@ def get_genres() -> dict:
     }
 
     # Only keeps the unique keys
-    piped_dicts = movie_genre_dict | tv_genre_dict
-
-    return piped_dicts
+    return movie_genre_dict | tv_genre_dict
