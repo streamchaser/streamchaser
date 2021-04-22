@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .helpers import valid_title, valid_release_date
-from .api import get_trending_movies, get_genres, get_all_movies
+from .api import *
 from .search import movies_tv_index
 import json
 
@@ -12,7 +12,6 @@ with open('movies.json', 'w') as output:
     json.dump(get_all_movies(), output)
 
 # Makes a dict to translate genre ids to their names
-genre_dict = get_genres()
 
 
 # Reads through 'movies.json' and builds a list of dicts with the desired fields
@@ -24,7 +23,8 @@ with open('movies.json') as json_file:
             'title': valid_title(movie),
             'release_date': valid_release_date(movie),
             'genres': [
-                genre_dict[genre_id] for genre_id in movie.get('genre_ids')  # Translates the ids
+                # Translates the ids
+                GENRE_DICT[genre_id] for genre_id in movie.get('genre_ids')
             ]
         }
         for movie in data
@@ -39,3 +39,17 @@ async def root() -> list[dict]:
     """Home page
     """
     return trending_movies
+
+
+@app.get('/{country_code}/movie/{movie_id}')
+async def get_movie(movie_id: int, country_code: str) -> list[dict]:
+    """Specific Movie page
+    """
+    return get_movie_from_id(movie_id, country_code.upper())
+
+
+@app.get('/{country_code}/tv/{tv_id}')
+async def get_tv(tv_id: int, country_code: str) -> list[dict]:
+    """Specific TV page
+    """
+    return get_tv_from_id(tv_id, country_code.upper())
