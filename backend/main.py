@@ -1,8 +1,11 @@
-from fastapi import FastAPI
-from .helpers import valid_title, valid_release_date
-from .api import get_trending_movies, get_genres, get_all_movies
-from .search import movies_tv_index
 import json
+
+from helpers import *
+from api import *
+from search import *
+
+from fastapi import FastAPI
+
 
 
 app = FastAPI()

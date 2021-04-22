@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # Environments
-.env
+backend/.env
 .venv
 env/
 venv/
@@ -17,3 +17,6 @@ venv.bak/
 
 # JetBrains
 .idea
+
+# Node
+node_modules
