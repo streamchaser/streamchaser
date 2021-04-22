@@ -1,8 +1,10 @@
 import requests
 from dotenv import dotenv_values
+from .helpers import *
+from .models import *
 
 
-TMDB_KEY = dotenv_values('.env')['TMDB_API_KEY']
+GENRE_DICT = get_genres()
 
 
 def get_trending_movies(media_type: str = 'all',
@@ -17,28 +19,9 @@ def get_trending_movies(media_type: str = 'all',
     return requests.get(url).json()
 
 
-def get_genres() -> dict:
-    """Gets genres from movies and tv-series to translate genre_ids
-    """
-    movie_url = f'https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_KEY}'
-    tv_url = f'https://api.themoviedb.org/3/genre/tv/list?api_key={TMDB_KEY}'
-
-    movie_genres = requests.get(movie_url).json()
-    tv_genres = requests.get(tv_url).json()
-
-    # Gets genres from movies and tv-series
-    movie_genre_dict = {
-        genre['id']: genre['name'] for genre in movie_genres['genres']
-    }
-    tv_genre_dict = {
-        genre['id']: genre['name'] for genre in tv_genres['genres']
-    }
-
-    # Only keeps the unique keys
-    return movie_genre_dict | tv_genre_dict
-
-
 def get_all_movies(total_pages: int = 25) -> list:
+    """ Gets all movies from the specified number of pages
+    """
     page_num = 1
     movie_list = []
 
@@ -55,3 +38,57 @@ def get_all_movies(total_pages: int = 25) -> list:
         page_num += 1
 
     return movie_list
+
+
+def get_movie_from_id(movie_id: int, country_code: str) -> Movie:
+    """ Gets data of a movie from an id
+    """
+
+    # Here we make 3 api calls into 1 using the append_to_response header we get provers, recommendations & watch
+    search_api_url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_KEY}&append_to_response=watch/providers,recommendations'
+
+    data = requests.get(search_api_url).json()
+
+    # Pydantic model for a movie
+    movie = Movie(
+        id = data.get('id'),
+        title = data.get('title'),
+        release_date = data.get('release_date'),
+        overview = data.get('overview'),
+        genres = [
+            genre.get('name') for genre in data.get('genres')
+        ],
+        imdb_id = data.get('imdb_id'),
+        runtime = get_movie_length(data.get('runtime')),
+        providers = get_providers(data.get('watch/providers'), country_code),
+        recommendations = get_recommendations(data.get('recommendations')),
+        poster_path = data.get('poster_path')
+    )
+
+    return movie
+
+
+def get_providers(providers: dict, country_code: str) -> list[dict]:
+    """ Gets list of provider data for a movie from a specified country code
+    """
+    provider_list = []
+
+    # Filters providers from the provided country code
+    if country_code in providers['results']:
+        # We check if there are any flatrate elements
+        if 'flatrate' in providers['results'][country_code]:
+            # Add the elements to our provider list
+            for element in providers['results'][country_code]['flatrate']:
+                temp_dict = {
+                    'id': element['provider_id'], 'name': element['provider_name'], 'logo_path': element['logo_path']}
+                provider_list.append(temp_dict)
+
+    return provider_list
+
+
+def get_recommendations(recommendations: dict) -> list[dict]:
+    """ Gets list of recommended movies for a movie
+    """
+
+    return [result for result in recommendations['results']]
+
