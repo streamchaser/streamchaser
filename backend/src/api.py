@@ -1,6 +1,8 @@
 from helpers import *
 from models import *
 
+API_URL = 'https://api.themoviedb.org/3/'
+
 
 def get_trending_movies(media_type: str = 'all',
                         time_window: str = 'week',
@@ -39,8 +41,9 @@ def get_movie_from_id(movie_id: int, country_code: str) -> Movie:
     """ Gets data of a movie from an id
     """
 
-    # Here we make 3 api calls into 1 using the append_to_response header we get provers, recommendations & watch
-    search_api_url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_KEY}&append_to_response=watch/providers,recommendations'
+    # Here we make 3 api calls into 1 using the append_to_response header
+    search_api_url = f'{API_URL}movie/{movie_id}?api_key={TMDB_KEY}' \
+                     f'&append_to_response=watch/providers,recommendations'
 
     data = requests.get(search_api_url).json()
 
@@ -67,7 +70,9 @@ def get_tv_from_id(tv_id: int, country_code: str) -> TV:
     """ Gets data of a tv series from an id
     """
 
-    search_api_url = f'https://api.themoviedb.org/3/tv/{tv_id}?api_key={TMDB_KEY}&append_to_response=watch/providers,recommendations'
+    # Here we make 3 api calls into 1 using the append_to_response header
+    search_api_url = f'{API_URL}tv/{tv_id}?api_key={TMDB_KEY}' \
+                     f'&append_to_response=watch/providers,recommendations'
 
     data = requests.get(search_api_url).json()
 
