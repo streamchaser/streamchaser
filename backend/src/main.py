@@ -7,8 +7,8 @@ from search import *
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI()
 
+app = FastAPI()
 
 origins = [
     'http://localhost:8080',
@@ -26,15 +26,11 @@ app.add_middleware(
 )
 
 # Saves the trending moves to 'movies.json'
-with open('movies.json', 'w') as output:
+with open('../movies.json', 'w') as output:
     json.dump(get_all_movies(), output)
 
-# Makes a dict to translate genre ids to their names
-genre_dict = get_genres()
-
-
 # Reads through 'movies.json' and builds a list of dicts with the desired fields
-with open('movies.json') as json_file:
+with open('../movies.json') as json_file:
     data = json.load(json_file)
     trending_movies = [
         {
@@ -42,7 +38,8 @@ with open('movies.json') as json_file:
             'title': valid_title(movie),
             'release_date': valid_release_date(movie),
             'genres': [
-                genre_dict[genre_id] for genre_id in movie.get('genre_ids')  # Translates the ids
+                # Translates the ids
+                GENRE_DICT[genre_id] for genre_id in movie.get('genre_ids')
             ]
         }
         for movie in data
@@ -64,3 +61,17 @@ async def search(input: str) -> list[dict]:
     """Search thingy
     """
     return movies_tv_index.search(input)
+
+
+@app.get('/{country_code}/movie/{movie_id}')
+async def get_movie(movie_id: int, country_code: str) -> list[dict]:
+    """Specific Movie page
+    """
+    return get_movie_from_id(movie_id, country_code.upper())
+
+
+@app.get('/{country_code}/tv/{tv_id}')
+async def get_tv(tv_id: int, country_code: str) -> list[dict]:
+    """Specific TV page
+    """
+    return get_tv_from_id(tv_id, country_code.upper())

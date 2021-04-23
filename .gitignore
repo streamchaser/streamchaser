@@ -17,3 +17,9 @@ node_modules
 
 # Data
 */movies.json
+
+# Frontend
+*/node_modules/
+*/public/build/
+
+*.DS_Store

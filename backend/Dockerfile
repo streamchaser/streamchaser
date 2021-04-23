@@ -4,9 +4,9 @@ COPY . /app/backend
 COPY requirements.txt /app/backend
 COPY .env /app/backend
 
-WORKDIR /app/backend
+WORKDIR /app/backend/src
 
-RUN pip install -r requirements.txt
+RUN pip install -r ../requirements.txt
 
 EXPOSE 1337
 
