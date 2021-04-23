@@ -1,30 +1,39 @@
 <script>
-    import { MeiliSearch } from 'meilisearch'
+    import { fly } from 'svelte/transition';
 
-    const client = new MeiliSearch({
-        host: 'http://search:7700',
-        apiKey: 'masterKey',
-    })
+    const url = 'http://localhost:1337/search/';
+    let input = '';
+    let movies = [];
 
-    const index = client.index('movies')
-
-    let input = ''
-
-
-    const search = () => {
-        alert(index.search(input))
+    const search = async () => {
+        const res = await fetch(url + input);
+        movies = await res.json();
     };
 </script>
 
-
 <main>
-    <div id="data_table"></div>
+    <h1>Placeholder</h1>
 
-    <h1>Input {input}!</h1>
+    <input bind:value={input} on:input={search}>
 
-    <input bind:value={input}>
-
-    <button on:click={ search }>Search</button>
+    {#if movies.hits}
+        <table>
+            <tr>
+                <th transition:fly>ID</th>
+                <th transition:fly>Title</th>
+                <th transition:fly>Release Date</th>
+                <th transition:fly>Genres</th>
+            </tr>
+            {#each movies.hits as movie}
+                <tr>
+                    <td transition:fly>{movie.id}</td>
+                    <td transition:fly>{movie.title}</td>
+                    <td transition:fly>{movie.release_date}</td>
+                    <td transition:fly>{movie.genres}</td>
+                </tr>
+            {/each}
+        </table>
+    {/if}
 </main>
 
 <style>
@@ -40,6 +49,12 @@
         text-transform: uppercase;
         font-size: 4em;
         font-weight: 100;
+    }
+
+    table {
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     @media (min-width: 640px) {

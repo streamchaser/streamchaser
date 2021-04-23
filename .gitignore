@@ -4,13 +4,7 @@ __pycache__/
 *$py.class
 
 # Environments
-backend/.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+*/.env
 
 # VSCode
 .vscode
@@ -20,3 +14,6 @@ venv.bak/
 
 # Node
 node_modules
+
+# Data
+*/movies.json
