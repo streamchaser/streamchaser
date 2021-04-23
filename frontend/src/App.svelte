@@ -1,5 +1,12 @@
 <script>
-    import { fly } from 'svelte/transition';
+    import {fly} from 'svelte/transition';
+    import {
+        MaterialApp,
+        TextField,
+        Card,
+        CardTitle,
+        CardSubtitle
+    } from 'svelte-materialify';
 
     const url = 'http://localhost:1337/search/';
     let input = '';
@@ -11,55 +18,23 @@
     };
 </script>
 
-<main>
+<MaterialApp>
     <h1>Placeholder</h1>
-
-    <input bind:value={input} on:input={search}>
+    <TextField dense rounded outlined autofocus
+               bind:value={input}
+               on:input={search}>
+        Search
+    </TextField>
 
     {#if movies.hits}
-        <table>
-            <tr>
-                <th transition:fly>ID</th>
-                <th transition:fly>Title</th>
-                <th transition:fly>Release Date</th>
-                <th transition:fly>Genres</th>
-            </tr>
+        <div class="d-flex flex-wrap align-content-stretch justify-center mt-4 mb-4">
             {#each movies.hits as movie}
-                <tr>
-                    <td transition:fly>{movie.id}</td>
-                    <td transition:fly>{movie.title}</td>
-                    <td transition:fly>{movie.release_date}</td>
-                    <td transition:fly>{movie.genres}</td>
-                </tr>
+                <Card style="max-width:350px;">
+                    <img src="//picsum.photos/350" alt="background"/>
+                    <CardTitle>{movie.title}</CardTitle>
+                    <CardSubtitle>{movie.genres}</CardSubtitle>
+                </Card>
             {/each}
-        </table>
+        </div>
     {/if}
-</main>
-
-<style>
-    main {
-        text-align: center;
-        padding: 1em;
-        max-width: 240px;
-        margin: 0 auto;
-    }
-
-    h1 {
-        color: #ff3e00;
-        text-transform: uppercase;
-        font-size: 4em;
-        font-weight: 100;
-    }
-
-    table {
-        width: 60%;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    @media (min-width: 640px) {
-        main {
-            max-width: none;
-        }
-    }
-</style>
+</MaterialApp>
