@@ -1,5 +1,3 @@
-import requests
-from dotenv import dotenv_values
 from helpers import *
 from models import *
 
@@ -46,7 +44,7 @@ def get_movie_from_id(movie_id: int, country_code: str) -> Movie:
 
     data = requests.get(search_api_url).json()
 
-    # Pydantic model for a movie
+    # pydantic model for a movie
     movie = Movie(
         id=data.get('id'),
         title=data.get('title'),
@@ -63,6 +61,33 @@ def get_movie_from_id(movie_id: int, country_code: str) -> Movie:
     )
 
     return movie
+
+
+def get_tv_from_id(tv_id: int, country_code: str) -> TV:
+    """ Gets data of a tv series from an id
+    """
+
+    search_api_url = f'https://api.themoviedb.org/3/tv/{tv_id}?api_key={TMDB_KEY}&append_to_response=watch/providers,recommendations'
+
+    data = requests.get(search_api_url).json()
+
+    # pydantic model for a tv series
+    tv = TV(
+        id=data.get('id'),
+        name=data.get('name'),
+        first_air_date=data.get('first_air_date'),
+        overview=data.get('overview'),
+        genres=[
+            genre.get('name') for genre in data.get('genres')
+        ],
+        episode_run_time=data.get('episode_run_time'),
+        providers=get_providers(data.get('watch/providers'), country_code),
+        recommendations=get_recommendations(data.get('recommendations')),
+        poster_path=data.get('poster_path'),
+        number_of_seasons=data.get('number_of_seasons')
+    )
+
+    return tv
 
 
 def get_providers(providers: dict, country_code: str) -> list[dict]:
