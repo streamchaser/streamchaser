@@ -1,6 +1,5 @@
 import json
 
-from helpers import *
 from api import *
 from search import *
 
@@ -64,14 +63,14 @@ async def search(input: str) -> list[dict]:
 
 
 @app.get('/{country_code}/movie/{movie_id}')
-async def get_movie(movie_id: int, country_code: str) -> list[dict]:
+async def get_movie(movie_id: int, country_code: str) -> Movie:
     """Specific Movie page
     """
     return get_movie_from_id(movie_id, country_code.upper())
 
 
 @app.get('/{country_code}/tv/{tv_id}')
-async def get_tv(tv_id: int, country_code: str) -> list[dict]:
+async def get_tv(tv_id: int, country_code: str) -> TV:
     """Specific TV page
     """
     return get_tv_from_id(tv_id, country_code.upper())

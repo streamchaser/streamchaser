@@ -36,7 +36,6 @@ def get_genres() -> dict:
     movie_genres = requests.get(movie_url).json()
     tv_genres = requests.get(tv_url).json()
 
-    # Gets genres from movies and tv-series
     movie_genre_dict = {
         genre['id']: genre['name'] for genre in movie_genres['genres']
     }
