@@ -1,7 +1,8 @@
 from dotenv import dotenv_values
 import requests
 
-TMDB_KEY = dotenv_values('.env')['TMDB_API_KEY']
+
+TMDB_KEY = dotenv_values('../.env')['TMDB_API_KEY']
 
 
 def valid_title(movie: dict) -> str:
@@ -45,3 +46,6 @@ def get_genres() -> dict:
 
     # Only keeps the unique keys
     return movie_genre_dict | tv_genre_dict
+
+
+GENRE_DICT = get_genres()

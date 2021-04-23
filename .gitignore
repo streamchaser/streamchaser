@@ -4,16 +4,22 @@ __pycache__/
 *$py.class
 
 # Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+*/.env
 
 # VSCode
 .vscode
 
 # JetBrains
 .idea
+
+# Node
+node_modules
+
+# Data
+*/movies.json
+
+# Frontend
+*/node_modules/
+*/public/build/
+
+*.DS_Store

@@ -1,12 +1,21 @@
 version: '3'
 services:
-    api:
-        build: .
-        container_name: api
+    frontend:
+        build: ./frontend
+        container_name: svelte
+        ports:
+            - 5000:5000
+            - 35729:35729
+        volumes:
+            - ./frontend/:/app/frontend
+            - app/frontend/node_modules
+    backend:
+        build: ./backend
+        container_name: fastapi
         ports:
             - 1337:1337
         volumes:
-            -   ./app/:/app/app
+            - ./backend/:/app/backend
     search:
         image: getmeili/meilisearch:latest
         container_name: meilisearch

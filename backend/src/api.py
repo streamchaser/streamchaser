@@ -1,10 +1,7 @@
 import requests
 from dotenv import dotenv_values
-from .helpers import *
-from .models import *
-
-
-GENRE_DICT = get_genres()
+from helpers import *
+from models import *
 
 
 def get_trending_movies(media_type: str = 'all',
@@ -51,18 +48,18 @@ def get_movie_from_id(movie_id: int, country_code: str) -> Movie:
 
     # Pydantic model for a movie
     movie = Movie(
-        id = data.get('id'),
-        title = data.get('title'),
-        release_date = data.get('release_date'),
-        overview = data.get('overview'),
-        genres = [
+        id=data.get('id'),
+        title=data.get('title'),
+        release_date=data.get('release_date'),
+        overview=data.get('overview'),
+        genres=[
             genre.get('name') for genre in data.get('genres')
         ],
-        imdb_id = data.get('imdb_id'),
-        runtime = get_movie_length(data.get('runtime')),
-        providers = get_providers(data.get('watch/providers'), country_code),
-        recommendations = get_recommendations(data.get('recommendations')),
-        poster_path = data.get('poster_path')
+        imdb_id=data.get('imdb_id'),
+        runtime=get_movie_length(data.get('runtime')),
+        providers=get_providers(data.get('watch/providers'), country_code),
+        recommendations=get_recommendations(data.get('recommendations')),
+        poster_path=data.get('poster_path')
     )
 
     return movie
@@ -80,7 +77,10 @@ def get_providers(providers: dict, country_code: str) -> list[dict]:
             # Add the elements to our provider list
             for element in providers['results'][country_code]['flatrate']:
                 temp_dict = {
-                    'id': element['provider_id'], 'name': element['provider_name'], 'logo_path': element['logo_path']}
+                    'id': element['provider_id'],
+                    'name': element['provider_name'],
+                    'logo_path': element['logo_path']
+                }
                 provider_list.append(temp_dict)
 
     return provider_list
@@ -91,4 +91,3 @@ def get_recommendations(recommendations: dict) -> list[dict]:
     """
 
     return [result for result in recommendations['results']]
-

@@ -22,3 +22,6 @@ Some things that might make life easier
 ### Docker
 * You only have to add `--build` the first time, or when you make changes to the docker setup
 * Add `-d` to `docker-compose up -d` to detach the logs from the terminal
+
+### Frontend setup guide
+https://github.com/sveltejs/template/blob/master/README.md
