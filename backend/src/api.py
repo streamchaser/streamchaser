@@ -55,8 +55,6 @@ def get_all_trending_media() -> list[dict]:
         for media in data
     ]
 
-    print([x for x in trending_media][:10])
-
     return trending_media
 
 
