@@ -1,3 +1,5 @@
+from datetime import date
+
 from pydantic import BaseModel
 from typing import Optional
 
@@ -25,3 +27,12 @@ class TV(BaseModel):
     recommendations: Optional[list[dict]] = None
     poster_path: Optional[str] = None
     number_of_seasons: int
+
+
+class Media(BaseModel):
+    id: str
+    title: str
+    original_title: str
+    release_date: str
+    genres: Optional[list[str]]
+    poster_path: Optional[str] = None

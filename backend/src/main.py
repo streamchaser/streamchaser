@@ -1,7 +1,6 @@
-import json
-
-from api import *
 from search import *
+from api import *
+from helpers import *
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -24,35 +23,19 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-# Saves the trending moves to 'movies.json'
-with open('../movies.json', 'w') as output:
-    json.dump(get_all_movies(), output)
+save_to_json('../trending_media.json', get_all_media())
 
-# Reads through 'movies.json' and builds a list of dicts with the desired fields
-with open('../movies.json') as json_file:
-    data = json.load(json_file)
-    trending_movies = [
-        {
-            'id': movie.get('id'),
-            'title': valid_title(movie),
-            'release_date': valid_release_date(movie),
-            'genres': [
-                # Translates the ids
-                GENRE_DICT[genre_id] for genre_id in movie.get('genre_ids')
-            ]
-        }
-        for movie in data
-    ]
+trending_media = get_all_trending_media()
 
 # Meilisearch indexing of trending_movies
-movies_tv_index.add_documents(trending_movies)
+movies_tv_index.add_documents(trending_media)
 
 
 @app.get('/')
 async def root() -> list[dict]:
     """Home page
     """
-    return trending_movies
+    return trending_media
 
 
 @app.get('/search/{input}')

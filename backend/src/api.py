@@ -4,9 +4,9 @@ from models import *
 API_URL = 'https://api.themoviedb.org/3/'
 
 
-def get_trending_movies(media_type: str = 'all',
-                        time_window: str = 'week',
-                        page: int = 1) -> dict[any]:
+def request_trending_media(media_type: str = 'all',
+                           time_window: str = 'week',
+                           page: int = 1) -> dict[any]:
     """
     :param media_type: 'all', 'movie', 'tv', 'person'
     :param time_window: 'week', 'day'
@@ -16,25 +16,48 @@ def get_trending_movies(media_type: str = 'all',
     return requests.get(url).json()
 
 
-def get_all_movies(total_pages: int = 25) -> list:
+def get_all_media(total_pages: int = 25) -> list:
     """ Gets all movies from the specified number of pages
     """
     page_num = 1
-    movie_list = []
+    media_list = []
 
     while page_num < total_pages:
-        movie_dict = get_trending_movies('movie', 'week', page_num)
-        tv_dict = get_trending_movies('tv', 'week', page_num)
+        movie_dict = request_trending_media('movie', 'week', page_num)
+        tv_dict = request_trending_media('tv', 'week', page_num)
 
         for page in movie_dict['results']:
-            movie_list.append(page)
+            media_list.append(page)
 
         for page in tv_dict['results']:
-            movie_list.append(page)
+            media_list.append(page)
 
         page_num += 1
 
-    return movie_list
+    return media_list
+
+
+def get_all_trending_media() -> list[dict]:
+    """Creates a list of Media-objects converted to dicts
+    """
+    data = read_from_json('../trending_media.json')
+
+    trending_media = [
+        # pydantic Media model
+        Media(
+            id=unique_id(media),
+            title=valid_title(media),
+            original_title=valid_original_title(media),
+            release_date=valid_release_date(media),
+            genres=genre_id_to_str(media),
+            poster_path=media.get('poster_path')
+        ).dict()
+        for media in data
+    ]
+
+    print([x for x in trending_media][:10])
+
+    return trending_media
 
 
 def get_movie_from_id(movie_id: int, country_code: str) -> Movie:
