@@ -72,10 +72,23 @@ GENRE_DICT = get_genres()
 
 
 def genre_id_to_str(media: dict) -> list[str]:
-    return [
-        GENRE_DICT[genre_id]
-        for genre_id in media.get('genre_ids') if GENRE_DICT[genre_id]
-    ]
+    """Tries to lookup the genres with a list comprehension
+    Goes into a for-loop, if there's an error and writes 'Unknown' for the exception
+    """
+    try:
+        return [
+            GENRE_DICT[genre_id]
+            for genre_id in media.get('genre_ids') if GENRE_DICT[genre_id]
+        ]
+    except KeyError as e:
+        print(f"Failed to lookup {media.get('id')} with a list comp, {e}")
+        list_of_genres = []
+        for genre_id in media.get('genre_ids'):
+            try:
+                list_of_genres.append(GENRE_DICT[genre_id])
+            except KeyError as e:
+                list_of_genres.append('Unknown')
+        return list_of_genres
 
 
 def save_to_json(file_path: str, media: list[dict]):

@@ -14,6 +14,7 @@ __pycache__/
 
 # Data
 *.json*
+*/trending_media.json
 
 # Frontend
 frontend/node_modules/*
