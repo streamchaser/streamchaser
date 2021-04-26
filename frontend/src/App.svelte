@@ -4,8 +4,6 @@
         MaterialApp,
         TextField,
         Card,
-        CardTitle,
-        CardSubtitle
     } from 'svelte-materialify';
 
     const url = 'http://localhost:1337/search/';
@@ -36,19 +34,31 @@
         Search
     </TextField>
 
+
     {#if media.hits}
-        <div transition:fly="{{ y: 200, duration: 2000 }}" class="d-flex flex-wrap align-content-stretch justify-center mt-4 mb-4">
+        <div transition:fly="{{ y: 200, duration: 200 }}"
+             class="d-flex flex-wrap align-content-start mt-4 mb-4 flex-grow-0 flex-shrink-0">
             {#each media.hits as media}
-                <Card style="max-width:350px;">
-                    <img src="https://image.tmdb.org/t/p/w500{media.poster_path}" alt="background"/>
-                    <CardTitle>{media.title}</CardTitle>
-                    <CardSubtitle>
-                        {#each media.genres as genre}
-                            {genre + ' '}
-                        {/each}
-                    </CardSubtitle>
-                </Card>
+                <div class="media-item">
+                    <Card style="height: 100%">
+                        <img src="https://image.tmdb.org/t/p/w500{media.poster_path}" alt="background"/>
+                    </Card>
+                </div>
             {/each}
         </div>
     {/if}
 </MaterialApp>
+
+<style>
+    img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .media-item {
+        width: calc(14.27% - 20px);
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 10px;
+    }
+</style>
+
