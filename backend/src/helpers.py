@@ -1,3 +1,5 @@
+import json
+
 from dotenv import dotenv_values
 import requests
 
@@ -5,18 +7,37 @@ import requests
 TMDB_KEY = dotenv_values('../.env')['TMDB_API_KEY']
 
 
-def valid_title(movie: dict) -> str:
-    if movie.get('media_type') == 'movie':
-        return movie.get('title')
+def valid_title(media: dict) -> str:
+    if media.get('media_type') == 'movie':
+        return media.get('title')
 
-    return movie.get('name')
+    return media.get('name')
 
 
-def valid_release_date(movie: dict) -> str:
-    if movie.get('media_type') == 'movie':
-        return movie.get('release_date')
+def valid_original_title(media: dict) -> str:
+    if media.get('media_type') == 'movie':
+        return media.get('original_title')
 
-    return movie.get('first_air_date')
+    return media.get('original_name')
+
+
+def valid_release_date(media: dict) -> str:
+    if media.get('media_type') == 'movie':
+        return str(media.get('release_date'))
+
+    return str(media.get('first_air_date'))
+
+
+def unique_id(media: dict) -> str:
+    if media.get('media_type') == 'movie':
+        return f"m{media.get('id')}"
+    elif media.get('media_type') == 'tv':
+        return f"t{media.get('id')}"
+    elif media.get('media_type') == 'person':
+        return f"p{media.get('id')}"
+    else:
+        print(f"Failed to create unique ID for {media.get('id')}")
+        return str(media.get('id'))
 
 
 def get_movie_length(total_minutes: int) -> str:
@@ -48,3 +69,26 @@ def get_genres() -> dict:
 
 
 GENRE_DICT = get_genres()
+
+
+def genre_id_to_str(media: dict) -> list[str]:
+    return [
+        GENRE_DICT[genre_id]
+        for genre_id in media.get('genre_ids') if GENRE_DICT[genre_id]
+    ]
+
+
+def save_to_json(file_path: str, media: list[dict]):
+    """Saves the media to '<file_path>'
+    """
+    with open(file_path, 'w') as output:
+        json.dump(media, output)
+
+
+def read_from_json(file_path: str):
+    """Reads through <file_path> and builds a list of dicts with the desired fields
+    """
+    with open(file_path) as json_file:
+        data = json.load(json_file)
+
+    return data

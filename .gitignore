@@ -13,7 +13,7 @@ __pycache__/
 .idea
 
 # Data
-*/movies.json
+*.json*
 
 # Frontend
 frontend/node_modules/*
