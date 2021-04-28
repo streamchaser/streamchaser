@@ -16,7 +16,7 @@
     const debounceInput = () => {
         clearTimeout(timer);
         timer = setTimeout(() => {
-            search(input);
+            input.trim() ? search() : media = [];
         }, INPUT_TIMER);
     }
 
