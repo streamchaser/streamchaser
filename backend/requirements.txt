@@ -5,3 +5,4 @@ sqlalchemy
 python-dotenv
 requests
 meilisearch
+psycopg2

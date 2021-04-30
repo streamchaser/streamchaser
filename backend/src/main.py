@@ -2,11 +2,19 @@ from search import *
 from api import *
 from helpers import *
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 
+import crud
+import models
+import schemas
+import database
+
+models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
+
 
 origins = [
     'http://localhost:8080',
@@ -22,8 +30,6 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
-
-save_to_json('../trending_media.json', get_all_media())
 
 trending_media = get_all_trending_media()
 
@@ -57,3 +63,21 @@ async def get_tv(tv_id: int, country_code: str) -> TV:
     """Specific TV page
     """
     return get_tv_from_id(tv_id, country_code.upper())
+
+
+@app.get('/media/', response_model=list[schemas.MediaBase])
+async def read_all_media(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
+    """Reads all database media
+    """
+    all_media = crud.get_all_media(db, skip=skip, limit=limit)
+    return all_media
+
+
+@app.post('/media/', response_model=schemas.MediaBase)
+async def create_media(media: schemas.MediaBase, db: Session = Depends(database.get_db)):
+    """Creates a media to the database
+    """
+    db_media = crud.get_media(db=db, media_id=media.id)
+    if db_media:
+        raise HTTPException(status_code=400, detail='Media already exists')
+    return crud.create_media(db=db, media=media)

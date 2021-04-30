@@ -1,38 +1,27 @@
-from datetime import date
+from sqlalchemy import Integer, String, ForeignKey, ARRAY
+from sqlalchemy.sql.schema import Column
+from sqlalchemy.orm import relationship
 
-from pydantic import BaseModel
-from typing import Optional
-
-
-class Movie(BaseModel):
-    id: int
-    title: str
-    release_date: str
-    genres: Optional[list[str]] = None
-    imdb_id: str
-    runtime: str
-    providers: Optional[list[dict]] = None
-    recommendations: list[dict] 
-    poster_path: Optional[str] = None
+from database import Base
 
 
-class TV(BaseModel):
-    id: int
-    name: str
-    first_air_date: Optional[str] = None
-    overview: str
-    genres: Optional[list[str]] = None
-    episode_run_time: list[int]
-    providers: Optional[list[dict]] = None
-    recommendations: Optional[list[dict]] = None
-    poster_path: Optional[str] = None
-    number_of_seasons: int
+class Media(Base):
+    __tablename__ = 'media'
+
+    id = Column(String, primary_key=True)
+    title = Column(String, nullable=True)
+    original_title = Column(String, nullable=True)
+    release_date = Column(String, nullable=True)
+    genre_ids = Column(ARRAY(Integer), nullable=True)
+    poster_path = Column(String, nullable=True)
+
+    # genres = relationship('Genre', back_populates='owner')
 
 
-class Media(BaseModel):
-    id: str
-    title: str
-    original_title: str
-    release_date: str
-    genres: Optional[list[str]]
-    poster_path: Optional[str] = None
+# class Genre(Base):
+#     __tablename__ = 'genres'
+#     id = Column(Integer, primary_key=True, index=True)
+#     name = Column(String, index=True)
+#     owner_id = Column(String, ForeignKey('medias.id'))
+#
+#     owner = relationship('Media', back_populates='genres')
