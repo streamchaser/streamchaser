@@ -1,5 +1,5 @@
-from helpers import *
-from schemas import MediaBase, Movie, TV
+from api_helpers import *
+from schemas import Media, Movie, TV
 
 API_URL = 'https://api.themoviedb.org/3/'
 
@@ -44,12 +44,13 @@ def get_all_trending_media() -> list[dict]:
 
     trending_media = [
         # pydantic Media model
-        MediaBase(
+        Media(
             id=unique_id(media),
             title=valid_title(media),
             original_title=valid_original_title(media),
+            overview=media.get('overview'),
             release_date=valid_release_date(media),
-            genre_ids=[genre_id for genre_id in media.get('genre_ids')],
+            genres=genre_id_to_str(media),
             poster_path=media.get('poster_path')
         ).dict()
         for media in data

@@ -91,19 +91,3 @@ def genre_id_to_str(media: dict) -> list[str]:
             except KeyError as e:
                 list_of_genres.append('Unknown')
         return list_of_genres
-
-
-def save_to_json(file_path: str, media: list[dict]):
-    """Saves the media to '<file_path>'
-    """
-    with open(file_path, 'w') as output:
-        json.dump(media, output)
-
-
-def read_from_json(file_path: str):
-    """Reads through <file_path> and builds a list of dicts with the desired fields
-    """
-    with open(file_path) as json_file:
-        data = json.load(json_file)
-
-    return data

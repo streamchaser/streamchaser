@@ -16,15 +16,16 @@ def get_all_media(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Media).offset(skip).limit(limit).all()
 
 
-def create_media(db: Session, media: schemas.MediaBase):
+def create_media(db: Session, media: schemas.Media):
     """Adds a Media-type to the database
     """
     db_media = models.Media(
         id=media.id,
         title=media.title,
         original_title=media.original_title,
+        overview=media.overview,
         release_date=media.release_date,
-        genre_ids=media.genre_ids,
+        genres=media.genres,
         poster_path=media.poster_path
     )
     db.add(db_media)
