@@ -16,8 +16,24 @@ services:
             - 1337:1337
         volumes:
             - ./backend/:/app/backend
+        depends_on:
+            - db
+        links:
+            - db
     search:
         image: getmeili/meilisearch:latest
         container_name: meilisearch
         ports:
             - 7700:7700
+    db:
+        image: postgres
+        container_name: postgres
+        environment:
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_USER: postgres
+            POSTGRES_DB: placeholder
+        volumes:
+        -   ./pgdata:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        restart: always

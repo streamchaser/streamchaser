@@ -1,0 +1,67 @@
+from typing import Optional
+
+from pydantic import BaseModel
+
+
+class GenreBase(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        # Makes use of database syntax "genre.id" instead of "genre['id']
+        orm_mode = True
+
+
+# TODO: Will be implemented soonTM
+# class Genre(GenreBase):
+#     id: int
+#     owner_id: str
+#
+#     class Config:
+#         orm_mode = True
+
+
+class MediaBase(BaseModel):
+    id: str
+    title: str
+    original_title: str
+    release_date: str
+    genre_ids: Optional[list[int]]
+    poster_path: Optional[str]
+
+    class Config:
+        # Makes use of database syntax "media.id" instead of "media['id']
+        orm_mode = True
+
+
+# TODO: Will be implemented soonTM
+# class Media(MediaBase):
+#     genres = list[Genre]
+#
+#     class Config:
+#         orm_mode = True
+
+
+class Movie(BaseModel):
+    id: int
+    title: str
+    release_date: str
+    genres: Optional[list[str]]
+    imdb_id: str
+    runtime: str
+    providers: Optional[list[dict]]
+    recommendations: list[dict]
+    poster_path: Optional[str]
+
+
+class TV(BaseModel):
+    id: int
+    name: str
+    first_air_date: Optional[str]
+    overview: str
+    genres: Optional[list[str]]
+    episode_run_time: list[int]
+    providers: Optional[list[dict]]
+    recommendations: Optional[list[dict]]
+    poster_path: Optional[str]
+    number_of_seasons: int
