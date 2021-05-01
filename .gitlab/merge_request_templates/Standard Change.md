@@ -1,17 +1,11 @@
 ## What does this MR do?
 <!--
 Briefly describe what this MR is about.
-Examples:
- Adds new document type: MyNewDocumentType
- Fixes js error in <some functionality>
+Example: Fixes js error in <some functionality>
 -->
 
-<!-- Other recommended quick actions (remove # to apply):
-#/request_review @AndreasPB @Primdahl26 @Pankai222 @nullxDEADBEEF
-#/label ~bug
-#/label ~enhancement
--->
 
+<!-- Add Asana link below -->
 
 ## Author's checklist
 <!--
@@ -24,6 +18,7 @@ Checkboxes can be pre-filled before submitting the MR by replacing
     - [ ] Screenshots of any UI changes have been added to the MR description
 - Workflow:
     - [ ] The corresponding Asana task has been set to `Review` and assigned to the principal reviewer
+    - [ ] The Asana task and MR have links to eachother
     - [ ] The MR has been labelled with either ~bug (if it is a bugfix) or ~enhancement (if it is a feature)
 
 ## Review checklist
