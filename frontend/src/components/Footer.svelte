@@ -13,7 +13,7 @@
 
 </script>
 
-<Footer absolute padless class="white theme--dark flex-box">
+<Footer padless class="white theme--dark flex-box">
     <div class="footer flex-box" style="padding: 10px">
         <div class="mt-2 mb-2">
             {#if links}

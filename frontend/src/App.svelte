@@ -28,6 +28,7 @@
 </script>
 
 <MaterialApp>
+    <div>
     <h1>Placeholder</h1>
     <TextField dense rounded outlined autofocus
                bind:value={input}
@@ -48,9 +49,9 @@
             {/each}
         </div>
     {/if}
-
-    <Footer />
+    </div>
 </MaterialApp>
+<Footer />
 
 <style>
     img {
