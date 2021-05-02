@@ -19,7 +19,7 @@
 <svelte:window bind:scrollY={y} />
 
 <Footer padless class="white theme--dark flex-box">
-    <div class="footer flex-box" style="padding: 10px" class:hide={y <= 350}>
+    <div class="footer flex-box" style="padding: 10px" class:hide={y <= 250}>
         <div class="mt-2 mb-2">
             {#if links}
                 {#each links as link}
