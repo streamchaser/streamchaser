@@ -5,6 +5,7 @@
         TextField,
         Card,
     } from 'svelte-materialify';
+    import Footer from './components/Footer.svelte'
 
     const url = 'http://localhost:1337/search/';
     const INPUT_TIMER = 200;
@@ -47,6 +48,8 @@
             {/each}
         </div>
     {/if}
+
+    <Footer />
 </MaterialApp>
 
 <style>
