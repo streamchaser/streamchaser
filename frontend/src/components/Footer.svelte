@@ -11,10 +11,15 @@
         'Instagram logo': 'img/instagram_logo.png'
     };
 
+    export let y = 0;
+
 </script>
 
+<!-- listening for scroll events -->
+<svelte:window bind:scrollY={y} />
+
 <Footer padless class="white theme--dark flex-box">
-    <div class="footer flex-box" style="padding: 10px">
+    <div class="footer flex-box" style="padding: 10px" class:hide={y <= 350}>
         <div class="mt-2 mb-2">
             {#if links}
                 {#each links as link}
@@ -34,6 +39,9 @@
 
 <style>
     .footer {
+        position: fixed;
+        bottom: 0;
+        background-color: white;
         border-top: solid black;
         border-width: thin;
         width: 100%;
@@ -47,6 +55,10 @@
 
     div {
         display: inline;
+        transition: transform 300ms linear;
+    }
 
+    .hide {
+        transform: translateY(100%);
     }
 </style>

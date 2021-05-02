@@ -50,8 +50,8 @@
         </div>
     {/if}
     </div>
+    <Footer />
 </MaterialApp>
-<Footer />
 
 <style>
     img {
