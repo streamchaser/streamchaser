@@ -43,7 +43,7 @@ async def root(db: Session = Depends(database.get_db)) -> list[dict]:
 async def search(user_input: str) -> list[dict]:
     """Search thingy
     """
-    return movies_tv_index.search(user_input)
+    return movies_tv_index.search(user_input, {'limit': 21})
 
 
 @app.get('/{country_code}/movie/{movie_id}')
@@ -86,19 +86,3 @@ async def create_media(media: schemas.Media, db: Session = Depends(database.get_
     if db_media:
         raise HTTPException(status_code=400, detail='Media already exists')
     return crud.create_media(db=db, media=media)
-
-
-# TODO: Remove when cron-job is implemented
-@app.get('/load_data/')
-async def load_data(db: Session = Depends(database.get_db)):
-    try:
-        trending_media = get_all_trending_media()
-
-        # Fills the database with media
-        database_service.dump_media_to_db(trending_media)
-
-        # Meilisearch indexing of trending_movies
-        movies_tv_index.add_documents(trending_media)
-        print('Done!')
-    except Exception as e:
-        print('Panic?!', e)

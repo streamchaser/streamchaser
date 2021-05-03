@@ -12,6 +12,16 @@ Here's how to get the application up and running
 3. Build the container `docker-compose up --build`  
 4. Go to http://localhost:1337/
 
+## CLI
+To use the cronjob use the following in the terminal:  
+`docker-compose exec backend python3 cron.py <method-name> <parameter>`
+
+So as an example to update the media list with 500 pages you would do the following:  
+`docker-compose exec backend python3 cron.py update-media 500`
+
+To get help with the commands you can type:  
+`docker-compose exec backend python3 cron.py --help`
+
 ## Tips & tricks
 Some things that might make life easier
 
