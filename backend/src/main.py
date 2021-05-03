@@ -1,6 +1,5 @@
 from search import *
 from api import *
-from helpers import *
 
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -10,6 +9,7 @@ import crud
 import models
 import schemas
 import database
+import database_service
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -31,24 +31,19 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-trending_media = get_all_trending_media()
 
-# Meilisearch indexing of trending_movies
-movies_tv_index.add_documents(trending_media)
-
-
-@app.get('/')
-async def root() -> list[dict]:
+@app.get('/', response_model=list[schemas.Media])
+async def root(db: Session = Depends(database.get_db)) -> list[dict]:
     """Home page
     """
-    return trending_media
+    return crud.get_all_media(db, skip=0, limit=1000)
 
 
-@app.get('/search/{input}')
-async def search(input: str) -> list[dict]:
+@app.get('/search/{user_input}')
+async def search(user_input: str) -> list[dict]:
     """Search thingy
     """
-    return movies_tv_index.search(input)
+    return movies_tv_index.search(user_input)
 
 
 @app.get('/{country_code}/movie/{movie_id}')
@@ -65,7 +60,17 @@ async def get_tv(tv_id: int, country_code: str) -> TV:
     return get_tv_from_id(tv_id, country_code.upper())
 
 
-@app.get('/media/', response_model=list[schemas.MediaBase])
+@app.get('/media/{media_id}', response_model=schemas.Media)
+async def read_specific_media(media_id: str, db: Session = Depends(database.get_db)):
+    """Reads all database media
+    """
+    db_media = crud.get_media_by_id(db=db, media_id=media_id)
+    if db_media:
+        return db_media
+    raise HTTPException(status_code=404, detail="Media doesn't exist")
+
+
+@app.get('/media/', response_model=list[schemas.Media])
 async def read_all_media(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
     """Reads all database media
     """
@@ -73,11 +78,27 @@ async def read_all_media(skip: int = 0, limit: int = 100, db: Session = Depends(
     return all_media
 
 
-@app.post('/media/', response_model=schemas.MediaBase)
-async def create_media(media: schemas.MediaBase, db: Session = Depends(database.get_db)):
+@app.post('/media/', response_model=schemas.Media)
+async def create_media(media: schemas.Media, db: Session = Depends(database.get_db)):
     """Creates a media to the database
     """
     db_media = crud.get_media(db=db, media_id=media.id)
     if db_media:
         raise HTTPException(status_code=400, detail='Media already exists')
     return crud.create_media(db=db, media=media)
+
+
+# TODO: Remove when cron-job is implemented
+@app.get('/load_data/')
+async def load_data(db: Session = Depends(database.get_db)):
+    try:
+        trending_media = get_all_trending_media()
+
+        # Fills the database with media
+        database_service.dump_media_to_db(trending_media)
+
+        # Meilisearch indexing of trending_movies
+        movies_tv_index.add_documents(trending_media)
+        print('Done!')
+    except Exception as e:
+        print('Panic?!', e)

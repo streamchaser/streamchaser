@@ -13,8 +13,6 @@ __pycache__/
 .idea
 
 # Data
-*.json*
-*/trending_media.json
 pgdata
 
 # Frontend
