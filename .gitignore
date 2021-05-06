@@ -4,7 +4,9 @@ __pycache__/
 *$py.class
 
 # Environments
-*/.env
+# TODO: find a better solution than .env to store our secrets
+# an option would be to use docker-compose environments
+# */.env
 
 # VSCode
 .vscode

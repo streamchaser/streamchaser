@@ -31,18 +31,22 @@ def dump_media_to_db(media: list[dict]):
 def init_meilisearch_indexing():
     """MeiliSearch indexing from Postgres DB
     """
-    db = database.SessionLocal()
-    media_list = crud.get_all_media(db=db)
-    media_list_as_dict = [
-        schemas.Media(
-            id=media.id,
-            title=media.title,
-            original_title=media.original_title,
-            overview=media.overview,
-            release_date=media.release_date,
-            genres=media.genres,
-            poster_path=media.poster_path
-        ).dict()
-        for media in media_list
-    ]
-    movies_tv_index.add_documents(media_list_as_dict)
+    try:
+        db = database.SessionLocal()
+        media_list = crud.get_all_media(db=db)
+
+        media_list_as_dict = [
+            schemas.Media(
+                id=media.id,
+                title=media.title,
+                original_title=media.original_title,
+                overview=media.overview,
+                release_date=media.release_date,
+                genres=media.genres,
+                poster_path=media.poster_path
+            ).dict()
+            for media in media_list
+        ]
+        movies_tv_index.add_documents(media_list_as_dict)
+    except Exception as e:
+        print(f'Error in {__name__} {e}')

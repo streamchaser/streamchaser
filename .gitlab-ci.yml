@@ -40,7 +40,7 @@ Build Backend:
     - echo TMDB_API_KEY="dummy" >> backend/.env
   script:
     - echo "Building backend service..."
-    - docker-compose up --build -d backend
+    - docker-compose build backend
   # remove .env so it doesnt stay as an artifact
   after_script:
     - rm backend/.env
@@ -52,7 +52,7 @@ Build Frontend:
     - docker
   script:
     - echo "Building frontend service..."
-    - docker-compose up --build -d frontend
+    - docker-compose build frontend
 
 Build Search:
   stage: build
@@ -61,6 +61,20 @@ Build Search:
     - docker
   script:
     - echo "Building search service..."
-    - docker-compose up --build -d search
+    - docker-compose build search
 
+Tests:
+  stage: test
+  needs: []
+  tags:
+    - docker
+  before_script:
+    - apk add postgresql-dev gcc g++ python3-dev musl-dev
+    - pip install -r backend/requirements.txt
+  script:
+    - echo "Testing application..."
+    - docker-compose up --build -d backend
+    # we sleep to make sure the DB is up and running
+    - sleep 15
+    - docker-compose exec -T backend python -m pytest -v ../
 

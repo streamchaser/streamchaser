@@ -7,3 +7,4 @@ requests
 meilisearch
 psycopg2
 typer
+pytest
