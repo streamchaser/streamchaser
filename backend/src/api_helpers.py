@@ -1,5 +1,3 @@
-import json
-
 from dotenv import dotenv_values
 import requests
 
@@ -89,5 +87,6 @@ def genre_id_to_str(media: dict) -> list[str]:
             try:
                 list_of_genres.append(GENRE_DICT[genre_id])
             except KeyError as e:
+                print(f'Unknown genre id {e}')
                 list_of_genres.append('Unknown')
         return list_of_genres

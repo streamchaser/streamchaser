@@ -16,5 +16,6 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
-    except:
+    except Exception as e:
+        print(f'Error in {__name__}: {e}')
         db.close()

@@ -1,15 +1,16 @@
-from search import *
-from api import *
-
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
+import api
 import crud
 import models
 import schemas
 import database
-import database_service
+
+from search import movies_tv_index
+from schemas import Movie, TV
+from database_service import init_meilisearch_indexing
 
 models.Base.metadata.create_all(bind=database.engine)
 
@@ -31,6 +32,8 @@ app.add_middleware(
     allow_headers=['*']
 )
 
+init_meilisearch_indexing()
+
 
 @app.get('/', response_model=list[schemas.Media])
 async def root(db: Session = Depends(database.get_db)) -> list[dict]:
@@ -50,14 +53,14 @@ async def search(user_input: str) -> list[dict]:
 async def get_movie(movie_id: int, country_code: str) -> Movie:
     """Specific Movie page
     """
-    return get_movie_from_id(movie_id, country_code.upper())
+    return api.get_movie_from_id(movie_id, country_code.upper())
 
 
 @app.get('/{country_code}/tv/{tv_id}')
 async def get_tv(tv_id: int, country_code: str) -> TV:
     """Specific TV page
     """
-    return get_tv_from_id(tv_id, country_code.upper())
+    return api.get_tv_from_id(tv_id, country_code.upper())
 
 
 @app.get('/media/{media_id}', response_model=schemas.Media)
@@ -74,7 +77,7 @@ async def read_specific_media(media_id: str, db: Session = Depends(database.get_
 async def read_all_media(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
     """Reads all database media
     """
-    all_media = crud.get_all_media(db, skip=skip, limit=limit)
+    all_media = crud.get_all_media(db=db, skip=skip, limit=limit)
     return all_media
 
 
@@ -82,7 +85,7 @@ async def read_all_media(skip: int = 0, limit: int = 100, db: Session = Depends(
 async def create_media(media: schemas.Media, db: Session = Depends(database.get_db)):
     """Creates a media to the database
     """
-    db_media = crud.get_media(db=db, media_id=media.id)
+    db_media = crud.get_media_by_id(db=db, media_id=media.id)
     if db_media:
         raise HTTPException(status_code=400, detail='Media already exists')
     return crud.create_media(db=db, media=media)
