@@ -8,7 +8,7 @@ Here's how to get the application up and running
 * Got Docker installed
 
 1. Clone the repo `git clone git@gitlab.com:AndreasPB/PLACEHOLDER.git`
-2. Add a .env file with `TMDB_API_KEY`
+2. Add a .env file in backend with `TMDB_API_KEY=<key>`, `POSTGRES_PASSWORD=<password>` and `POSTGRES_USERNAME=<username>`
 3. Build the container `docker-compose up --build`  
 4. Go to http://localhost:1337/
 
