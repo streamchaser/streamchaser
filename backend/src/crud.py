@@ -4,7 +4,7 @@ import models
 import schemas
 
 
-def get_media(db: Session, media_id: str):
+def get_media_by_id(db: Session, media_id: str):
     """Gets a single Media-type by the id
     """
     return db.query(models.Media).filter(models.Media.id == media_id).first()

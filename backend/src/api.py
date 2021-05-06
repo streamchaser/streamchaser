@@ -1,5 +1,8 @@
-from api_helpers import *
+import requests
+
 from schemas import Media, Movie, TV
+from api_helpers import unique_id, valid_title, valid_original_title, valid_release_date, \
+    genre_id_to_str, get_movie_length, TMDB_KEY
 
 API_URL = 'https://api.themoviedb.org/3/'
 
@@ -16,8 +19,8 @@ def request_trending_media(media_type: str = 'all',
     return requests.get(url).json()
 
 
-def get_all_media(total_pages: int = 25) -> list:
-    """ Gets all movies from the specified number of pages
+def get_trending_media_by_total_pages(total_pages: int = 25) -> list:
+    """ Gets all movies and tv-series from the specified number of pages
     """
     page_num = 1
     media_list = []
@@ -34,16 +37,8 @@ def get_all_media(total_pages: int = 25) -> list:
 
         page_num += 1
 
-    return media_list
-
-
-def get_all_trending_media(total_pages: int = 25) -> list[dict]:
-    """Creates a list of Media-objects converted to dicts
-    """
-    data = get_all_media(total_pages)
-
     trending_media = [
-        # pydantic Media model
+        # pydantic Media schema
         Media(
             id=unique_id(media),
             title=valid_title(media),
@@ -53,13 +48,13 @@ def get_all_trending_media(total_pages: int = 25) -> list[dict]:
             genres=genre_id_to_str(media),
             poster_path=media.get('poster_path')
         ).dict()
-        for media in data
+        for media in media_list
     ]
 
     return trending_media
 
 
-def get_movie_from_id(movie_id: int, country_code: str) -> Movie:
+def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
     """ Gets data of a movie from an id
     """
 
@@ -67,28 +62,28 @@ def get_movie_from_id(movie_id: int, country_code: str) -> Movie:
     search_api_url = f'{API_URL}movie/{movie_id}?api_key={TMDB_KEY}' \
                      f'&append_to_response=watch/providers,recommendations'
 
-    data = requests.get(search_api_url).json()
+    movies = requests.get(search_api_url).json()
 
-    # pydantic model for a movie
-    movie = Movie(
-        id=data.get('id'),
-        title=data.get('title'),
-        release_date=data.get('release_date'),
-        overview=data.get('overview'),
+    # pydantic schema for a movie
+    movie_schema = Movie(
+        id=movies.get('id'),
+        title=movies.get('title'),
+        release_date=movies.get('release_date'),
+        overview=movies.get('overview'),
         genres=[
-            genre.get('name') for genre in data.get('genres')
+            genre.get('name') for genre in movies.get('genres')
         ],
-        imdb_id=data.get('imdb_id'),
-        runtime=get_movie_length(data.get('runtime')),
-        providers=get_providers(data.get('watch/providers'), country_code),
-        recommendations=get_recommendations(data.get('recommendations')),
-        poster_path=data.get('poster_path')
+        imdb_id=movies.get('imdb_id'),
+        runtime=get_movie_length(movies.get('runtime')),
+        providers=get_providers(movies.get('watch/providers'), country_code),
+        recommendations=get_recommendations(movies.get('recommendations')),
+        poster_path=movies.get('poster_path')
     )
 
-    return movie
+    return movie_schema
 
 
-def get_tv_from_id(tv_id: int, country_code: str) -> TV:
+def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
     """ Gets data of a tv series from an id
     """
 
@@ -96,25 +91,25 @@ def get_tv_from_id(tv_id: int, country_code: str) -> TV:
     search_api_url = f'{API_URL}tv/{tv_id}?api_key={TMDB_KEY}' \
                      f'&append_to_response=watch/providers,recommendations'
 
-    data = requests.get(search_api_url).json()
+    tv = requests.get(search_api_url).json()
 
-    # pydantic model for a tv series
-    tv = TV(
-        id=data.get('id'),
-        name=data.get('name'),
-        first_air_date=data.get('first_air_date'),
-        overview=data.get('overview'),
+    # pydantic schema for a tv series
+    tv_schema = TV(
+        id=tv.get('id'),
+        name=tv.get('name'),
+        first_air_date=tv.get('first_air_date'),
+        overview=tv.get('overview'),
         genres=[
-            genre.get('name') for genre in data.get('genres')
+            genre.get('name') for genre in tv.get('genres')
         ],
-        episode_run_time=data.get('episode_run_time'),
-        providers=get_providers(data.get('watch/providers'), country_code),
-        recommendations=get_recommendations(data.get('recommendations')),
-        poster_path=data.get('poster_path'),
-        number_of_seasons=data.get('number_of_seasons')
+        episode_run_time=tv.get('episode_run_time'),
+        providers=get_providers(tv.get('watch/providers'), country_code),
+        recommendations=get_recommendations(tv.get('recommendations')),
+        poster_path=tv.get('poster_path'),
+        number_of_seasons=tv.get('number_of_seasons')
     )
 
-    return tv
+    return tv_schema
 
 
 def get_providers(providers: dict, country_code: str) -> list[dict]:
