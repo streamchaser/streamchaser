@@ -25,7 +25,7 @@ To get help with the commands you can type:
 ## Postgres CLI
 ### How to drop a table
 Make sure the db container is running and enter PSQL
-* `docker-compose up db`
+* `docker ps`
 * `docker-compose exec db psql -U postgres`
 
 Then from PSQL
