@@ -5,6 +5,7 @@
         TextField,
         Card,
     } from 'svelte-materialify';
+    import Footer from './components/Footer.svelte'
 
     const url = 'http://localhost:1337/search/';
     const INPUT_TIMER = 200;
@@ -27,6 +28,7 @@
 </script>
 
 <MaterialApp>
+    <div style="padding-bottom: 3.7%">
     <h1>Placeholder</h1>
     <TextField dense rounded outlined autofocus
                bind:value={input}
@@ -47,6 +49,10 @@
             {/each}
         </div>
     {/if}
+    </div>
+    <div>
+        <Footer />
+    </div>
 </MaterialApp>
 
 <style>
