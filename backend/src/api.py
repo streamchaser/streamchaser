@@ -12,7 +12,7 @@ def request_trending_media(media_type: str = 'all',
     :param time_window: 'week', 'day'
     :param page: int 1:many
     """
-    url = f'https://api.themoviedb.org/3/trending/{media_type}/{time_window}?api_key={TMDB_KEY}&page={page}'
+    url = f'{API_URL}trending/{media_type}/{time_window}?api_key={TMDB_KEY}&page={page}'
     return requests.get(url).json()
 
 
@@ -37,10 +37,10 @@ def get_all_media(total_pages: int = 25) -> list:
     return media_list
 
 
-def get_all_trending_media() -> list[dict]:
+def get_all_trending_media(total_pages: int = 25) -> list[dict]:
     """Creates a list of Media-objects converted to dicts
     """
-    data = get_all_media()
+    data = get_all_media(total_pages)
 
     trending_media = [
         # pydantic Media model

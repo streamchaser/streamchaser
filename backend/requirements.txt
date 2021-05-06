@@ -6,3 +6,4 @@ python-dotenv
 requests
 meilisearch
 psycopg2
+typer
