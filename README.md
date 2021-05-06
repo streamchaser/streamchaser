@@ -17,7 +17,7 @@ Some things that might make life easier
 
 ### Git
 * Make a pushf alias for `git push --force-with-lease`, since writing it all out gets annoying  
-`git config --global alias.pushf push --force-with-lease`
+`git config --global alias.pushf "push --force-with-lease"`
 
 ### Docker
 * You only have to add `--build` the first time, or when you make changes to the docker setup
