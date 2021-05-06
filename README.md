@@ -22,6 +22,20 @@ So as an example to update the media list with 500 pages you would do the follow
 To get help with the commands you can type:  
 `docker-compose exec backend python3 cron.py --help`
 
+## Postgres CLI
+### How to drop a table
+Make sure the db container is running and enter PSQL
+* `docker-compose up db`
+* `docker-compose exec db psql -U postgres`
+
+Then from PSQL
+* `\c placeholder`
+* `drop table media;`
+
+### Extra commands
+* `\l` lists all databases
+* `\dt` lists all data tables
+
 ## Tips & tricks
 Some things that might make life easier
 
