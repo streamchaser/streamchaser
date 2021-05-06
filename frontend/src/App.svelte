@@ -28,7 +28,7 @@
 </script>
 
 <MaterialApp>
-    <div>
+    <div style="padding-bottom: 3.7%">
     <h1>Placeholder</h1>
     <TextField dense rounded outlined autofocus
                bind:value={input}
@@ -50,7 +50,9 @@
         </div>
     {/if}
     </div>
-    <Footer />
+    <div>
+        <Footer />
+    </div>
 </MaterialApp>
 
 <style>
