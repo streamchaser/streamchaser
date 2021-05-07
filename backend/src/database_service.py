@@ -1,7 +1,8 @@
 import database
 import crud
 import schemas
-from search import movies_tv_index
+from api_helpers import get_genres
+from search import client
 
 
 def dump_media_to_db(media: list[dict]):
@@ -28,6 +29,26 @@ def dump_media_to_db(media: list[dict]):
             crud.create_media(db=db, media=formatted_media)
 
 
+def dump_genres_to_db():
+    """Turns a dict of genres into Genre-schemas, and feeds them to crud create
+    """
+    # TODO: connection should probably be done in a safer way
+    db = database.SessionLocal()
+    genres = get_genres()
+
+    for key in genres:
+        formatted_genre = schemas.Genre(
+            id=key,
+            name=genres[key]
+        )
+
+        db_genre = crud.get_genre_by_id(db=db, genre_id=key)
+        if db_genre:
+            print('Already exists', formatted_genre)
+        else:
+            crud.create_genre(db=db, genre=formatted_genre)
+
+
 def init_meilisearch_indexing():
     """MeiliSearch indexing from Postgres DB
     """
@@ -47,6 +68,8 @@ def init_meilisearch_indexing():
             ).dict()
             for media in media_list
         ]
-        movies_tv_index.add_documents(media_list_as_dict)
+        client.index('media').add_documents(media_list_as_dict)
+        print(f'Indexing {len(media_list)} media!')
+
     except Exception as e:
         print(f'Error in {__name__} {e}')

@@ -1,4 +1,4 @@
-from sqlalchemy import String
+from sqlalchemy import String, Integer
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.sql.schema import Column
 
@@ -15,3 +15,10 @@ class Media(Base):
     release_date = Column(String, nullable=True)
     genres = Column(postgresql.ARRAY(String), nullable=True)
     poster_path = Column(String, nullable=True)
+
+
+class Genre(Base):
+    __tablename__ = 'genres'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
