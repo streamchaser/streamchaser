@@ -40,3 +40,11 @@ class TV(BaseModel):
     recommendations: Optional[list[dict]]
     poster_path: Optional[str]
     number_of_seasons: int
+
+
+class Genre(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True

@@ -1,4 +1,6 @@
-from fastapi import FastAPI, Depends, HTTPException
+from typing import Optional, List
+
+from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -8,7 +10,7 @@ import models
 import schemas
 import database
 
-from search import movies_tv_index
+from search import client
 from schemas import Movie, TV
 from database_service import init_meilisearch_indexing
 
@@ -43,10 +45,20 @@ async def root(db: Session = Depends(database.get_db)) -> list[dict]:
 
 
 @app.get('/search/{user_input}')
-async def search(user_input: str) -> list[dict]:
-    """Search thingy
+async def search(user_input: str,
+                 g: Optional[List[str]] = Query(None)):
     """
-    return movies_tv_index.search(user_input, {'limit': 21})
+    # Our endpoint for the MeiliSearch API
+    * **user_input**: Input to lookup media
+    * **g**: Optional genre query
+    """
+    genres = g
+    if genres:
+        return client.index('media').search(user_input, {
+            'limit': 21,
+            'facetFilters': [f'genres:{genre}' for genre in genres]
+        })
+    return client.index('media').search(user_input, {'limit': 21})
 
 
 @app.get('/{country_code}/movie/{movie_id}')
@@ -77,8 +89,7 @@ async def read_specific_media(media_id: str, db: Session = Depends(database.get_
 async def read_all_media(skip: int = 0, limit: int = 100, db: Session = Depends(database.get_db)):
     """Reads all database media
     """
-    all_media = crud.get_all_media(db=db, skip=skip, limit=limit)
-    return all_media
+    return crud.get_all_media(db=db, skip=skip, limit=limit)
 
 
 @app.post('/media/', response_model=schemas.Media)
@@ -89,3 +100,11 @@ async def create_media(media: schemas.Media, db: Session = Depends(database.get_
     if db_media:
         raise HTTPException(status_code=400, detail='Media already exists')
     return crud.create_media(db=db, media=media)
+
+
+@app.get('/genres/')
+async def read_all_genres(db: Session = Depends(database.get_db)):
+    """Reads all genres, returns only the name
+    """
+    db_genres = crud.get_all_genres(db=db)
+    return [genre.name for genre in db_genres]

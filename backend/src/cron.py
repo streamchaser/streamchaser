@@ -1,7 +1,8 @@
 import typer
 from api import get_trending_media_by_total_pages
-from search import movies_tv_index
-import database_service
+from database_service import dump_media_to_db, dump_genres_to_db, \
+    init_meilisearch_indexing
+from search import client
 
 
 app = typer.Typer()
@@ -13,10 +14,11 @@ def update_media(total_pages: int):
         trending_media = get_trending_media_by_total_pages(total_pages)
 
         # Fills the database with media
-        database_service.dump_media_to_db(trending_media)
+        dump_media_to_db(trending_media)
+        dump_genres_to_db()
 
         # Meilisearch indexing of trending_movies
-        movies_tv_index.add_documents(trending_media)
+        init_meilisearch_indexing()
     except Exception as e:
         typer.echo('Failed to add element', e)
 
@@ -27,7 +29,7 @@ def update_media(total_pages: int):
 @app.command()
 def remove_adult():
     blacklisted_media = [
-        movies_tv_index.delete_document(line.rstrip())
+        client.index('media').delete_document(line.rstrip())
         for line in open('../blacklist.txt')
     ]
 
