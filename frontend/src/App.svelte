@@ -6,6 +6,7 @@
         Card
     } from 'svelte-materialify';
     import Select from 'svelte-select'
+    import Header from './components/Header.svelte'
     import Footer from './components/Footer.svelte'
 
     const search_url = 'http://localhost:1337/search/';
@@ -50,6 +51,9 @@
 </script>
 
 <MaterialApp>
+
+
+    <Header />
     <div class="container">
     <h1 style="text-align: center">Placeholder</h1>
 
