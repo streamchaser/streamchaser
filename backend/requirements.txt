@@ -8,3 +8,4 @@ meilisearch
 psycopg2
 typer
 pytest
+tqdm

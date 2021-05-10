@@ -1,5 +1,5 @@
 import requests
-
+from tqdm import tqdm
 from schemas import Media, Movie, TV
 from api_helpers import unique_id, valid_title, valid_original_title, valid_release_date, \
     genre_id_to_str, get_movie_length, TMDB_KEY
@@ -24,8 +24,10 @@ def get_trending_media_by_total_pages(total_pages: int = 25) -> list:
     """
     page_num = 1
     media_list = []
+    pbar = tqdm(total=total_pages)
+    pbar.set_description('Fetching media from TMDb')
 
-    while page_num < total_pages:
+    while page_num <= total_pages:
         movie_dict = request_trending_media('movie', 'week', page_num)
         tv_dict = request_trending_media('tv', 'week', page_num)
 
@@ -36,7 +38,9 @@ def get_trending_media_by_total_pages(total_pages: int = 25) -> list:
             media_list.append(page)
 
         page_num += 1
+        pbar.update(1)
 
+    pbar.close()
     trending_media = [
         # pydantic Media schema
         Media(
@@ -112,25 +116,23 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
     return tv_schema
 
 
-def get_providers(providers: dict, country_code: str) -> list[dict]:
+def get_providers(providers: dict, country_code: str = 'all') -> list[dict]:
     """ Gets list of provider data for a movie from a specified country code
     """
-    provider_list = []
 
-    # Filters providers from the provided country code
-    if country_code in providers['results']:
-        # We check if there are any flatrate elements
-        if 'flatrate' in providers['results'][country_code]:
-            # Add the elements to our provider list
-            for element in providers['results'][country_code]['flatrate']:
-                temp_dict = {
-                    'id': element['provider_id'],
-                    'name': element['provider_name'],
-                    'logo_path': element['logo_path']
-                }
-                provider_list.append(temp_dict)
+    if country_code == 'all':
+        return [
+            {country: provider}
+            for country in providers.get('results')
+            if providers.get('results').get(country).get('flatrate')
+            for provider in providers.get('results').get(country).get('flatrate')
+        ]
 
-    return provider_list
+    return [
+        provider
+        for provider in providers.get('results').get(country_code).get('flatrate')
+        if providers.get('results').get(country_code).get('flatrate')
+    ]
 
 
 def get_recommendations(recommendations: dict) -> list[dict]:

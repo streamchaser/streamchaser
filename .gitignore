@@ -16,6 +16,7 @@ __pycache__/
 
 # Data
 pgdata
+backend/providers.txt
 
 # Frontend
 frontend/node_modules/*
