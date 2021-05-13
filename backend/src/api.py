@@ -81,7 +81,8 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
         runtime=get_movie_length(movies.get('runtime')),
         providers=get_providers(movies.get('watch/providers'), country_code),
         recommendations=get_recommendations(movies.get('recommendations')),
-        poster_path=movies.get('poster_path')
+        poster_path=movies.get('poster_path'),
+        backdrop_path=movies.get('backdrop_path')
     )
 
     return movie_schema
@@ -110,7 +111,9 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
         providers=get_providers(tv.get('watch/providers'), country_code),
         recommendations=get_recommendations(tv.get('recommendations')),
         poster_path=tv.get('poster_path'),
-        number_of_seasons=tv.get('number_of_seasons')
+        number_of_seasons=tv.get('number_of_seasons'),
+        seasons=tv.get('seasons'),
+        backdrop_path=tv.get('backdrop_path')
     )
 
     return tv_schema
