@@ -5,7 +5,8 @@ client = meilisearch.Client('http://search:7700', 'masterKey')
 
 # An index where the movies are stored
 client.index('media').update_attributes_for_faceting([
-    'genres'
+    'genres',
+    'specific_provider_names'
 ])
 
 # Isolated the important

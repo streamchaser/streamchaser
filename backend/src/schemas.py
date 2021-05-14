@@ -11,6 +11,9 @@ class Media(BaseModel):
     release_date: str
     genres: Optional[list[str]]
     poster_path: Optional[str]
+    providers: Optional[list[dict]]
+    specific_provider_names: Optional[list[str]]
+    specific_providers: Optional[list[dict]]
 
     class Config:
         # Makes use of database syntax "media.id" instead of "media['id']

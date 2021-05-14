@@ -12,12 +12,10 @@ import database
 
 from search import client
 from schemas import Movie, TV
-from database_service import init_meilisearch_indexing
 
 models.Base.metadata.create_all(bind=database.engine)
 
 app = FastAPI()
-
 
 origins = [
     'http://localhost:8080',
@@ -34,8 +32,6 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-init_meilisearch_indexing()
-
 
 @app.get('/', response_model=list[schemas.Media])
 async def root(db: Session = Depends(database.get_db)) -> list[dict]:
@@ -46,17 +42,42 @@ async def root(db: Session = Depends(database.get_db)) -> list[dict]:
 
 @app.get('/search/{user_input}')
 async def search(user_input: str,
-                 g: Optional[List[str]] = Query(None)):
+                 g: Optional[List[str]] = Query(None),
+                 p: Optional[List[str]] = Query(None)):
     """
     # Our endpoint for the MeiliSearch API
     * **user_input**: Input to lookup media
     * **g**: Optional genre query
+    * **p**: Optional provider query
     """
     genres = g
+    providers = p
+
+    if genres and providers:
+        genre_list: list[str] = [
+            f'genres:{genre}' for genre in genres
+        ]
+        provider_list: list[list[str]] = [
+            [f'specific_provider_names:{providers}'
+             for providers in providers]
+        ]
+
+        return client.index('media').search(user_input, {
+            'limit': 21,
+            'facetFilters': genre_list + provider_list
+        })
     if genres:
         return client.index('media').search(user_input, {
             'limit': 21,
+            # This is using AND logic
             'facetFilters': [f'genres:{genre}' for genre in genres]
+        })
+    elif providers:
+        return client.index('media').search(user_input, {
+            'limit': 21,
+            # This is using OR logic
+            'facetFilters': [[f'specific_provider_names:{providers}'
+                              for providers in providers]]
         })
     return client.index('media').search(user_input, {'limit': 21})
 
@@ -108,3 +129,10 @@ async def read_all_genres(db: Session = Depends(database.get_db)):
     """
     db_genres = crud.get_all_genres(db=db)
     return [genre.name for genre in db_genres]
+
+
+@app.get('/providers/')
+async def read_all_providers():
+    """Reads all the providers from providers.txt
+    """
+    return [line.rstrip() for line in open('../providers.txt')]

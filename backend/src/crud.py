@@ -34,6 +34,13 @@ def create_media(db: Session, media: schemas.Media):
     return db_media
 
 
+def update_media_provider_by_id(db: Session, id: str, providers: list[dict]):
+    db.query(models.Media).filter_by(id=id).update({
+        'providers': providers
+    })
+    db.commit()
+
+
 def get_genre_by_id(db: Session, genre_id: str):
     """Gets a single Media-type by the id
     """
