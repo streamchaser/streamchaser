@@ -22,7 +22,7 @@
 
 </script>
 
-<Footer absolute padless class="white theme--dark flex-box">
+<Footer absolute padless class="theme--light flex-box">
     <div class:active={toggle} class:notActive={!toggle} style="color: black">
         <Button text rounded class="black-text" on:click={setToggle}>
             <Icon class="black-text" path={mdiChevronUp} rotate={toggle ? 180 : 0}/>
