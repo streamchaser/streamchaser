@@ -19,6 +19,13 @@ pgdata
 backend/providers.txt
 
 # Frontend
-frontend/node_modules/*
-*/public/build/
 *.DS_Store
+**/node_modules/
+frontend/dist/
+.DS_Store
+**/.history
+src/tmp/
+.routify
+.netlify
+assets/build
+.vercel

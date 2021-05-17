@@ -9,9 +9,9 @@
 
     const links = ['FAQ', 'Privacy policy', 'Contact us', 'About us'];
     const logos = {
-        'Facebook logo': 'img/facebook_logo.png',
-        'Twitter logo': 'img/twitter_logo.png',
-        'Instagram logo': 'img/instagram_logo.png'
+        'Facebook logo': 'images/facebook_logo.png',
+        'Twitter logo': 'images/twitter_logo.png',
+        'Instagram logo': 'images/instagram_logo.png'
     };
 
     let toggle = false;
