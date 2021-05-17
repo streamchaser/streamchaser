@@ -55,28 +55,30 @@
     $: mappedSelectedProviders = selectedProviders ? selectedProviders.map(item => item.value) : [];
 
     const search = async () => {
-        // Builds the optional query for genres
-        // Example: "?g=Action&g=Comedy&g=Drama"
-        let genre_query = '';
-        for (let i = 0; i < mappedSelectedGenres.length; i++) {
-            // First query needs a "?"
-            if (genre_query.length === 0 && i === 0) {
-                genre_query += `?g=${mappedSelectedGenres[0]}`;
-            } else {
-                genre_query += `&g=${mappedSelectedGenres[i]}`;
-            }
-        }
-        for (let i = 0; i < mappedSelectedProviders.length; i++) {
-            if (genre_query.length === 0 && i === 0) {
-                genre_query += `?p=${mappedSelectedProviders[0]}`;
-            } else {
-                genre_query += `&p=${mappedSelectedProviders[i]}`;
-            }
-        }
+            // Builds the optional query for genres
+            // Example: "?g=Action&g=Comedy&g=Drama"
+            let genre_query = '';
 
-        const res = await fetch(search_url + input + genre_query);
-        media = await res.json();
-    };
+            for (let i = 0; i < mappedSelectedGenres.length; i++) {
+                // First query needs a "?"
+                if (genre_query.length === 0 && i === 0) {
+                    genre_query += `?g=${mappedSelectedGenres[0]}`;
+                } else {
+                    genre_query += `&g=${mappedSelectedGenres[i]}`;
+                }
+            }
+            for (let i = 0; i < mappedSelectedProviders.length; i++) {
+                if (genre_query.length === 0 && i === 0) {
+                    genre_query += `?p=${mappedSelectedProviders[0]}`;
+                } else {
+                    genre_query += `&p=${mappedSelectedProviders[i]}`;
+                }
+            }
+
+            const res = await fetch(search_url + input + genre_query);
+            media = await res.json();
+        }
+    ;
 
     function mouseEnter(index) {
         // Sets currentCard to the card currently being hovered over,
@@ -152,11 +154,11 @@
                  class="d-flex flex-wrap align-content-start mt-4 mb-4 flex-grow-0 flex-shrink-0">
                 {#each media.hits as media, index}
                     <div class="media-item" class:card={showExtra}
-                         style="transition: all 150ms linear"
+                         style="transition: all 150ms linear;"
                          on:mouseenter={() => mouseEnter(index)}
                          on:mouseleave={mouseLeave}>
                         {#if showExtra && index === currentCard}
-                            <div>
+                            <div style="position: absolute;">
                                 <Card flat shaped hover>
                                     <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
                                          alt="background"/>
@@ -222,6 +224,13 @@
         max-height: 100%;
     }
 
+    div.select {
+        max-width: calc(50% - 20px);
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 20px;
+    }
+
     .media-item {
         width: calc(14.27% - 20px);
         margin-left: 10px;
@@ -232,7 +241,7 @@
 
     .card:hover {
         transition: transform 300ms ease-in-out;
-        transform: scale(1.5);
+        transform: scale(1.2);
         z-index: 1;
     }
 </style>

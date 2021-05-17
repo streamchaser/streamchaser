@@ -24,12 +24,14 @@ class Movie(BaseModel):
     id: int
     title: str
     release_date: str
+    overview: str
     genres: Optional[list[str]]
     imdb_id: str
     runtime: str
     providers: Optional[list[dict]]
     recommendations: list[dict]
     poster_path: Optional[str]
+    backdrop_path: Optional[str]
 
 
 class TV(BaseModel):
@@ -43,6 +45,8 @@ class TV(BaseModel):
     recommendations: Optional[list[dict]]
     poster_path: Optional[str]
     number_of_seasons: int
+    seasons: list[dict]
+    backdrop_path: Optional[str]
 
 
 class Genre(BaseModel):
