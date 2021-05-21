@@ -3,12 +3,12 @@ services:
     frontend:
         build: ./frontend
         container_name: svelte
+        command: npm run dev:ssr
         ports:
             - 5000:5000
             - 35729:35729
         volumes:
-            - ./frontend/:/app/frontend
-            - node_modules:/app/frontend/node_modules
+            - ./frontend/:/app
     backend:
         build: ./backend
         container_name: fastapi

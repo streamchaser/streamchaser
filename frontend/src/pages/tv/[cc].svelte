@@ -1,11 +1,12 @@
 <script>
+    import { params } from '@roxi/routify'
     import {MaterialApp, Card, CardText, Tabs, Tab, TabContent, Icon} from 'svelte-materialify'
     import {mdiRefresh} from '@mdi/js';
-    import Footer from "./Footer.svelte";
-    import Header from "./Header.svelte";
-    import Carousel from "./Carousel.svelte";
+    import Footer from "../../components/Footer.svelte";
+    import Header from "../../components/Header.svelte";
+    import Carousel from '../../components/Carousel.svelte';
 
-    const tv_detail_url = 'http://localhost:1337/dk/tv/1100'
+    const tv_detail_url = `http://localhost:1337/${$params.cc}/tv/${$params.id}`
 
     const fetchTvDetails = async () => {
         const response = await fetch(tv_detail_url);
@@ -13,12 +14,10 @@
     }
 
     const API_URL = "https://image.tmdb.org/t/p/original/"
-
 </script>
 
 <MaterialApp>
     <Header/>
-
 
     <div class="container">
         {#await fetchTvDetails()}
