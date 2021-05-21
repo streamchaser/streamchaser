@@ -26,7 +26,7 @@
             <div class="poster-stack">
                 <div class="card">
                     <img src="{API_URL}{movie.backdrop_path}" style="position: absolute; filter:
-                    blur(8px); max-height: 80vh; display: flex;" alt="backdrop poster"/>
+                    blur(8px); max-height: 100%;" alt="backdrop poster"/>
                     <img src="{API_URL}{movie.poster_path}"
                          alt="background" style="max-width: 30em; position: relative"/>
                     <div class="card-info">

@@ -29,9 +29,7 @@
 
     .carousel-content {
         display: flex;
-        transform: scale(1.18, 1);
-        margin-left: 1.3vw;
-        height: 30vh;
+        height: 34vh;
         z-index: 1;
     }
 </style>
