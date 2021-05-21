@@ -26,7 +26,7 @@
             <div class="poster-stack">
                 <div class="card">
                     <img src="{API_URL}{tv.backdrop_path}" style="position: absolute; filter:
-                    blur(8px); max-height: 80vh;"/>
+                    blur(8px); max-height: 100%;" alt="backdrop poster"/>
                     <img src="{API_URL}{tv.poster_path}"
                          alt="background" style="max-width: 30em; position: relative;
                              z-index: 1"/>
