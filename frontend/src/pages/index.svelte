@@ -32,6 +32,7 @@ import {fly, slide} from 'svelte/transition';
     let hoverTimer;
     let selectedGenres;
     let selectedProviders;
+    let bgImg;
 
     const fetchGenres = async () => {
         const res = await fetch(genre_url);
@@ -87,12 +88,15 @@ import {fly, slide} from 'svelte/transition';
             if (!showExtra) {
                 showExtra = true;
             }
-        }, 600);
+        }, 200);
     }
 
     function mouseLeave() {
         if (showExtra) {
             showExtra = false;
+        }
+        if (active) {
+            active = false;
         }
         currentCard = null;
     }
@@ -158,40 +162,50 @@ import {fly, slide} from 'svelte/transition';
                         {#if showExtra && index === currentCard}
                             <div style="position: absolute;">
                                 <Card flat shaped hover>
+                                    {#if active}
+                                        <div transition:slide={{ y: 100, duration: 300 }} style="position: absolute; z-index: 6; bottom: 50px; background-color: white; border: solid ghostwhite thin">
+                                            <div class="pl-4 pr-4 pt-2 pb-2">
+                                                {media.overview}
+                                            </div>
+                                        </div>
+                                    {/if}
+                                    <div class="card-item" style="position: absolute; z-index: 3">
+                                    {#each media.specific_providers as provider}
+                                        <img class="provider-logo"
+                                             src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                             alt="Poster for {media.title}"
+                                             style="max-width: 50px">
+                                    {/each}
+                                    </div>
                                     <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
                                          alt="background"/>
-                                    <CardTitle>{media.title}</CardTitle>
-                                    <CardSubtitle>
-                                        {media.genres}
-                                        {#each media.specific_providers as provider}
-                                            <img src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
-                                                 style="max-width: 50px">
-                                        {/each}
-                                    </CardSubtitle>
+                                    <p style="margin-left: 10px; margin-right: 10px; margin-bottom: 0"><strong>{media.title}</strong></p>
+                                    <p style="margin-left: 10px; margin-right: 10px; margin-top: 0">{media.genres}</p>
                                     <CardActions>
-
                                         <Button text on:click={toggleOverview}
-                                                style="margin-top: -20px;">
+                                                style="margin-top: -20px; z-index: 4">
                                             <Icon path={mdiChevronDown} rotate={active ? 180 : 0}/>
                                         </Button>
                                     </CardActions>
                                 </Card>
-                                {#if active}
-                                    <div transition:slide>
-                                        <Divider/>
-                                        <div class="pl-4 pr-4 pt-2 pb-2">
-                                            {media.description}
-                                        </div>
-                                    </div>
-                                {/if}
                             </div>
                         {:else}
-                            <div style="">
-                                <Card flat shaped>
-                                    <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
-                                         alt="background"/>
-                                </Card>
-                            </div>
+                            <Card flat>
+                                <div class="card-item">
+                                    <div style="position: absolute; z-index: 2;">
+                                    {#each media.specific_providers as provider}
+                                        <img class="provider-logo"
+                                             src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                             alt="Poster for {media.title}"
+                                             style="max-width: 50px">
+                                    {/each}
+                                    </div>
+                                    <div style="position: relative;">
+                                        <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
+                                             alt="background"/>
+                                    </div>
+                                </div>
+                            </Card>
                         {/if}
                     </div>
                 {/each}
@@ -230,9 +244,28 @@ import {fly, slide} from 'svelte/transition';
         height: 100%;
     }
 
+    .card-item {
+        border-radius: 25%;
+    }
+
+    .card-item:before {
+        content: '';
+        position:absolute;
+        top:0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to top, rgba(0,0,0,0) 40%,rgba(0,0,0,1) 100%);
+        z-index: 1;
+    }
+
     .card:hover {
         transition: transform 300ms ease-in-out;
         transform: scale(1.2);
-        z-index: 1;
+        z-index: 4;
+    }
+
+    .provider-logo {
+        border-radius: 50%;
     }
 </style>
