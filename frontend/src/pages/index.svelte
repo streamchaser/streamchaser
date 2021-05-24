@@ -294,7 +294,7 @@
     .provider-logo-hover {
         border-radius: 0 0 25% 25%;
         margin-bottom: -7px;
-        margin-top: 0;
+        margin-top: 1px;
         margin-right: 3px;
         margin-left: 0;
         width: 15%;

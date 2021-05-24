@@ -137,7 +137,7 @@ def get_providers(providers: dict, country_code: str = 'all') -> list[dict]:
             for provider in providers.get('results').get(country_code).get('flatrate')
             if providers.get('results').get(country_code).get('flatrate')
         ]
-    except AttributeError:
+    except (AttributeError, TypeError):
         # If no providers for given country code
         return []
 
