@@ -90,5 +90,8 @@ export default {
     watch: {
         clearScreen: false,
         buildDelay: 100,
+        chokidar: {
+            usePolling: true
+        }
     }
 }

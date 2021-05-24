@@ -82,14 +82,14 @@ async def search(user_input: str,
     return client.index('media').search(user_input, {'limit': 21})
 
 
-@app.get('/{country_code}/movie/{movie_id}')
+@app.get('/movie/{country_code}/{movie_id}')
 async def get_movie(movie_id: int, country_code: str) -> Movie:
     """Specific Movie page
     """
     return api.get_movie_from_id(movie_id, country_code.upper())
 
 
-@app.get('/{country_code}/tv/{tv_id}')
+@app.get('/tv/{country_code}/{tv_id}')
 async def get_tv(tv_id: int, country_code: str) -> TV:
     """Specific TV page
     """

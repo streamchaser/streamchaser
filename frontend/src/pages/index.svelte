@@ -1,15 +1,13 @@
 <script>
-import {fly, slide} from 'svelte/transition';
+    import {fly, slide} from 'svelte/transition';
     import {
         MaterialApp,
         TextField,
         Card,
-        CardTitle,
+        CardText,
         CardActions,
-        CardSubtitle,
         Button,
         Icon,
-        Divider,
         Row,
         Col
     } from 'svelte-materialify';
@@ -17,6 +15,7 @@ import {fly, slide} from 'svelte/transition';
     import Header from '../components/Header.svelte'
     import Footer from '../components/Footer.svelte'
     import {mdiChevronDown} from '@mdi/js'
+    import {goto, url} from "@roxi/routify";
 
     const search_url = 'http://localhost:1337/search/';
     const genre_url = 'http://localhost:1337/genres/';
@@ -95,14 +94,22 @@ import {fly, slide} from 'svelte/transition';
         if (showExtra) {
             showExtra = false;
         }
+        currentCard = null;
         if (active) {
             active = false;
         }
-        currentCard = null;
     }
 
     function toggleOverview() {
         active = !active;
+    }
+
+    function redirectTo(id) {
+        if (id[0] === 't') {
+            $goto('./tv/:cc', {cc: 'dk', id: id.slice(1)})
+        } else {
+            $goto('./movie/:cc', {cc: 'dk', id: id.slice(1)})
+        }
     }
 </script>
 
@@ -119,6 +126,7 @@ import {fly, slide} from 'svelte/transition';
                 Search
             </TextField>
         </div>
+
         <Row>
             <Col>
                 {#await fetchGenres()}
@@ -163,24 +171,40 @@ import {fly, slide} from 'svelte/transition';
                             <div style="position: absolute;">
                                 <Card flat shaped hover>
                                     {#if active}
-                                        <div transition:slide={{ y: 100, duration: 300 }} style="position: absolute; z-index: 6; bottom: 50px; background-color: white; border: solid ghostwhite thin">
+                                        <div transition:slide={{ y: 100, duration: 300 }}
+                                             class="overview">
                                             <div class="pl-4 pr-4 pt-2 pb-2">
-                                                {media.overview}
+                                                <p style="line-height: 95%;">
+                                                    <small>{media.overview}</small></p>
                                             </div>
                                         </div>
                                     {/if}
-                                    <div class="card-item" style="position: absolute; z-index: 3">
-                                    {#each media.specific_providers as provider}
-                                        <img class="provider-logo"
-                                             src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
-                                             alt="Poster for {media.title}"
-                                             style="max-width: 50px">
-                                    {/each}
-                                    </div>
-                                    <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
+                                    <img on:click={ redirectTo(media.id) } src="https://image.tmdb.org/t/p/w500{media.poster_path}"
                                          alt="background"/>
-                                    <p style="margin-left: 10px; margin-right: 10px; margin-bottom: 0"><strong>{media.title}</strong></p>
-                                    <p style="margin-left: 10px; margin-right: 10px; margin-top: 0">{media.genres}</p>
+                                    <div class="provider-nest">
+                                        {#each media.specific_providers as provider}
+                                            {#if media.specific_providers.length < 1}
+                                                <CardText>
+                                                    No providers in DK
+                                                </CardText>
+                                            {:else}
+                                                <img class="provider-logo-hover"
+                                                     src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                                     alt="Poster for {media.title}"
+                                                     style="max-width: 50px;">
+                                            {/if}
+                                        {/each}
+                                    </div>
+                                    <p style="margin: 5px 10px 17px 10px">
+                                        <small>
+                                            {#each media.genres as genre, index}
+                                                {genre}
+                                                {#if index !== media.genres.length - 1}
+                                                    •&nbsp
+                                                {/if}
+                                            {/each}
+                                        </small>
+                                    </p>
                                     <CardActions>
                                         <Button text on:click={toggleOverview}
                                                 style="margin-top: -20px; z-index: 4">
@@ -190,20 +214,22 @@ import {fly, slide} from 'svelte/transition';
                                 </Card>
                             </div>
                         {:else}
-                            <Card flat>
-                                <div class="card-item">
-                                    <div style="position: absolute; z-index: 2;">
+                            <Card flat shaped>
+                                <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
+                                     alt="background"/>
+                                <div class="provider-nest">
                                     {#each media.specific_providers as provider}
-                                        <img class="provider-logo"
-                                             src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
-                                             alt="Poster for {media.title}"
-                                             style="max-width: 50px">
+                                        {#if media.specific_providers.length < 1}
+                                            <CardText>
+                                                No providers in DK
+                                            </CardText>
+                                        {:else}
+                                            <img class="provider-logo"
+                                                 src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                                 alt="Poster for {media.title}"
+                                                 style="max-width: 50px">
+                                        {/if}
                                     {/each}
-                                    </div>
-                                    <div style="position: relative;">
-                                        <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
-                                             alt="background"/>
-                                    </div>
                                 </div>
                             </Card>
                         {/if}
@@ -234,28 +260,31 @@ import {fly, slide} from 'svelte/transition';
     img {
         max-width: 100%;
         max-height: 100%;
+        border-radius: 0 0 1.25% 0;
     }
 
     .media-item {
         width: calc(14.27% - 20px);
         margin-left: 10px;
         margin-right: 10px;
-        margin-top: 10px;
+        margin-top: 30px;
         height: 100%;
     }
 
-    .card-item {
-        border-radius: 25%;
+    .provider-nest {
+        background-color: #fff;
+        margin-top: -7px;
+
     }
 
     .card-item:before {
         content: '';
-        position:absolute;
-        top:0;
+        position: absolute;
+        top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(to top, rgba(0,0,0,0) 40%,rgba(0,0,0,1) 100%);
+        background: linear-gradient(to top, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 1) 100%);
         z-index: 1;
     }
 
@@ -266,6 +295,33 @@ import {fly, slide} from 'svelte/transition';
     }
 
     .provider-logo {
-        border-radius: 50%;
+        border-radius: 0 0 25% 25%;
+        margin-bottom: -7px;
+        margin-top: 1px;
+        margin-right: 3px;
+        width: 15%;
+        height: 15%;
+    }
+
+    .provider-logo-hover {
+        border-radius: 0 0 25% 25%;
+        margin-bottom: -7px;
+        margin-top: 0;
+        margin-right: 3px;
+        margin-left: 0;
+        width: 15%;
+        height: 15%;
+    }
+
+    .provider-logo-hover:first-child {
+        border-radius: 0 0 25% 0;
+    }
+
+    .overview {
+        position: absolute;
+        z-index: 6;
+        bottom: 50px;
+        background-color: white;
+        border: solid ghostwhite thin
     }
 </style>
