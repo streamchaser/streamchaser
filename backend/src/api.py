@@ -123,19 +123,23 @@ def get_providers(providers: dict, country_code: str = 'all') -> list[dict]:
     """ Gets list of provider data for a movie from a specified country code
     """
 
-    if country_code == 'all':
-        return [
-            {country: provider}
-            for country in providers.get('results')
-            if providers.get('results').get(country).get('flatrate')
-            for provider in providers.get('results').get(country).get('flatrate')
-        ]
+    try:
+        if country_code == 'all':
+            return [
+                {country: provider}
+                for country in providers.get('results')
+                if providers.get('results').get(country).get('flatrate')
+                for provider in providers.get('results').get(country).get('flatrate')
+            ]
 
-    return [
-        provider
-        for provider in providers.get('results').get(country_code).get('flatrate')
-        if providers.get('results').get(country_code).get('flatrate')
-    ]
+        return [
+            provider
+            for provider in providers.get('results').get(country_code).get('flatrate')
+            if providers.get('results').get(country_code).get('flatrate')
+        ]
+    except AttributeError:
+        # If no providers for given country code
+        return []
 
 
 def get_recommendations(recommendations: dict) -> list[dict]:
