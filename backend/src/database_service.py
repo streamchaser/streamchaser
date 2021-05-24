@@ -91,7 +91,7 @@ def init_meilisearch_indexing():
             for media in pbar_media_list
         ]
         client.index('media').add_documents(media_list_as_dict)
-        print(f'Milisearch indexing {len(media_list)} elements...')
+        print(f'Meilisearch indexing {len(media_list)} elements...')
 
         extract_unique_providers_to_txt(media_list)
 

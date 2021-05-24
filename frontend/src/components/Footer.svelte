@@ -20,21 +20,16 @@
         toggle = !toggle;
     }
 
-    export let y = 0;
-
 </script>
 
-<!-- listening for scroll events -->
-<svelte:window bind:scrollY={y}/>
-
-<Footer padless class="white theme--dark flex-box">
-    <div class="icon">
+<Footer absolute padless class="theme--light flex-box">
+    <div class:active={toggle} class:notActive={!toggle} style="color: black">
         <Button text rounded class="black-text" on:click={setToggle}>
             <Icon class="black-text" path={mdiChevronUp} rotate={toggle ? 180 : 0}/>
         </Button>
     </div>
     {#if toggle}
-        <div transition:slide="{{ y: 100, duration: 800 }}" class="footer flex-box"
+        <div transition:slide="{{ y: 100, duration: 400 }}" class="flex-box footer"
              style="padding: 10px">
             <div class="mt-2 mb-2">
                 {#if links}
@@ -59,10 +54,8 @@
 <style>
     .footer {
         position: fixed;
+        background-color: ghostwhite;
         bottom: 0;
-        background-color: white;
-        border-top: solid black;
-        border-width: thin;
         width: 100%;
         z-index: 99;
     }
@@ -75,9 +68,12 @@
         display: inline;
         transition: transform 300ms linear;
     }
-    .icon {
+    .active {
         position: fixed;
-        color: black;
-        bottom: 60px;
+        bottom: 3.5em;
+    }
+    .notActive {
+        position: fixed;
+        bottom: 0;
     }
 </style>

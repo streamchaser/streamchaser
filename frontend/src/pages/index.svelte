@@ -1,15 +1,13 @@
 <script>
-import {fly, slide} from 'svelte/transition';
+    import {fly, slide} from 'svelte/transition';
     import {
         MaterialApp,
         TextField,
         Card,
-        CardTitle,
+        CardText,
         CardActions,
-        CardSubtitle,
         Button,
         Icon,
-        Divider,
         Row,
         Col
     } from 'svelte-materialify';
@@ -17,6 +15,7 @@ import {fly, slide} from 'svelte/transition';
     import Header from '../components/Header.svelte'
     import Footer from '../components/Footer.svelte'
     import {mdiChevronDown} from '@mdi/js'
+    import {goto, url} from "@roxi/routify";
 
     const search_url = 'http://localhost:1337/search/';
     const genre_url = 'http://localhost:1337/genres/';
@@ -32,6 +31,7 @@ import {fly, slide} from 'svelte/transition';
     let hoverTimer;
     let selectedGenres;
     let selectedProviders;
+    let bgImg;
 
     const fetchGenres = async () => {
         const res = await fetch(genre_url);
@@ -87,7 +87,7 @@ import {fly, slide} from 'svelte/transition';
             if (!showExtra) {
                 showExtra = true;
             }
-        }, 600);
+        }, 200);
     }
 
     function mouseLeave() {
@@ -95,10 +95,21 @@ import {fly, slide} from 'svelte/transition';
             showExtra = false;
         }
         currentCard = null;
+        if (active) {
+            active = false;
+        }
     }
 
     function toggleOverview() {
         active = !active;
+    }
+
+    function redirectTo(id) {
+        if (id[0] === 't') {
+            $goto('./tv/:cc', {cc: 'dk', id: id.slice(1)})
+        } else {
+            $goto('./movie/:cc', {cc: 'dk', id: id.slice(1)})
+        }
     }
 </script>
 
@@ -115,6 +126,7 @@ import {fly, slide} from 'svelte/transition';
                 Search
             </TextField>
         </div>
+
         <Row>
             <Col>
                 {#await fetchGenres()}
@@ -158,40 +170,56 @@ import {fly, slide} from 'svelte/transition';
                         {#if showExtra && index === currentCard}
                             <div style="position: absolute;">
                                 <Card flat shaped hover>
-                                    <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
+                                    {#if active}
+                                        <div transition:slide={{ y: 100, duration: 300 }}
+                                             class="overview">
+                                            <div class="pl-4 pr-4 pt-2 pb-2">
+                                                <p style="line-height: 95%;">
+                                                    <small>{media.overview}</small></p>
+                                            </div>
+                                        </div>
+                                    {/if}
+                                    <img on:click={ redirectTo(media.id) } src="https://image.tmdb.org/t/p/w500{media.poster_path}"
                                          alt="background"/>
-                                    <CardTitle>{media.title}</CardTitle>
-                                    <CardSubtitle>
-                                        {media.genres}
+                                    <div class="provider-nest">
                                         {#each media.specific_providers as provider}
-                                            <img src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
-                                                 style="max-width: 50px">
+                                            <img class="provider-logo-hover"
+                                                 src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                                 alt="Poster for {media.title}"
+                                                 style="max-width: 50px;">
                                         {/each}
-                                    </CardSubtitle>
+                                    </div>
+                                    <p style="margin: 5px 10px 17px 10px; font-weight: bold">
+                                        <small>
+                                            {#each media.genres as genre, index}
+                                                {genre}
+                                                {#if index !== media.genres.length - 1}
+                                                    •&nbsp
+                                                {/if}
+                                            {/each}
+                                        </small>
+                                    </p>
                                     <CardActions>
-
                                         <Button text on:click={toggleOverview}
-                                                style="margin-top: -20px;">
+                                                style="margin-top: -20px; z-index: 4">
                                             <Icon path={mdiChevronDown} rotate={active ? 180 : 0}/>
                                         </Button>
                                     </CardActions>
                                 </Card>
-                                {#if active}
-                                    <div transition:slide>
-                                        <Divider/>
-                                        <div class="pl-4 pr-4 pt-2 pb-2">
-                                            {media.description}
-                                        </div>
-                                    </div>
-                                {/if}
                             </div>
                         {:else}
-                            <div style="">
-                                <Card flat shaped>
-                                    <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
-                                         alt="background"/>
-                                </Card>
-                            </div>
+                            <Card flat shaped>
+                                <img src="https://image.tmdb.org/t/p/w500{media.poster_path}"
+                                     alt="background"/>
+                                <div class="provider-nest">
+                                    {#each media.specific_providers as provider}
+                                        <img class="provider-logo"
+                                             src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                             alt="Poster for {media.title}"
+                                             style="max-width: 50px">
+                                    {/each}
+                                </div>
+                            </Card>
                         {/if}
                     </div>
                 {/each}
@@ -220,19 +248,68 @@ import {fly, slide} from 'svelte/transition';
     img {
         max-width: 100%;
         max-height: 100%;
+        border-radius: 0 0 1.25% 0;
     }
 
     .media-item {
         width: calc(14.27% - 20px);
         margin-left: 10px;
         margin-right: 10px;
-        margin-top: 10px;
+        margin-top: 30px;
         height: 100%;
+    }
+
+    .provider-nest {
+        background-color: #fff;
+        margin-top: -7px;
+
+    }
+
+    .card-item:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 1) 100%);
+        z-index: 1;
     }
 
     .card:hover {
         transition: transform 300ms ease-in-out;
         transform: scale(1.2);
-        z-index: 1;
+        z-index: 4;
+    }
+
+    .provider-logo {
+        border-radius: 0 0 25% 25%;
+        margin-bottom: -7px;
+        margin-top: 1px;
+        margin-right: 3px;
+        width: 15%;
+        height: 15%;
+    }
+
+    .provider-logo-hover {
+        border-radius: 0 0 25% 25%;
+        margin-bottom: -7px;
+        margin-top: 0;
+        margin-right: 3px;
+        margin-left: 0;
+        width: 15%;
+        height: 15%;
+    }
+
+    .provider-logo-hover:first-child {
+        border-radius: 0 0 25% 0;
+    }
+
+    .overview {
+        position: absolute;
+        z-index: 6;
+        bottom: 50px;
+        background-color: white;
+        border: solid ghostwhite thin
     }
 </style>

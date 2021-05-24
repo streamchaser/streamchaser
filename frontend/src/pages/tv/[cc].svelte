@@ -6,7 +6,7 @@
     import Header from "../../components/Header.svelte";
     import Carousel from '../../components/Carousel.svelte';
 
-    const tv_detail_url = `http://localhost:1337/${$params.cc}/tv/${$params.id}`
+    const tv_detail_url = `http://localhost:1337/tv/${$params.cc}/${$params.id}`
 
     const fetchTvDetails = async () => {
         const response = await fetch(tv_detail_url);
