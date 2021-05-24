@@ -183,19 +183,13 @@
                                          alt="background"/>
                                     <div class="provider-nest">
                                         {#each media.specific_providers as provider}
-                                            {#if media.specific_providers.length < 1}
-                                                <CardText>
-                                                    No providers in DK
-                                                </CardText>
-                                            {:else}
-                                                <img class="provider-logo-hover"
-                                                     src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
-                                                     alt="Poster for {media.title}"
-                                                     style="max-width: 50px;">
-                                            {/if}
+                                            <img class="provider-logo-hover"
+                                                 src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                                 alt="Poster for {media.title}"
+                                                 style="max-width: 50px;">
                                         {/each}
                                     </div>
-                                    <p style="margin: 5px 10px 17px 10px">
+                                    <p style="margin: 5px 10px 17px 10px; font-weight: bold">
                                         <small>
                                             {#each media.genres as genre, index}
                                                 {genre}
@@ -219,16 +213,10 @@
                                      alt="background"/>
                                 <div class="provider-nest">
                                     {#each media.specific_providers as provider}
-                                        {#if media.specific_providers.length < 1}
-                                            <CardText>
-                                                No providers in DK
-                                            </CardText>
-                                        {:else}
-                                            <img class="provider-logo"
-                                                 src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
-                                                 alt="Poster for {media.title}"
-                                                 style="max-width: 50px">
-                                        {/if}
+                                        <img class="provider-logo"
+                                             src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                             alt="Poster for {media.title}"
+                                             style="max-width: 50px">
                                     {/each}
                                 </div>
                             </Card>
