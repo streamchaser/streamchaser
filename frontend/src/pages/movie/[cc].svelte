@@ -1,6 +1,6 @@
 <script>
-    import { params } from '@roxi/routify'
-    import {MaterialApp, Icon, Card, CardText} from 'svelte-materialify'
+    import {params} from '@roxi/routify'
+    import {MaterialApp, Icon, Card, CardText, CardTitle} from 'svelte-materialify'
     import {mdiRefresh} from '@mdi/js'
     import Footer from "../../components/Footer.svelte";
     import Header from "../../components/Header.svelte";
@@ -18,61 +18,66 @@
 
 <MaterialApp>
     <Header/>
-
-    <div class="container">
-        {#await fetchMovieDetails()}
-            <Icon spin path={mdiRefresh}/>
-        {:then movie}
+    {#await fetchMovieDetails()}
+        <Icon spin path={mdiRefresh}/>
+    {:then movie}
+        <img class="backdrop-img" src="{API_URL}{movie.backdrop_path}"/>
+        <div class="container">
             <div class="poster-stack">
                 <div class="card">
-                    <img src="{API_URL}{movie.backdrop_path}" style="position: absolute; filter:
-                    blur(8px); max-height: 100%;" alt="backdrop poster"/>
                     <img src="{API_URL}{movie.poster_path}"
-                         alt="background" style="max-width: 30em; position: relative"/>
+                         alt="background" style="max-width: 50%; position: relative; border-radius: 5% 2% 5% 2%;
+                                box-shadow: 0 0 3px black"/>
                     <div class="card-info">
                         <div class="d-flex justify-center mt-4 mb-4">
-                            <Card outlined shaped style="background-color: #212121;
-                                                         box-shadow: 0 0 5px 10px #212121;
-                                                         color: white;">
-                                <div class="pl-4 pr-4 pt-3">
-                                    <br/>
-                                    <span class="text-h5 mb-2">{movie.title}</span>
-                                    <br/>
-                                </div>
+                            <Card outlined shaped style="background: black; opacity: 75%;">
+                                <CardTitle style="color: white">
+                                    <h5>{movie.title}</h5>
+                                </CardTitle>
                                 <CardText style="color: white;">
                                     <h6>{movie.release_date}</h6>
+                                    &nbsp
+                                    <!--
                                     <h6>{movie.rating ? movie.rating : 'No rating'}</h6>
+                                    -->
                                     <p>{movie.overview}</p>
                                 </CardText>
                             </Card>
                         </div>
-
                     </div>
                 </div>
-
-
                 <div class="providers">
                     {#each movie.providers as provider}
-                        <img class="provider-logo" src="{API_URL}{provider.logo_path}"
-                             alt="cover"/>
+                        <img class="provider-logo" src="{API_URL}{provider.logo_path}" alt="cover"/>
                     {/each}
                 </div>
             </div>
 
             <div style="padding-top: 3vh; padding-bottom: 8vh;">
-                <h6>Recommendations</h6>
+                &nbsp
+                <h4>Recommendations</h4>
+                &nbsp
                 <Carousel recommendations="{movie.recommendations}"/>
             </div>
-
-        {/await}
-    </div>
-
+        </div>
+    {/await}
     <Footer/>
 
 </MaterialApp>
 
 <style>
+    img.backdrop-img {
+        padding-top: 3em;
+        filter: blur(4px);
+        background-repeat: no-repeat;
+        width: 80%;
+        position: absolute;
+        left: 10%;
+        max-height: 84%;
+    }
+
     div.container {
+        padding-top: 3em;
         display: block;
         width: 50vw;
         margin: auto;
@@ -85,9 +90,7 @@
     }
 
     .card {
-        margin: auto;
         padding-top: 1vw;
-        width: 50vw;
         display: flex;
         position: relative;
         z-index: 3;
@@ -95,17 +98,17 @@
 
     .card-info {
         margin-left: 1vw;
+        padding-left: 1.5vw;
         display: block;
         justify-content: space-between;
         z-index: 1;
-        height: 50vh;
     }
 
     .provider-logo {
-        padding-top: 0.5vh;
-        width: 3em;
-        height: auto;
+        border-radius: 15% 8% 15% 8%;
+        width: 4em;
         z-index: 1;
+        box-shadow: 0 0 3px black;
     }
 
 
@@ -116,5 +119,6 @@
         min-width: 40px;
         position: relative;
         z-index: 3;
+        padding-top: 1em;
     }
 </style>

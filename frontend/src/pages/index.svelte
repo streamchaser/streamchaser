@@ -185,8 +185,7 @@
                                         {#each media.specific_providers as provider}
                                             <img class="provider-logo-hover"
                                                  src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
-                                                 alt="Poster for {media.title}"
-                                                 style="max-width: 50px;">
+                                                 alt="Poster for {media.title}">
                                         {/each}
                                     </div>
                                     <p style="margin: 5px 10px 17px 10px; font-weight: bold">
@@ -215,8 +214,7 @@
                                     {#each media.specific_providers as provider}
                                         <img class="provider-logo"
                                              src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
-                                             alt="Poster for {media.title}"
-                                             style="max-width: 50px">
+                                             alt="Poster for {media.title}">
                                     {/each}
                                 </div>
                             </Card>
@@ -233,7 +231,7 @@
 
 <style>
     div.container {
-        padding-bottom: 3.7%;
+        padding-bottom: 7.5%;
         margin-left: 50px;
         margin-right: 50px;
     }
@@ -265,16 +263,6 @@
 
     }
 
-    .card-item:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 1) 100%);
-        z-index: 1;
-    }
 
     .card:hover {
         transition: transform 300ms ease-in-out;
@@ -286,19 +274,17 @@
         border-radius: 0 0 25% 25%;
         margin-bottom: -7px;
         margin-top: 1px;
-        margin-right: 3px;
-        width: 15%;
-        height: 15%;
+        margin-right: 1px;
+        width: 20%;
+        height: 20%;
     }
 
     .provider-logo-hover {
         border-radius: 0 0 25% 25%;
-        margin-bottom: -7px;
+        margin-right: 1px;
+        width: 20%;
+        height: 20%;
         margin-top: 1px;
-        margin-right: 3px;
-        margin-left: 0;
-        width: 15%;
-        height: 15%;
     }
 
     .provider-logo-hover:first-child {
