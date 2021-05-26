@@ -4,9 +4,9 @@ import typer
 from api import get_trending_media_by_total_pages, get_providers, API_URL
 from api_helpers import TMDB_KEY
 from database_service import dump_media_to_db, dump_genres_to_db, \
-    init_meilisearch_indexing
+    init_meilisearch_indexing, prune_non_ascii_media_from_db
 from search import client
-from crud import get_all_media, update_media_provider_by_id
+from crud import get_all_media, update_media_provider_by_id, delete_all_media
 import database
 
 app = typer.Typer()
@@ -36,7 +36,7 @@ def index_meilisearch():
 
 
 @app.command()
-def remove_adult():
+def remove_blacklisted_from_search():
     blacklisted_media = [
         line.rstrip() for line in open('../blacklist.txt')
     ]
@@ -44,6 +44,18 @@ def remove_adult():
     client.index('media').delete_documents(blacklisted_media)
 
     typer.echo(f'Attempted to remove {len(blacklisted_media)} blacklisted media elements')
+
+
+@app.command()
+def remove_non_ascii_media():
+    prune_non_ascii_media_from_db()
+
+
+@app.command()
+def remove_all_media():
+    db = database.SessionLocal()
+    delete_all_media(db=db)
+    typer.echo('All media has been deleted')
 
 
 @app.command()
@@ -80,11 +92,13 @@ def add_provider_to_media():
 
 
 @app.command()
-def full_setup(total_pages: int):
+def full_setup(total_pages: int, remove_non_ascii: bool = True):
     if update_media(total_pages=total_pages):
-        remove_adult()
+        if remove_non_ascii:
+            remove_non_ascii_media()
         add_provider_to_media()
         index_meilisearch()
+        remove_blacklisted_from_search()
 
 
 if __name__ == "__main__":

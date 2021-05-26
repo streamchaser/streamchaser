@@ -41,6 +41,16 @@ def update_media_provider_by_id(db: Session, id: str, providers: list[dict]):
     db.commit()
 
 
+def delete_media_by_id(db: Session, id: str):
+    db.query(models.Media).filter_by(id=id).delete()
+    db.commit()
+
+
+def delete_all_media(db: Session):
+    db.query(models.Media).delete()
+    db.commit()
+
+
 def get_genre_by_id(db: Session, genre_id: str):
     """Gets a single Media-type by the id
     """
