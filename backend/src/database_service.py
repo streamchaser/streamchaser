@@ -65,7 +65,7 @@ def init_meilisearch_indexing():
         media_list = crud.get_all_media(db=db)
 
         pbar_media_list = tqdm(media_list)
-        pbar_media_list.set_description('Attaching specific providers to ALL DB elements')
+        pbar_media_list.set_description('Adding providers to media')
 
         media_list_as_dict = [
             schemas.Media(
@@ -110,3 +110,27 @@ def extract_unique_providers_to_txt(media_list):
     with open('../providers.txt', 'w') as file:
         for provider in ordered_provider_list:
             file.write(f'{provider}\n')
+
+
+def prune_non_ascii_media_from_db():
+    """Removes media with no genres or Animation that cannot be encoded with ASCII
+    """
+
+    try:
+        db = database.SessionLocal()
+        media_list = crud.get_all_media(db=db)
+        pbar_media_list = tqdm(media_list)
+        pbar_media_list.set_description('Finding non-ASCII in titles')
+
+        for media in pbar_media_list:
+            if media.genres.__contains__('Animation') or len(media.genres) == 0:
+
+                for letter in media.original_title:
+                    try:
+                        letter.encode(encoding='utf-8').decode('ascii')
+                    except UnicodeDecodeError:
+                        crud.delete_media_by_id(db=db, id=media.id)
+                        break
+        print('Media with non-ASCII titles have been pruned')
+    except Exception as e:
+        print(e)
