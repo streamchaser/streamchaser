@@ -25,7 +25,7 @@ Here's how to get the application up and running
 * Got Git installed
 * Got Docker installed
 
-1. Clone the repo `git clone git@github.com:AndreasPB/streamchaser.git`
+1. Clone the repo `git clone https://github.com/AndreasPB/streamchaser.git`
 2. Build the container `docker-compose up --build`  
 3. Run `docker-compose exec backend python3 cron.py full-setup <total_pages>`
 4. Go to http://localhost:5000/ and search
