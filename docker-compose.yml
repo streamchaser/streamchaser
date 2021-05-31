@@ -9,6 +9,7 @@ services:
             - 35729:35729
         volumes:
             - ./frontend/:/app
+            - /app/node_modules
     backend:
         build: ./backend
         container_name: fastapi
