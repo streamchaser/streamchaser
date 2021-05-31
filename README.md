@@ -1,4 +1,22 @@
-# PLACEHOLDER
+# 🎬 streamchaser 🎬
+This project was created as a school project, to overcome the frustration when you can't find out where to stream content!  
+
+## Credits
+Built using:
+* [FastAPI](https://github.com/tiangolo/fastapi) 
+* [MeiliSearch](https://github.com/meilisearch/MeiliSearch)
+* [Svelte](https://github.com/sveltejs/svelte)
+* [Routify](https://github.com/roxiness/routify)
+* [PostgreSQL](https://github.com/postgres/postgres) 
+* [Docker](https://github.com/docker)
+* [Materialfy](https://github.com/TheComputerM/svelte-materialify)
+
+Authors 👷:
+* [AndreasPB](https://github.com/AndreasPB)
+* [Pankai222](https://github.com/Pankai222)
+* [nullxDEADBEEF](https://github.com/nullxDEADBEEF)
+* [Primdahl26](https://github.com/Primdahl26)
+
 
 ## First time setup
 Here's how to get the application up and running
@@ -7,10 +25,10 @@ Here's how to get the application up and running
 * Got Git installed
 * Got Docker installed
 
-1. Clone the repo `git clone git@gitlab.com:AndreasPB/PLACEHOLDER.git`
-2. Add a .env file in backend with `TMDB_API_KEY=<key>`, `POSTGRES_PASSWORD=<password>` and `POSTGRES_USERNAME=<username>`
+1. Clone the repo `git clone git@github.com:AndreasPB/streamchaser.git`
+2. npm install the frontend `docker-compose run frontend npm install`
 3. Build the container `docker-compose up --build`  
-4. Run `docker-compose exec backend python3 cron.py update-media <total pages>`
+4. Run `docker-compose exec backend python3 cron.py full-setup <total_pages>`
 5. Go to http://localhost:5000/ and search
 
 ## CLI
@@ -20,8 +38,19 @@ To use the cronjob use the following in the terminal:
 So as an example to update the media list with 500 pages you would do the following:  
 `docker-compose exec backend python3 cron.py update-media 500`
 
+After updating the database you need to index MeiliSearch:  
+`docker-compose exec backend python3 cron.py index-meilisearch`
+
+To do a full setup use the following command:  
+`docker-compose exec backend python3 cron.py full-setup <total_pages> <remove_non_ascii>`  
+This will fetch media for the number of pages, and remove non ascii characters if False flag is not added.  This also indexes MeiliSearch.
+
+To drop the media database:  
+`docker-compose exec backend python3 cron.py remove-all-media`
+
 To get help with the commands you can type:  
 `docker-compose exec backend python3 cron.py --help`
+
 
 ## Postgres CLI
 ### How to drop a table
@@ -50,7 +79,5 @@ Some things that might make life easier
 
 ### How to run tests
 To run tests locally:  
-`docker-compose exec backend python -m pytest -v ../`
-
-### Frontend setup guide
-https://github.com/sveltejs/template/blob/master/README.md
+* `docker-compose run backend python -m pytest -v ../` 
+* `docker-compose exec backend python -m pytest -v ../`
