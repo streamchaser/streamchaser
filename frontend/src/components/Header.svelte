@@ -7,7 +7,7 @@
 <MaterialApp>
 <AppBar flat>
   <Button text rounded onclick="window.location.href='/'">
-    <Icon path={mdiHome}/> Placeholder
+    <Icon path={mdiHome}/> streamchaser
   </Button>
   <div style="flex-grow:1"></div>
   <Button text rounded style="margin-right: 5px">Roulette</Button>
