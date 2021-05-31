@@ -59,7 +59,7 @@ Make sure the db container is running and enter PSQL
 * `docker-compose exec db psql -U postgres`
 
 Then from PSQL
-* `\c placeholder`
+* `\c streamchaser`
 * `drop table media;`
 
 ### Extra commands
