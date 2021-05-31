@@ -118,7 +118,8 @@
     <Header/>
 
     <div class="container">
-        <h1 style="text-align: center">Placeholder</h1>
+        <br>
+        <h1 style="text-align: center">streamchaser</h1>
         <div class="input">
             <TextField dense rounded outlined autofocus
                        bind:value={input}
@@ -179,7 +180,8 @@
                                             </div>
                                         </div>
                                     {/if}
-                                    <img on:click={ redirectTo(media.id) } src="https://image.tmdb.org/t/p/w500{media.poster_path}"
+                                    <img on:click={ redirectTo(media.id) }
+                                         src="https://image.tmdb.org/t/p/w500{media.poster_path}"
                                          alt="background"/>
                                     <div class="provider-nest">
                                         {#each media.specific_providers as provider}
