@@ -1,5 +1,8 @@
 # 🎬 streamchaser 🎬
-This project was created as a school project, to overcome the frustration when you can't find out where to stream content!  
+Streamchaser seeks to simplify movie, series and documentary search located on streaming services by curating all of the content through a centralized entertainment technology platform. 
+Streamchaser seeks to solve the issue where it appears, i.e. in front of the TV. 
+Lastly, Streamchaser is founded on the basis of convenience, which means that no feature, 
+no profit margin and no personal gains should ever compromise the convenience and ease of use for the customer.
 
 ## Credits
 Built using:
