@@ -21,6 +21,7 @@
     const genre_url = 'http://localhost:1337/genres/';
     const PROVIDER_URL = 'http://localhost:1337/providers/';
     const INPUT_TIMER = 200;
+
     let input = '';
     let timer;
     let active = false;
@@ -133,12 +134,14 @@
                 {#await fetchGenres()}
                     <p>...loading selection</p>
                 {:then genres}
-                    <Select items={genres}
-                            placeholder="Select genres..."
-                            isMulti={true}
-                            bind:selectedValue={selectedGenres}
-                            on:select={debounceInput}>
-                    </Select>
+                    <label>
+                        <Select items={genres}
+                                placeholder="Select genres..."
+                                isMulti={true}
+                                bind:selectedValue={selectedGenres}
+                                on:select={debounceInput}>
+                        </Select>
+                    </label>
                 {:catch error}
                     <p>Select error! {error}</p>
                 {/await}
@@ -171,22 +174,13 @@
                         {#if showExtra && index === currentCard}
                             <div style="position: absolute;">
                                 <Card flat shaped hover>
-                                    {#if active}
-                                        <div transition:slide={{ y: 100, duration: 300 }}
-                                             class="overview">
-                                            <div class="pl-4 pr-4 pt-2 pb-2">
-                                                <p style="line-height: 95%;">
-                                                    <small>{media.overview}</small></p>
-                                            </div>
-                                        </div>
-                                    {/if}
                                     <img on:click={ redirectTo(media.id) }
                                          src="https://image.tmdb.org/t/p/w500{media.poster_path}"
                                          alt="background"/>
                                     <div class="provider-nest">
                                         {#each media.specific_providers as provider}
                                             <img class="provider-logo-hover"
-                                                 src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                                 src="https://image.tmdb.org/t/p/original{provider.logo_path}"
                                                  alt="Poster for {media.title}">
                                         {/each}
                                     </div>
@@ -199,13 +193,7 @@
                                                 {/if}
                                             {/each}
                                         </small>
-                                    </p>
-                                    <CardActions>
-                                        <Button text on:click={toggleOverview}
-                                                style="margin-top: -20px; z-index: 4">
-                                            <Icon path={mdiChevronDown} rotate={active ? 180 : 0}/>
-                                        </Button>
-                                    </CardActions>
+                                    <br>
                                 </Card>
                             </div>
                         {:else}
@@ -215,7 +203,7 @@
                                 <div class="provider-nest">
                                     {#each media.specific_providers as provider}
                                         <img class="provider-logo"
-                                             src="https://image.tmdb.org/t/p/w500{provider.logo_path}"
+                                             src="https://image.tmdb.org/t/p/original{provider.logo_path}"
                                              alt="Poster for {media.title}">
                                     {/each}
                                 </div>
@@ -226,8 +214,6 @@
             </div>
         {/if}
     </div>
-
-    <Footer/>
 
 </MaterialApp>
 

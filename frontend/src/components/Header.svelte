@@ -1,6 +1,14 @@
 <script>
     import { mdiMenu, mdiHome } from '@mdi/js';
-    import { AppBar, Button, Menu, ListItem, Icon, MaterialApp } from 'svelte-materialify';
+    import { AppBar, Button, Menu, ListItem, Icon, MaterialApp, Select } from 'svelte-materialify';
+    import {goto} from "@roxi/routify";
+
+    const countries = [
+            {name: 'Denmark', value: 'dk'},
+            {name: 'Germany', value: 'de'},
+            {name: 'Sweden', value: 'se'},
+            {name: 'UK', value: 'gb'},
+            {name: 'USA', value: 'us'}]
 
 </script>
 
@@ -10,16 +18,12 @@
     <Icon path={mdiHome}/> streamchaser
   </Button>
   <div style="flex-grow:1"></div>
-  <Button text rounded style="margin-right: 5px">Roulette</Button>
-  <Menu right>
-    <div slot="activator">
-      <Button fab depressed>
-        <Icon path={mdiMenu} />
-      </Button>
+  <Button on:click={$goto('/about')} text rounded style="margin-right: 3%">About Us</Button>
+  <Button on:click={$goto('/faq')} text rounded style="margin-right: 3%">FAQ</Button>
+  <div class="d-flex flex-row">
+    <div class="pa-2 ma-1">
+      <Select filled items={countries}>Country</Select>
     </div>
-    <ListItem>Item 1</ListItem>
-    <ListItem>Item 2</ListItem>
-    <ListItem>Item 3</ListItem>
-  </Menu>
+  </div>
 </AppBar>
 </MaterialApp>

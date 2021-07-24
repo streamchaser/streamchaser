@@ -13,6 +13,7 @@
         'Twitter logo': '../images/twitter_logo.png',
         'Instagram logo': '../images/instagram_logo.png'
     };
+    import {goto, url} from "@roxi/routify";
 
     let toggle = false;
 
@@ -34,7 +35,7 @@
             <div class="mt-2 mb-2">
                 {#if links}
                     {#each links as link}
-                        <Button onclick="window.location.href='https://www.youtube.com/watch?v=yPYZpwSpKmA';"
+                        <Button onclick="{$goto('./about')}"
                                 text rounded class="black-text"
                                 style="padding: 0 60px 0 60px">{link}</Button>
                     {/each}
