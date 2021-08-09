@@ -5,6 +5,7 @@ import requests
 TMDB_KEY = dotenv_values('../.env')['TMDB_API_KEY']
 PSQL_USER = dotenv_values('../.env')['POSTGRES_USERNAME']
 PSQL_PWD = dotenv_values('../.env')['POSTGRES_PASSWORD']
+SUPPORTED_COUNTRY_CODES = ['DK', 'GB', 'DE', 'SE', 'US']
 
 
 def valid_title(media: dict) -> str:

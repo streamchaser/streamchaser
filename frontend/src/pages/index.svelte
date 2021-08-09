@@ -1,5 +1,6 @@
 <script>
     import {fly, slide} from 'svelte/transition';
+    import { currentCountry } from '../store.js';
     import {
         MaterialApp,
         TextField,
@@ -33,6 +34,7 @@
     let selectedGenres;
     let selectedProviders;
     let bgImg;
+    let currentProviderList;
 
     const fetchGenres = async () => {
         const res = await fetch(genre_url);
@@ -40,7 +42,7 @@
     }
 
     const fetchProviders = async () => {
-        const res = await fetch(PROVIDER_URL);
+        const res = await fetch(PROVIDER_URL + $currentCountry);
         return await res.json()
     }
 
@@ -61,21 +63,14 @@
         let genre_query = '';
         for (let i = 0; i < mappedSelectedGenres.length; i++) {
             // First query needs a "?"
-            if (genre_query.length === 0 && i === 0) {
-                genre_query += `?g=${mappedSelectedGenres[0]}`;
-            } else {
-                genre_query += `&g=${mappedSelectedGenres[i]}`;
-            }
-        }
-        for (let i = 0; i < mappedSelectedProviders.length; i++) {
-            if (genre_query.length === 0 && i === 0) {
-                genre_query += `?p=${mappedSelectedProviders[0]}`;
-            } else {
-                genre_query += `&p=${mappedSelectedProviders[i]}`;
-            }
+            genre_query += `&g=${mappedSelectedGenres[i]}`;
         }
 
-        const res = await fetch(search_url + input + genre_query);
+        for (let i = 0; i < mappedSelectedProviders.length; i++) {
+            genre_query += `&p=${mappedSelectedProviders[i]}`;
+        }
+
+        const res = await fetch(search_url + input + '?c=' + $currentCountry + genre_query);
         media = await res.json();
     };
 
@@ -101,23 +96,36 @@
         }
     }
 
-    function toggleOverview() {
-        active = !active;
-    }
-
     function redirectTo(id) {
         if (id[0] === 't') {
-            $goto('./tv/:cc', {cc: 'dk', id: id.slice(1)})
+            $goto('./tv/:cc', {cc: $currentCountry, id: id.slice(1)})
         } else {
-            $goto('./movie/:cc', {cc: 'dk', id: id.slice(1)})
+            $goto('./movie/:cc', {cc: $currentCountry, id: id.slice(1)})
         }
     }
+
+    function lorteTis(){
+      fetch(PROVIDER_URL+$currentCountry)
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Cannot connect to server!');
+            }
+            return res
+        })
+    }
+
+    // If the variable changes
+    $: if($currentCountry){
+        fetchProviders()
+        console.log('penis')
+        lorteTis()
+    }
+
+
 </script>
 
 <MaterialApp>
-
-    <Header/>
-
+    <Header />
     <div class="container">
         <br>
         <h1 style="text-align: center">streamchaser</h1>
@@ -151,7 +159,7 @@
                 {#await fetchProviders()}
                     <p>...loading selection</p>
                 {:then providers}
-                    <Select items={providers}
+                    <Select items={}
                             placeholder="Select providers..."
                             isMulti={true}
                             bind:selectedValue={selectedProviders}

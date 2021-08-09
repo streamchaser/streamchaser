@@ -3,6 +3,8 @@
     import Carousel from "@beyonk/svelte-carousel";
     import {mdiArrowRightBoldCircle , mdiArrowLeftBoldCircle } from '@mdi/js'
     import {url} from '@roxi/routify'
+    import { currentCountry } from '../store.js';
+
 
     const API_URL = "https://image.tmdb.org/t/p/original/"
 
@@ -22,7 +24,7 @@
         const diffY = Math.abs(event.pageY - startY);
 
         if (diffX < delta && diffY < delta) {
-            window.location.href = $url('./:cc', {cc: 'dk', id: id})
+            window.location.href = $url('./:cc', {cc: $currentCountry, id: id})
         }
     }
 
