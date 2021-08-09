@@ -1,5 +1,5 @@
 import requests
-from tqdm import tqdm
+from tqdm import trange
 from schemas import Media, Movie, TV
 from api_helpers import unique_id, valid_title, valid_original_title, valid_release_date, \
     genre_id_to_str, get_movie_length, TMDB_KEY
@@ -22,12 +22,9 @@ def request_trending_media(media_type: str = 'all',
 def get_trending_media_by_total_pages(total_pages: int = 25) -> list:
     """ Gets all movies and tv-series from the specified number of pages
     """
-    page_num = 1
     media_list = []
-    pbar = tqdm(total=total_pages)
-    pbar.set_description('Fetching media from TMDb')
 
-    while page_num <= total_pages:
+    for page_num in trange(1, total_pages + 1, desc='Fetching media from TMDb'):
         movie_dict = request_trending_media('movie', 'week', page_num)
         tv_dict = request_trending_media('tv', 'week', page_num)
 
@@ -37,11 +34,7 @@ def get_trending_media_by_total_pages(total_pages: int = 25) -> list:
         for page in tv_dict['results']:
             media_list.append(page)
 
-        page_num += 1
-        pbar.update(1)
-
-    pbar.close()
-    trending_media = [
+    return [
         # pydantic Media schema
         Media(
             id=unique_id(media),
@@ -54,8 +47,6 @@ def get_trending_media_by_total_pages(total_pages: int = 25) -> list:
         ).dict()
         for media in media_list
     ]
-
-    return trending_media
 
 
 def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:

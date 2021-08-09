@@ -61,34 +61,30 @@ def remove_all_media():
 @app.command()
 def add_provider_to_media():
     db = database.SessionLocal()
-    media = get_all_media(db)
-    media_ids = [media.id for media in media]
-    pbar_media_ids = tqdm(media_ids)
-    pbar_media_ids.set_description('Adding providers to media')
+    all_media = get_all_media(db)
 
-    for media_id in pbar_media_ids:
+    for media in tqdm(all_media, desc='Adding providers to media'):
         try:
-            if media_id[0] == 'm':
-                search_url = f'{API_URL}movie/{media_id[1:]}?api_key={TMDB_KEY}' \
+            if media.id[0] == 'm':
+                search_url = f'{API_URL}movie/{media.id[1:]}?api_key={TMDB_KEY}' \
                                    f'&append_to_response=watch/providers'
 
-            elif media_id[0] == 't':
-                search_url = f'{API_URL}tv/{media_id[1:]}?api_key={TMDB_KEY}' \
+            elif media.id[0] == 't':
+                search_url = f'{API_URL}tv/{media.id[1:]}?api_key={TMDB_KEY}' \
                                 f'&append_to_response=watch/providers'
 
             else:
                 # skips to next element if id has wrong format
-                typer.echo(f'Error in id: {media_id}')
+                typer.echo(f'Error in id: {media.id}')
                 continue
 
-            media = requests.get(search_url).json()
-
-            media_provider = get_providers(media.get('watch/providers'))
-            update_media_provider_by_id(db, media_id, media_provider)
+            media_req = requests.get(search_url).json()
+            media_provider = get_providers(media_req.get('watch/providers'))
+            update_media_provider_by_id(db, media.id, media_provider)
 
         except Exception as e:
-            typer.echo(f'Error in cron.py::add_provider_to_media: {e} | media_id: {media_id}')
-            update_media_provider_by_id(db, media_id, [])
+            typer.echo(f'Error in cron.py::add_provider_to_media: {e} | media_id: {media.id}')
+            update_media_provider_by_id(db, media.id, [])
 
 
 @app.command()
