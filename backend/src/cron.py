@@ -2,7 +2,7 @@ from tqdm import tqdm
 import requests
 import typer
 from api import get_trending_media_by_total_pages, get_providers, API_URL
-from api_helpers import TMDB_KEY
+from api_helpers import TMDB_KEY, SUPPORTED_COUNTRY_CODES
 from database_service import dump_media_to_db, dump_genres_to_db, \
     init_meilisearch_indexing, prune_non_ascii_media_from_db
 from search import client
@@ -40,10 +40,11 @@ def remove_blacklisted_from_search():
     blacklisted_media = [
         line.rstrip() for line in open('../blacklist.txt')
     ]
+    for country_code in SUPPORTED_COUNTRY_CODES:
+        client.index(f'media_{country_code}').delete_documents(blacklisted_media)
 
-    client.index('media').delete_documents(blacklisted_media)
-
-    typer.echo(f'Attempted to remove {len(blacklisted_media)} blacklisted media elements')
+    typer.echo(f'Attempted to remove {len(blacklisted_media)} blacklisted media elements in '
+               f'{len(SUPPORTED_COUNTRY_CODES)} indexes')
 
 
 @app.command()

@@ -6,7 +6,6 @@ from search import client
 from tqdm import tqdm
 
 
-
 def dump_media_to_db(media: list[dict]):
     """Turns a list of dicts into a Media-schemas, and feeds them to crud create
     """

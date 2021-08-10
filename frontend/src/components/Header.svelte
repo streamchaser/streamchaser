@@ -1,10 +1,10 @@
 <script>
-    import { mdiMenu, mdiHome } from '@mdi/js';
-    import { AppBar, Button, Menu, ListItem, Icon, MaterialApp, Select } from 'svelte-materialify';
-    import {goto} from "@roxi/routify";
+    import { mdiHome } from '@mdi/js';
+    import { AppBar, Button, Icon, MaterialApp } from 'svelte-materialify';
+    import { goto } from "@roxi/routify";
     import { currentCountry } from '../store.js';
 
-    let value = 'DK'
+    let value = 'DK';
 
     const countries = [
             {name: 'Denmark', value: 'DK'},
@@ -29,6 +29,5 @@
 		<option value={country.value}>{country.name}</option>
 	{/each}
     </select>
-
 </AppBar>
 </MaterialApp>

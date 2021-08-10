@@ -1,22 +1,16 @@
 <script>
-    import {fly, slide} from 'svelte/transition';
+    import { fly } from 'svelte/transition';
     import { currentCountry } from '../store.js';
     import {
         MaterialApp,
         TextField,
         Card,
-        CardText,
-        CardActions,
-        Button,
-        Icon,
         Row,
         Col
     } from 'svelte-materialify';
     import Select from 'svelte-select'
     import Header from '../components/Header.svelte'
-    import Footer from '../components/Footer.svelte'
-    import {mdiChevronDown} from '@mdi/js'
-    import {goto, url} from "@roxi/routify";
+    import { goto } from "@roxi/routify";
 
     const search_url = 'http://localhost:1337/search/';
     const genre_url = 'http://localhost:1337/genres/';
@@ -34,7 +28,7 @@
     let selectedGenres;
     let selectedProviders;
     let bgImg;
-    let currentProviderList;
+    let currentProviders;
 
     const fetchGenres = async () => {
         const res = await fetch(genre_url);
@@ -43,7 +37,7 @@
 
     const fetchProviders = async () => {
         const res = await fetch(PROVIDER_URL + $currentCountry);
-        return await res.json()
+        currentProviders = await res.json()
     }
 
     // run search if we haven't received input in the last 200ms
@@ -117,8 +111,6 @@
     // If the variable changes
     $: if($currentCountry){
         fetchProviders()
-        console.log('penis')
-        lorteTis()
     }
 
 
@@ -159,7 +151,7 @@
                 {#await fetchProviders()}
                     <p>...loading selection</p>
                 {:then providers}
-                    <Select items={}
+                    <Select items={currentProviders}
                             placeholder="Select providers..."
                             isMulti={true}
                             bind:selectedValue={selectedProviders}
