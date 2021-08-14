@@ -9,8 +9,6 @@
 
     const tv_detail_url = `http://localhost:1337/tv/${$params.cc}/${$params.id}`
 
-    let firstLoadCompleted = false
-
     const fetchTvDetails = async () => {
         const response = await fetch(tv_detail_url);
         return await response.json()
@@ -18,6 +16,7 @@
 
     const API_URL = "https://image.tmdb.org/t/p/original/"
 
+    let firstLoadCompleted = false
     // If the variable changes
     $: if($currentCountry) {
         if (firstLoadCompleted === true) {

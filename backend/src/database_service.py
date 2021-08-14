@@ -60,7 +60,6 @@ def dump_genres_to_db():
 def init_meilisearch_indexing():
     """MeiliSearch indexing from Postgres DB
     """
-    # TODO: Less hardcoded version is prefferable
 
     try:
         db = database.SessionLocal()

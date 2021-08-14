@@ -8,8 +8,6 @@
 
     const movie_detail_url = `http://localhost:1337/movie/${$params.cc}/${$params.id}`
 
-    let firstLoadCompleted = false
-
     const fetchMovieDetails = async () => {
         const response = await fetch(movie_detail_url);
         return await response.json()
@@ -17,6 +15,7 @@
 
     const API_URL = "https://image.tmdb.org/t/p/original/"
 
+    let firstLoadCompleted = false
     // If the variable changes
     $: if($currentCountry) {
         if (firstLoadCompleted === true) {
