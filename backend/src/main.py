@@ -42,6 +42,7 @@ async def root(db: Session = Depends(database.get_db)) -> list[dict]:
 
 @app.get('/search/{user_input}')
 async def search(user_input: str,
+                 c: str,
                  g: Optional[List[str]] = Query(None),
                  p: Optional[List[str]] = Query(None)):
     """
@@ -52,6 +53,7 @@ async def search(user_input: str,
     """
     genres = g
     providers = p
+    country_code = c
 
     if genres and providers:
         genre_list: list[str] = [
@@ -62,24 +64,24 @@ async def search(user_input: str,
              for providers in providers]
         ]
 
-        return client.index('media').search(user_input, {
+        return client.index(f'media_{country_code}').search(user_input, {
             'limit': 21,
             'facetFilters': genre_list + provider_list
         })
     if genres:
-        return client.index('media').search(user_input, {
+        return client.index(f'media_{country_code}').search(user_input, {
             'limit': 21,
             # This is using AND logic
             'facetFilters': [f'genres:{genre}' for genre in genres]
         })
     elif providers:
-        return client.index('media').search(user_input, {
+        return client.index(f'media_{country_code}').search(user_input, {
             'limit': 21,
             # This is using OR logic
             'facetFilters': [[f'specific_provider_names:{providers}'
                               for providers in providers]]
         })
-    return client.index('media').search(user_input, {'limit': 21})
+    return client.index(f'media_{country_code}').search(user_input, {'limit': 21})
 
 
 @app.get('/movie/{country_code}/{movie_id}')
@@ -131,8 +133,8 @@ async def read_all_genres(db: Session = Depends(database.get_db)):
     return [genre.name for genre in db_genres]
 
 
-@app.get('/providers/')
-async def read_all_providers():
+@app.get('/providers/{country_code}')
+async def read_all_providers(country_code):
     """Reads all the providers from providers.txt
     """
-    return [line.rstrip() for line in open('../providers.txt')]
+    return [line.rstrip() for line in open(f'../providers_{country_code}.txt')]

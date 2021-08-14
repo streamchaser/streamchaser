@@ -1,10 +1,10 @@
 <script>
-    import {params} from '@roxi/routify'
-    import {MaterialApp, Icon, Card, CardText, CardTitle} from 'svelte-materialify'
-    import {mdiRefresh} from '@mdi/js'
-    import Footer from "../../components/Footer.svelte";
+    import {url, params, goto} from '@roxi/routify'
+    import { MaterialApp, Icon, Card, CardText, CardTitle } from 'svelte-materialify'
+    import { mdiRefresh } from '@mdi/js'
     import Header from "../../components/Header.svelte";
     import Carousel from '../../components/Carousel.svelte';
+    import { currentCountry } from '../../store.js';
 
     const movie_detail_url = `http://localhost:1337/movie/${$params.cc}/${$params.id}`
 
@@ -14,6 +14,16 @@
     }
 
     const API_URL = "https://image.tmdb.org/t/p/original/"
+
+    let firstLoadCompleted = false
+    // If the variable changes
+    $: if($currentCountry) {
+        if (firstLoadCompleted === true) {
+            window.location.href = $url('./:cc', {cc: $currentCountry, id: $params.id})
+        }
+        firstLoadCompleted = true;
+    }
+
 </script>
 
 <MaterialApp>
@@ -61,8 +71,6 @@
             </div>
         </div>
     {/await}
-    <Footer/>
-
 </MaterialApp>
 
 <style>

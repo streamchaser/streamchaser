@@ -1,10 +1,11 @@
 <script>
-    import {params} from '@roxi/routify'
-    import {MaterialApp, Card, CardText, Tabs, Tab, TabContent, Icon, CardTitle} from 'svelte-materialify'
-    import {mdiRefresh} from '@mdi/js';
-    import Footer from "../../components/Footer.svelte";
+    import {goto, params, url} from '@roxi/routify'
+    import { MaterialApp, Card, CardText, Tabs, Tab, TabContent, Icon, CardTitle } from 'svelte-materialify'
+    import { mdiRefresh } from '@mdi/js';
     import Header from "../../components/Header.svelte";
     import Carousel from '../../components/Carousel.svelte';
+    import { currentCountry } from "../../store";
+
 
     const tv_detail_url = `http://localhost:1337/tv/${$params.cc}/${$params.id}`
 
@@ -14,6 +15,15 @@
     }
 
     const API_URL = "https://image.tmdb.org/t/p/original/"
+
+    let firstLoadCompleted = false
+    // If the variable changes
+    $: if($currentCountry) {
+        if (firstLoadCompleted === true) {
+            window.location.href = $url('./:cc', {cc: $currentCountry, id: $params.id})
+        }
+        firstLoadCompleted = true;
+    }
 </script>
 
 <MaterialApp>
@@ -90,7 +100,7 @@
             </div>
 
             <div style="padding-top: 3vh; padding-bottom: 8vh;">
-                &nbsp
+                &nbsp&nbsp
                 <h4>Recommendations</h4>
                 &nbsp
                 <Carousel recommendations="{tv.recommendations}"/>
@@ -99,10 +109,6 @@
     {:catch error}
         <p>Tv details error: {error}</p>
     {/await}
-
-
-    <Footer/>
-
 </MaterialApp>
 
 <style>

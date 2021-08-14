@@ -1,21 +1,16 @@
 <script>
-    import {fly, slide} from 'svelte/transition';
+    import { fly } from 'svelte/transition';
+    import { currentCountry } from '../store.js';
     import {
         MaterialApp,
         TextField,
         Card,
-        CardText,
-        CardActions,
-        Button,
-        Icon,
         Row,
         Col
     } from 'svelte-materialify';
     import Select from 'svelte-select'
     import Header from '../components/Header.svelte'
-    import Footer from '../components/Footer.svelte'
-    import {mdiChevronDown} from '@mdi/js'
-    import {goto, url} from "@roxi/routify";
+    import { goto } from "@roxi/routify";
 
     const search_url = 'http://localhost:1337/search/';
     const genre_url = 'http://localhost:1337/genres/';
@@ -26,13 +21,16 @@
     let timer;
     let active = false;
     let media = [];
-
     let showExtra = false;
+
     let currentCard;
     let hoverTimer;
     let selectedGenres;
     let selectedProviders;
     let bgImg;
+    let currentProviders;
+    let mappedSelectedGenres;
+    let mappedSelectedProviders;
 
     const fetchGenres = async () => {
         const res = await fetch(genre_url);
@@ -40,8 +38,8 @@
     }
 
     const fetchProviders = async () => {
-        const res = await fetch(PROVIDER_URL);
-        return await res.json()
+        const res = await fetch(PROVIDER_URL + $currentCountry);
+        currentProviders = await res.json()
     }
 
     // run search if we haven't received input in the last 200ms
@@ -58,25 +56,18 @@
     const search = async () => {
         // Builds the optional query for genres
         // Example: "?g=Action&g=Comedy&g=Drama"
-        let genre_query = '';
-        for (let i = 0; i < mappedSelectedGenres.length; i++) {
-            // First query needs a "?"
-            if (genre_query.length === 0 && i === 0) {
-                genre_query += `?g=${mappedSelectedGenres[0]}`;
-            } else {
+        if (input) {
+            let genre_query = '';
+            for (let i = 0; i < mappedSelectedGenres.length; i++) {
                 genre_query += `&g=${mappedSelectedGenres[i]}`;
             }
-        }
-        for (let i = 0; i < mappedSelectedProviders.length; i++) {
-            if (genre_query.length === 0 && i === 0) {
-                genre_query += `?p=${mappedSelectedProviders[0]}`;
-            } else {
+            for (let i = 0; i < mappedSelectedProviders.length; i++) {
                 genre_query += `&p=${mappedSelectedProviders[i]}`;
             }
-        }
 
-        const res = await fetch(search_url + input + genre_query);
-        media = await res.json();
+            const res = await fetch(search_url + input + '?c=' + $currentCountry + genre_query);
+            media = await res.json();
+        }
     };
 
     function mouseEnter(index) {
@@ -91,6 +82,11 @@
         }, 200);
     }
 
+    function resetProviders() {
+        selectedProviders = undefined
+        mappedSelectedProviders = []
+    }
+
     function mouseLeave() {
         if (showExtra) {
             showExtra = false;
@@ -101,23 +97,24 @@
         }
     }
 
-    function toggleOverview() {
-        active = !active;
-    }
-
     function redirectTo(id) {
         if (id[0] === 't') {
-            $goto('./tv/:cc', {cc: 'dk', id: id.slice(1)})
+            $goto('./tv/:cc', {cc: $currentCountry, id: id.slice(1)})
         } else {
-            $goto('./movie/:cc', {cc: 'dk', id: id.slice(1)})
+            $goto('./movie/:cc', {cc: $currentCountry, id: id.slice(1)})
         }
+    }
+
+    // If the variable changes
+    $: if($currentCountry) {
+        resetProviders()
+        fetchProviders()
+        search()
     }
 </script>
 
 <MaterialApp>
-
-    <Header/>
-
+    <Header />
     <div class="container">
         <br>
         <h1 style="text-align: center">streamchaser</h1>
@@ -125,7 +122,7 @@
             <TextField dense rounded outlined autofocus
                        bind:value={input}
                        on:input={debounceInput}>
-                Search
+                Search in {$currentCountry}
             </TextField>
         </div>
 
@@ -151,7 +148,7 @@
                 {#await fetchProviders()}
                     <p>...loading selection</p>
                 {:then providers}
-                    <Select items={providers}
+                    <Select items={currentProviders}
                             placeholder="Select providers..."
                             isMulti={true}
                             bind:selectedValue={selectedProviders}

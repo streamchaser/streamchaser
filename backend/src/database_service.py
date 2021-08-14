@@ -1,7 +1,7 @@
 import database
 import crud
 import schemas
-from api_helpers import get_genres
+from api_helpers import get_genres, SUPPORTED_COUNTRY_CODES
 from search import client
 from tqdm import tqdm
 
@@ -60,54 +60,53 @@ def dump_genres_to_db():
 def init_meilisearch_indexing():
     """MeiliSearch indexing from Postgres DB
     """
+
     try:
         db = database.SessionLocal()
         media_list = crud.get_all_media(db=db)
 
-        pbar_media_list = tqdm(media_list)
-        pbar_media_list.set_description('Adding providers to media')
+        for country_code in SUPPORTED_COUNTRY_CODES:
+            media_list_as_dict = [
+                schemas.Media(
+                    id=media.id,
+                    title=media.title,
+                    original_title=media.original_title,
+                    overview=media.overview,
+                    release_date=media.release_date,
+                    genres=media.genres,
+                    poster_path=media.poster_path,
+                    specific_provider_names=[
+                        provider.get(country_code).get('provider_name')
+                        for provider in media.providers
+                        if provider.get(country_code)
+                    ],
+                    specific_providers=[
+                        provider.get(country_code)
+                        for provider in media.providers
+                        if provider.get(country_code)
+                    ]
+                ).dict()
+                for media in media_list
+            ]
+            client.index(f'media_{country_code}').add_documents(media_list_as_dict)
 
-        media_list_as_dict = [
-            schemas.Media(
-                id=media.id,
-                title=media.title,
-                original_title=media.original_title,
-                overview=media.overview,
-                release_date=media.release_date,
-                genres=media.genres,
-                poster_path=media.poster_path,
-                providers=None,  # Placeholder for the full provider JSON
-                specific_provider_names=[
-                    provider.get('DK').get('provider_name')
-                    for provider in media.providers
-                    if provider.get('DK')
-                ],
-                specific_providers=[
-                    provider.get('DK')
-                    for provider in media.providers
-                    if provider.get('DK')
-                ]
-            ).dict()
-            for media in pbar_media_list
-        ]
-        client.index('media').add_documents(media_list_as_dict)
-        print(f'Meilisearch indexing {len(media_list)} elements...')
+            extract_unique_providers_to_txt(media_list, country_code)
 
-        extract_unique_providers_to_txt(media_list)
+        print(f'Meilisearch indexing {len(SUPPORTED_COUNTRY_CODES)} x {len(media_list)} elements')
 
     except Exception as e:
         print(f'Error in database_service.py::init_meilisearch_indexing {e}')
 
 
-def extract_unique_providers_to_txt(media_list):
+def extract_unique_providers_to_txt(media_list, country_code):
     provider_set = {
-        provider.get('DK').get('provider_name')
+        provider.get(country_code).get('provider_name')
         for media in media_list
         for provider in media.providers
-        if provider.get('DK')
+        if provider.get(country_code)
     }
     ordered_provider_list = sorted(provider_set)
-    with open('../providers.txt', 'w') as file:
+    with open(f'../providers_{country_code}.txt', 'w') as file:
         for provider in ordered_provider_list:
             file.write(f'{provider}\n')
 
