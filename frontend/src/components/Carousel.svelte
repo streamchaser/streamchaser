@@ -2,7 +2,7 @@
     import {Icon} from 'svelte-materialify'
     import Carousel from "@beyonk/svelte-carousel";
     import {mdiArrowRightBoldCircle , mdiArrowLeftBoldCircle } from '@mdi/js'
-    import {url} from '@roxi/routify'
+    import {goto, url} from '@roxi/routify'
     import { currentCountry } from '../store.js';
 
 
@@ -24,7 +24,7 @@
         const diffY = Math.abs(event.pageY - startY);
 
         if (diffX < delta && diffY < delta) {
-            window.location.href = $url('./:cc', {cc: $currentCountry, id: id})
+            $goto('./:cc', {cc: $currentCountry, id: id})
         }
     }
 

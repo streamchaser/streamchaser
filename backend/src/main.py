@@ -54,7 +54,6 @@ async def search(user_input: str,
     genres = g
     providers = p
     country_code = c
-    print(f'{genres} + {providers} + {country_code}')
 
     if genres and providers:
         genre_list: list[str] = [
@@ -138,5 +137,4 @@ async def read_all_genres(db: Session = Depends(database.get_db)):
 async def read_all_providers(country_code):
     """Reads all the providers from providers.txt
     """
-    print(country_code)
     return [line.rstrip() for line in open(f'../providers_{country_code}.txt')]

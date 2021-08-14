@@ -21,14 +21,16 @@
     let timer;
     let active = false;
     let media = [];
-
     let showExtra = false;
+
     let currentCard;
     let hoverTimer;
     let selectedGenres;
     let selectedProviders;
     let bgImg;
     let currentProviders;
+    let mappedSelectedGenres;
+    let mappedSelectedProviders;
 
     const fetchGenres = async () => {
         const res = await fetch(genre_url);
@@ -54,18 +56,18 @@
     const search = async () => {
         // Builds the optional query for genres
         // Example: "?g=Action&g=Comedy&g=Drama"
-        let genre_query = '';
-        for (let i = 0; i < mappedSelectedGenres.length; i++) {
-            // First query needs a "?"
-            genre_query += `&g=${mappedSelectedGenres[i]}`;
-        }
+        if (input) {
+            let genre_query = '';
+            for (let i = 0; i < mappedSelectedGenres.length; i++) {
+                genre_query += `&g=${mappedSelectedGenres[i]}`;
+            }
+            for (let i = 0; i < mappedSelectedProviders.length; i++) {
+                genre_query += `&p=${mappedSelectedProviders[i]}`;
+            }
 
-        for (let i = 0; i < mappedSelectedProviders.length; i++) {
-            genre_query += `&p=${mappedSelectedProviders[i]}`;
+            const res = await fetch(search_url + input + '?c=' + $currentCountry + genre_query);
+            media = await res.json();
         }
-
-        const res = await fetch(search_url + input + '?c=' + $currentCountry + genre_query);
-        media = await res.json();
     };
 
     function mouseEnter(index) {
@@ -78,6 +80,11 @@
                 showExtra = true;
             }
         }, 200);
+    }
+
+    function resetProviders() {
+        selectedProviders = undefined
+        mappedSelectedProviders = []
     }
 
     function mouseLeave() {
@@ -98,22 +105,12 @@
         }
     }
 
-    function lorteTis(){
-      fetch(PROVIDER_URL+$currentCountry)
-        .then(res => {
-            if (!res.ok) {
-                throw new Error('Cannot connect to server!');
-            }
-            return res
-        })
-    }
-
     // If the variable changes
-    $: if($currentCountry){
+    $: if($currentCountry) {
+        resetProviders()
         fetchProviders()
+        search()
     }
-
-
 </script>
 
 <MaterialApp>
@@ -125,7 +122,7 @@
             <TextField dense rounded outlined autofocus
                        bind:value={input}
                        on:input={debounceInput}>
-                Search
+                Search in {$currentCountry}
             </TextField>
         </div>
 
