@@ -1,4 +1,5 @@
 from tqdm.contrib.concurrent import process_map
+from tqdm import tqdm
 import typer
 from api import get_trending_media_by_total_pages
 from api_helpers import SUPPORTED_COUNTRY_CODES
@@ -64,9 +65,11 @@ def add_providers():
     all_media = get_all_media(db)
 
     # returns a list of dicts with media ids and provider data
-    providers = process_map(request_providers, all_media, desc="Adding providers to media")
+    providers = process_map(
+        request_providers, all_media, chunksize=10, desc="Fetching provider data"
+    )
 
-    for provider in providers:
+    for provider in tqdm(providers, desc="Updating database with provider data"):
         update_media_provider_by_id(db, provider.get('media_id'), provider.get('data'))
 
 
