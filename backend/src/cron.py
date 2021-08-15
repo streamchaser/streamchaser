@@ -1,12 +1,12 @@
+from tqdm.contrib.concurrent import process_map
 from tqdm import tqdm
-import requests
 import typer
-from api import get_trending_media_by_total_pages, get_providers, API_URL
-from api_helpers import TMDB_KEY, SUPPORTED_COUNTRY_CODES
+from api import get_trending_media_by_total_pages
+from api_helpers import SUPPORTED_COUNTRY_CODES
 from database_service import dump_media_to_db, dump_genres_to_db, \
     init_meilisearch_indexing, prune_non_ascii_media_from_db
 from search import client
-from crud import get_all_media, update_media_provider_by_id, delete_all_media
+from crud import get_all_media, update_media_provider_by_id, delete_all_media, request_providers
 import database
 
 app = typer.Typer()
@@ -60,32 +60,17 @@ def remove_all_media():
 
 
 @app.command()
-def add_provider_to_media():
+def add_providers():
     db = database.SessionLocal()
     all_media = get_all_media(db)
 
-    for media in tqdm(all_media, desc='Adding providers to media'):
-        try:
-            if media.id[0] == 'm':
-                search_url = f'{API_URL}movie/{media.id[1:]}?api_key={TMDB_KEY}' \
-                                   f'&append_to_response=watch/providers'
+    # returns a list of dicts with media ids and provider data
+    providers = process_map(
+        request_providers, all_media, chunksize=10, desc="Fetching provider data"
+    )
 
-            elif media.id[0] == 't':
-                search_url = f'{API_URL}tv/{media.id[1:]}?api_key={TMDB_KEY}' \
-                                f'&append_to_response=watch/providers'
-
-            else:
-                # skips to next element if id has wrong format
-                typer.echo(f'Error in id: {media.id}')
-                continue
-
-            media_req = requests.get(search_url).json()
-            media_provider = get_providers(media_req.get('watch/providers'))
-            update_media_provider_by_id(db, media.id, media_provider)
-
-        except Exception as e:
-            typer.echo(f'Error in cron.py::add_provider_to_media: {e} | media_id: {media.id}')
-            update_media_provider_by_id(db, media.id, [])
+    for provider in tqdm(providers, desc="Updating database with provider data"):
+        update_media_provider_by_id(db, provider.get('media_id'), provider.get('data'))
 
 
 @app.command()
@@ -93,7 +78,7 @@ def full_setup(total_pages: int, remove_non_ascii: bool = True):
     if update_media(total_pages=total_pages):
         if remove_non_ascii:
             remove_non_ascii_media()
-        add_provider_to_media()
+        add_providers()
         index_meilisearch()
         remove_blacklisted_from_search()
 
