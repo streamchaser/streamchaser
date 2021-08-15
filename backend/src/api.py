@@ -2,9 +2,7 @@ import requests
 from tqdm import trange
 from schemas import Media, Movie, TV
 from api_helpers import unique_id, valid_title, valid_original_title, valid_release_date, \
-    genre_id_to_str, get_movie_length, TMDB_KEY
-
-API_URL = 'https://api.themoviedb.org/3/'
+    genre_id_to_str, get_movie_length, TMDB_KEY, API_URL
 
 
 def request_trending_media(media_type: str = 'all',
@@ -60,7 +58,7 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
     movies = requests.get(search_api_url).json()
 
     # pydantic schema for a movie
-    movie_schema = Movie(
+    return Movie(
         id=movies.get('id'),
         title=movies.get('title'),
         release_date=movies.get('release_date'),
@@ -76,8 +74,6 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
         backdrop_path=movies.get('backdrop_path')
     )
 
-    return movie_schema
-
 
 def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
     """ Gets data of a tv series from an id
@@ -90,7 +86,7 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
     tv = requests.get(search_api_url).json()
 
     # pydantic schema for a tv series
-    tv_schema = TV(
+    return TV(
         id=tv.get('id'),
         name=tv.get('name'),
         first_air_date=tv.get('first_air_date'),
@@ -106,8 +102,6 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
         seasons=tv.get('seasons'),
         backdrop_path=tv.get('backdrop_path')
     )
-
-    return tv_schema
 
 
 def get_providers(providers: dict, country_code: str = 'all') -> list[dict]:

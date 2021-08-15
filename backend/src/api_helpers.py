@@ -2,6 +2,7 @@ from dotenv import dotenv_values
 import requests
 
 
+API_URL = 'https://api.themoviedb.org/3/'
 TMDB_KEY = dotenv_values('../.env')['TMDB_API_KEY']
 PSQL_USER = dotenv_values('../.env')['POSTGRES_USERNAME']
 PSQL_PWD = dotenv_values('../.env')['POSTGRES_PASSWORD']

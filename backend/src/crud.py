@@ -1,4 +1,9 @@
+import requests
+
 from sqlalchemy.orm import Session
+
+from api import get_providers
+from api_helpers import TMDB_KEY, API_URL
 
 import models
 import schemas
@@ -73,3 +78,23 @@ def create_genre(db: Session, genre: schemas.Genre):
     db.add(db_genre)
     db.commit()
     return db_genre
+
+
+def request_providers(media: models.Media):
+    try:
+        if media.id[0] == 'm':
+            search_url = f'{API_URL}movie/{media.id[1:]}?api_key={TMDB_KEY}' \
+                                f'&append_to_response=watch/providers'
+
+        elif media.id[0] == 't':
+            search_url = f'{API_URL}tv/{media.id[1:]}?api_key={TMDB_KEY}' \
+                            f'&append_to_response=watch/providers'
+
+        media_provider_append = requests.get(search_url).json()
+        return {
+            'media_id': media.id,
+            'data': get_providers(media_provider_append.get('watch/providers'))
+            }
+
+    except Exception as e:
+        print(e)
