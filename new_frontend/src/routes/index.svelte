@@ -1,6 +1,7 @@
 <script>
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
+    import {currentCountry} from '../store.js';
 
     const search_url = 'http://localhost:1337/search/';
     const genre_url = 'http://localhost:1337/genres/';
@@ -8,10 +9,10 @@
     const IMG_URL = 'https://image.tmdb.org/t/p/w500/';
     const INPUT_TIMER = 200;
 
-    let currentCountry = 'US'
     let input = '';
     let timer;
     let media = [];
+    let currentProviders;
     let selectedGenres;
     let selectedProviders;
     let mappedSelectedGenres;
@@ -41,10 +42,26 @@
                 genre_query += `&p=${mappedSelectedProviders[i]}`;
             }
 
-            const res = await fetch(search_url + input + '?c=' + currentCountry + genre_query);
+            const res = await fetch(search_url + input + '?c=' + $currentCountry + genre_query);
             media = await res.json();
         }
     };
+
+    const fetchProviders = async () => {
+        const res = await fetch(PROVIDER_URL + $currentCountry);
+        currentProviders = await res.json()
+    }
+
+    function resetProviders() {
+        selectedProviders = undefined
+        mappedSelectedProviders = []
+    }
+
+    $: if ($currentCountry) {
+        // resetProviders()
+        // fetchProviders()
+        search()
+    }
 
 </script>
 
