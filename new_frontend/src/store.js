@@ -19,4 +19,4 @@ const createWritableStore = (key, startValue) => {
   };
 }
 
-export const currentCountry = createWritableStore('count', 'DK');
+export const currentCountry = createWritableStore('country', 'DK');

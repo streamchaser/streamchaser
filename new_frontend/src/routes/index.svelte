@@ -65,39 +65,40 @@
 
 </script>
 
-<Navbar/>
-
-
-<div class="container mx-auto">
-    <div class="form-control pt-4">
-        <input
-                type="text"
-                placeholder="Search"
-                class="input input-bordered"
-                bind:value={input}
-                on:input={debounceInput}>
-    </div>
-    {#if media.hits}
-        <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-2 pt-4 bg-base-100">
-            {#each media.hits as media}
-                <div class="card compact bordered w-auto">
-                    <figure>
-                        <img src="{IMG_URL}{media.poster_path}" alt="haha du kan ikke se"/>
-                    </figure>
-                    <div class="-space-x-4 avatar-group">
-                        {#each media.specific_providers as provider}
-                            <div class="avatar">
-                                <div class="w-12 h-12">
-                                    <img src="{IMG_URL}{provider.logo_path}">
-                                </div>
-                            </div>
-                        {/each}
-                    </div>
-                </div>
-            {/each}
+<div class="flex flex-col h-screen justify-between">
+    <Navbar/>
+    <div class="mb-auto container mx-auto">
+        <h1 class="text-center text-3xl pt-4">streamchaser</h1>
+        <div class="form-control pt-4">
+            <input
+                    type="text"
+                    placeholder="Search in {$currentCountry}"
+                    class="input input-bordered"
+                    bind:value={input}
+                    on:input={debounceInput}>
         </div>
-    {/if}
+        {#if media.hits}
+            <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-2 pt-4 bg-base-100">
+                {#each media.hits as media}
+                    <div class="card compact bordered w-auto">
+                        <figure>
+                            <img src="{IMG_URL}{media.poster_path}" alt="haha du kan ikke se"/>
+                        </figure>
+                        <div class="-space-x-4 avatar-group">
+                            {#each media.specific_providers as provider}
+                                <div class="avatar">
+                                    <div class="w-12 h-12">
+                                        <img src="{IMG_URL}{provider.logo_path}">
+                                    </div>
+                                </div>
+                            {/each}
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        {/if}
+    </div>
+
+
+    <Footer/>
 </div>
-
-
-<Footer/>
