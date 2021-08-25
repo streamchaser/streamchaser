@@ -93,8 +93,12 @@
                         <figure>
                             <img src="{imageUrl}{media.poster_path}" alt="media poster"/>
                         </figure>
-                        <div class="-space-x-4 avatar-group">
-                            {#if providerAmounts[mediaIndex] <= shownProviders}
+                        {#if providerAmounts[mediaIndex] === 0}
+                            <div class="card-body">
+                                <p class="text-center"><strong>No providers in {$currentCountry}</strong></p>
+                            </div>
+                        {:else if providerAmounts[mediaIndex] <= shownProviders}
+                            <div class="-space-x-4 avatar-group">
                                 {#each media.specific_providers as provider}
                                     <div class="avatar">
                                         <div class="w-12 h-12">
@@ -102,8 +106,10 @@
                                         </div>
                                     </div>
                                 {/each}
-                            {:else}
-                                {#each media.specific_providers.slice(0, shownProviders-1) as provider}
+                            </div>
+                        {:else}
+                            <div class="-space-x-4 avatar-group">
+                                {#each media.specific_providers.slice(0, shownProviders - 1) as provider}
                                     <div class="avatar">
                                         <div class="w-12 h-12">
                                             <img src="{imageUrl}{provider.logo_path}" alt="provider logo">
@@ -112,11 +118,11 @@
                                 {/each}
                                 <div class="avatar placeholder">
                                     <div class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
-                                        <span>+{providerAmounts[mediaIndex] - shownProviders+1}</span>
+                                        <span>+{providerAmounts[mediaIndex] - shownProviders + 1}</span>
                                     </div>
                                 </div>
-                            {/if}
-                        </div>
+                            </div>
+                        {/if}
                     </div>
                 {/each}
             </div>
