@@ -1,7 +1,7 @@
 <script>
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
-    import {currentCountry} from '../store.js';
+    import {currentCountry} from '../stores/country.js';
 
     const searchUrl = 'http://localhost:1337/search/';
     const genreUrl = 'http://localhost:1337/genres/';
@@ -78,7 +78,7 @@
     <Navbar/>
     <div class="mb-auto container mx-auto">
         <h1 class="text-center text-3xl pt-4">streamchaser</h1>
-        <div class="form-control pt-4">
+        <div class="form-control p-4">
             <input
                     type="text"
                     placeholder="Search in {$currentCountry}"

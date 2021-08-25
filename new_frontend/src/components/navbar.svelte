@@ -1,8 +1,8 @@
 <!-- https://daisyui.com/components/navbar -->
 <script>
-    import {currentCountry} from '../store.js';
+    import {currentCountry} from '../stores/country.js';
 
-    let value = $currentCountry;
+    let selectedCountry = $currentCountry;
 
     const countries = [
         {name: 'Denmark', value: 'DK'},
@@ -11,9 +11,7 @@
         {name: 'UK', value: 'GB'},
         {name: 'USA', value: 'US'}];
 
-
 </script>
-
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
     <div class="flex-none px-2 mx-2">
         <a href="/">
@@ -28,7 +26,7 @@
         </div>
     </div>
     <div class="pl-4">
-        <select bind:value on:change={currentCountry.set(value)}
+        <select bind:value={selectedCountry} on:change={currentCountry.set(selectedCountry)}
                 class="select select-ghost select-bordered max-sm">
             <option disabled="disabled">Choose country</option>
             {#each countries as country}

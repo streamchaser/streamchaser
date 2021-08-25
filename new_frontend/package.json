@@ -15,7 +15,8 @@
     "eslint-plugin-svelte3": "^3.2.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "svelte": "^3.34.0"
+    "svelte": "^3.34.0",
+    "svelte-local-storage-store": "^0.2.4"
   },
   "type": "module"
 }
