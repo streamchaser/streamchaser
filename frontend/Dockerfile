@@ -1,20 +1,23 @@
-#FROM nginx
-#COPY dist /usr/share/nginx/html
-#
-#
-# Use Node.js 14, name this stage 'frontend'
-FROM node:14
+# Our Node base image
+FROM node:14.16.1
 
-# Copy the rest of the files for the frontend
-COPY . /app
+# Set the Node environment to development to ensure all packages are installed
+ENV NODE_ENV development
 
-# Our working directory within the image
-WORKDIR /app
+# Change our current working directory
+WORKDIR /usr/src/app
 
-# Copy package and lock files then install dependencies
-COPY package.json .
-COPY package-lock.json .
+# Copy over `package.json` and lock files to optimize the build process
+COPY ["package.json", "package-lock.json*", "./"]
+# Install Node modules
 RUN npm install
-RUN npm run build
 
-EXPOSE 5000
+# Copy over rest of the project files
+COPY . .
+
+# Expose port 3000 for the SvelteKit app and 24678 for Vite's HMR
+EXPOSE 3000
+EXPOSE 24678
+
+# Run and set the host to 0.0.0.0 so we can access the web app from outside
+# CMD ["npm", "run", "dev", "--host", "0.0.0.0"]

@@ -1,14 +1,25 @@
 version: '3'
 services:
+    # old_frontend:
+    #     build: ./old_frontend
+    #     container_name: oldsvelte
+    #     command: npm run dev:ssr
+    #     ports:
+    #         - 5000:5000
+    #         - 35729:35729
+    #     volumes:
+    #         - ./old_frontend/:/app
+    #         - /app/node_modules
     frontend:
+        restart: on-failure
         build: ./frontend
         container_name: svelte
-        command: npm run dev:ssr
+        command: npm run dev -- --host
         ports:
-            - 5000:5000
-            - 35729:35729
+            - 3000:3000
+            - 24678:24678
         volumes:
-            - ./frontend/:/app
+            - ./frontend:/app
             - /app/node_modules
     backend:
         build: ./backend

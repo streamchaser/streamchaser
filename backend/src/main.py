@@ -19,7 +19,7 @@ app = FastAPI()
 
 origins = [
     'http://localhost:8080',
-    'http://localhost:5000',
+    'http://localhost:5000',  # TODO: Remove when old_frontend is deleted
     'http://localhost:3000',
     'http://localhost',
     'https://localhost',
