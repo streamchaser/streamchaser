@@ -2,6 +2,7 @@
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
     import {currentCountry} from '../stores/country.js';
+    import { goto } from '$app/navigation';
 
     const searchUrl = 'http://localhost:1337/search/';
     const genreUrl = 'http://localhost:1337/genres/';
@@ -72,6 +73,14 @@
         search()
     }
 
+    function routeToPage(mediaId, replaceState) {
+        if (mediaId.startsWith('m')) {
+            goto(`/movie/${currentCountry}/${mediaId.slice(1)}`, { replaceState })
+        } else {
+            goto(`/tv/${currentCountry}/${mediaId.slice(1)}`, { replaceState })
+        }
+    }
+
 </script>
 
 <div class="flex flex-col h-screen justify-between">
@@ -89,7 +98,7 @@
         {#if media.hits}
             <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-2 pt-4 bg-base-100">
                 {#each media.hits as media, mediaIndex}
-                    <div class="card compact bordered w-auto">
+                    <div on:click={ () => { routeToPage(media.id) }} class="card compact bordered w-auto">
                         <figure>
                             <img src="{imageUrl}{media.poster_path}" alt="media poster"/>
                         </figure>
