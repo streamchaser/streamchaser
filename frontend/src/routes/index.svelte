@@ -2,7 +2,7 @@
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
     import {currentCountry} from '../stores/country.js';
-    import { goto } from '$app/navigation';
+    import {goto} from '$app/navigation';
 
     const searchUrl = 'http://localhost:1337/search/';
     const genreUrl = 'http://localhost:1337/genres/';
@@ -75,9 +75,9 @@
 
     function routeToPage(mediaId, replaceState) {
         if (mediaId.startsWith('m')) {
-            goto(`/movie/${currentCountry}/${mediaId.slice(1)}`, { replaceState })
+            goto(`/movie/${$currentCountry}/${mediaId.slice(1)}`, {replaceState})
         } else {
-            goto(`/tv/${currentCountry}/${mediaId.slice(1)}`, { replaceState })
+            goto(`/tv/${$currentCountry}/${mediaId.slice(1)}`, {replaceState})
         }
     }
 
@@ -98,20 +98,23 @@
         {#if media.hits}
             <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-2 pt-4 bg-base-100">
                 {#each media.hits as media, mediaIndex}
-                    <div on:click={ () => { routeToPage(media.id) }} class="card compact bordered w-auto">
+                    <div on:click={routeToPage(media.id)}
+                         class="card compact bordered w-auto transition duration-500 ease-in-out transform hover:scale-110 m-1">
                         <figure>
                             <img src="{imageUrl}{media.poster_path}" alt="media poster"/>
                         </figure>
                         {#if providerAmounts[mediaIndex] === 0}
                             <div class="card-body">
-                                <p class="text-center"><strong>No providers in {$currentCountry}</strong></p>
+                                <p class="text-center"><strong>No providers
+                                    in {$currentCountry}</strong></p>
                             </div>
                         {:else if providerAmounts[mediaIndex] <= shownProviders}
                             <div class="-space-x-4 avatar-group">
                                 {#each media.specific_providers as provider}
                                     <div class="avatar">
                                         <div class="w-12 h-12">
-                                            <img src="{imageUrl}{provider.logo_path}" alt="provider logo">
+                                            <img src="{imageUrl}{provider.logo_path}"
+                                                 alt="provider logo">
                                         </div>
                                     </div>
                                 {/each}
@@ -121,7 +124,8 @@
                                 {#each media.specific_providers.slice(0, shownProviders - 1) as provider}
                                     <div class="avatar">
                                         <div class="w-12 h-12">
-                                            <img src="{imageUrl}{provider.logo_path}" alt="provider logo">
+                                            <img src="{imageUrl}{provider.logo_path}"
+                                                 alt="provider logo">
                                         </div>
                                     </div>
                                 {/each}
