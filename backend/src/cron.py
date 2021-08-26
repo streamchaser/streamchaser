@@ -13,7 +13,7 @@ app = typer.Typer()
 
 
 @app.command()
-def update_media(total_pages: int):
+def fetch_media(total_pages: int):
     if 1 <= total_pages <= 500:
         try:
             trending_media = get_trending_media_by_total_pages(total_pages)
@@ -75,7 +75,7 @@ def add_providers():
 
 @app.command()
 def full_setup(total_pages: int, remove_non_ascii: bool = True):
-    if update_media(total_pages=total_pages):
+    if fetch_media(total_pages=total_pages):
         if remove_non_ascii:
             remove_non_ascii_media()
         add_providers()
