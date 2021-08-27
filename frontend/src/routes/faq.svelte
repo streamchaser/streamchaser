@@ -2,42 +2,31 @@
     import Collapse from "../components/collapse.svelte";
     import Footer from "../components/footer.svelte";
     import Navbar from "../components/navbar.svelte";
-    import Avatar from "../components/avatar.svelte";
 </script>
+
 
 <div class="flex flex-col h-screen">
     <Navbar/>
     <div class="mb-auto mx-auto items-center px-2">
         <br>
-        <h1 class="text-center text-3xl">About us</h1>
+        <h1 class="text-center text-3xl">FAQ</h1>
         <br>
-        <Collapse title="Who are we?"
+        <Collapse title="Why cant I find a specific movie or tv show?"
                   description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat amet natus obcaecati
                     molestiae quas mollitia error modi atque aliquam esse."/>
-        <Collapse title="Our vision"
+        <Collapse title="Why dont you support more countries?"
                   description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat amet natus obcaecati
                     molestiae quas mollitia error modi atque aliquam esse."/>
-        <Collapse title="Contact"
+        <Collapse title="I have a good idea, how do I contact you?"
                   description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat amet natus obcaecati
                     molestiae quas mollitia error modi atque aliquam esse."/>
-        <Collapse title="Data sources"
+        <Collapse title="Where do you get your data from?"
                   description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat amet natus obcaecati
                     molestiae quas mollitia error modi atque aliquam esse."/>
-        <Collapse title="TMDB"
+        <Collapse title="Why are some movies or tv shows missing provider logo underneath?"
                   description="Lorem ipsum dolor sit amet consectetur, adipisicing elit. Repellat amet natus obcaecati
                     molestiae quas mollitia error modi atque aliquam esse."/>
 
-        <h2 class="text-center text-3xl">Developers</h2>
-        <div class="flex justify-center space-x-1 p-4">
-            <Avatar href="https://github.com/Primdahl26"
-                    img_src="https://avatars.githubusercontent.com/u/50198099?v=4"/>
-            <Avatar href="https://github.com/AndreasPB"
-                    img_src="https://avatars.githubusercontent.com/u/43907402?v=4"/>
-            <Avatar href="https://github.com/nullxDEADBEEF"
-                    img_src="https://avatars.githubusercontent.com/u/9653806?v=4"/>
-            <Avatar href="https://github.com/Pankai222"
-                    img_src="https://avatars.githubusercontent.com/u/48592277?v=4"/>
-        </div>
     </div>
     <Footer/>
 </div>
