@@ -58,10 +58,10 @@ async def search(user_input: str,
 
     if genres and providers:
         genre_list: list[str] = [
-            f'genres={genre}' for genre in genres
+            f'genres="{genre}"' for genre in genres
         ]
         provider_list: list[list[str]] = [
-            [f'specific_provider_names={providers}'
+            [f'specific_provider_names="{providers}"'
              for providers in providers]
         ]
 
@@ -69,17 +69,17 @@ async def search(user_input: str,
             'limit': 21,
             'filter': genre_list + provider_list
         })
-    if genres:
+    elif genres:
         return client.index(f'media_{country_code}').search(user_input, {
             'limit': 21,
             # This is using AND logic
-            'filter': [f'genres={genre}' for genre in genres]
+            'filter': [f'genres="{genre}"' for genre in genres]
         })
     elif providers:
         return client.index(f'media_{country_code}').search(user_input, {
             'limit': 21,
             # This is using OR logic
-            'filter': [[f'specific_provider_names={providers}'
+            'filter': [[f'specific_provider_names="{providers}"'
                         for providers in providers]]
         })
     return client.index(f'media_{country_code}').search(user_input, {'limit': 21})
