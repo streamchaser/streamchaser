@@ -1,13 +1,16 @@
-from tqdm.contrib.concurrent import process_map
-from tqdm import tqdm
 import typer
+from tqdm import tqdm
+from tqdm.contrib.concurrent import process_map
+
+import database
 from api import get_trending_media_by_total_pages
 from api_helpers import SUPPORTED_COUNTRY_CODES
-from database_service import dump_media_to_db, dump_genres_to_db, \
-    init_meilisearch_indexing, prune_non_ascii_media_from_db
+from crud import (delete_all_media, get_all_media, request_providers,
+                  update_media_provider_by_id)
+from database_service import (dump_genres_to_db, dump_media_to_db,
+                              init_meilisearch_indexing,
+                              prune_non_ascii_media_from_db)
 from search import client
-from crud import get_all_media, update_media_provider_by_id, delete_all_media, request_providers
-import database
 
 app = typer.Typer()
 
@@ -43,8 +46,10 @@ def remove_blacklisted_from_search():
     for country_code in SUPPORTED_COUNTRY_CODES:
         client.index(f'media_{country_code}').delete_documents(blacklisted_media)
 
-    typer.echo(f'Attempted to remove {len(blacklisted_media)} blacklisted media elements in '
-               f'{len(SUPPORTED_COUNTRY_CODES)} indexes')
+    typer.echo(
+        f'Attempted to remove {len(blacklisted_media)} blacklisted media elements in '
+        f'{len(SUPPORTED_COUNTRY_CODES)} indexes'
+    )
 
 
 @app.command()

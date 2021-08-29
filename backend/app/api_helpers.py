@@ -1,6 +1,7 @@
-from dotenv import dotenv_values
-import requests
+from typing import Dict, List
 
+import requests
+from dotenv import dotenv_values
 
 API_URL = 'https://api.themoviedb.org/3/'
 TMDB_KEY = dotenv_values('../.env')['TMDB_API_KEY']
@@ -9,28 +10,28 @@ PSQL_PWD = dotenv_values('../.env')['POSTGRES_PASSWORD']
 SUPPORTED_COUNTRY_CODES = ['DK', 'GB', 'DE', 'SE', 'US']
 
 
-def valid_title(media: dict) -> str:
+def valid_title(media: Dict) -> str:
     if media.get('media_type') == 'movie':
         return media.get('title')
 
     return media.get('name')
 
 
-def valid_original_title(media: dict) -> str:
+def valid_original_title(media: Dict) -> str:
     if media.get('media_type') == 'movie':
         return media.get('original_title')
 
     return media.get('original_name')
 
 
-def valid_release_date(media: dict) -> str:
+def valid_release_date(media: Dict) -> str:
     if media.get('media_type') == 'movie':
         return str(media.get('release_date'))
 
     return str(media.get('first_air_date'))
 
 
-def unique_id(media: dict) -> str:
+def unique_id(media: Dict) -> str:
     if media.get('media_type') == 'movie':
         return f"m{media.get('id')}"
     elif media.get('media_type') == 'tv':
@@ -50,7 +51,7 @@ def get_movie_length(total_minutes: int) -> str:
     return f'{hours}h {minutes}m'
 
 
-def get_genres() -> dict:
+def get_genres() -> Dict:
     """Gets genres from movies and tv-series to translate genre_ids
     """
     movie_url = f'https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_KEY}'
@@ -67,13 +68,13 @@ def get_genres() -> dict:
     }
 
     # Only keeps the unique keys
-    return movie_genre_dict | tv_genre_dict
+    return {**movie_genre_dict, **tv_genre_dict}
 
 
 GENRE_DICT = get_genres()
 
 
-def genre_id_to_str(media: dict) -> list[str]:
+def genre_id_to_str(media: Dict) -> List[str]:
     """Tries to lookup the genres with a list comprehension
     Goes into a for-loop, if there's an error and writes 'Unknown' for the exception
     """

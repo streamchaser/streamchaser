@@ -1,12 +1,12 @@
+from typing import Dict, List
+
 import requests
-
 from sqlalchemy.orm import Session
-
-from api import get_providers
-from api_helpers import TMDB_KEY, API_URL
 
 import models
 import schemas
+from api import get_providers
+from api_helpers import API_URL, TMDB_KEY
 
 
 def get_media_by_id(db: Session, media_id: str):
@@ -39,7 +39,7 @@ def create_media(db: Session, media: schemas.Media):
     return db_media
 
 
-def update_media_provider_by_id(db: Session, id: str, providers: list[dict]):
+def update_media_provider_by_id(db: Session, id: str, providers: List[Dict]):
     db.query(models.Media).filter_by(id=id).update({
         'providers': providers
     })

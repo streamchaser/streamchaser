@@ -1,12 +1,15 @@
-import database
-import crud
-import schemas
-from api_helpers import get_genres, SUPPORTED_COUNTRY_CODES
-from search import client
+from typing import Dict, List
+
 from tqdm import tqdm
 
+import crud
+import database
+import schemas
+from api_helpers import SUPPORTED_COUNTRY_CODES, get_genres
+from search import client
 
-def dump_media_to_db(media: list[dict]):
+
+def dump_media_to_db(media: List[Dict]):
     """Turns a list of dicts into a Media-schemas, and feeds them to crud create
     """
     # TODO: connection should probably be done in a safer way
@@ -92,7 +95,10 @@ def init_meilisearch_indexing():
 
             extract_unique_providers_to_txt(media_list, country_code)
 
-        print(f'Meilisearch indexing {len(SUPPORTED_COUNTRY_CODES)} x {len(media_list)} elements')
+        print(
+            f'Meilisearch indexing {len(SUPPORTED_COUNTRY_CODES)} x '
+            f'{len(media_list)} elements'
+        )
 
     except Exception as e:
         print(f'Error in database_service.py::init_meilisearch_indexing {e}')
