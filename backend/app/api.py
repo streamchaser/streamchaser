@@ -1,13 +1,17 @@
+from typing import Dict, List
+
 import requests
 from tqdm import trange
-from schemas import Media, Movie, TV
-from api_helpers import unique_id, valid_title, valid_original_title, valid_release_date, \
-    genre_id_to_str, get_movie_length, TMDB_KEY, API_URL
+
+from api_helpers import (API_URL, TMDB_KEY, genre_id_to_str, get_movie_length,
+                         unique_id, valid_original_title, valid_release_date,
+                         valid_title)
+from schemas import TV, Media, Movie
 
 
 def request_trending_media(media_type: str = 'all',
                            time_window: str = 'week',
-                           page: int = 1) -> dict[any]:
+                           page: int = 1) -> Dict:
     """
     :param media_type: 'all', 'movie', 'tv', 'person'
     :param time_window: 'week', 'day'
@@ -17,7 +21,7 @@ def request_trending_media(media_type: str = 'all',
     return requests.get(url).json()
 
 
-def get_trending_media_by_total_pages(total_pages: int = 25) -> list:
+def get_trending_media_by_total_pages(total_pages: int = 25) -> List[Media]:
     """ Gets all movies and tv-series from the specified number of pages
     """
     media_list = []
@@ -104,7 +108,7 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
     )
 
 
-def get_providers(providers: dict, country_code: str = 'all') -> list[dict]:
+def get_providers(providers: Dict, country_code: str = 'all') -> List[Dict]:
     """ Gets list of provider data for a movie from a specified country code
     """
 
@@ -127,7 +131,7 @@ def get_providers(providers: dict, country_code: str = 'all') -> list[dict]:
         return []
 
 
-def get_recommendations(recommendations: dict) -> list[dict]:
+def get_recommendations(recommendations: Dict) -> List[Dict]:
     """ Gets list of recommended movies for a movie
     """
 

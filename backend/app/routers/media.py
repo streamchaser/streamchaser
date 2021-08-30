@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -22,7 +23,7 @@ async def read_specific_media(media_id: str, db: Session = Depends(get_db)):
     raise HTTPException(status_code=404, detail="Media doesn't exist")
 
 
-@router.get("/", response_model=list[Media])
+@router.get("/", response_model=List[Media])
 async def read_all_media(
     skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
 ):

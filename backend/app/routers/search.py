@@ -30,8 +30,8 @@ async def search(
     country_code = c
 
     if genres and providers:
-        genre_list: list[str] = [f'genres="{genre}"' for genre in genres]
-        provider_list: list[list[str]] = [
+        genre_list: List[str] = [f'genres="{genre}"' for genre in genres]
+        provider_list: List[List[str]] = [
             [f'specific_provider_names="{providers}"' for providers in providers]
         ]
 

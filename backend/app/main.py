@@ -43,4 +43,4 @@ app.include_router(search.router)
 @app.get("/")
 async def root() -> Dict:
     """Home page"""
-    return {"data": "Welcome to the API - Go to /docs for a better view"}
+    return {"data": "Welcome to the API - Go to /docs for the Swagger documentation"}
