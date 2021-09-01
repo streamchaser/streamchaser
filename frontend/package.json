@@ -11,7 +11,8 @@
   "devDependencies": {
     "@sveltejs/kit": "next",
     "svelte": "^3.34.0",
-    "svelte-local-storage-store": "^0.2.4"
+    "svelte-local-storage-store": "^0.2.4",
+    "svelte-multiselect":" ^1.1.10"
   },
   "type": "module"
 }
