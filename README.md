@@ -9,10 +9,11 @@ Built using:
 * [FastAPI](https://github.com/tiangolo/fastapi) 
 * [MeiliSearch](https://github.com/meilisearch/MeiliSearch)
 * [Svelte](https://github.com/sveltejs/svelte)
-* [Routify](https://github.com/roxiness/routify)
+* [Svelte-kit](https://kit.svelte.dev)
 * [PostgreSQL](https://github.com/postgres/postgres) 
 * [Docker](https://github.com/docker)
-* [Materialfy](https://github.com/TheComputerM/svelte-materialify)
+* [Tailwind CSS](https://tailwindcss.com)
+* [DaisyUI](https://daisyui.com)
 
 Authors 👷:
 * [AndreasPB](https://github.com/AndreasPB)
