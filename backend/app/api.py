@@ -1,7 +1,6 @@
 from typing import Dict, List
 
 import requests
-from tqdm import trange
 
 from api_helpers import (API_URL, TMDB_KEY, genre_id_to_str, get_movie_length,
                          unique_id, valid_original_title, valid_release_date,
@@ -9,33 +8,18 @@ from api_helpers import (API_URL, TMDB_KEY, genre_id_to_str, get_movie_length,
 from schemas import TV, Media, Movie
 
 
-def request_trending_media(media_type: str = 'all',
-                           time_window: str = 'week',
-                           page: int = 1) -> Dict:
-    """
-    :param media_type: 'all', 'movie', 'tv', 'person'
-    :param time_window: 'week', 'day'
-    :param page: int 1:many
-    """
-    url = f'{API_URL}trending/{media_type}/{time_window}?api_key={TMDB_KEY}&page={page}'
-    return requests.get(url).json()
+def fetch_trending_movies(page: int) -> Dict:
+    url = f'{API_URL}trending/movie/week?api_key={TMDB_KEY}&page={page}'
+    return requests.get(url).json()["results"]
 
 
-def get_trending_media_by_total_pages(total_pages: int = 25) -> List[Media]:
-    """ Gets all movies and tv-series from the specified number of pages
-    """
-    media_list = []
+def fetch_trending_tv(page: int) -> Dict:
+    url = f'{API_URL}trending/tv/week?api_key={TMDB_KEY}&page={page}'
+    return requests.get(url).json()["results"]
 
-    for page_num in trange(1, total_pages + 1, desc='Fetching media from TMDb'):
-        movie_dict = request_trending_media('movie', 'week', page_num)
-        tv_dict = request_trending_media('tv', 'week', page_num)
 
-        for page in movie_dict['results']:
-            media_list.append(page)
-
-        for page in tv_dict['results']:
-            media_list.append(page)
-
+def media_converter(mixed_list: List[Dict]) -> List[Media]:
+    """Takes a list movie/tv json ["results"] and converts it to Media"""
     return [
         # pydantic Media schema
         Media(
@@ -47,7 +31,7 @@ def get_trending_media_by_total_pages(total_pages: int = 25) -> List[Media]:
             genres=genre_id_to_str(media),
             poster_path=media.get('poster_path')
         ).dict()
-        for media in media_list
+        for media in mixed_list
     ]
 
 
