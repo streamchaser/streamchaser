@@ -37,9 +37,21 @@ def fetch_media(total_pages: int) -> bool:
             ]
         )
 
-        # Fills the media and genre table
-        dump_media_to_db(trending_media)
-        dump_genres_to_db()
+        try:
+            # Fills the database with media
+            process_map(
+                dump_media_to_db,
+                trending_media,
+                chunksize=10,
+                # max_workers=10,
+                desc="Dumping media to Postgres"
+            )
+
+            dump_genres_to_db()
+
+        except Exception as e:
+            typer.echo('Failed to add element', e)
+
         return True
 
     else:
@@ -82,6 +94,7 @@ def remove_all_media():
 def add_providers():
     db = database.SessionLocal()
     all_media = get_all_media(db)
+    db.close()
 
     # returns a list of dicts with media ids and provider data
     providers = process_map(
