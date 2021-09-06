@@ -1,49 +1,44 @@
-from typing import Dict, List
-
-from tqdm import tqdm
-
 import crud
 import database
 import schemas
+import models
+
+from tqdm import tqdm
+from sqlalchemy.exc import IntegrityError
+
 from api_helpers import SUPPORTED_COUNTRY_CODES, get_genres
 from search import client
 
 
-def dump_media_to_db(media: List[Dict]):
-    """Turns a list of dicts into a Media-schemas, and feeds them to crud create
-    """
-    # TODO: connection should probably be done in a safer way
-    db = database.SessionLocal()
-    already_exists_list = []
-    pbar_media = tqdm(media)
-    pbar_media.set_description('Dumping media to DB')
+def dump_media_to_db(media: models.Media) -> None:
+    """Turns Media-model into a Media-schemas, and adds to Media table"""
 
-    for m in pbar_media:
-        formatted_media = schemas.Media(
-            id=m.get('id'),
-            title=m.get('title'),
-            original_title=m.get('original_title'),
-            overview=m.get('overview'),
-            release_date=m.get('release_date'),
-            genres=m.get('genres'),
-            poster_path=m.get('poster_path')
-        )
-
+    formatted_media = schemas.Media(
+        id=media.get("id"),
+        title=media.get("title"),
+        original_title=media.get("original_title"),
+        overview=media.get("overview"),
+        release_date=media.get("release_date"),
+        genres=media.get("genres"),
+        poster_path=media.get("poster_path")
+    )
+    try:
+        db = database.SessionLocal()
         db_media = crud.get_media_by_id(db=db, media_id=formatted_media.id)
-        if db_media:
-            already_exists_list.append(formatted_media.id)
-        else:
+        if not db_media:
             crud.create_media(db=db, media=formatted_media)
-    print(f'Number of media elements that already existed: {len(already_exists_list)}')
+    except IntegrityError:  # Still a bit unsure why this only happens sometimes
+        pass
+    finally:
+        db.close()
 
 
-def dump_genres_to_db():
+def dump_genres_to_db() -> None:
     """Turns a dict of genres into Genre-schemas, and feeds them to crud create
     """
     # TODO: connection should probably be done in a safer way
     db = database.SessionLocal()
     genres = get_genres()
-    already_exists_list = []
 
     for key in genres:
         formatted_genre = schemas.Genre(
@@ -52,12 +47,9 @@ def dump_genres_to_db():
         )
 
         db_genre = crud.get_genre_by_id(db=db, genre_id=key)
-        if db_genre:
-            already_exists_list.append(formatted_genre.name)
-        else:
+        if not db_genre:
             crud.create_genre(db=db, genre=formatted_genre)
-
-    print(f'Number of Genres that already existed: {len(already_exists_list)}')
+    db.close()
 
 
 def init_meilisearch_indexing():
