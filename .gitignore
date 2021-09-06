@@ -22,7 +22,6 @@ backend/providers???.txt
 # Frontend
 *.DS_Store
 **/node_modules/
-old_frontend/dist/
 .DS_Store
 **/.history
 src/tmp/
