@@ -1,9 +1,10 @@
 import typer
+
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
 
 import database
-from api import get_trending_media_by_total_pages
+from api import fetch_trending_movies, fetch_trending_tv, media_converter
 from api_helpers import SUPPORTED_COUNTRY_CODES
 from crud import (delete_all_media, get_all_media, request_providers,
                   update_media_provider_by_id)
@@ -16,18 +17,31 @@ app = typer.Typer()
 
 
 @app.command()
-def fetch_media(total_pages: int):
+def fetch_media(total_pages: int) -> bool:
     if 1 <= total_pages <= 500:
-        try:
-            trending_media = get_trending_media_by_total_pages(total_pages)
-            # Fills the database with media
-            dump_media_to_db(trending_media)
-            dump_genres_to_db()
+        trending_movies = process_map(
+            fetch_trending_movies,
+            range(1, total_pages),
+            desc="Fetching trending movies"
+        )
 
-        except Exception as e:
-            typer.echo('Failed to add element', e)
+        trending_tv = process_map(
+            fetch_trending_tv, range(1, total_pages), desc="Fetching trending tv"
+        )
 
+        trending_media = media_converter(
+            [
+                media
+                for sublist in trending_movies + trending_tv
+                for media in sublist
+            ]
+        )
+
+        # Fills the media and genre table
+        dump_media_to_db(trending_media)
+        dump_genres_to_db()
         return True
+
     else:
         typer.echo('Method only supports between 1 & 500 pages')
         return False
