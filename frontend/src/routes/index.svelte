@@ -99,11 +99,11 @@
                 on:input={debounceInput}
             />
         </div>
-        <div class="select-primary flex-row">
+        <div class="grid grid-cols-1 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-2 pb-1 pt-1 pr-2 pl-2">
             {#await fetchGenres()}
                 <p>...loading selection</p>
             {:then genres}
-                <MultiSelect --sms-options-bg="var(--my-css-var, grey)"
+                <MultiSelect class="select-primary" --sms-options-bg="var(--my-css-var, #404454)"
                     bind:selected={selectedGenres}
                     on:change={debounceInput}
                     options={genres}
@@ -116,7 +116,7 @@
             {#await fetchProviders()}
                 <p>...loading selection</p>
             {:then}
-                <MultiSelect --sms-options-bg="var(--my-css-var, grey)"
+                <MultiSelect class="select-primary" --sms-options-bg="var(--my-css-var, #404454)"
                     bind:selected={selectedProviders}
                     on:change={debounceInput}
                     options={currentProviders}
