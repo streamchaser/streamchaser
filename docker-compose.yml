@@ -11,6 +11,11 @@ services:
         volumes:
             - ./frontend:/app
             - /app/node_modules
+        labels:
+          - "traefik.enable=true"
+        # TODO: Be able to change between dev and prod
+        #   - "traefik.http.routers.streamchaserfrontend.rule=Host(`streamchaser.tv`)"
+          - "traefik.http.routers.streamchaserfrontend.rule=Host(`localhost`)"
     backend:
         build: ./backend
         container_name: fastapi
@@ -39,7 +44,31 @@ services:
             - pgdata:/var/lib/postgresql/data
         ports:
             - 5432:5432
-        restart: always
+    traefik:
+        image: "traefik:v2.5"
+        container_name: "traefik"
+        command:
+        #- "--log.level=DEBUG"
+        - "--api.insecure=true"
+        - "--providers.docker=true"
+        - "--providers.docker.exposedbydefault=false"
+        - "--entrypoints.web.address=:80"
+        ports:
+        - "80:80"
+        - "443:443"
+        - "8080:8080"
+        volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+    whoami:
+        image: "traefik/whoami"
+        container_name: "simple-service"
+        labels:
+        - "traefik.enable=true"
+        # TODO: Be able to change between dev and prod
+        # - "traefik.http.routers.whoami.rule=Host(`whoami.streamchaser.tv`)"
+        - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
+        - "traefik.http.routers.whoami.entrypoints=web"
 volumes:
     pgdata:
     node_modules:

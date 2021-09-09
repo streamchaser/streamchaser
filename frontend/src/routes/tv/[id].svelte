@@ -1,10 +1,15 @@
 <script>
+    import { variables } from '../../../variables.js'
     import {page} from '$app/stores';
     import {currentCountry} from '../../stores/country.js';
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
 
+<<<<<<< HEAD:frontend/src/routes/tv/[id].svelte
     const tvDetailUrl = `http://localhost:1337/tv/${$currentCountry}/${$page.params.id}`;
+=======
+    const tvDetailUrl = `${variables.ap}/tv/${$page.params.cc}/${$page.params.id}`;
+>>>>>>> Implment Traefik and improve deployment "flow":frontend/src/routes/tv/[cc]/[id].svelte
     const imgUrl = 'https://image.tmdb.org/t/p/original/';
 
     const fetchTVDetails = async () => {
