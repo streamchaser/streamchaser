@@ -8,7 +8,7 @@
         </div>
         <div class="grid grid-flow-col gap-4 p-4">
             <a href="https://github.com/streamchaser/streamchaser">
-                <img src="github.svg" alt="Github"/>
+                <img src="../../github.svg" alt="Github"/>
             </a>
         </div>
         <p>Copyright © 2021 - All right reserved by <a class="link link-hover"
