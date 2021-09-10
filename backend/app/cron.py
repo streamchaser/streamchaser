@@ -18,7 +18,7 @@ app = typer.Typer()
 
 @app.command()
 def fetch_media(total_pages: int) -> bool:
-    if 1 <= total_pages <= 500:
+    if 1 <= total_pages <= 1000:
         trending_movies = process_map(
             fetch_trending_movies,
             range(1, total_pages),
@@ -98,7 +98,7 @@ def add_providers():
 
     # returns a list of dicts with media ids and provider data
     providers = process_map(
-        request_providers, all_media, chunksize=10, desc="Fetching provider data"
+        request_providers, all_media, chunksize=25, desc="Fetching provider data"
     )
 
     for provider in tqdm(providers, desc="Updating database with provider data"):

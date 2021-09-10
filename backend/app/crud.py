@@ -15,7 +15,7 @@ def get_media_by_id(db: Session, media_id: str):
     return db.query(models.Media).filter(models.Media.id == media_id).first()
 
 
-def get_all_media(db: Session, skip: int = 0, limit: int = 25000):
+def get_all_media(db: Session, skip: int = 0, limit: int = 50000):
     """Gets all Media-types limited by 'limit'
     """
     return db.query(models.Media).offset(skip).limit(limit).all()
