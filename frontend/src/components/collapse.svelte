@@ -1,6 +1,8 @@
 <script>
     export let title;
     export let description;
+    export let link;
+    export let linkText;
 </script>
 
 <div tabindex="0"
@@ -8,7 +10,13 @@
     <div class="collapse-title text-xl font-medium">
         {title}
     </div>
-    <div class="collapse-content">
+    {#if link && linkText != null}
+        <div class="collapse-content">
+            <p class="inline">{description}</p> <p class="inline link link-hover" on:click={() => window.open(link)}>{linkText}</p>.
+        </div>
+    {:else}
+        <div class="collapse-content">
         <p>{description}</p>
     </div>
+    {/if}
 </div>
