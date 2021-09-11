@@ -9,22 +9,22 @@
     <Navbar/>
     <div class="mb-auto mx-auto items-center px-2">
         <br>
-        <h1 class="text-center text-3xl">About us</h1>
+        <h1 class="text-center text-3xl">About</h1>
         <br>
         <Collapse title="The people behind"
                   description="Streamchaser was initially founded in 2021 as part of our final project in
-                  AP Computer Science where we came up with the idea behind our application streamchaser.
-                  Since then, we have sought to evolve streamchaser from the end-product of an exam
+                  AP Computer Science where we came up with the idea behind the web application.
+                  Since then, we have sought to evolve Streamchaser from the end-product of an exam
                   to a viable product for widespread use. We are a small development team composed of
                   four developers all studying to become software engineers and with many different
                   experiences in the field of software development."/>
         <Collapse title="Our vision"
-                  description="streamchaser seeks to make the search for any kind of media located
+                  description="Streamchaser seeks to make the search for any kind of media located
                   on streaming services easier by curating all content through a centralized entertainment
                   technology platform. We aim to solve all troubles related to finding the right streaming
-                  service for a given media type – be it movies, series or documentaries. streamchaser
+                  service for a given media type – be it movies, series or documentaries. Streamchaser
                   further seeks to solve the issue where and when it appears, most often in front of the TV.
-                  Lastly, streamchaser is founded on the basis of convenience, which means that no feature,
+                  Lastly, Streamchaser is founded on the basis of convenience, which means that no feature,
                   no profit margin and no personal gains should ever compromise the convenience and ease of
                   use for the customer."/>
 

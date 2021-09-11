@@ -29,7 +29,7 @@
                   is a community-built database comprising every movie, series and actor/actress available
                   for search on our website. You can read more about TMDb and the TMDb API"
                   link="https://developers.themoviedb.org/3/getting-started/introduction"
-                  linkText="here."/>
+                  linkText="here"/>
 
     </div>
     <Footer/>

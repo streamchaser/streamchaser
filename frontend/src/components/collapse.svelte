@@ -12,7 +12,7 @@
     </div>
     {#if link && linkText != null}
         <div class="collapse-content">
-            <p class="inline">{description}</p> <p class="inline link link-hover" on:click={() => window.open(link)}>{linkText}</p>
+            <p class="inline">{description}</p> <p class="inline link link-hover" on:click={() => window.open(link)}>{linkText}</p>.
         </div>
     {:else}
         <div class="collapse-content">
