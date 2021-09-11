@@ -30,10 +30,17 @@ Here's how to get the application up and running
 * Got Docker installed
 
 1. Clone the repo `git clone https://github.com/AndreasPB/streamchaser.git`
-2. Build the container `docker-compose up --build -d`  
-3. Run `docker-compose exec backend python3 cron.py full-setup <total_pages>`
-4. Go to http://localhost:3000/ and search
+2. Add .env in root of backend and frontend
+    * Backend: TMDB_API_KEY, POSTGRES_PASSWORD, POSTGRES_USERNAME
+    * Frontend: VITE_API_PATH(path of the backend)
+3. Build the container `docker-compose up --build -d`  
+4. Run `docker-compose exec backend python3 cron.py full-setup <total_pages>`
+5. Go to http://localhost:3000/ and search
 
+*Backend needs:
+TMDB_API_KEY, POSTGRES_PASSWORD, POSTGRES_USERNAME
+*Frontend needs:
+VITE_API_PATH(path of the backend)
 ## CLI
 To use the cronjob use the following in the terminal:  
 `docker-compose exec backend python3 cron.py <command> <parameter>`

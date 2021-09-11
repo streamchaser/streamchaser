@@ -29,3 +29,5 @@ src/tmp/
 .netlify
 assets/build
 .vercel
+
+.env
