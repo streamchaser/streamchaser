@@ -31,7 +31,7 @@ Here's how to get the application up and running
 
 1. Clone the repo `git clone https://github.com/AndreasPB/streamchaser.git`
 2. Add .env in root of backend and frontend
-    * Backend: TMDB_API_KEY, POSTGRES_PASSWORD, POSTGRES_USERNAME
+    * Backend: TMDB_API_KEY
     * Frontend: VITE_API_PATH(path of the backend)
 3. Build the container `docker-compose up --build -d`  
 4. Run `docker-compose exec backend python3 cron.py full-setup <total_pages>`

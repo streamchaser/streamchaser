@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 services:
     frontend:
         restart: on-failure
@@ -19,6 +19,9 @@ services:
     backend:
         build: ./backend
         container_name: fastapi
+        environment: 
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_USERNAME: postgres
         ports:
             - 1337:1337
         volumes:

@@ -22,12 +22,12 @@ backend/providers???.txt
 # Frontend
 *.DS_Store
 **/node_modules/
-.DS_Store
 **/.history
 src/tmp/
-.routify
-.netlify
 assets/build
 .vercel
+/build
+/.svelte-kit
+/package
 
 .env
