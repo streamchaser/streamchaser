@@ -1,6 +1,7 @@
 <script>
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
+    import MultiSelect from 'svelte-multiselect'
     import {currentCountry} from '../stores/country.js';
     import {goto} from '$app/navigation';
 
@@ -14,11 +15,9 @@
     let input = '';
     let timer;
     let media = [];
-    let currentProviders;
-    let selectedGenres;
-    let selectedProviders;
-    let mappedSelectedGenres;
-    let mappedSelectedProviders;
+    let currentProviders = [];
+    let selectedGenres = [];
+    let selectedProviders = [];
     let providerAmounts = [];
 
     // run search if we haven't received input in the last 200ms
@@ -28,9 +27,6 @@
             input.trim() ? search() : media = [];
         }, inputTimer);
     }
-
-    $: mappedSelectedGenres = selectedGenres ? selectedGenres.map(item => item.value) : [];
-    $: mappedSelectedProviders = selectedProviders ? selectedProviders.map(item => item.value) : [];
 
     const hitProviderAmounts = (searchHits) => {
         providerAmounts = [];
@@ -43,15 +39,17 @@
         // Builds the optional query for genres
         // Example: "?g=Action&g=Comedy&g=Drama"
         if (input) {
-            let genre_query = '';
-            for (let i = 0; i < mappedSelectedGenres.length; i++) {
-                genre_query += `&g=${mappedSelectedGenres[i]}`;
+            let query = '';
+            for (let i = 0; i < selectedGenres.length; i++) {
+                query += `&g=${selectedGenres[i]}`;
             }
-            for (let i = 0; i < mappedSelectedProviders.length; i++) {
-                genre_query += `&p=${mappedSelectedProviders[i]}`;
+            for (let i = 0; i < selectedProviders.length; i++) {
+                query += `&p=${selectedProviders[i]}`;
             }
 
-            const res = await fetch(searchUrl + input + '?c=' + $currentCountry + genre_query);
+            const res = await fetch(
+                searchUrl + input + "?c=" + $currentCountry + query
+            );
             media = await res.json();
             hitProviderAmounts(media.hits);
         }
@@ -59,19 +57,24 @@
 
     const fetchProviders = async () => {
         const res = await fetch(providerUrl + $currentCountry);
-        currentProviders = await res.json()
-    }
+        currentProviders = await res.json();
+        return currentProviders;
+    };
+
+    const fetchGenres = async () => {
+        const res = await fetch(genreUrl);
+        return await res.json();
+    };
 
     function resetProviders() {
-        selectedProviders = undefined
-        mappedSelectedProviders = []
-    }
+        selectedProviders = [];
+    };
 
     $: if ($currentCountry) {
-        // resetProviders()
-        // fetchProviders()
-        search()
-    }
+        resetProviders();
+        fetchProviders();
+        search();
+    };
 
     function routeToPage(mediaId, replaceState) {
         if (mediaId.startsWith('m')) {
@@ -84,16 +87,44 @@
 </script>
 
 <div class="flex flex-col h-screen justify-between">
-    <Navbar/>
+    <Navbar />
     <div class="mb-auto container mx-auto">
         <h1 class="text-center text-3xl pt-4">streamchaser</h1>
         <div class="form-control p-4">
             <input
-                    type="text"
-                    placeholder="Search in {$currentCountry}"
-                    class="input input-bordered"
-                    bind:value={input}
-                    on:input={debounceInput}>
+                type="text"
+                placeholder="Search in {$currentCountry}"
+                class="input input-bordered"
+                bind:value={input}
+                on:input={debounceInput}
+            />
+        </div>
+        <div class="grid grid-cols-1 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-2 pb-1 pt-1 pr-2 pl-2">
+            {#await fetchGenres()}
+                <p>...loading selection</p>
+            {:then genres}
+                <MultiSelect class="select-primary" --sms-options-bg="var(--my-css-var, #404454)"
+                    bind:selected={selectedGenres}
+                    on:change={debounceInput}
+                    options={genres}
+                    placeholder="Select genres..."
+                />
+            {:catch error}
+                <p>Select error! {error}</p>
+            {/await}
+
+            {#await fetchProviders()}
+                <p>...loading selection</p>
+            {:then}
+                <MultiSelect class="select-primary" --sms-options-bg="var(--my-css-var, #404454)"
+                    bind:selected={selectedProviders}
+                    on:change={debounceInput}
+                    options={currentProviders}
+                    placeholder="Select providers..."
+                />
+            {:catch error}
+                <p>Select error! {error}</p>
+            {/await}
         </div>
         {#if media.hits}
             <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-2 pt-4 bg-base-100">
