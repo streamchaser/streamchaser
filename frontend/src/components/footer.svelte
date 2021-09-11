@@ -1,5 +1,5 @@
 <!-- https://daisyui.com/components/footer -->
-<footer class="p-10 footer bg-base-200 text-base-content footer-center position:sticky">
+<footer class="p-4 pb-1 footer bg-base-200 text-base-content footer-center position:sticky">
     <div>
         <div class="grid grid-flow-col gap-4">
             <a class="link link-hover" href="/">Home</a>
@@ -8,12 +8,18 @@
         </div>
         <div class="grid grid-flow-col gap-4 p-4">
             <a href="https://github.com/streamchaser/streamchaser">
-                <img src="../../github.svg" alt="Github"/>
+                <img src="../../github.svg" alt="Github logo"/>
             </a>
         </div>
-        <p>Copyright © 2021 - All right reserved by <a class="link link-hover"
-                                                       href="https://github.com/orgs/streamchaser">streamchaser</a>
-        </p>
+        <div>
+            <p>Copyright © 2021 - All rights reserved by <a class="link link-hover"
+                                                                           href="https://github.com/orgs/streamchaser">streamchaser</a>
+            </p>
+            <p><a href="https://www.themoviedb.org/">
+                <img class="w-20 h-20 inline" src="../../tmdb.svg/" alt="The Movie Database logo">
+            </a> &nbsp This product uses the TMDB API but is not endorsed or
+                certified by TMDB.
+        </div>
     </div>
 </footer>
 
