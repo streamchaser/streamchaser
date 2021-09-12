@@ -5,16 +5,12 @@
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
 
-<<<<<<< HEAD:frontend/src/routes/tv/[id].svelte
-    const tvDetailUrl = `http://localhost:1337/tv/${$currentCountry}/${$page.params.id}`;
-=======
-    const tvDetailUrl = `${variables.ap}/tv/${$page.params.cc}/${$page.params.id}`;
->>>>>>> Implment Traefik and improve deployment "flow":frontend/src/routes/tv/[cc]/[id].svelte
-    const imgUrl = 'https://image.tmdb.org/t/p/original/';
+    const TV_DETAIL_URL = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
+    const IMG_URL = 'https://image.tmdb.org/t/p/original/';
 
     const fetchTVDetails = async () => {
         try {
-            const response = await fetch(tvDetailUrl);
+            const response = await fetch(TV_DETAIL_URL);
             return await response.json();
         } catch (error) {
             console.error(error);
@@ -40,12 +36,12 @@
     {:then tv}
         <div
                 class="flex items-center w-full px-4 py-10 bg-cover card bg-base-200"
-                style="background-image: url(&quot;{imgUrl}{tv.backdrop_path}&quot;);e"
+                style="background-image: url(&quot;{IMG_URL}{tv.backdrop_path}&quot;);e"
         >
             <div class="card glass lg:card-side text-neutral-content">
                 <figure class="p-6">
                     <img
-                            src="{imgUrl}{tv.poster_path}"
+                            src="{IMG_URL}{tv.poster_path}"
                             class="object-contain h-96 w-full rounded-lg"
                             alt="Poster path for tv series"
                     />
@@ -66,7 +62,7 @@
                 {#each tv.providers as provider}
                     <div class="avatar p-2">
                         <div class="mb-8 w-24 h-24 mask mask-squircle">
-                            <img src="{imgUrl}{provider.logo_path}" alt="Provider logo"/>
+                            <img src="{IMG_URL}{provider.logo_path}" alt="Provider logo"/>
                         </div>
                     </div>
                 {/each}

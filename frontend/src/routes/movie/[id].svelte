@@ -5,17 +5,12 @@
 	import Navbar from '../../components/navbar.svelte';
 	import Footer from '../../components/footer.svelte';
 
-<<<<<<< HEAD:frontend/src/routes/movie/[id].svelte
-	const MOVIE_DETAIL_URL = `http://localhost:1337/movie/${$currentCountry}/${$page.params.id}`;
+	const MOVIE_DETAIL_URL = `${variables.apiPath}/movie/${$currentCountry}/${$page.params.id}`;
 	const IMG_URL = 'https://image.tmdb.org/t/p/original/';
-=======
-	const movieDetailsPath = `${variables.apiPath}/movie/${$page.params.cc}/${$page.params.id}`;
-	const imgUrl = 'https://image.tmdb.org/t/p/original/';
->>>>>>> Implment Traefik and improve deployment "flow":frontend/src/routes/movie/[cc]/[id].svelte
 
 	const fetchMovieDetails = async () => {
 		try {
-			const response = await fetch(movieDetailsPath);
+			const response = await fetch(MOVIE_DETAIL_URL);
 			return await response.json();
 		} catch (error) {
 			console.error(error);
@@ -41,12 +36,12 @@
 	{:then movie}
 		<div
 			class="flex items-center w-full px-4 py-10 bg-cover card bg-base-200"
-			style="background-image: url(&quot;{imgUrl}{movie.backdrop_path}&quot;);e"
+			style="background-image: url(&quot;{IMG_URL}{movie.backdrop_path}&quot;);e"
 		>
 			<div class="card glass lg:card-side text-neutral-content">
 				<figure class="p-6">
 					<img
-						src="{imgUrl}{movie.poster_path}"
+						src="{IMG_URL}{movie.poster_path}"
 						class="object-contain h-96 w-full rounded-lg"
 						alt="lol du kan ikke se"
 					/>
@@ -67,7 +62,7 @@
 				{#each movie.providers as provider}
 					<div class="avatar p-2">
 						<div class="mb-8 w-24 h-24 mask mask-squircle">
-							<img src="{imgUrl}{provider.logo_path}" alt="lol du kan ikke se" />
+							<img src="{IMG_URL}{provider.logo_path}" alt="lol du kan ikke se" />
 						</div>
 					</div>
 				{/each}

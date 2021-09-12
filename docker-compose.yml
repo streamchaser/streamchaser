@@ -1,9 +1,10 @@
 version: '3.3'
+
 services:
     frontend:
-        restart: on-failure
         build: ./frontend
-        container_name: svelte
+        restart: always
+        container_name: frontend
         command: npm run dev -- --host
         ports:
             - 3000:3000
@@ -11,14 +12,22 @@ services:
         volumes:
             - ./frontend:/app
             - /app/node_modules
+        networks:
+            - traefik
+            - streamchaser
         labels:
-          - "traefik.enable=true"
-        # TODO: Be able to change between dev and prod
-        #   - "traefik.http.routers.streamchaserfrontend.rule=Host(`streamchaser.tv`)"
-          - "traefik.http.routers.streamchaserfrontend.rule=Host(`localhost`)"
+            - "traefik.enable=true"
+            - "traefik.http.routers.frontend-web.rule=Host(`localhost`)"
+            - "traefik.http.routers.frontend-web.entrypoints=web"
+            # - "traefik.http.routers.frontend-web.middlewares=redirect@file"
+            - "traefik.http.routers.frontend-secured.rule=Host(`localhost`)"
+            - "traefik.http.routers.frontend-secured.entrypoints=web-secured"
+            - "traefik.http.routers.frontend-secured.tls.certresolver=mytlschallenge"
+            - "traefik.docker.network=traefik"
     backend:
         build: ./backend
-        container_name: fastapi
+        restart: always
+        container_name: backend
         environment: 
             POSTGRES_PASSWORD: postgres
             POSTGRES_USERNAME: postgres
@@ -31,14 +40,29 @@ services:
             - search
         links:
             - db
+        networks:
+            - traefik
+            - streamchaser
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.api-web.rule=Host(`api.localhost`)"
+            - "traefik.http.routers.api-web.entrypoints=web"
+            # - "traefik.http.routers.api-web.middlewares=redirect@file"
+            - "traefik.http.routers.api-secured.rule=Host(`api.localhost`)"
+            - "traefik.http.routers.api-secured.entrypoints=web-secured"
+            - "traefik.http.routers.api-secured.tls.certresolver=mytlschallenge"
+            - "traefik.docker.network=traefik"
     search:
         image: getmeili/meilisearch:v0.21.0
-        container_name: meilisearch
+        restart: always
+        container_name: search
         ports:
             - 7700:7700
+        networks:
+            - streamchaser
     db:
         image: postgres
-        container_name: postgres
+        container_name: db
         environment:
             POSTGRES_PASSWORD: postgres
             POSTGRES_USER: postgres
@@ -47,31 +71,61 @@ services:
             - pgdata:/var/lib/postgresql/data
         ports:
             - 5432:5432
+        networks:
+            - streamchaser
     traefik:
-        image: "traefik:v2.5"
-        container_name: "traefik"
-        command:
-        #- "--log.level=DEBUG"
-        - "--api.insecure=true"
-        - "--providers.docker=true"
-        - "--providers.docker.exposedbydefault=false"
-        - "--entrypoints.web.address=:80"
+        image: traefik:v2.5
+        restart: always
+        container_name: traefik
         ports:
-        - "80:80"
-        - "443:443"
-        - "8080:8080"
+            - "80:80"
+            - "443:443"
+            - "8080:8080"
+        command:
+            ## API Settings - https://docs.traefik.io/operations/api/, endpoints - https://docs.traefik.io/operations/api/#endpoints ##
+            - --api.insecure=true
+            - --api.dashboard=true
+            - --api.debug=true
+            ## Log Settings (options: ERROR, DEBUG, PANIC, FATAL, WARN, INFO) - https://docs.traefik.io/observability/logs/ ##
+            - --log.level=DEBUG
+            ## Provider Settings - https://docs.traefik.io/providers/docker/#provider-configuration ##
+            - --providers.docker=true
+            - --providers.docker.exposedbydefault=false
+            - --providers.file.filename=/dynamic.yml
+            - --providers.docker.network=web
+            ## Entrypoints Settings - https://docs.traefik.io/routing/entrypoints/#configuration ##
+            - --entrypoints.web.address=:80
+            - --entrypoints.web-secured.address=:443
+            ## Certificate Settings (Let's Encrypt) -  https://docs.traefik.io/https/acme/#configuration-examples ##
+            - --certificatesresolvers.mytlschallenge.acme.tlschallenge=true
+            - --certificatesresolvers.mytlschallenge.acme.email=theafkdeveloper@gmail.com
+            - --certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json
         volumes:
-        - "/var/run/docker.sock:/var/run/docker.sock:ro"
-
-    whoami:
-        image: "traefik/whoami"
-        container_name: "simple-service"
+            - ./letsencrypt:/letsencrypt
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./dynamic.yml:/dynamic.yml
+        networks:
+            - traefik
         labels:
-        - "traefik.enable=true"
-        # TODO: Be able to change between dev and prod
-        # - "traefik.http.routers.whoami.rule=Host(`whoami.streamchaser.tv`)"
-        - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
-        - "traefik.http.routers.whoami.entrypoints=web"
+            #### Labels define the behavior and rules of the traefik proxy for this container ####
+            - "traefik.enable=true"
+            - "traefik.http.routers.api.rule=Host(`monitor.localhost`)"
+            - "traefik.http.routers.api.service=api@internal"
+
+networks:
+    traefik:
+        external: true
+    streamchaser:
+        external: false
+
 volumes:
     pgdata:
     node_modules:
+    # backend:
+    #     external: true
+    # db:
+    #     external: true
+    # frontend:
+    #     external: true
+    # search:
+    #     external: true
