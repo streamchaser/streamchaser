@@ -7,7 +7,7 @@ import database
 from api import fetch_trending_movies, fetch_trending_tv, media_converter
 from api_helpers import SUPPORTED_COUNTRY_CODES
 from crud import (delete_all_media, get_all_media, request_providers,
-                  update_media_provider_by_id)
+                  update_media_provider_by_id, get_media_by_id, delete_media_by_id)
 from database_service import (dump_genres_to_db, dump_media_to_db,
                               init_meilisearch_indexing,
                               prune_non_ascii_media_from_db)
@@ -113,6 +113,44 @@ def full_setup(total_pages: int, remove_non_ascii: bool = True):
         add_providers()
         index_meilisearch()
         remove_blacklisted_from_search()
+
+
+@app.command()
+def remove_and_blacklist(media_id: str):
+    try:
+        db = database.SessionLocal()
+        media = get_media_by_id(db=db, media_id=media_id)
+        if not media:
+            typer.echo(f'Cannot find media: {media_id}')
+            raise typer.Abort()
+
+        typer.confirm(
+            f'Are you sure you want to remove & blacklist [{media.title}]?',
+            abort=True
+        )
+
+        typer.echo(f'Removing and blacklisting: {media_id}')
+        delete_media_by_id(db=db, id=media_id)
+        typer.echo('Removed from database ✓')
+
+        with open('../blacklist.txt', 'a+') as file:
+            file.seek(0)
+            if media_id in file.read().splitlines():
+                typer.echo(f'{media_id} already in blacklist')
+            else:
+                file.write(f'{media_id}\n')
+                typer.echo('Added to blacklist ✓')
+
+        for country_code in SUPPORTED_COUNTRY_CODES:
+            client.index(f'media_{country_code}').delete_document(media_id)
+
+        typer.echo('Meilisearch updated ✓')
+        typer.echo(f'{media_id} has succesfully been removed & blacklisted')
+
+    except Exception as e:
+        typer.echo(f'An error occoured. {e}')
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
