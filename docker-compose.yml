@@ -6,6 +6,8 @@ services:
         restart: always
         container_name: frontend
         command: npm run dev -- --host
+        env_file:
+            - .env
         ports:
             - 3000:3000
             - 24678:24678
@@ -17,10 +19,10 @@ services:
             - streamchaser
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.frontend-web.rule=Host(`localhost`)"
+            - "traefik.http.routers.frontend-web.rule=Host(`${HOST_NAME}`)"
             - "traefik.http.routers.frontend-web.entrypoints=web"
             # - "traefik.http.routers.frontend-web.middlewares=redirect@file"
-            - "traefik.http.routers.frontend-secured.rule=Host(`localhost`)"
+            - "traefik.http.routers.frontend-secured.rule=Host(`${HOST_NAME}`)"
             - "traefik.http.routers.frontend-secured.entrypoints=web-secured"
             - "traefik.http.routers.frontend-secured.tls.certresolver=mytlschallenge"
             - "traefik.docker.network=traefik"
@@ -28,9 +30,8 @@ services:
         build: ./backend
         restart: always
         container_name: backend
-        environment: 
-            POSTGRES_PASSWORD: postgres
-            POSTGRES_USERNAME: postgres
+        env_file: 
+            - .env
         ports:
             - 1337:1337
         volumes:
@@ -45,12 +46,12 @@ services:
             - streamchaser
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.api-web.rule=Host(`api.localhost`)"
-            - "traefik.http.routers.api-web.entrypoints=web"
+            - "traefik.http.routers.backend-web.rule=Host(`api.${HOST_NAME}`)"
+            - "traefik.http.routers.backend-web.entrypoints=web"
             # - "traefik.http.routers.api-web.middlewares=redirect@file"
-            - "traefik.http.routers.api-secured.rule=Host(`api.localhost`)"
-            - "traefik.http.routers.api-secured.entrypoints=web-secured"
-            - "traefik.http.routers.api-secured.tls.certresolver=mytlschallenge"
+            - "traefik.http.routers.backend-secured.rule=Host(`api.${HOST_NAME}`)"
+            - "traefik.http.routers.backend-secured.entrypoints=web-secured"
+            - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"
             - "traefik.docker.network=traefik"
     search:
         image: getmeili/meilisearch:v0.21.0
@@ -85,9 +86,9 @@ services:
             ## API Settings - https://docs.traefik.io/operations/api/, endpoints - https://docs.traefik.io/operations/api/#endpoints ##
             - --api.insecure=true
             - --api.dashboard=true
-            - --api.debug=true
+            - --api.debug=false
             ## Log Settings (options: ERROR, DEBUG, PANIC, FATAL, WARN, INFO) - https://docs.traefik.io/observability/logs/ ##
-            - --log.level=DEBUG
+            - --log.level=ERROR
             ## Provider Settings - https://docs.traefik.io/providers/docker/#provider-configuration ##
             - --providers.docker=true
             - --providers.docker.exposedbydefault=false
@@ -109,7 +110,7 @@ services:
         labels:
             #### Labels define the behavior and rules of the traefik proxy for this container ####
             - "traefik.enable=true"
-            - "traefik.http.routers.api.rule=Host(`monitor.localhost`)"
+            - "traefik.http.routers.api.rule=Host(`monitor.${HOST_NAME}`)"
             - "traefik.http.routers.api.service=api@internal"
 
 networks:
@@ -121,11 +122,3 @@ networks:
 volumes:
     pgdata:
     node_modules:
-    # backend:
-    #     external: true
-    # db:
-    #     external: true
-    # frontend:
-    #     external: true
-    # search:
-    #     external: true
