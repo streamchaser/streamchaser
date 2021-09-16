@@ -20,6 +20,7 @@
     let selectedGenres = [];
     let selectedProviders = [];
     let providerAmounts = [];
+    let formattedGenres = {};
 
     // run search if we haven't received input in the last 200ms
     const debounceInput = () => {
@@ -42,7 +43,7 @@
         if (input) {
             let query = '';
             for (let i = 0; i < selectedGenres.length; i++) {
-                query += `&g=${selectedGenres[i]}`;
+                query += `&g=${getKeyByValue(formattedGenres, selectedGenres[i])}`;
             }
             for (let i = 0; i < selectedProviders.length; i++) {
                 query += `&p=${selectedProviders[i]}`;
@@ -55,6 +56,17 @@
             hitProviderAmounts(media.hits);
         }
     };
+
+    const getKeyByValue = function (object, value) {
+        return Object.keys(object).find(key => object[key] === value);
+    }
+
+    const getDictValues = (dict) => {
+        formattedGenres = dict;
+        return Object.keys(dict).map(function (key) {
+            return dict[key];
+        });
+    }
 
     const fetchProviders = async () => {
         const res = await fetch(providerUrl + $currentCountry);
@@ -108,7 +120,7 @@
                 <MultiSelect class="select-primary" --sms-options-bg="var(--my-css-var, #404454)"
                     bind:selected={selectedGenres}
                     on:change={debounceInput}
-                    options={genres}
+                    options={getDictValues(genres)}
                     placeholder="Select genres..."
                 />
             {:catch error}

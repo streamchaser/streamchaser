@@ -73,11 +73,25 @@ def create_genre(db: Session, genre: schemas.Genre):
     """
     db_genre = models.Genre(
         id=genre.id,
-        name=genre.name
+        name=genre.name,
+        value=genre.value
     )
     db.add(db_genre)
     db.commit()
     return db_genre
+
+
+def update_genre_name(db: Session, genre: schemas.Genre):
+    db_genre = models.Genre(
+        id=genre.id,
+        name=genre.name,
+        value=genre.value
+    )
+
+    db.query(models.Genre).filter_by(id=genre.id).update({
+        'name': db_genre.name
+    })
+    db.commit()
 
 
 def request_providers(media: models.Media):

@@ -23,3 +23,4 @@ class Genre(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
+    value = Column(String, nullable=False)

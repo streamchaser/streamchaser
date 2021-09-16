@@ -10,7 +10,7 @@ from crud import (delete_all_media, get_all_media, request_providers,
                   update_media_provider_by_id, get_media_by_id, delete_media_by_id)
 from database_service import (dump_genres_to_db, dump_media_to_db,
                               init_meilisearch_indexing,
-                              prune_non_ascii_media_from_db)
+                              prune_non_ascii_media_from_db, format_genres)
 from search import client
 
 app = typer.Typer()
@@ -65,6 +65,11 @@ def index_meilisearch():
 
 
 @app.command()
+def cleanup_genres():
+    format_genres()
+
+
+@app.command()
 def remove_blacklisted_from_search():
     blacklisted_media = [
         line.rstrip() for line in open('../blacklist.txt')
@@ -111,6 +116,7 @@ def full_setup(total_pages: int, remove_non_ascii: bool = True):
         if remove_non_ascii:
             remove_non_ascii_media()
         add_providers()
+        cleanup_genres()
         index_meilisearch()
         remove_blacklisted_from_search()
 

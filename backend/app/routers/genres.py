@@ -14,6 +14,6 @@ router = APIRouter(
 
 @router.get("/")
 async def read_all_genres(db: Session = Depends(get_db)):
-    """Reads all genres, returns only the name"""
+    """Reads all genres, returns only name and value"""
     db_genres = get_all_genres(db=db)
-    return [genre.name for genre in db_genres]
+    return {genre.name: genre.value for genre in db_genres}
