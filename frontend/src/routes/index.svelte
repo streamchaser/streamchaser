@@ -4,6 +4,7 @@
     import Footer from '../components/footer.svelte';
     import MultiSelect from 'svelte-multiselect'
     import {currentCountry} from '../stores/country.js';
+    import {currentProviders} from '../stores/providers.js';
     import {goto} from '$app/navigation';
 
     const searchUrl = `${variables.apiPath}/search/`;
@@ -16,11 +17,10 @@
     let input = '';
     let timer;
     let media = [];
-    let currentProviders = [];
     let selectedGenres = [];
-    let selectedProviders = [];
     let providerAmounts = [];
     let formattedGenres = {};
+    let activeProviders = [];
 
     // run search if we haven't received input in the last 200ms
     const debounceInput = () => {
@@ -45,8 +45,8 @@
             for (let i = 0; i < selectedGenres.length; i++) {
                 query += `&g=${getKeyByValue(formattedGenres, selectedGenres[i])}`;
             }
-            for (let i = 0; i < selectedProviders.length; i++) {
-                query += `&p=${selectedProviders[i]}`;
+            for (let i = 0; i < $currentProviders.length; i++) {
+                query += `&p=${$currentProviders[i]}`;
             }
 
             const res = await fetch(
@@ -70,8 +70,8 @@
 
     const fetchProviders = async () => {
         const res = await fetch(providerUrl + $currentCountry);
-        currentProviders = await res.json();
-        return currentProviders;
+        activeProviders = await res.json();
+        return activeProviders;
     };
 
     const fetchGenres = async () => {
@@ -80,13 +80,19 @@
     };
 
     function resetProviders() {
-        selectedProviders = [];
+        $currentProviders = [];
     };
 
+    //TODO: This should be done prettier
+    let firstLoadCompleted = false;
     $: if ($currentCountry) {
-        resetProviders();
-        fetchProviders();
-        search();
+        if (firstLoadCompleted) {
+            resetProviders();
+            fetchProviders();
+            search();
+            
+        }
+        firstLoadCompleted = true;
     };
 
     function routeToPage(mediaId, replaceState) {
@@ -131,9 +137,9 @@
                 <p>...loading selection</p>
             {:then}
                 <MultiSelect class="select-primary" --sms-options-bg="var(--my-css-var, #404454)"
-                    bind:selected={selectedProviders}
+                    bind:selected={$currentProviders}
                     on:change={debounceInput}
-                    options={currentProviders}
+                    options={activeProviders}
                     placeholder="Select providers..."
                 />
             {:catch error}
