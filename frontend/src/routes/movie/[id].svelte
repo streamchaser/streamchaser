@@ -1,5 +1,5 @@
 <script>
-	import { variables } from '../../../variables.js'
+	import { variables } from '../../variables.js'
 	import { page } from '$app/stores';
 	import { currentCountry } from '../../stores/country.js';
 	import Navbar from '../../components/navbar.svelte';

@@ -30,5 +30,6 @@ assets/build
 /.svelte-kit
 /package
 
-.env
+backend/.env
+frontend/.env
 /letsencrypt

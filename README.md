@@ -30,7 +30,8 @@ Here's how to get the application up and running
 * Got Docker installed
 
 1. Clone the repo `git clone https://github.com/AndreasPB/streamchaser.git`
-2. Add .env in root of backend and frontend
+2. Add .env in root, backend and frontend
+    * Root: HOST_NAME
     * Backend: TMDB_API_KEY
     * Frontend: VITE_API_PATH(path of the backend)
 3. Build the container `docker-compose up --build -d`  

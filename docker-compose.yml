@@ -32,8 +32,6 @@ services:
         container_name: backend
         env_file: 
             - .env
-        ports:
-            - 1337:1337
         volumes:
             - ./backend/:/app/backend
         depends_on:

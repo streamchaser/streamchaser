@@ -23,6 +23,8 @@ origins = [
     "https://localhost:1337",
     "http://localhost",
     "https://localhost",
+    "http://api.localhost",
+    "https://api.localhost",
     "http://streamchaser.tv",
     "https://streamchaser.tv",
     "http://test.streamchaser.tv",
