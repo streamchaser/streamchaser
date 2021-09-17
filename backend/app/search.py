@@ -1,11 +1,12 @@
 import meilisearch
-from api_helpers import SUPPORTED_COUNTRY_CODES
+from config import get_settings
 
 client = meilisearch.Client('http://search:7700', 'masterKey')
 
-# An index where the movies are stored
+supported_country_codes = get_settings().supported_country_codes
 
-for country_code in SUPPORTED_COUNTRY_CODES:
+# An index where the movies are stored
+for country_code in supported_country_codes:
     client.index(f'media_{country_code}').update_filterable_attributes([
         'genres',
         'specific_provider_names'

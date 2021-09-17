@@ -6,8 +6,9 @@ import models
 from tqdm import tqdm
 from sqlalchemy.exc import IntegrityError
 
-from api_helpers import SUPPORTED_COUNTRY_CODES, get_genres
+from api_helpers import get_genres
 from search import client
+from config import get_settings
 
 
 def dump_media_to_db(media: models.Media) -> None:
@@ -76,12 +77,13 @@ def format_genres() -> None:
 def init_meilisearch_indexing():
     """MeiliSearch indexing from Postgres DB
     """
+    supported_country_codes = get_settings().supported_country_codes
 
+    db = database.SessionLocal()
     try:
-        db = database.SessionLocal()
         media_list = crud.get_all_media(db=db)
 
-        for country_code in SUPPORTED_COUNTRY_CODES:
+        for country_code in supported_country_codes:
             media_list_as_dict = [
                 schemas.Media(
                     id=media.id,
@@ -109,7 +111,7 @@ def init_meilisearch_indexing():
             extract_unique_providers_to_txt(media_list, country_code)
 
         print(
-            f'Meilisearch indexing {len(SUPPORTED_COUNTRY_CODES)} x '
+            f'Meilisearch indexing {len(supported_country_codes)} x '
             f'{len(media_list)} elements'
         )
 

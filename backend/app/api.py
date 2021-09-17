@@ -2,19 +2,22 @@ from typing import Dict, List
 
 import requests
 
-from api_helpers import (API_URL, TMDB_KEY, genre_id_to_str, get_movie_length,
+from api_helpers import (genre_id_to_str, get_movie_length,
                          unique_id, valid_original_title, valid_release_date,
                          valid_title)
 from schemas import TV, Media, Movie, Person
+from config import get_settings
 
 
 def fetch_trending_movies(page: int) -> Dict:
-    url = f'{API_URL}trending/movie/week?api_key={TMDB_KEY}&page={page}'
+    url = f'{get_settings().tmdb_url}trending/movie/week?' \
+            'api_key={get_settings().tmdb_key}&page={page}'
     return requests.get(url).json()["results"]
 
 
 def fetch_trending_tv(page: int) -> Dict:
-    url = f'{API_URL}trending/tv/week?api_key={TMDB_KEY}&page={page}'
+    url = f'{get_settings().tmdb_url}trending/tv/week?' \
+            'api_key={get_settings().tmdb_key}&page={page}'
     return requests.get(url).json()["results"]
 
 
@@ -66,8 +69,9 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
     """
 
     # Here we make 3 api calls into 1 using the append_to_response header
-    search_api_url = f'{API_URL}movie/{movie_id}?api_key={TMDB_KEY}' \
-                     f'&append_to_response=watch/providers,recommendations,credits'
+    search_api_url = f'{get_settings().tmdb_url}movie/{movie_id}?' \
+                     f'api_key={get_settings().tmdb_key}' \
+                     '&append_to_response=watch/providers,recommendations,credits'
 
     movies = requests.get(search_api_url).json()
 
@@ -95,8 +99,9 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
     """
 
     # Here we make 3 api calls into 1 using the append_to_response header
-    search_api_url = f'{API_URL}tv/{tv_id}?api_key={TMDB_KEY}' \
-                     f'&append_to_response=watch/providers,recommendations,credits'
+    search_api_url = f'{get_settings().tmdb_url}tv/{tv_id}' \
+                     f'?api_key={get_settings().tmdb_key}' \
+                     '&append_to_response=watch/providers,recommendations,credits'
 
     tv = requests.get(search_api_url).json()
 
