@@ -1,13 +1,14 @@
 <script>
+	import { variables } from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
     import MultiSelect from 'svelte-multiselect'
     import {currentCountry} from '../stores/country.js';
     import {goto} from '$app/navigation';
 
-    const searchUrl = 'http://localhost:1337/search/';
-    const genreUrl = 'http://localhost:1337/genres/';
-    const providerUrl = 'http://localhost:1337/providers/';
+    const searchUrl = `${variables.apiPath}/search/`;
+    const genreUrl = `${variables.apiPath}/genres/`;
+    const providerUrl = `${variables.apiPath}/providers/`;
     const imageUrl = 'https://image.tmdb.org/t/p/w500/';
     const inputTimer = 200;
     const shownProviders = 5;

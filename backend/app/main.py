@@ -16,9 +16,19 @@ app = FastAPI()
 
 origins = [
     "http://localhost:8080",
+    "https://localhost:8080",
     "http://localhost:3000",
+    "https://localhost:3000",
+    "http://localhost:1337",
+    "https://localhost:1337",
     "http://localhost",
     "https://localhost",
+    "http://api.localhost",
+    "https://api.localhost",
+    "http://streamchaser.tv",
+    "https://streamchaser.tv",
+    "http://test.streamchaser.tv",
+    "https://test.streamchaser.tv",
 ]
 
 

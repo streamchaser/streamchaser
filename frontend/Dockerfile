@@ -8,7 +8,7 @@ ENV NODE_ENV development
 WORKDIR /usr/src/app
 
 # Copy over `package.json` and lock files to optimize the build process
-COPY ["package.json", "package-lock.json*", "./"]
+COPY ["package.json", "package-lock.json*", ".env*", "./"]
 # Install Node modules
 RUN npm install
 

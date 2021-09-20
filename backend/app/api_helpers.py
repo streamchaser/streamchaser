@@ -4,9 +4,7 @@ import requests
 from dotenv import dotenv_values
 
 API_URL = 'https://api.themoviedb.org/3/'
-TMDB_KEY = dotenv_values('../.env')['TMDB_API_KEY']
-PSQL_USER = dotenv_values('../.env')['POSTGRES_USERNAME']
-PSQL_PWD = dotenv_values('../.env')['POSTGRES_PASSWORD']
+TMDB_KEY = dotenv_values('../.env').get('TMDB_API_KEY')
 SUPPORTED_COUNTRY_CODES = ['DK', 'GB', 'DE', 'SE', 'US']
 
 

@@ -1,21 +1,37 @@
-version: '3'
+version: '3.3'
+
 services:
     frontend:
-        restart: on-failure
         build: ./frontend
-        container_name: svelte
+        restart: always
+        container_name: frontend
         command: npm run dev -- --host
+        env_file:
+            - .env
         ports:
             - 3000:3000
             - 24678:24678
         volumes:
             - ./frontend:/app
             - /app/node_modules
+        networks:
+            - traefik
+            - streamchaser
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.frontend-web.rule=Host(`${HOST_NAME}`)"
+            - "traefik.http.routers.frontend-web.entrypoints=web"
+            # - "traefik.http.routers.frontend-web.middlewares=redirect@file"
+            - "traefik.http.routers.frontend-secured.rule=Host(`${HOST_NAME}`)"
+            - "traefik.http.routers.frontend-secured.entrypoints=web-secured"
+            - "traefik.http.routers.frontend-secured.tls.certresolver=mytlschallenge"
+            - "traefik.docker.network=traefik"
     backend:
         build: ./backend
-        container_name: fastapi
-        ports:
-            - 1337:1337
+        restart: always
+        container_name: backend
+        env_file: 
+            - .env
         volumes:
             - ./backend/:/app/backend
         depends_on:
@@ -23,14 +39,29 @@ services:
             - search
         links:
             - db
+        networks:
+            - traefik
+            - streamchaser
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.backend-web.rule=Host(`api.${HOST_NAME}`)"
+            - "traefik.http.routers.backend-web.entrypoints=web"
+            # - "traefik.http.routers.api-web.middlewares=redirect@file"
+            - "traefik.http.routers.backend-secured.rule=Host(`api.${HOST_NAME}`)"
+            - "traefik.http.routers.backend-secured.entrypoints=web-secured"
+            - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"
+            - "traefik.docker.network=traefik"
     search:
         image: getmeili/meilisearch:v0.21.0
-        container_name: meilisearch
+        restart: always
+        container_name: search
         ports:
             - 7700:7700
+        networks:
+            - streamchaser
     db:
         image: postgres
-        container_name: postgres
+        container_name: db
         environment:
             POSTGRES_PASSWORD: postgres
             POSTGRES_USER: postgres
@@ -39,7 +70,53 @@ services:
             - pgdata:/var/lib/postgresql/data
         ports:
             - 5432:5432
+        networks:
+            - streamchaser
+    traefik:
+        image: traefik:v2.5
         restart: always
+        container_name: traefik
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8080:8080"
+        command:
+            ## API Settings - https://docs.traefik.io/operations/api/, endpoints - https://docs.traefik.io/operations/api/#endpoints ##
+            - --api.insecure=true
+            - --api.dashboard=true
+            - --api.debug=false
+            ## Log Settings (options: ERROR, DEBUG, PANIC, FATAL, WARN, INFO) - https://docs.traefik.io/observability/logs/ ##
+            - --log.level=ERROR
+            ## Provider Settings - https://docs.traefik.io/providers/docker/#provider-configuration ##
+            - --providers.docker=true
+            - --providers.docker.exposedbydefault=false
+            - --providers.file.filename=/dynamic.yml
+            - --providers.docker.network=web
+            ## Entrypoints Settings - https://docs.traefik.io/routing/entrypoints/#configuration ##
+            - --entrypoints.web.address=:80
+            - --entrypoints.web-secured.address=:443
+            ## Certificate Settings (Let's Encrypt) -  https://docs.traefik.io/https/acme/#configuration-examples ##
+            - --certificatesresolvers.mytlschallenge.acme.tlschallenge=true
+            - --certificatesresolvers.mytlschallenge.acme.email=theafkdeveloper@gmail.com
+            - --certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json
+        volumes:
+            - ./letsencrypt:/letsencrypt
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./dynamic.yml:/dynamic.yml
+        networks:
+            - traefik
+        labels:
+            #### Labels define the behavior and rules of the traefik proxy for this container ####
+            - "traefik.enable=true"
+            - "traefik.http.routers.api.rule=Host(`monitor.${HOST_NAME}`)"
+            - "traefik.http.routers.api.service=api@internal"
+
+networks:
+    traefik:
+        external: true
+    streamchaser:
+        external: false
+
 volumes:
     pgdata:
     node_modules:
