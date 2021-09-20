@@ -78,9 +78,9 @@
 
     function routeToPage(mediaId, replaceState) {
         if (mediaId.startsWith('m')) {
-            goto(`/movie/${$currentCountry}/${mediaId.slice(1)}`, {replaceState})
+            goto(`/movie/${mediaId.slice(1)}`, {replaceState})
         } else {
-            goto(`/tv/${$currentCountry}/${mediaId.slice(1)}`, {replaceState})
+            goto(`/tv/${mediaId.slice(1)}`, {replaceState})
         }
     }
 

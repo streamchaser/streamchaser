@@ -1,9 +1,10 @@
 <script>
     import {page} from '$app/stores';
-    import Navbar from '../../../components/navbar.svelte';
-    import Footer from '../../../components/footer.svelte';
+    import {currentCountry} from '../../stores/country.js';
+    import Navbar from '../../components/navbar.svelte';
+    import Footer from '../../components/footer.svelte';
 
-    const tvDetailUrl = `http://localhost:1337/tv/${$page.params.cc}/${$page.params.id}`;
+    const tvDetailUrl = `http://localhost:1337/tv/${$currentCountry}/${$page.params.id}`;
     const imgUrl = 'https://image.tmdb.org/t/p/original/';
 
     const fetchTVDetails = async () => {
@@ -15,9 +16,18 @@
         }
     };
 
+    let firstLoadCompleted = false;
+
+    $: if ($currentCountry) {
+        if (firstLoadCompleted) {
+            location.reload();
+        }
+        firstLoadCompleted = true;
+    }
+
 </script>
 
-<Navbar />
+<Navbar/>
 
 <div class="container mx-auto">
     {#await fetchTVDetails()}

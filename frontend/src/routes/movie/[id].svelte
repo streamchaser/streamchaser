@@ -1,9 +1,10 @@
 <script>
 	import { page } from '$app/stores';
-	import Navbar from '../../../components/navbar.svelte';
-	import Footer from '../../../components/footer.svelte';
+	import { currentCountry } from '../../stores/country.js';
+	import Navbar from '../../components/navbar.svelte';
+	import Footer from '../../components/footer.svelte';
 
-	const MOVIE_DETAIL_URL = `http://localhost:1337/movie/${$page.params.cc}/${$page.params.id}`;
+	const MOVIE_DETAIL_URL = `http://localhost:1337/movie/${$currentCountry}/${$page.params.id}`;
 	const IMG_URL = 'https://image.tmdb.org/t/p/original/';
 
 	const fetchMovieDetails = async () => {
@@ -14,6 +15,16 @@
 			console.error(error);
 		}
 	};
+
+	let firstLoadCompleted = false;
+
+	$: if($currentCountry) {
+        if (firstLoadCompleted) {
+        	location.reload();
+        }
+        firstLoadCompleted = true;
+    }
+
 </script>
 
 <Navbar />
