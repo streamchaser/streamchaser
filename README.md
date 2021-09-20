@@ -38,10 +38,6 @@ Here's how to get the application up and running
 4. Run `docker-compose exec backend python3 cron.py full-setup <total_pages>`
 5. Go to http://localhost:3000/ and search
 
-*Backend needs:
-TMDB_API_KEY, POSTGRES_PASSWORD, POSTGRES_USERNAME
-*Frontend needs:
-VITE_API_PATH(path of the backend)
 ## CLI
 To use the cronjob use the following in the terminal:  
 `docker-compose exec backend python3 cron.py <command> <parameter>`
