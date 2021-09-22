@@ -43,13 +43,34 @@ def dump_genres_to_db() -> None:
     for key in genres:
         formatted_genre = schemas.Genre(
             id=key,
-            name=genres[key]
+            name=genres[key],
+            value=genres[key],
         )
 
         db_genre = crud.get_genre_by_id(db=db, genre_id=key)
         if not db_genre:
             crud.create_genre(db=db, genre=formatted_genre)
     db.close()
+
+
+def format_genres() -> None:
+    """Finds any genre name containing ampersand (&), formats the name to work with the
+        TMDb query, and calls crud update
+    """
+    db = database.SessionLocal()
+    genres = crud.get_all_genres(db=db)
+
+    formatted_genres = [
+        schemas.Genre(
+            id=genre.id,
+            name=str(genre.name).replace(' & ', '%20%26%20'),
+            value=genre.name
+        )
+        for genre in genres if ' & ' in genre.name
+    ]
+
+    for genre in formatted_genres:
+        crud.update_genre_name(db, genre)
 
 
 def init_meilisearch_indexing():

@@ -52,6 +52,7 @@ class TV(BaseModel):
 class Genre(BaseModel):
     id: int
     name: str
+    value: str
 
     class Config:
         orm_mode = True
