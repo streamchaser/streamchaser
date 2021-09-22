@@ -4,6 +4,8 @@
     import {currentCountry} from '../../stores/country.js';
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
+    import {goto} from '$app/navigation';
+
 
     const TV_DETAIL_URL = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
     const IMG_URL = 'https://image.tmdb.org/t/p/original/';
@@ -26,11 +28,16 @@
         firstLoadCompleted = true;
     }
 
+    function routeToPage(mediaId) {
+        goto(`/tv/${mediaId}`)
+        location.reload()
+    }
+
 </script>
 
 <Navbar/>
 
-<div class="container mx-auto">
+<div class="container mx-auto pb-2">
     {#await fetchTVDetails()}
         <p>Loading...</p>
     {:then tv}
@@ -68,29 +75,19 @@
                 {/each}
             </div>
         </div>
-
-        <div class="overflow-x-auto">
-            <table class="table w-full">
-                <thead>
-                <tr>
-                    <th/>
-                    <th>Title</th>
-                    <th>Language</th>
-                    <th>First Air Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                {#each tv.recommendations as recommendation, i}
-                    <tr>
-                        <th {i}/>
-                        <th>{recommendation.name}</th>
-                        <th>{recommendation.original_language}</th>
-                        <th>{recommendation.first_air_date ? recommendation.first_air_date : 'No air date available'}</th>
-                    </tr>
+        {#if tv.recommendations.length != 0}
+            <h1 class="text-center text-3xl pt-5">Recommendations</h1>
+            <div class="pt-5">
+                <div class="p-4 space-x-4 carousel carousel-center bg-neutral sm:rounded-box">
+                {#each tv.recommendations as recommendation}
+                    <div on:click={() => routeToPage(recommendation.id)} class="carousel-item h-96 w-64 p-1">
+                        <img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer" 
+                             alt="{recommendation.title}">
+                    </div>
                 {/each}
-                </tbody>
-            </table>
+            </div>
         </div>
+        {/if}
     {/await}
 </div>
 

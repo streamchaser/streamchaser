@@ -4,6 +4,7 @@
 	import { currentCountry } from '../../stores/country.js';
 	import Navbar from '../../components/navbar.svelte';
 	import Footer from '../../components/footer.svelte';
+    import {goto} from '$app/navigation';
 
 	const MOVIE_DETAIL_URL = `${variables.apiPath}/movie/${$currentCountry}/${$page.params.id}`;
 	const IMG_URL = 'https://image.tmdb.org/t/p/original/';
@@ -26,11 +27,15 @@
         firstLoadCompleted = true;
     }
 
+	function routeToPage(mediaId) {
+        goto(`/movie/${mediaId}`)
+        location.reload()
+    }
 </script>
 
 <Navbar />
 
-<div class="container mx-auto">
+<div class="container mx-auto pb-2">
 	{#await fetchMovieDetails()}
 		<p>Loading...</p>
 	{:then movie}
@@ -68,29 +73,19 @@
 				{/each}
 			</div>
 		</div>
-
-		<div class="overflow-x-auto">
-			<table class="table w-full">
-				<thead>
-					<tr>
-						<th />
-						<th>Title</th>
-						<th>Language</th>
-						<th>Release date</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each movie.recommendations as recommendation, i}
-						<tr>
-							<th {i} />
-							<th>{recommendation.title}</th>
-							<th>{recommendation.original_language}</th>
-							<th>{recommendation.release_date}</th>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+		{#if movie.recommendations.length != 0}
+            <h1 class="text-center text-3xl pt-5">Recommendations</h1>
+            <div class="pt-5">
+                <div class="p-4 space-x-4 carousel carousel-center bg-neutral sm:rounded-box">
+                {#each movie.recommendations as recommendation}
+                    <div on:click={() => routeToPage(recommendation.id)} class="carousel-item h-96 w-64 p-1">
+                        <img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer"
+							 alt="{recommendation.title}">
+                    </div>
+                {/each}
+            </div>
+        </div>
+		{/if}
 	{/await}
 </div>
 
