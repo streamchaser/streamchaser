@@ -17,4 +17,5 @@ def get_db():
         yield db
     except Exception as e:
         print(f"Error in {__name__}: {e}")
+    finally:
         db.close()
