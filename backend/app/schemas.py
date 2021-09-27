@@ -11,6 +11,7 @@ class Media(BaseModel):
     release_date: str
     genres: Optional[List[str]]
     poster_path: Optional[str]
+    popularity: Optional[int]
     providers: Optional[List[Dict]]
     specific_provider_names: Optional[List[str]]
     specific_providers: Optional[List[Dict]]
@@ -31,6 +32,7 @@ class Movie(BaseModel):
     providers: Optional[List[Dict]]
     recommendations: List[Dict]
     poster_path: Optional[str]
+    popularity: int
     backdrop_path: Optional[str]
     cast: List[Dict]
 
@@ -45,6 +47,7 @@ class TV(BaseModel):
     providers: Optional[List[Dict]]
     recommendations: Optional[List[Dict]]
     poster_path: Optional[str]
+    popularity: int
     number_of_seasons: int
     seasons: List[Dict]
     backdrop_path: Optional[str]

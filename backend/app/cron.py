@@ -10,8 +10,8 @@ from crud import (delete_all_media, get_all_media, request_providers,
 from database_service import (dump_genres_to_db, dump_media_to_db,
                               init_meilisearch_indexing,
                               prune_non_ascii_media_from_db, format_genres)
-from search import client
 from config import get_settings
+from search import client, update_index
 
 
 supported_country_codes = get_settings().supported_country_codes
@@ -65,6 +65,7 @@ def fetch_media(total_pages: int) -> bool:
 @app.command()
 def index_meilisearch():
     init_meilisearch_indexing()
+    update_index()
 
 
 @app.command()
@@ -121,6 +122,7 @@ def full_setup(total_pages: int, remove_non_ascii: bool = True):
         add_providers()
         cleanup_genres()
         index_meilisearch()
+        update_index()
         remove_blacklisted_from_search()
 
 
