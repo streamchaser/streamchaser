@@ -32,6 +32,7 @@ class Movie(BaseModel):
     recommendations: List[Dict]
     poster_path: Optional[str]
     backdrop_path: Optional[str]
+    cast: List[Dict]
 
 
 class TV(BaseModel):
@@ -47,6 +48,7 @@ class TV(BaseModel):
     number_of_seasons: int
     seasons: List[Dict]
     backdrop_path: Optional[str]
+    cast: List[Dict]
 
 
 class Genre(BaseModel):

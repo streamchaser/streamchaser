@@ -41,7 +41,7 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
 
     # Here we make 3 api calls into 1 using the append_to_response header
     search_api_url = f'{API_URL}movie/{movie_id}?api_key={TMDB_KEY}' \
-                     f'&append_to_response=watch/providers,recommendations'
+                     f'&append_to_response=watch/providers,recommendations,credits'
 
     movies = requests.get(search_api_url).json()
 
@@ -59,7 +59,8 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
         providers=get_providers(movies.get('watch/providers'), country_code),
         recommendations=get_recommendations(movies.get('recommendations')),
         poster_path=movies.get('poster_path'),
-        backdrop_path=movies.get('backdrop_path')
+        backdrop_path=movies.get('backdrop_path'),
+        cast=get_cast(movies.get('credits'))
     )
 
 
@@ -69,7 +70,7 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
 
     # Here we make 3 api calls into 1 using the append_to_response header
     search_api_url = f'{API_URL}tv/{tv_id}?api_key={TMDB_KEY}' \
-                     f'&append_to_response=watch/providers,recommendations'
+                     f'&append_to_response=watch/providers,recommendations,credits'
 
     tv = requests.get(search_api_url).json()
 
@@ -88,7 +89,8 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
         poster_path=tv.get('poster_path'),
         number_of_seasons=tv.get('number_of_seasons'),
         seasons=tv.get('seasons'),
-        backdrop_path=tv.get('backdrop_path')
+        backdrop_path=tv.get('backdrop_path'),
+        cast=get_cast(tv.get('credits'))
     )
 
 
@@ -120,3 +122,10 @@ def get_recommendations(recommendations: Dict) -> List[Dict]:
     """
 
     return [result for result in recommendations['results']]
+
+
+def get_cast(credits: Dict) -> List[Dict]:
+    """ Gets list of cast members for a movie
+    """
+
+    return [result for result in credits['cast']]

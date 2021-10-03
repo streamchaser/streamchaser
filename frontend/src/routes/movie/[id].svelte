@@ -86,6 +86,17 @@
             </div>
         </div>
 		{/if}
+		<div class="flex-nowrap pt-5 content-center">
+			{#each movie.cast as person}
+				{#if person.profile_path != undefined}
+				<div class="avatar p-1">
+					<div class="mb-8 w-24 h-24 mask mask-squircle">
+						<img src="{IMG_URL}{person.profile_path}" alt="{person.name}" />
+					</div>
+				</div>
+				{/if}
+			{/each}
+		</div>
 	{/await}
 </div>
 
