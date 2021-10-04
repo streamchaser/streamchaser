@@ -8,6 +8,7 @@
 
 	const MOVIE_DETAIL_URL = `${variables.apiPath}/movie/${$currentCountry}/${$page.params.id}`;
 	const IMG_URL = 'https://image.tmdb.org/t/p/original/';
+	let currentItems = 20;
 
 	const fetchMovieDetails = async () => {
 		try {
@@ -44,6 +45,7 @@
 	{#await fetchMovieDetails()}
 		<p>Loading...</p>
 	{:then movie}
+		<!-- Movie -->
 		<div
 			class="flex items-center w-full px-4 py-10 bg-cover card bg-base-200"
 			style="background-image: url(&quot;{IMG_URL}{movie.backdrop_path}&quot;);e"
@@ -68,6 +70,7 @@
 					</div>
 				</div>
 			</div>
+			<!-- Providers -->
 			<div class="flex-nowrap pt-5">
 				{#each movie.providers as provider}
 					<div class="avatar p-2">
@@ -78,6 +81,36 @@
 				{/each}
 			</div>
 		</div>
+		<!-- Person -->
+		{#if movie.cast.length != 0}
+			<h1 class="text-center text-3xl pt-5">Cast</h1>
+			<div class="grid grid-cols-3 2xl:grid-cols-10 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
+				{#each movie.cast.slice(0, currentItems) as person}
+					{#if person.profile_path != undefined}
+						<div on:click={() => routeToPerson(person.id)} class="card compact cursor-pointer bordered">
+							<figure>
+							<img src="{IMG_URL}{person.profile_path}" alt="{person.name}">
+							</figure> 
+							<div class="card-body">
+							<p><b>{person.name}</b> - <i>{person.character}</i></p> 
+							</div>
+						</div>
+					{/if}
+				{/each}
+			</div>
+			{#if currentItems < movie.cast.length}
+				<div class="flex justify-center pt-1">
+					<button
+						on:click={() => currentItems = currentItems + 20}
+						id="loadmore"
+						type="button"
+						class="btn">
+						Show more
+					</button>
+				</div>
+			{/if}
+		{/if}
+		<!-- Recommendations -->
 		{#if movie.recommendations.length != 0}
             <h1 class="text-center text-3xl pt-5">Recommendations</h1>
             <div class="pt-5">
@@ -91,17 +124,6 @@
             </div>
         </div>
 		{/if}
-		<div class="flex-nowrap pt-5 content-center">
-			{#each movie.cast as person}
-				{#if person.profile_path != undefined}
-				<div on:click={() => routeToPerson(person.id)} class="avatar p-1">
-					<div class="mb-8 w-24 h-24 mask mask-squircle cursor-pointer">
-						<img src="{IMG_URL}{person.profile_path}" alt="{person.name}" />
-					</div>
-				</div>
-				{/if}
-			{/each}
-		</div>
 	{/await}
 </div>
 
