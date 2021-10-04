@@ -5,7 +5,7 @@ import requests
 from api_helpers import (API_URL, TMDB_KEY, genre_id_to_str, get_movie_length,
                          unique_id, valid_original_title, valid_release_date,
                          valid_title)
-from schemas import TV, Media, Movie
+from schemas import TV, Media, Movie, Person
 
 
 def fetch_trending_movies(page: int) -> Dict:
@@ -35,13 +35,39 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
     ]
 
 
+async def get_person_from_id(person_id: int):
+    """ Gets data of a person from an id
+    """
+
+    # Here we make 3 api calls into 1 using the append_to_response header
+    search_api_url = f'{API_URL}person/{person_id}?api_key={TMDB_KEY}' \
+                     f'&append_to_response=movie_credits,tv_credits'
+
+    person = requests.get(search_api_url).json()
+
+    # pydantic schema for a person
+    return Person(
+        id=person.get('id'),
+        name=person.get('name'),
+        birthdate=person.get('birthdate'),
+        deathday=person.get('deathday'),
+        biography=person.get('biography'),
+        place_of_birth=person.get('place_of_birth'),
+        also_known_as=person.get('also_known_as'),
+        profile_path=person.get('profile_path'),
+        gender=person.get('gender'),
+        movie_credits=person.get('movie_credits').get('cast'),
+        tv_credits=person.get('tv_credits').get('cast')
+    )
+
+
 def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
     """ Gets data of a movie from an id
     """
 
     # Here we make 3 api calls into 1 using the append_to_response header
     search_api_url = f'{API_URL}movie/{movie_id}?api_key={TMDB_KEY}' \
-                     f'&append_to_response=watch/providers,recommendations'
+                     f'&append_to_response=watch/providers,recommendations,credits'
 
     movies = requests.get(search_api_url).json()
 
@@ -59,7 +85,8 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
         providers=get_providers(movies.get('watch/providers'), country_code),
         recommendations=get_recommendations(movies.get('recommendations')),
         poster_path=movies.get('poster_path'),
-        backdrop_path=movies.get('backdrop_path')
+        backdrop_path=movies.get('backdrop_path'),
+        cast=movies.get('credits').get('cast')
     )
 
 
@@ -69,7 +96,7 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
 
     # Here we make 3 api calls into 1 using the append_to_response header
     search_api_url = f'{API_URL}tv/{tv_id}?api_key={TMDB_KEY}' \
-                     f'&append_to_response=watch/providers,recommendations'
+                     f'&append_to_response=watch/providers,recommendations,credits'
 
     tv = requests.get(search_api_url).json()
 
@@ -88,7 +115,8 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
         poster_path=tv.get('poster_path'),
         number_of_seasons=tv.get('number_of_seasons'),
         seasons=tv.get('seasons'),
-        backdrop_path=tv.get('backdrop_path')
+        backdrop_path=tv.get('backdrop_path'),
+        cast=tv.get('credits').get('cast')
     )
 
 

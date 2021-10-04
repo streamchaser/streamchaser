@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import models
 
 from database import engine
-from routers import media, providers, genres, movie, tv, search
+from routers import media, providers, genres, movie, tv, search, person
 
 
 models.Base.metadata.create_all(bind=engine)
@@ -47,6 +47,7 @@ app.include_router(genres.router)
 app.include_router(tv.router)
 app.include_router(movie.router)
 app.include_router(search.router)
+app.include_router(person.router)
 
 
 @app.get("/")

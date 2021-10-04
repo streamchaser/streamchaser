@@ -26,12 +26,13 @@ class Movie(BaseModel):
     release_date: str
     overview: str
     genres: Optional[List[str]]
-    imdb_id: str
+    imdb_id: Optional[str]
     runtime: str
     providers: Optional[List[Dict]]
     recommendations: List[Dict]
     poster_path: Optional[str]
     backdrop_path: Optional[str]
+    cast: List[Dict]
 
 
 class TV(BaseModel):
@@ -47,6 +48,21 @@ class TV(BaseModel):
     number_of_seasons: int
     seasons: List[Dict]
     backdrop_path: Optional[str]
+    cast: List[Dict]
+
+
+class Person(BaseModel):
+    id: int
+    name: str
+    birthdate: Optional[str]
+    deathday: Optional[str]
+    biography: str
+    place_of_birth: Optional[str]
+    aslo_knows_as: Optional[str]
+    profile_path: Optional[str]
+    movie_credits: Optional[List[Dict]]
+    tv_credits: Optional[List[Dict]]
+    gender: int
 
 
 class Genre(BaseModel):
