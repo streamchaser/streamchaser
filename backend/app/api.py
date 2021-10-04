@@ -5,7 +5,7 @@ import requests
 from api_helpers import (API_URL, TMDB_KEY, genre_id_to_str, get_movie_length,
                          unique_id, valid_original_title, valid_release_date,
                          valid_title)
-from schemas import TV, Media, Movie
+from schemas import TV, Media, Movie, Person
 
 
 def fetch_trending_movies(page: int) -> Dict:
@@ -33,6 +33,32 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
         ).dict()
         for media in mixed_list
     ]
+
+
+def get_person_from_id(person_id: int):
+    """ Gets data of a person from an id
+    """
+
+    # Here we make 3 api calls into 1 using the append_to_response header
+    search_api_url = f'{API_URL}person/{person_id}?api_key={TMDB_KEY}' \
+                     f'&append_to_response=movie_credits,tv_credits'
+
+    person = requests.get(search_api_url).json()
+
+    # pydantic schema for a person
+    return Person(
+        id=person.get('id'),
+        name=person.get('name'),
+        birthdate=person.get('birthdate'),
+        deathday=person.get('deathday'),
+        biography=person.get('biography'),
+        place_of_birth=person.get('place_of_birth'),
+        also_known_as=person.get('also_known_as'),
+        profile_path=person.get('profile_path'),
+        gender=person.get('gender'),
+        movie_credits=get_cast(person.get('movie_credits')),
+        tv_credits=get_cast(person.get('tv_credits'))
+    )
 
 
 def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:

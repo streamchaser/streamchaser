@@ -33,6 +33,11 @@
         location.reload()
     }
 
+    function routeToPerson(mediaId){
+        goto(`/person/${mediaId}`)
+        location.reload()
+    }
+
 </script>
 
 <Navbar/>
@@ -91,8 +96,8 @@
         <div class="flex-nowrap pt-5 content-center">
 			{#each tv.cast as person}
 				{#if person.profile_path != undefined}
-				<div class="avatar p-1">
-					<div class="mb-8 w-24 h-24 mask mask-squircle">
+				<div on:click={() => routeToPerson(person.id)} class="avatar p-1">
+					<div class="mb-8 w-24 h-24 mask mask-squircle cursor-pointer">
 						<img src="{IMG_URL}{person.profile_path}" alt="{person.name}" />
 					</div>
 				</div>

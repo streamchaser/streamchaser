@@ -51,6 +51,20 @@ class TV(BaseModel):
     cast: List[Dict]
 
 
+class Person(BaseModel):
+    id: int
+    name: str
+    birthdate: Optional[str]
+    deathday: Optional[str]
+    biography: str
+    place_of_birth: Optional[str]
+    aslo_knows_as: Optional[str]
+    profile_path: Optional[str]
+    movie_credits: Optional[List[Dict]]
+    tv_credits: Optional[List[Dict]]
+    gender: int
+
+
 class Genre(BaseModel):
     id: int
     name: str
