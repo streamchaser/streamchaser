@@ -97,7 +97,7 @@
 
             <!-- TV -->
             {#if person.tv_credits.length != 0}
-                <h1 class="text-center text-3xl pt-5">TV Shows</h1>
+                <h1 class="text-center text-3xl pt-5">Series</h1>
                 <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
                     {#each person.tv_credits.slice(0, currentTVAmount) as tv}
                         {#if tv.poster_path != undefined}
