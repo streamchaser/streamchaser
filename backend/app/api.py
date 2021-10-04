@@ -35,7 +35,7 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
     ]
 
 
-def get_person_from_id(person_id: int):
+async def get_person_from_id(person_id: int):
     """ Gets data of a person from an id
     """
 
@@ -56,8 +56,8 @@ def get_person_from_id(person_id: int):
         also_known_as=person.get('also_known_as'),
         profile_path=person.get('profile_path'),
         gender=person.get('gender'),
-        movie_credits=get_cast(person.get('movie_credits')),
-        tv_credits=get_cast(person.get('tv_credits'))
+        movie_credits=person.get('movie_credits').get('cast'),
+        tv_credits=person.get('tv_credits').get('cast')
     )
 
 
@@ -86,7 +86,7 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
         recommendations=get_recommendations(movies.get('recommendations')),
         poster_path=movies.get('poster_path'),
         backdrop_path=movies.get('backdrop_path'),
-        cast=get_cast(movies.get('credits'))
+        cast=movies.get('credits').get('cast')
     )
 
 
@@ -116,7 +116,7 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
         number_of_seasons=tv.get('number_of_seasons'),
         seasons=tv.get('seasons'),
         backdrop_path=tv.get('backdrop_path'),
-        cast=get_cast(tv.get('credits'))
+        cast=tv.get('credits').get('cast')
     )
 
 
@@ -148,10 +148,3 @@ def get_recommendations(recommendations: Dict) -> List[Dict]:
     """
 
     return [result for result in recommendations['results']]
-
-
-def get_cast(credits: Dict) -> List[Dict]:
-    """ Gets list of cast members for a movie
-    """
-
-    return [result for result in credits['cast']]

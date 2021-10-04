@@ -26,7 +26,7 @@ class Movie(BaseModel):
     release_date: str
     overview: str
     genres: Optional[List[str]]
-    imdb_id: str
+    imdb_id: Optional[str]
     runtime: str
     providers: Optional[List[Dict]]
     recommendations: List[Dict]

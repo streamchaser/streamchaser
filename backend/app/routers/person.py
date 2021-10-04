@@ -14,4 +14,4 @@ router = APIRouter(
 @router.get("/{person_id}")
 async def get_person(person_id: int) -> Person:
     """Specific TV page"""
-    return get_person_from_id(person_id)
+    return await get_person_from_id(person_id)
