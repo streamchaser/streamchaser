@@ -123,7 +123,7 @@
             {#await fetchGenres()}
                 <p>...loading selection</p>
             {:then genres}
-                <MultiSelect class="select-primary" --sms-options-bg="var(--my-css-var, #404454)"
+                <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
                     bind:selected={selectedGenres}
                     on:change={debounceInput}
                     options={getDictValues(genres)}
@@ -136,7 +136,7 @@
             {#await fetchProviders()}
                 <p>...loading selection</p>
             {:then}
-                <MultiSelect class="select-primary" --sms-options-bg="var(--my-css-var, #404454)"
+                <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
                     bind:selected={$currentProviders}
                     on:change={debounceInput}
                     options={activeProviders}
