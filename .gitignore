@@ -18,7 +18,6 @@ __pycache__/
 pgdata
 backend/providers???.txt
 
-
 # Frontend
 *.DS_Store
 **/node_modules/
@@ -30,5 +29,6 @@ assets/build
 /.svelte-kit
 /package
 
-.env
+backend/.env
+frontend/.env
 /letsencrypt
