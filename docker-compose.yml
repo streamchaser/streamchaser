@@ -5,7 +5,7 @@ services:
         build: ./frontend
         restart: always
         container_name: frontend
-        command: npm run dev -- --host
+        command: npm run dev
         env_file:
             - .env
         ports:
