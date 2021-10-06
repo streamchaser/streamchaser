@@ -16,6 +16,7 @@ router = APIRouter(
 async def search(
     user_input: str,
     c: str,
+    l: int,
     g: Optional[List[str]] = Query(None),
     p: Optional[List[str]] = Query(None),
 ):
@@ -25,6 +26,7 @@ async def search(
     * **g**: Optional genre query
     * **p**: Optional provider query
     """
+    limit = l
     genres = g
     providers = p
     country_code = c
@@ -38,7 +40,7 @@ async def search(
         return client.index(f"media_{country_code}").search(
             user_input,
             {
-                "limit": 21,
+                "limit": limit,
                 "filter": genre_list + provider_list,
                 "sort": ["popularity:desc"],
             },
@@ -47,7 +49,7 @@ async def search(
         return client.index(f"media_{country_code}").search(
             user_input,
             {
-                "limit": 21,
+                "limit": limit,
                 # This is using AND logic
                 "filter": [f'genres="{genre}"' for genre in genres],
                 "sort": ["popularity:desc"],
@@ -57,7 +59,7 @@ async def search(
         return client.index(f"media_{country_code}").search(
             user_input,
             {
-                "limit": 21,
+                "limit": limit,
                 # This is using OR logic
                 "filter": [
                     [
@@ -69,5 +71,5 @@ async def search(
             },
         )
     return client.index(f"media_{country_code}").search(
-        user_input, {"limit": 21, "sort": ["popularity:desc"]}
+        user_input, {"limit": limit, "sort": ["popularity:desc"]}
     )

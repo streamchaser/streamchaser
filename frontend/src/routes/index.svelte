@@ -8,6 +8,8 @@
     import {goto} from '$app/navigation';
     import {onMount} from 'svelte';
 
+    const HIT_START_AMOUNT = 21;
+    const SHOW_BUTTON_AMOUNT = 12;
     const searchUrl = `${variables.apiPath}/search/`;
     const genreUrl = `${variables.apiPath}/genres/`;
     const providerUrl = `${variables.apiPath}/providers/`;
@@ -22,6 +24,7 @@
     let providerAmounts = [];
     let formattedGenres = {};
     let activeProviders = [];
+    let hitAmount = 21;
 
     // run search if we haven't received input in the last 200ms
     const debounceInput = () => {
@@ -48,6 +51,9 @@
         for (let i = 0; i < $currentProviders.length; i++) {
             query += `&p=${$currentProviders[i]}`;
         }
+
+        // Adds amount of hits
+        query += `&l=${hitAmount}`
 
         // Searches for all(*) if empty input
         const res = input !== '' ? await fetch(
@@ -200,6 +206,26 @@
                             {/if}
                         </div>
                     {/each}
+                </div>
+                <div class="flex space-x-1 justify-center">
+                    {#if 100 < media.length}
+                        <button
+                            on:click={() => hitAmount = hitAmount + SHOW_BUTTON_AMOUNT}
+                            id="loadmore"
+                            type="button"
+                            class="btn">
+                            Show more
+                        </button>
+                    {/if}
+                    {#if media.length > HIT_START_AMOUNT}
+                        <button
+                            on:click={() => hitAmount = hitAmount - SHOW_BUTTON_AMOUNT}
+                            id="loadmore"
+                            type="button"
+                            class="btn">
+                            Show less
+                        </button>
+                    {/if}
                 </div>
             {:else}
                 <div class="flex justify-around">
