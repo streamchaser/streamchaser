@@ -29,6 +29,9 @@ assets/build
 /.svelte-kit
 /package
 
+<<<<<<< HEAD
 backend/.env
 frontend/.env
+=======
+>>>>>>> f5f2aeb (Change old global variables with Pydantic settings management)
 /letsencrypt

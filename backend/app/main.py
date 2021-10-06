@@ -6,6 +6,7 @@ import models
 
 from database import engine
 from routers import media, providers, genres, movie, tv, search, person
+from config import get_settings
 
 
 models.Base.metadata.create_all(bind=engine)
@@ -14,21 +15,14 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
+streamchaser_url = get_settings().streamchaser_url
 origins = [
-    "http://localhost:8080",
-    "https://localhost:8080",
-    "http://localhost:3000",
-    "https://localhost:3000",
-    "http://localhost:1337",
-    "https://localhost:1337",
-    "http://localhost",
-    "https://localhost",
-    "http://api.localhost",
-    "https://api.localhost",
-    "http://streamchaser.tv",
-    "https://streamchaser.tv",
-    "http://test.streamchaser.tv",
-    "https://test.streamchaser.tv",
+    f"http://{streamchaser_url}:8080",
+    f"https://{streamchaser_url}:8080",
+    f"http://{streamchaser_url}",
+    f"https://{streamchaser_url}",
+    f"http://api.{streamchaser_url}",
+    f"https://api.{streamchaser_url}",
 ]
 
 

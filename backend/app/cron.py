@@ -5,13 +5,16 @@ from tqdm.contrib.concurrent import process_map
 
 import database
 from api import fetch_trending_movies, fetch_trending_tv, media_converter
-from api_helpers import SUPPORTED_COUNTRY_CODES
 from crud import (delete_all_media, get_all_media, request_providers,
                   update_media_provider_by_id, get_media_by_id, delete_media_by_id)
 from database_service import (dump_genres_to_db, dump_media_to_db,
                               init_meilisearch_indexing,
                               prune_non_ascii_media_from_db, format_genres)
 from search import client
+from config import get_settings
+
+
+supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
 
@@ -74,12 +77,12 @@ def remove_blacklisted_from_search():
     blacklisted_media = [
         line.rstrip() for line in open('../blacklist.txt')
     ]
-    for country_code in SUPPORTED_COUNTRY_CODES:
+    for country_code in supported_country_codes:
         client.index(f'media_{country_code}').delete_documents(blacklisted_media)
 
     typer.echo(
         f'Attempted to remove {len(blacklisted_media)} blacklisted media elements in '
-        f'{len(SUPPORTED_COUNTRY_CODES)} indexes'
+        f'{len(supported_country_codes)} indexes'
     )
 
 
@@ -147,7 +150,7 @@ def remove_and_blacklist(media_id: str):
                 file.write(f'{media_id}\n')
                 typer.echo('Added to blacklist ✓')
 
-        for country_code in SUPPORTED_COUNTRY_CODES:
+        for country_code in supported_country_codes:
             client.index(f'media_{country_code}').delete_document(media_id)
 
         typer.echo('Meilisearch updated ✓')

@@ -1,11 +1,11 @@
 from typing import Dict, List
 
 import requests
-from dotenv import dotenv_values
 
-API_URL = 'https://api.themoviedb.org/3/'
-TMDB_KEY = dotenv_values('../.env').get('TMDB_API_KEY')
-SUPPORTED_COUNTRY_CODES = ['DK', 'GB', 'DE', 'SE', 'US']
+from config import get_settings
+
+
+tmdb_key = get_settings().tmdb_key
 
 
 def valid_title(media: Dict) -> str:
@@ -52,8 +52,10 @@ def get_movie_length(total_minutes: int) -> str:
 def get_genres() -> Dict:
     """Gets genres from movies and tv-series to translate genre_ids
     """
-    movie_url = f'https://api.themoviedb.org/3/genre/movie/list?api_key={TMDB_KEY}'
-    tv_url = f'https://api.themoviedb.org/3/genre/tv/list?api_key={TMDB_KEY}'
+    movie_url = 'https://api.themoviedb.org/3/genre/movie/list?' \
+                f'api_key={tmdb_key}'
+    tv_url = 'https://api.themoviedb.org/3/genre/tv/list?' \
+             f'api_key={tmdb_key}'
 
     movie_genres = requests.get(movie_url).json()
     tv_genres = requests.get(tv_url).json()

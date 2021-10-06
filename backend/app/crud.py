@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 import models
 import schemas
 from api import get_providers
-from api_helpers import API_URL, TMDB_KEY
+from config import get_settings
 
 
 def get_media_by_id(db: Session, media_id: str):
@@ -95,16 +95,19 @@ def update_genre_name(db: Session, genre: schemas.Genre):
 
 
 def request_providers(media: models.Media):
+    tmdb_url = get_settings().tmdb_url
+    tmdb_key = get_settings().tmdb_key
+
     try:
         if media.id[0] == 'm':
-            search_url = f'{API_URL}movie/{media.id[1:]}?api_key={TMDB_KEY}' \
-                                f'&append_to_response=watch/providers'
+            url = f'{tmdb_url}movie/{media.id[1:]}?api_key={tmdb_key}' \
+                  '&append_to_response=watch/providers'
 
         elif media.id[0] == 't':
-            search_url = f'{API_URL}tv/{media.id[1:]}?api_key={TMDB_KEY}' \
-                            f'&append_to_response=watch/providers'
+            url = f'{tmdb_url}tv/{media.id[1:]}?api_key={tmdb_key}' \
+                  '&append_to_response=watch/providers'
 
-        media_provider_append = requests.get(search_url).json()
+        media_provider_append = requests.get(url).json()
         return {
             'media_id': media.id,
             'data': get_providers(media_provider_append.get('watch/providers'))
