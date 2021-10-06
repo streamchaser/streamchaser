@@ -9,21 +9,17 @@ from schemas import TV, Media, Movie, Person
 from config import get_settings
 
 
+tmdb_url = get_settings().tmdb_url
+tmdb_key = get_settings().tmdb_key
+
+
 def fetch_trending_movies(page: int) -> Dict:
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-
     url = f'{tmdb_url}trending/movie/week?api_key={tmdb_key}&page={page}'
-
     return requests.get(url).json()["results"]
 
 
 def fetch_trending_tv(page: int) -> Dict:
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-
     url = f'{tmdb_url}trending/tv/week?api_key={tmdb_key}&page={page}'
-
     return requests.get(url).json()["results"]
 
 
@@ -47,9 +43,6 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
 async def get_person_from_id(person_id: int):
     """ Gets data of a person from an id
     """
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-
     # Here we make 3 api calls into 1 using the append_to_response header
     url = f'{tmdb_url}person/{person_id}?api_key={tmdb_key}' \
           '&append_to_response=movie_credits,tv_credits'
@@ -75,9 +68,6 @@ async def get_person_from_id(person_id: int):
 def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
     """ Gets data of a movie from an id
     """
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-
     # Here we make 3 api calls into 1 using the append_to_response header
     url = f'{tmdb_url}movie/{movie_id}?api_key={tmdb_key}' \
           '&append_to_response=watch/providers,recommendations,credits'
@@ -106,11 +96,8 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
 def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
     """ Gets data of a tv series from an id
     """
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-
     # Here we make 3 api calls into 1 using the append_to_response header
-    url = f'{tmdb_url}tv/{tv_id}?api_key={get_settings().tmdb_key}' \
+    url = f'{tmdb_url}tv/{tv_id}?api_key={tmdb_key}' \
           '&append_to_response=watch/providers,recommendations,credits'
 
     tv = requests.get(url).json()

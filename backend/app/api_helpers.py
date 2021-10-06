@@ -5,6 +5,9 @@ import requests
 from config import get_settings
 
 
+tmdb_key = get_settings().tmdb_key
+
+
 def valid_title(media: Dict) -> str:
     if media.get('media_type') == 'movie':
         return media.get('title')
@@ -50,9 +53,9 @@ def get_genres() -> Dict:
     """Gets genres from movies and tv-series to translate genre_ids
     """
     movie_url = 'https://api.themoviedb.org/3/genre/movie/list?' \
-                f'api_key={get_settings().tmdb_key}'
+                f'api_key={tmdb_key}'
     tv_url = 'https://api.themoviedb.org/3/genre/tv/list?' \
-             f'api_key={get_settings().tmdb_key}'
+             f'api_key={tmdb_key}'
 
     movie_genres = requests.get(movie_url).json()
     tv_genres = requests.get(tv_url).json()
@@ -68,7 +71,7 @@ def get_genres() -> Dict:
     return {**movie_genre_dict, **tv_genre_dict}
 
 
-# GENRE_DICT = get_genres()
+GENRE_DICT = get_genres()
 
 
 def genre_id_to_str(media: Dict) -> List[str]:

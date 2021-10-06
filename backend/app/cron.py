@@ -13,6 +13,9 @@ from database_service import (dump_genres_to_db, dump_media_to_db,
 from search import client
 from config import get_settings
 
+
+supported_country_codes = get_settings().supported_country_codes
+
 app = typer.Typer()
 
 
@@ -71,8 +74,6 @@ def cleanup_genres():
 
 @app.command()
 def remove_blacklisted_from_search():
-    supported_country_codes = get_settings().supported_country_codes
-
     blacklisted_media = [
         line.rstrip() for line in open('../blacklist.txt')
     ]
@@ -125,8 +126,6 @@ def full_setup(total_pages: int, remove_non_ascii: bool = True):
 
 @app.command()
 def remove_and_blacklist(media_id: str):
-    supported_country_codes = get_settings().supported_country_codes
-
     try:
         db = database.SessionLocal()
         media = get_media_by_id(db=db, media_id=media_id)
