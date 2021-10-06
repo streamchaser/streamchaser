@@ -2,9 +2,8 @@ from typing import Dict
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-import models
-
-from database import engine
+from db.database import engine
+from db import models
 from routers import media, providers, genres, movie, tv, search, person
 from config import get_settings
 

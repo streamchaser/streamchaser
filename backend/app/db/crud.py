@@ -1,12 +1,10 @@
 from typing import Dict, List
 
-import requests
 from sqlalchemy.orm import Session
 
-import models
+from db import models
+
 import schemas
-from api import get_providers
-from config import get_settings
 
 
 def get_media_by_id(db: Session, media_id: str):
@@ -93,26 +91,3 @@ def update_genre_name(db: Session, genre: schemas.Genre):
         'name': db_genre.name
     })
     db.commit()
-
-
-def request_providers(media: models.Media):
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-
-    try:
-        if media.id[0] == 'm':
-            url = f'{tmdb_url}movie/{media.id[1:]}?api_key={tmdb_key}' \
-                  '&append_to_response=watch/providers'
-
-        elif media.id[0] == 't':
-            url = f'{tmdb_url}tv/{media.id[1:]}?api_key={tmdb_key}' \
-                  '&append_to_response=watch/providers'
-
-        media_provider_append = requests.get(url).json()
-        return {
-            'media_id': media.id,
-            'data': get_providers(media_provider_append.get('watch/providers'))
-            }
-
-    except Exception as e:
-        print(e)
