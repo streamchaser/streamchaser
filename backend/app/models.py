@@ -1,4 +1,4 @@
-from sqlalchemy import String, Integer, JSON, Float
+from sqlalchemy import String, Integer, JSON
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.sql.schema import Column
 
@@ -15,7 +15,7 @@ class Media(Base):
     release_date = Column(String, nullable=True)
     genres = Column(postgresql.ARRAY(String), nullable=True)
     poster_path = Column(String, nullable=True)
-    popularity = Column(Float, nullable=True)
+    popularity = Column(Integer, nullable=True)
     providers = Column(postgresql.ARRAY(JSON), nullable=True)
 
 

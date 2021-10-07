@@ -89,7 +89,7 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
         providers=get_providers(movies.get('watch/providers'), country_code),
         recommendations=get_recommendations(movies.get('recommendations')),
         poster_path=movies.get('poster_path'),
-        cast=movies.get('credits').get('cast')
+        cast=movies.get('credits').get('cast'),
         popularity=movies.get('popularity'),
         backdrop_path=movies.get('backdrop_path')
     )

@@ -36,7 +36,12 @@ async def search(
         ]
 
         return client.index(f"media_{country_code}").search(
-            user_input, {"limit": 21, "filter": genre_list + provider_list}
+            user_input,
+            {
+                "limit": 21,
+                "filter": genre_list + provider_list,
+                "sort": ["popularity:desc"],
+            },
         )
     elif genres:
         return client.index(f"media_{country_code}").search(
@@ -45,6 +50,7 @@ async def search(
                 "limit": 21,
                 # This is using AND logic
                 "filter": [f'genres="{genre}"' for genre in genres],
+                "sort": ["popularity:desc"],
             },
         )
     elif providers:
@@ -59,6 +65,9 @@ async def search(
                         for providers in providers
                     ]
                 ],
+                "sort": ["popularity:desc"],
             },
         )
-    return client.index(f"media_{country_code}").search(user_input, {"limit": 21})
+    return client.index(f"media_{country_code}").search(
+        user_input, {"limit": 21, "sort": ["popularity:desc"]}
+    )
