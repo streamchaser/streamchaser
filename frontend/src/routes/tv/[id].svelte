@@ -1,10 +1,11 @@
 <script>
-    import { variables } from '../../variables.js'
+    import {variables} from '../../variables.js'
     import {page} from '$app/stores';
     import {currentCountry} from '../../stores/country.js';
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
     import {goto} from '$app/navigation';
+    import Seasons from '../../components/seasons.svelte';
 
 
     const TV_DETAIL_URL = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
@@ -40,7 +41,7 @@
         location.reload()
     }
 
-    function routeToPerson(mediaId){
+    function routeToPerson(mediaId) {
         goto(`/person/${mediaId}`)
         location.reload()
     }
@@ -93,6 +94,9 @@
                     {/each}
                 </div>
             </div>
+
+            <Seasons seasons={tv.seasons} />
+
             <!-- Person -->
             {#if tv.cast.length != 0}
                 <h1 class="text-center text-3xl pt-5">Cast</h1>
