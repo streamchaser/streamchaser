@@ -21,7 +21,8 @@ def dump_media_to_db(media: models.Media) -> None:
         overview=media.get("overview"),
         release_date=media.get("release_date"),
         genres=media.get("genres"),
-        poster_path=media.get("poster_path")
+        poster_path=media.get("poster_path"),
+        popularity=media.get('popularity')
     )
     try:
         db = database.SessionLocal()
@@ -93,6 +94,7 @@ def init_meilisearch_indexing():
                     release_date=media.release_date,
                     genres=media.genres,
                     poster_path=media.poster_path,
+                    popularity=media.popularity,
                     specific_provider_names=[
                         provider.get(country_code).get('provider_name')
                         for provider in media.providers

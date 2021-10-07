@@ -31,7 +31,8 @@ def create_media(db: Session, media: schemas.Media):
         overview=media.overview,
         release_date=media.release_date,
         genres=media.genres,
-        poster_path=media.poster_path
+        poster_path=media.poster_path,
+        popularity=media.popularity
     )
     db.add(db_media)
     db.commit()

@@ -34,7 +34,8 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
             overview=media.get('overview'),
             release_date=valid_release_date(media),
             genres=genre_id_to_str(media),
-            poster_path=media.get('poster_path')
+            poster_path=media.get('poster_path'),
+            popularity=media.get('popularity')
         ).dict()
         for media in mixed_list
     ]
@@ -88,8 +89,9 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
         providers=get_providers(movies.get('watch/providers'), country_code),
         recommendations=get_recommendations(movies.get('recommendations')),
         poster_path=movies.get('poster_path'),
-        backdrop_path=movies.get('backdrop_path'),
-        cast=movies.get('credits').get('cast')
+        cast=movies.get('credits').get('cast'),
+        popularity=movies.get('popularity'),
+        backdrop_path=movies.get('backdrop_path')
     )
 
 
@@ -115,6 +117,7 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
         providers=get_providers(tv.get('watch/providers'), country_code),
         recommendations=get_recommendations(tv.get('recommendations')),
         poster_path=tv.get('poster_path'),
+        popularity=tv.get('popularity'),
         number_of_seasons=tv.get('number_of_seasons'),
         seasons=tv.get('seasons'),
         backdrop_path=tv.get('backdrop_path'),

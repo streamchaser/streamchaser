@@ -6,6 +6,7 @@
     import {currentCountry} from '../stores/country.js';
     import {currentProviders} from '../stores/providers.js';
     import {goto} from '$app/navigation';
+    import {onMount} from 'svelte';
 
     const searchUrl = `${variables.apiPath}/search/`;
     const genreUrl = `${variables.apiPath}/genres/`;
@@ -26,7 +27,7 @@
     const debounceInput = () => {
         clearTimeout(timer);
         timer = setTimeout(() => {
-            input.trim() ? search() : media = [];
+            search()
         }, inputTimer);
     }
 
@@ -40,21 +41,22 @@
     const search = async () => {
         // Builds the optional query for genres
         // Example: "?g=Action&g=Comedy&g=Drama"
-        if (input) {
-            let query = '';
-            for (let i = 0; i < selectedGenres.length; i++) {
-                query += `&g=${getKeyByValue(formattedGenres, selectedGenres[i])}`;
-            }
-            for (let i = 0; i < $currentProviders.length; i++) {
-                query += `&p=${$currentProviders[i]}`;
-            }
-
-            const res = await fetch(
-                searchUrl + input + "?c=" + $currentCountry + query
-            );
-            media = await res.json();
-            hitProviderAmounts(media.hits);
+        let query = '';
+        for (let i = 0; i < selectedGenres.length; i++) {
+            query += `&g=${getKeyByValue(formattedGenres, selectedGenres[i])}`;
         }
+        for (let i = 0; i < $currentProviders.length; i++) {
+            query += `&p=${$currentProviders[i]}`;
+        }
+
+        // Searches for all(*) if empty input
+        const res = input !== '' ? await fetch(
+            searchUrl + input + "?c=" + $currentCountry + query
+        ) : await fetch(
+            searchUrl + '*' + "?c=" + $currentCountry + query
+        )
+        media = await res.json();
+        hitProviderAmounts(media.hits);
     };
 
     const getKeyByValue = function (object, value) {
@@ -102,6 +104,10 @@
             goto(`/tv/${mediaId.slice(1)}`, {replaceState})
         }
     }
+
+    onMount(async () => {
+        await search();
+    });
 
 </script>
 

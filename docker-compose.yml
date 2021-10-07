@@ -52,7 +52,7 @@ services:
             - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"
             - "traefik.docker.network=traefik"
     search:
-        image: getmeili/meilisearch:v0.21.0
+        image: getmeili/meilisearch:v0.22.0
         restart: always
         container_name: search
         ports:
