@@ -96,7 +96,7 @@
 				<h1 class="text-center text-3xl pt-5">Cast</h1>
 				<div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
 					{#each movie.cast.slice(0, castItemAmount) as person}
-						{#if person.profile_path != undefined}
+						{#if person.profile_path}
 							<div on:click={() => routeToPerson(person.id)} class="card compact cursor-pointer bordered">
 								<figure>
 								<img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
@@ -135,10 +135,12 @@
 				<div class="pt-5">
 					<div class="p-4 space-x-4 carousel carousel-center bg-neutral sm:rounded-box">
 					{#each movie.recommendations as recommendation}
-						<div on:click={() => routeToPage(recommendation.id)} class="carousel-item h-96 w-64 p-1">
-							<img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer"
-								alt="{recommendation.title}">
-						</div>
+						{#if recommendation.poster_path}
+							<div on:click={() => routeToPage(recommendation.id)} class="carousel-item h-96 w-64 p-1">
+								<img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer"
+									alt="{recommendation.title}">
+							</div>
+						{/if}
 					{/each}
 				</div>
 			</div>
