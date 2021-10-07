@@ -153,52 +153,56 @@
             {/await}
         </div>
         {#if media.hits}
-            <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-2 pt-4 bg-base-100">
-                {#each media.hits as media, mediaIndex}
-                    <div on:click={routeToPage(media.id)}
-                         class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
-                        <figure>
-                            <img src="{imageUrl}{media.poster_path}" alt="media poster"/>
-                        </figure>
-                        {#if providerAmounts[mediaIndex] === 0}
-                            <div class="card-body">
-                                <p class="text-center"><strong>No providers
-                                    in {$currentCountry}</strong></p>
-                            </div>
-                        {:else if providerAmounts[mediaIndex] <= shownProviders}
-                            <div class="-space-x-4 avatar-group">
-                                {#each media.specific_providers as provider}
-                                    <div class="avatar">
-                                        <div class="w-12 h-12">
-                                            <img src="{imageUrl}{provider.logo_path}"
-                                                 alt="provider logo">
+            {#if media.hits.length > 0}
+                <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-2 pt-4 bg-base-100">
+                    {#each media.hits as media, mediaIndex}
+                        <div on:click={routeToPage(media.id)}
+                            class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
+                            <figure>
+                                <img src="{imageUrl}{media.poster_path}" alt="media poster"/>
+                            </figure>
+                            {#if providerAmounts[mediaIndex] === 0}
+                                <div class="card-body">
+                                    <p class="text-center"><strong>No providers
+                                        in {$currentCountry}</strong></p>
+                                </div>
+                            {:else if providerAmounts[mediaIndex] <= shownProviders}
+                                <div class="-space-x-4 avatar-group">
+                                    {#each media.specific_providers as provider}
+                                        <div class="avatar">
+                                            <div class="w-12 h-12">
+                                                <img src="{imageUrl}{provider.logo_path}"
+                                                    alt="provider logo">
+                                            </div>
                                         </div>
-                                    </div>
-                                {/each}
-                            </div>
-                        {:else}
-                            <div class="-space-x-4 avatar-group">
-                                {#each media.specific_providers.slice(0, shownProviders - 1) as provider}
-                                    <div class="avatar">
-                                        <div class="w-12 h-12">
-                                            <img src="{imageUrl}{provider.logo_path}"
-                                                 alt="provider logo">
+                                    {/each}
+                                </div>
+                            {:else}
+                                <div class="-space-x-4 avatar-group">
+                                    {#each media.specific_providers.slice(0, shownProviders - 1) as provider}
+                                        <div class="avatar">
+                                            <div class="w-12 h-12">
+                                                <img src="{imageUrl}{provider.logo_path}"
+                                                    alt="provider logo">
+                                            </div>
                                         </div>
-                                    </div>
-                                {/each}
-                                <div class="avatar placeholder">
-                                    <div class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
-                                        <span>+{providerAmounts[mediaIndex] - shownProviders + 1}</span>
+                                    {/each}
+                                    <div class="avatar placeholder">
+                                        <div class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
+                                            <span>+{providerAmounts[mediaIndex] - shownProviders + 1}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {/if}
-                    </div>
-                {/each}
-            </div>
+                            {/if}
+                        </div>
+                    {/each}
+                </div>
+            {:else}
+                <div class="flex justify-around">
+                    <p>No results for: {input}</p>
+                </div>
+            {/if}
         {/if}
     </div>
-
-
     <Footer/>
 </div>
