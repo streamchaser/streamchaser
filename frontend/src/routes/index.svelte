@@ -111,6 +111,10 @@
 
 </script>
 
+<svelte:head>
+    <title>Streamchaser {$currentCountry}</title>
+</svelte:head>
+
 <div class="flex flex-col h-screen justify-between">
     <Navbar />
     <div class="mb-auto container mx-auto">

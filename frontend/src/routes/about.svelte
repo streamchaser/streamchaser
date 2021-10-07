@@ -5,6 +5,10 @@
     import Avatar from "../components/avatar.svelte";
 </script>
 
+<svelte:head>
+    <title>About Streamchaser</title>
+</svelte:head>
+
 <div class="flex flex-col h-screen">
     <Navbar/>
     <div class="mb-auto mx-auto items-center px-2">

@@ -12,11 +12,14 @@
     const CAST_ITEM_START_AMOUNT = 6;
     let currentMovieAmount  = 6;
     let currentTVAmount = 6;
+    let personName = 'Loading...';
 
     const fetchPersonDetails = async () => {
         try {
             const response = await fetch(PERSON_DETAIL_URL);
-            return await response.json();
+            let jsonResponse = await response.json();
+            personName = jsonResponse.name;
+            return jsonResponse;
         } catch (error) {
             console.error(error);
         }
@@ -33,6 +36,10 @@
     }
 
 </script>
+
+<svelte:head>
+    <title>{personName}</title>
+</svelte:head>
 
 <div class="flex flex-col h-screen justify-between">
     <Navbar/>

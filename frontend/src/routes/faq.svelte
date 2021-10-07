@@ -4,6 +4,9 @@
     import Navbar from "../components/navbar.svelte";
 </script>
 
+<svelte:head>
+    <title>FAQ</title>
+</svelte:head>
 
 <div class="flex flex-col h-screen">
     <Navbar/>

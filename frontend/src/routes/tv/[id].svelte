@@ -13,11 +13,14 @@
 	const SHOW_BUTTON_AMOUNT = 18;
 	const CAST_ITEM_START_AMOUNT = 9;
 	let castItemAmount = 9;
+    let tvTitle = 'Loading...';
 
     const fetchTVDetails = async () => {
         try {
             const response = await fetch(TV_DETAIL_URL);
-            return await response.json();
+            let jsonResponse = await response.json();
+            tvTitle = jsonResponse.name;
+            return jsonResponse;
         } catch (error) {
             console.error(error);
         }
@@ -43,6 +46,10 @@
     }
 
 </script>
+
+<svelte:head>
+    <title>{tvTitle}</title>
+</svelte:head>
 
 <div class="flex flex-col h-screen justify-between">
     <Navbar/>
