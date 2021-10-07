@@ -71,7 +71,7 @@
                 <h1 class="text-center text-3xl pt-5">Movies</h1>
                 <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
                     {#each person.movie_credits.slice(0, currentMovieAmount) as movie}
-                        {#if movie.poster_path != undefined}
+                        {#if movie.poster_path}
                             <div on:click={() => routeToMovie(movie.id)} class="card compact cursor-pointer bordered">
                                 <figure>
                                     <img src="{LOW_RES_IMG_URL}{movie.poster_path}" alt="{movie.title}">
@@ -107,7 +107,7 @@
                 <h1 class="text-center text-3xl pt-5">Series</h1>
                 <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
                     {#each person.tv_credits.slice(0, currentTVAmount) as tv}
-                        {#if tv.poster_path != undefined}
+                        {#if tv.poster_path}
                             <div on:click={() => routeToTV(tv.id)} class="card compact cursor-pointer bordered">
                                 <figure>
                                     <img src="{LOW_RES_IMG_URL}{tv.poster_path}" alt="{tv.name}">

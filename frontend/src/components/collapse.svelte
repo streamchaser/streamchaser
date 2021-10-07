@@ -10,7 +10,7 @@
     <div class="collapse-title text-xl font-medium">
         {title}
     </div>
-    {#if link && linkText != null}
+    {#if link && linkText}
         <div class="collapse-content">
             <p class="inline">{description}</p> <p class="inline link link-hover" on:click={() => window.open(link)}>{linkText}</p>.
         </div>
