@@ -141,10 +141,12 @@
                 <div class="pt-5">
                     <div class="p-4 space-x-4 carousel carousel-center bg-neutral sm:rounded-box">
                     {#each tv.recommendations as recommendation}
-                        <div on:click={() => routeToPage(recommendation.id)} class="carousel-item h-96 w-64 p-1">
-                            <img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer" 
-                                alt="{recommendation.title}">
-                        </div>
+                        {#if recommendation.poster_path}
+                            <div on:click={() => routeToPage(recommendation.id)} class="carousel-item h-96 w-64 p-1">
+                                <img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer" 
+                                    alt="{recommendation.title}">
+                            </div>
+                        {/if}
                     {/each}
                 </div>
             </div>
