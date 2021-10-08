@@ -2,9 +2,8 @@ from typing import Dict, List
 
 import requests
 
-from api_helpers import (get_movie_length,
-                         unique_id, valid_original_title, valid_release_date,
-                         valid_title)
+from api_helpers import (unique_id, valid_original_title,
+                         valid_release_date, valid_title)
 from db import models
 from schemas import TV, Media, Movie, Person
 from config import get_settings
@@ -107,7 +106,7 @@ def get_movie_from_id(movie_id: int, country_code: str = 'DK') -> Movie:
             genre.get('name') for genre in movies.get('genres')
         ],
         imdb_id=movies.get('imdb_id'),
-        runtime=get_movie_length(movies.get('runtime')),
+        runtime=movies.get('runtime'),
         providers=get_providers(movies.get('watch/providers'), country_code),
         recommendations=get_recommendations(movies.get('recommendations')),
         poster_path=movies.get('poster_path'),

@@ -39,14 +39,6 @@ def unique_id(media: Dict) -> str:
         return str(media.get('id'))
 
 
-def get_movie_length(total_minutes: int) -> str:
-    """ Formats minutes into following format: 0h 20m
-    """
-    hours = total_minutes // 60
-    minutes = total_minutes % 60
-    return f'{hours}h {minutes}m'
-
-
 def get_providers(providers: Dict, country_code: str = 'all') -> List[Dict]:
     """ Gets list of provider data for a movie from a specified country code
     """
