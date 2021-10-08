@@ -27,7 +27,7 @@ Lint Python:
   script:
     - cd backend
     - flake8 --version
-    - flake8 --max-line-length=88 app
+    - flake8 --max-line-length=88
 
 Build Backend:
   stage: build
