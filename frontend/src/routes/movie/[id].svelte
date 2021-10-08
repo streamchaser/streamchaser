@@ -5,6 +5,7 @@
 	import Navbar from '../../components/navbar.svelte';
 	import Footer from '../../components/footer.svelte';
     import {goto} from '$app/navigation';
+    import Error from '../../components/error.svelte';
 
 	const MOVIE_DETAIL_URL = `${variables.apiPath}/movie/${$currentCountry}/${$page.params.id}`;
 	const IMG_URL = 'https://image.tmdb.org/t/p/original/';
@@ -15,13 +16,16 @@
 	let movieTitle = 'Loading...';
 
 	const fetchMovieDetails = async () => {
-		try {
-			const response = await fetch(MOVIE_DETAIL_URL);
+		const response = await fetch(MOVIE_DETAIL_URL);
+
+		if (response.status == 200) {
             let jsonResponse = await response.json();
 			movieTitle = jsonResponse.title;
-			return jsonResponse;
-		} catch (error) {
-			console.error(error);
+			return await jsonResponse;
+		} else {
+			console.error(response.statusText);
+			movieTitle = 'Error loading movie'
+			throw new Error(response.statusText)
 		}
 	};
 
@@ -146,7 +150,7 @@
 			</div>
 			{/if}
 		{:catch error}
-			<p>Unable to load page</p>
+			<Error error={error} />
 		{/await}
 	</div>
 	<Footer/>

@@ -6,6 +6,7 @@
     import Footer from '../../components/footer.svelte';
     import {goto} from '$app/navigation';
     import Seasons from '../../components/seasons.svelte';
+    import Error from '../../components/error.svelte';
 
 
     const TV_DETAIL_URL = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
@@ -17,14 +18,17 @@
     let tvTitle = 'Loading...';
 
     const fetchTVDetails = async () => {
-        try {
-            const response = await fetch(TV_DETAIL_URL);
+		const response = await fetch(TV_DETAIL_URL);
+
+		if (response.status == 200) {
             let jsonResponse = await response.json();
-            tvTitle = jsonResponse.name;
-            return jsonResponse;
-        } catch (error) {
-            console.error(error);
-        }
+			tvTitle = jsonResponse.title;
+			return await jsonResponse;
+		} else {
+			console.error(response.statusText);
+			tvTitle = 'Error loading movie'
+			throw new Error(response.statusText)
+		}
     };
 
     let firstLoadCompleted = false;
@@ -152,7 +156,7 @@
             </div>
             {/if}
         {:catch error}
-            <p>Unable to load page</p>
+            <Error error={error} />
         {/await}
     </div>
     <Footer/>
