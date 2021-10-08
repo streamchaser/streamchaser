@@ -26,7 +26,7 @@
 			return await jsonResponse;
 		} else {
 			console.error(response.statusText);
-			tvTitle = 'Error loading movie'
+			tvTitle = 'Error loading tv'
 			throw new Error(response.statusText)
 		}
     };

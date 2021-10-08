@@ -24,7 +24,7 @@
 			return await jsonResponse;
 		} else {
 			console.error(response.statusText);
-			personName = 'Error loading movie'
+			personName = 'Error loading person'
 			throw new Error(response.statusText)
 		}
     };
