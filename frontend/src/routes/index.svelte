@@ -11,7 +11,8 @@
     const searchUrl = `${variables.apiPath}/search/`;
     const genreUrl = `${variables.apiPath}/genres/`;
     const providerUrl = `${variables.apiPath}/providers/`;
-    const imageUrl = 'https://image.tmdb.org/t/p/w500/';
+    const IMG_URL = 'https://image.tmdb.org/t/p/original/';
+	const LOW_RES_IMG_URL = 'https://image.tmdb.org/t/p/w500/';
     const inputTimer = 200;
     const shownProviders = 5;
 
@@ -163,7 +164,7 @@
                         <div on:click={routeToPage(media.id)}
                             class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
                             <figure>
-                                <img src="{imageUrl}{media.poster_path}" alt="media poster"/>
+                                <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt="media poster"/>
                             </figure>
                             {#if providerAmounts[mediaIndex] === 0}
                                 <div class="card-body">
@@ -175,7 +176,7 @@
                                     {#each media.specific_providers as provider}
                                         <div class="avatar">
                                             <div class="w-12 h-12">
-                                                <img src="{imageUrl}{provider.logo_path}"
+                                                <img src="{IMG_URL}{provider.logo_path}"
                                                     alt="provider logo">
                                             </div>
                                         </div>
@@ -186,7 +187,7 @@
                                     {#each media.specific_providers.slice(0, shownProviders - 1) as provider}
                                         <div class="avatar">
                                             <div class="w-12 h-12">
-                                                <img src="{imageUrl}{provider.logo_path}"
+                                                <img src="{IMG_URL}{provider.logo_path}"
                                                     alt="provider logo">
                                             </div>
                                         </div>
