@@ -4,6 +4,7 @@
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
     import {goto} from '$app/navigation';
+    import Error from '../../components/error.svelte';
 
     const PERSON_DETAIL_URL = `${variables.apiPath}/person/${$page.params.id}`;
     const IMG_URL = 'https://image.tmdb.org/t/p/original/';
@@ -15,14 +16,17 @@
     let personName = 'Loading...';
 
     const fetchPersonDetails = async () => {
-        try {
-            const response = await fetch(PERSON_DETAIL_URL);
+		const response = await fetch(PERSON_DETAIL_URL);
+
+		if (response.status == 200) {
             let jsonResponse = await response.json();
-            personName = jsonResponse.name;
-            return jsonResponse;
-        } catch (error) {
-            console.error(error);
-        }
+			personName = jsonResponse.title;
+			return await jsonResponse;
+		} else {
+			console.error(response.statusText);
+			personName = 'Error loading person'
+			throw new Error(response.statusText)
+		}
     };
 
     function routeToMovie(mediaId) {
@@ -137,6 +141,8 @@
                     {/if}
                 </div>
             {/if}
+        {:catch error}
+            <Error error={error} />
         {/await}
     </div>
 <Footer/>
