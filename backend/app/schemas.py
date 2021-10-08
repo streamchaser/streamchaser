@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 from pydantic import BaseModel
 
@@ -9,7 +9,7 @@ class Media(BaseModel):
     original_title: str
     overview: str
     release_date: str
-    genres: Optional[List[str]]
+    genres: Optional[Any]  # Rapand told me to do it :'( #TODO: find a proper solution
     poster_path: Optional[str]
     popularity: Optional[int]
     providers: Optional[List[Dict]]

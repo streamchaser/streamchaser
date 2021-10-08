@@ -2,7 +2,7 @@ from sqlalchemy import String, Integer, JSON
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.sql.schema import Column
 
-from database import Base
+from db.database import Base
 
 
 class Media(Base):

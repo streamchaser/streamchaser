@@ -2,11 +2,13 @@ from typing import Dict, List
 
 import requests
 
-from api_helpers import (genre_id_to_str, get_movie_length,
+from api_helpers import (get_movie_length,
                          unique_id, valid_original_title, valid_release_date,
                          valid_title)
+from db import models
 from schemas import TV, Media, Movie, Person
 from config import get_settings
+from api_helpers import get_providers
 
 
 tmdb_url = get_settings().tmdb_url
@@ -25,6 +27,24 @@ def fetch_trending_tv(page: int) -> Dict:
 
 def media_converter(mixed_list: List[Dict]) -> List[Media]:
     """Takes a list movie/tv json ["results"] and converts it to Media"""
+    movie_url = 'https://api.themoviedb.org/3/genre/movie/list?' \
+                f'api_key={tmdb_key}'
+    tv_url = 'https://api.themoviedb.org/3/genre/tv/list?' \
+             f'api_key={tmdb_key}'
+
+    movie_genres = requests.get(movie_url).json()
+    tv_genres = requests.get(tv_url).json()
+
+    movie_genre_dict = {
+        genre['id']: genre['name'] for genre in movie_genres['genres']
+    }
+    tv_genre_dict = {
+        genre['id']: genre['name'] for genre in tv_genres['genres']
+    }
+
+    # Only keeps the unique keys
+    genre_dict = {**movie_genre_dict, **tv_genre_dict}
+
     return [
         # pydantic Media schema
         Media(
@@ -33,7 +53,9 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
             original_title=valid_original_title(media),
             overview=media.get('overview'),
             release_date=valid_release_date(media),
-            genres=genre_id_to_str(media),
+            genres=[
+                genre_dict.get(genre_id) for genre_id in media.get('genre_ids')
+            ] if media.get('genre_ids') else ['Unknown'],
             poster_path=media.get('poster_path'),
             popularity=media.get('popularity')
         ).dict()
@@ -125,27 +147,49 @@ def get_tv_from_id(tv_id: int, country_code: str = 'DK') -> TV:
     )
 
 
-def get_providers(providers: Dict, country_code: str = 'all') -> List[Dict]:
-    """ Gets list of provider data for a movie from a specified country code
+def get_genres() -> Dict:
+    """Gets genres from movies and tv-series to translate genre_ids
     """
+    movie_url = 'https://api.themoviedb.org/3/genre/movie/list?' \
+                f'api_key={tmdb_key}'
+    tv_url = 'https://api.themoviedb.org/3/genre/tv/list?' \
+             f'api_key={tmdb_key}'
+
+    movie_genres = requests.get(movie_url).json()
+    tv_genres = requests.get(tv_url).json()
+
+    movie_genre_dict = {
+        genre['id']: genre['name'] for genre in movie_genres['genres']
+    }
+    tv_genre_dict = {
+        genre['id']: genre['name'] for genre in tv_genres['genres']
+    }
+
+    # Only keeps the unique keys
+    return {**movie_genre_dict, **tv_genre_dict}
+
+
+def request_providers(media: models.Media):
+    tmdb_url = get_settings().tmdb_url
+    tmdb_key = get_settings().tmdb_key
 
     try:
-        if country_code == 'all':
-            return [
-                {country: provider}
-                for country in providers.get('results')
-                if providers.get('results').get(country).get('flatrate')
-                for provider in providers.get('results').get(country).get('flatrate')
-            ]
+        if media.id[0] == 'm':
+            url = f'{tmdb_url}movie/{media.id[1:]}?api_key={tmdb_key}' \
+                  '&append_to_response=watch/providers'
 
-        return [
-            provider
-            for provider in providers.get('results').get(country_code).get('flatrate')
-            if providers.get('results').get(country_code).get('flatrate')
-        ]
-    except (AttributeError, TypeError):
-        # If no providers for given country code
-        return []
+        elif media.id[0] == 't':
+            url = f'{tmdb_url}tv/{media.id[1:]}?api_key={tmdb_key}' \
+                  '&append_to_response=watch/providers'
+
+        media_provider_append = requests.get(url).json()
+        return {
+            'media_id': media.id,
+            'data': get_providers(media_provider_append.get('watch/providers'))
+            }
+
+    except Exception as e:
+        print(e)
 
 
 def get_recommendations(recommendations: Dict) -> List[Dict]:

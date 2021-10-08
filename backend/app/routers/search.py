@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from fastapi import Query
 from fastapi import APIRouter
-from search import client
+from db.search import client
 
 
 router = APIRouter(
