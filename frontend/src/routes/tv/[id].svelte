@@ -151,6 +151,8 @@
                 </div>
             </div>
             {/if}
+        {:catch error}
+            <p>Unable to load page</p>
         {/await}
     </div>
     <Footer/>
