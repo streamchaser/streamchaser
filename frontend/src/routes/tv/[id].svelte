@@ -22,7 +22,7 @@
 
 		if (response.status == 200) {
             let jsonResponse = await response.json();
-			tvTitle = jsonResponse.title;
+			tvTitle = jsonResponse.name;
 			return await jsonResponse;
 		} else {
 			console.error(response.statusText);
