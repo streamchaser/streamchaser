@@ -20,7 +20,7 @@ Authors 👷:
 * [Pankai222](https://github.com/Pankai222)
 * [nullxDEADBEEF](https://github.com/nullxDEADBEEF)
 * [Primdahl26](https://github.com/Primdahl26)
-
+* Derp
 
 ## First time setup
 Here's how to get the application up and running
