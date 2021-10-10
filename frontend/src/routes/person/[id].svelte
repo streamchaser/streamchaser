@@ -20,7 +20,7 @@
 
 		if (response.status == 200) {
             let jsonResponse = await response.json();
-			personName = jsonResponse.title;
+			personName = jsonResponse.name;
 			return await jsonResponse;
 		} else {
 			console.error(response.statusText);
