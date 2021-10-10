@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTQ0NCGTQQ"></script>
+    <script>
+        const host = window.location.hostname;
+        if(host == "streamchaser.tv") {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-TTQ0NCGTQQ');
+        }
+    </script>
     <meta charset="utf-8"/>
     <link rel="icon" href="/favicon.png"/>
     <!-- Tailwind -->
