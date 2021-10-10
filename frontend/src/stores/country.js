@@ -1,3 +1,4 @@
-import {writable} from 'svelte-local-storage-store'
+import { persist, localStorage } from "@macfja/svelte-persistent-store"
+import { writable } from "svelte/store"
 
-export const currentCountry = writable('currentCountry', 'DK')
+export const currentCountry = persist(writable('DK'), localStorage(), 'currentCountry');
