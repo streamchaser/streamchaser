@@ -5,6 +5,7 @@
     import MultiSelect from 'svelte-multiselect'
     import {currentCountry} from '../stores/country.js';
     import {currentProviders} from '../stores/providers.js';
+    import {currentGenres} from "../stores/genres";
     import {inputQuery} from "../stores/input";
     import {goto} from '$app/navigation';
     import {onMount} from 'svelte';
@@ -58,6 +59,7 @@
             searchUrl + '*' + "?c=" + $currentCountry + query
         )
         $inputQuery = input;
+        $currentGenres = selectedGenres;
         media = await res.json();
         hitProviderAmounts(media.hits);
     };
@@ -111,6 +113,10 @@
     onMount(async () => {
         const inputField = document.getElementById('input-field')
         setTimeout(function () { inputField.select(); }, 100);
+
+        if ($currentGenres !== []) {
+            selectedGenres = $currentGenres
+        }
 
         if ($inputQuery !== '') {
             input = $inputQuery;
