@@ -30,7 +30,7 @@ services:
         build: ./backend
         restart: always
         container_name: backend
-        env_file: 
+        env_file:
             - .env
         volumes:
             - ./backend/:/app/backend

@@ -110,9 +110,9 @@
                             <div on:click={() => routeToPerson(person.id)} class="card compact cursor-pointer bordered">
                                 <figure>
                                 <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
-                                </figure> 
+                                </figure>
                                 <div class="card-body">
-                                <p><b>{person.name}</b> - <i>{person.character}</i></p> 
+                                <p><b>{person.name}</b> - <i>{person.character}</i></p>
                                 </div>
                             </div>
                         {/if}
@@ -147,7 +147,7 @@
                     {#each tv.recommendations as recommendation}
                         {#if recommendation.poster_path}
                             <div on:click={() => routeToPage(recommendation.id)} class="carousel-item h-96 w-64 p-1">
-                                <img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer" 
+                                <img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer"
                                     alt="{recommendation.title}">
                             </div>
                         {/if}

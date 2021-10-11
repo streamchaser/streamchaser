@@ -79,7 +79,7 @@
                             <div on:click={() => routeToMovie(movie.id)} class="card compact cursor-pointer bordered">
                                 <figure>
                                     <img src="{LOW_RES_IMG_URL}{movie.poster_path}" alt="{movie.title}">
-                                </figure> 
+                                </figure>
                             </div>
                         {/if}
                     {/each}

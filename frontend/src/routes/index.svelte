@@ -93,7 +93,7 @@
             resetProviders();
             fetchProviders();
             search();
-            
+
         }
         firstLoadCompleted = true;
     };
