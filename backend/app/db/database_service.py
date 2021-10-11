@@ -1,12 +1,13 @@
-from tqdm import tqdm
 from sqlalchemy.exc import IntegrityError
+from tqdm import tqdm
 
-import schemas
-
-from api import get_genres
-from db.search import client
-from db import crud, database, models
-from config import get_settings
+from backend.app import schemas
+from backend.app.api import get_genres
+from backend.app.config import get_settings
+from backend.app.db import crud
+from backend.app.db import database
+from backend.app.db import models
+from backend.app.db.search import client
 
 
 def dump_media_to_db(media: models.Media) -> None:
