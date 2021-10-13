@@ -1,5 +1,5 @@
 <script>
-	import { variables } from '../variables.js'
+    import {variables} from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
     import MultiSelect from 'svelte-multiselect'
@@ -10,6 +10,7 @@
     import {goto} from '$app/navigation';
     import {onMount} from 'svelte';
 
+    const ipInfoKey = `${variables.ipInfoKey}`
     const searchUrl = `${variables.apiPath}/search/`;
     const genreUrl = `${variables.apiPath}/genres/`;
     const providerUrl = `${variables.apiPath}/providers/`;
@@ -110,9 +111,24 @@
         }
     }
 
+    const getCountryCodeByIP = async () => {
+        if ($currentCountry !== '')
+        {
+            return;
+        }
+        fetch(`https://ipinfo.io/json?token=${ipInfoKey}`).then(
+                (response) => response.json()
+            ).then(
+                (jsonResponse) => $currentCountry = jsonResponse.country
+            )
+    }
+
     onMount(async () => {
+        if ($currentCountry === '' || !$currentCountry) {
+             await getCountryCodeByIP();
+        }
+
         const inputField = document.getElementById('input-field')
-        setTimeout(function () { inputField.select(); }, 100);
 
         if ($currentGenres !== []) {
             selectedGenres = $currentGenres
@@ -120,6 +136,7 @@
 
         if ($inputQuery !== '') {
             input = $inputQuery;
+            setTimeout(function () { inputField.select(); }, 50);
             debounceInput();
         } else {
             await search();
