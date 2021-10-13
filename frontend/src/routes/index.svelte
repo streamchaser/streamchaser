@@ -5,6 +5,8 @@
     import MultiSelect from 'svelte-multiselect'
     import {currentCountry} from '../stores/country.js';
     import {currentProviders} from '../stores/providers.js';
+    import {currentGenres} from "../stores/genres";
+    import {inputQuery} from "../stores/input";
     import {goto} from '$app/navigation';
     import {onMount} from 'svelte';
 
@@ -56,6 +58,8 @@
         ) : await fetch(
             searchUrl + '*' + "?c=" + $currentCountry + query
         )
+        $inputQuery = input;
+        $currentGenres = selectedGenres;
         media = await res.json();
         hitProviderAmounts(media.hits);
     };
@@ -107,7 +111,19 @@
     }
 
     onMount(async () => {
-        await search();
+        const inputField = document.getElementById('input-field')
+        setTimeout(function () { inputField.select(); }, 100);
+
+        if ($currentGenres !== []) {
+            selectedGenres = $currentGenres
+        }
+
+        if ($inputQuery !== '') {
+            input = $inputQuery;
+            debounceInput();
+        } else {
+            await search();
+        }
     });
 
 </script>
@@ -121,7 +137,7 @@
     <div class="mb-auto container mx-auto">
         <h1 class="text-center text-3xl pt-4">streamchaser</h1>
         <div class="form-control p-4">
-            <input
+            <input id="input-field"
                 type="text"
                 placeholder="Search in {$currentCountry}"
                 class="input input-bordered"
