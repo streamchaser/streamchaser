@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from api import get_person_from_id
-from schemas import Person
+from backend.app.api import get_person_from_id
+from backend.app.schemas import Person
 
 
 router = APIRouter(

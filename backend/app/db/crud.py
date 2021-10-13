@@ -1,10 +1,10 @@
-from typing import Dict, List
+from typing import Dict
+from typing import List
 
 from sqlalchemy.orm import Session
 
-from db import models
-
-import schemas
+from backend.app import schemas
+from backend.app.db import models
 
 
 def get_media_by_id(db: Session, media_id: str):

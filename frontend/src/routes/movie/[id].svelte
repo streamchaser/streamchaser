@@ -104,9 +104,9 @@
 							<div on:click={() => routeToPerson(person.id)} class="card compact cursor-pointer bordered">
 								<figure>
 								<img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
-								</figure> 
+								</figure>
 								<div class="card-body">
-								<p><b>{person.name}</b> - <i>{person.character}</i></p> 
+								<p><b>{person.name}</b> - <i>{person.character}</i></p>
 								</div>
 							</div>
 						{/if}

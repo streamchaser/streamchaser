@@ -1,16 +1,18 @@
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/streamchaser/streamchaser/development.svg)](https://results.pre-commit.ci/latest/github/streamchaser/streamchaser/development)
+
 # 🎬 streamchaser 🎬
-Streamchaser seeks to simplify movie, series and documentary search located on streaming services by curating all of the content through a centralized entertainment technology platform. 
-Streamchaser seeks to solve the issue where it appears, i.e. in front of the TV. 
-Lastly, Streamchaser is founded on the basis of convenience, which means that no feature, 
+Streamchaser seeks to simplify movie, series and documentary search located on streaming services by curating all of the content through a centralized entertainment technology platform.
+Streamchaser seeks to solve the issue where it appears, i.e. in front of the TV.
+Lastly, Streamchaser is founded on the basis of convenience, which means that no feature,
 no profit margin and no personal gains should ever compromise the convenience and ease of use for the customer.
 
 ## Credits
 Built using:
-* [FastAPI](https://github.com/tiangolo/fastapi) 
+* [FastAPI](https://github.com/tiangolo/fastapi)
 * [MeiliSearch](https://github.com/meilisearch/MeiliSearch)
 * [Svelte](https://github.com/sveltejs/svelte)
 * [Svelte-kit](https://kit.svelte.dev)
-* [PostgreSQL](https://github.com/postgres/postgres) 
+* [PostgreSQL](https://github.com/postgres/postgres)
 * [Docker](https://github.com/docker)
 * [Tailwind CSS](https://tailwindcss.com)
 * [DaisyUI](https://daisyui.com)
@@ -34,12 +36,12 @@ Here's how to get the application up and running
     * Root: HOST_NAME
     * Backend: TMDB_API_KEY
     * Frontend: VITE_API_PATH(path of the backend)
-3. Build the container `docker-compose up --build -d`  
+3. Build the container `docker-compose up --build -d`
 4. Run `docker-compose exec backend python3 cron.py full-setup <total_pages>`
 5. Go to http://localhost:3000/ and search
 
 ## CLI
-To use the cronjob use the following in the terminal:  
+To use the cronjob use the following in the terminal:
 `docker-compose exec backend python3 cron.py <command> <parameter>`
 
 List of commands:
@@ -51,24 +53,24 @@ List of commands:
 * `remove-blacklisted-from-search` - Removes all blacklisted IDs
 * `remove-non-ascii-media` - Removes all non-ascii titles
 
-So as an example to update the media list with 500 pages you would do the following:  
+So as an example to update the media list with 500 pages you would do the following:
 `docker-compose exec backend python3 cron.py update-media 500`
 
-After updating the database you need to index MeiliSearch:  
+After updating the database you need to index MeiliSearch:
 `docker-compose exec backend python3 cron.py index-meilisearch`
 
-*To do a full setup use the following command:*  
-`docker-compose exec backend python3 cron.py full-setup <total_pages>`  
-Optional: Add `--no-remove-ascii` to the end if you want to keep non-ascii titles. 
+*To do a full setup use the following command:*
+`docker-compose exec backend python3 cron.py full-setup <total_pages>`
+Optional: Add `--no-remove-ascii` to the end if you want to keep non-ascii titles.
 
 This will fetch media for the number of pages, and remove non ascii characters if False flag is not added.  This also indexes MeiliSearch.
 
-To drop the media database:  
+To drop the media database:
 `docker-compose exec backend python3 cron.py remove-all-media`
 
-To get help with the commands type:  
-`docker-compose exec backend python3 cron.py --help`  
-or  
+To get help with the commands type:
+`docker-compose exec backend python3 cron.py --help`
+or
 `docker-compose exec backend python3 cron.py <command> --help`
 
 
@@ -90,7 +92,7 @@ Then from PSQL
 Some things that might make life easier
 
 ### Git
-* Make a pushf alias for `git push --force-with-lease`, since writing it all out gets annoying  
+* Make a pushf alias for `git push --force-with-lease`, since writing it all out gets annoying
 `git config --global alias.pushf "push --force-with-lease"`
 
 ### Docker
@@ -98,6 +100,6 @@ Some things that might make life easier
 * Add `-d` to `docker-compose up -d` to detach the logs from the terminal
 
 ### How to run tests
-To run tests locally:  
-* `docker-compose run backend python -m pytest -v ../` 
+To run tests locally:
+* `docker-compose run backend python -m pytest -v ../`
 * `docker-compose exec backend python -m pytest -v ../`

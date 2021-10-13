@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
+from fastapi import Depends
 from sqlalchemy.orm import Session
 
-from db.database import get_db
-from db.crud import get_all_genres
+from backend.app.db.crud import get_all_genres
+from backend.app.db.database import get_db
 
 
 router = APIRouter(

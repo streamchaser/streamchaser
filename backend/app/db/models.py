@@ -1,8 +1,10 @@
-from sqlalchemy import String, Integer, JSON
+from sqlalchemy import Integer
+from sqlalchemy import JSON
+from sqlalchemy import String
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.sql.schema import Column
 
-from db.database import Base
+from backend.app.db.database import Base
 
 
 class Media(Base):

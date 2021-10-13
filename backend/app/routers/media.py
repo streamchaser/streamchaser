@@ -1,10 +1,15 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+
+from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import HTTPException
+from schemas import Media
 from sqlalchemy.orm import Session
 
-from schemas import Media
-from db.database import get_db
-from db.crud import get_media_by_id, get_all_media, create_media
+from backend.app.db.crud import create_media
+from backend.app.db.crud import get_all_media
+from backend.app.db.crud import get_media_by_id
+from backend.app.db.database import get_db
 
 
 router = APIRouter(

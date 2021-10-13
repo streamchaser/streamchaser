@@ -1,26 +1,25 @@
 import typer
-
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
 
-from api import fetch_trending_movies
-from api import fetch_trending_tv
-from api import media_converter
-from api import request_providers
-from config import get_settings
-from db import database
-from db.crud import delete_all_media
-from db.crud import delete_media_by_id
-from db.crud import get_all_media
-from db.crud import get_media_by_id
-from db.crud import update_media_provider_by_id
-from db.database_service import dump_genres_to_db
-from db.database_service import dump_media_to_db
-from db.database_service import format_genres
-from db.database_service import init_meilisearch_indexing
-from db.database_service import prune_non_ascii_media_from_db
-from db.search import client
-from db.search import update_index
+from backend.app.api import fetch_trending_movies
+from backend.app.api import fetch_trending_tv
+from backend.app.api import media_converter
+from backend.app.api import request_providers
+from backend.app.config import get_settings
+from backend.app.db import database
+from backend.app.db.crud import delete_all_media
+from backend.app.db.crud import delete_media_by_id
+from backend.app.db.crud import get_all_media
+from backend.app.db.crud import get_media_by_id
+from backend.app.db.crud import update_media_provider_by_id
+from backend.app.db.database_service import dump_genres_to_db
+from backend.app.db.database_service import dump_media_to_db
+from backend.app.db.database_service import format_genres
+from backend.app.db.database_service import init_meilisearch_indexing
+from backend.app.db.database_service import prune_non_ascii_media_from_db
+from backend.app.db.search import client
+from backend.app.db.search import update_index
 
 
 supported_country_codes = get_settings().supported_country_codes

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from api import get_movie_from_id
-from schemas import Movie
+from backend.app.api import get_movie_from_id
+from backend.app.schemas import Movie
 
 
 router = APIRouter(
