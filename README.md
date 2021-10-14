@@ -1,4 +1,5 @@
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/streamchaser/streamchaser/development.svg)](https://results.pre-commit.ci/latest/github/streamchaser/streamchaser/development)
+[![CodeFactor status](https://www.codefactor.io/repository/github/streamchaser/streamchaser/badge)](https://www.codefactor.io/repository/github/streamchaser/streamchaser)
 
 # 🎬 streamchaser 🎬
 Streamchaser seeks to simplify movie, series and documentary search located on streaming services by curating all of the content through a centralized entertainment technology platform.
