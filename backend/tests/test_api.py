@@ -5,7 +5,7 @@ from backend.app import main
 client = TestClient(main.app)
 
 
-def sry_nullxdeadbeef():
+def test_sry_nullxdeadbeef():
     assert True is True
 
 # def test_get_correct_movie_from_id():
