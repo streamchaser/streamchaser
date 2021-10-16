@@ -90,20 +90,18 @@
                 <div class="card glass lg:card-side text-neutral-content">
                     <figure class="p-6">
                         <img
-                                src="{IMG_URL}{tv.poster_path}"
-                                class="object-contain h-96 w-full rounded-lg"
-                                alt="Poster path for tv series"
+                            src="{IMG_URL}{tv.poster_path}"
+                            class="object-contain h-96 w-full rounded-lg"
+                            alt="TV-series poster"
                         />
                     </figure>
                     <div class="max-w-md card-body">
                         <h2 class="card-title">{tv.name}</h2>
                         <p>{tv.overview}</p>
-                        <div class="flex-nowrap pt-5">
-                            <div class="flex flex-wrap items-start md:space-x-2 space-x-0 space-y-2 md:space-y-0 flex-col md:flex-row">
-                                {#each tv.genres as genre}
-                                    <div class="badge">{genre}</div>
-                                {/each}
-                            </div>
+                        <div class="flex-wrap mt-2">
+                            {#each tv.genres as genre}
+                                <div class="badge mx-2">{genre}</div>
+                            {/each}
                         </div>
                     </div>
                 </div>
