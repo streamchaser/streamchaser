@@ -25,7 +25,7 @@
             <a class="btn btn-ghost btn-sm rounded-btn" href="/faq"> FAQ </a>
         </div>
     </div>
-    <div class="pl-4">
+    <div class="sm:pl-4">
         <select bind:value={selectedCountry} on:change={currentCountry.set(selectedCountry)}
                 class="select select-ghost select-bordered max-sm">
             <option disabled="disabled">Choose country</option>
