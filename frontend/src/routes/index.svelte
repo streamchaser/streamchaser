@@ -17,6 +17,8 @@
 	const LOW_RES_IMG_URL = 'https://image.tmdb.org/t/p/w500/';
     const inputTimer = 200;
     const shownProviders = 5;
+    const SHOW_BUTTON_AMOUNT = 21;
+    const MEDIA_START_AMOUNT = 21;
 
     let input = '';
     let timer;
@@ -25,9 +27,11 @@
     let providerAmounts = [];
     let formattedGenres = {};
     let activeProviders = [];
+    let currentMediaAmount = 21;
 
     // run search if we haven't received input in the last 200ms
     const debounceInput = () => {
+        currentMediaAmount = MEDIA_START_AMOUNT;
         clearTimeout(timer);
         timer = setTimeout(() => {
             search()
@@ -54,9 +58,9 @@
 
         // Searches for all(*) if empty input
         const res = input !== '' ? await fetch(
-            searchUrl + input + "?c=" + $currentCountry + query
+            searchUrl + input + "?c=" + $currentCountry + query + `&limit=${currentMediaAmount}`
         ) : await fetch(
-            searchUrl + '*' + "?c=" + $currentCountry + query
+            searchUrl + '*' + "?c=" + $currentCountry + query + `&limit=${currentMediaAmount}`
         )
         $inputQuery = input;
         $currentGenres = selectedGenres;
@@ -100,6 +104,11 @@
 
         }
         firstLoadCompleted = true;
+    };
+
+    const changeMediaAmount = (buttonElement) => {
+        currentMediaAmount = buttonElement === 'loadmore' ? currentMediaAmount + SHOW_BUTTON_AMOUNT : currentMediaAmount - SHOW_BUTTON_AMOUNT;
+        search()
     };
 
     function routeToPage(mediaId, replaceState) {
@@ -217,6 +226,26 @@
                             {/if}
                         </div>
                     {/each}
+                </div>
+                <div class="flex space-x-1 justify-center p-1">
+                    {#if currentMediaAmount < media.nbHits}
+                        <button
+                            on:click={() => { changeMediaAmount('loadmore') }}
+                            id="loadmore"
+                            type="button"
+                            class="btn">
+                            Show more
+                        </button>
+                    {/if}
+                    {#if currentMediaAmount > MEDIA_START_AMOUNT}
+                        <button
+                            on:click={() => { changeMediaAmount('loadless') }}
+                            id="loadless"
+                            type="button"
+                            class="btn">
+                            Show less
+                        </button>
+                    {/if}
                 </div>
             {:else}
                 <div class="flex justify-around">
