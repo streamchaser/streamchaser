@@ -89,18 +89,16 @@
 						<img
 							src="{IMG_URL}{movie.poster_path}"
 							class="object-contain h-96 w-full rounded-lg"
-							alt="lol du kan ikke se"
+                            alt="{movie.title}"
 						/>
 					</figure>
 					<div class="max-w-md card-body">
 						<h2 class="card-title">{movie.title}</h2>
 						<p>{movie.overview}</p>
-						<div class="flex-nowrap pt-5">
-							<div class="flex flex-wrap items-start md:space-x-2 space-x-0 space-y-2 md:space-y-0 flex-col md:flex-row">
-								{#each movie.genres as genre}
-									<div class="badge">{genre}</div>
-								{/each}
-							</div>
+						<div class="flex-wrap mt-2">
+							{#each movie.genres as genre}
+								<div class="badge mx-2">{genre}</div>
+							{/each}
 						</div>
 					</div>
 				</div>
@@ -109,7 +107,7 @@
 					{#each movie.providers as provider}
 						<div class="avatar p-2">
 							<div class="mb-8 w-24 h-24 mask mask-squircle">
-								<img src="{IMG_URL}{provider.logo_path}" alt="lol du kan ikke se" />
+                                <img src="{IMG_URL}{provider.logo_path}" alt="{provider.provider_name}" />
 							</div>
 						</div>
 					{/each}
