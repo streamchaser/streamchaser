@@ -106,14 +106,8 @@
         firstLoadCompleted = true;
     };
 
-    function plusMediaAmount() {
-        currentMediaAmount = currentMediaAmount + SHOW_BUTTON_AMOUNT;
-        search()
-    };
-
-
-    function minusMediaAmount() {
-        currentMediaAmount = currentMediaAmount - SHOW_BUTTON_AMOUNT;
+    const changeMediaAmount = (buttonElement) => {
+        currentMediaAmount = buttonElement === 'loadmore' ? currentMediaAmount + SHOW_BUTTON_AMOUNT : currentMediaAmount - SHOW_BUTTON_AMOUNT;
         search()
     };
 
@@ -236,7 +230,7 @@
                 <div class="flex space-x-1 justify-center p-1">
                     {#if currentMediaAmount < media.nbHits}
                         <button
-                            on:click={plusMediaAmount}
+                            on:click={() => { changeMediaAmount('loadmore') }}
                             id="loadmore"
                             type="button"
                             class="btn">
@@ -245,8 +239,8 @@
                     {/if}
                     {#if currentMediaAmount > MEDIA_START_AMOUNT}
                         <button
-                            on:click={minusMediaAmount}
-                            id="loadmore"
+                            on:click={() => { changeMediaAmount('loadless') }}
+                            id="loadless"
                             type="button"
                             class="btn">
                             Show less
