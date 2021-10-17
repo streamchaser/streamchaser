@@ -26,7 +26,7 @@ Authors 👷:
 
 
 ## First time setup
-Here's how to get the application up and running
+Here's how to get the application up and running for development
 
 ### Prerequisites
 * Got Git installed
@@ -34,45 +34,46 @@ Here's how to get the application up and running
 
 1. Clone the repo `git clone https://github.com/AndreasPB/streamchaser.git`
 2. Add .env in root, backend and frontend
-    * Root: HOST_NAME
-    * Backend: TMDB_API_KEY
-    * Frontend: VITE_API_PATH(path of the backend)
+    * Backend: TMDB_KEY
+    * Frontend: VITE_API_PATH(path of the backend), VITE_IPINFO_KEY
 3. Build the container `docker-compose up --build -d`
-4. Run `docker-compose exec backend python3 cron.py full-setup <total_pages>`
-5. Go to http://localhost:3000/ and search
+4. Run `docker-compose exec backend python3 cli.py full-setup <total_pages>`
+5. Go to http://localhost/ and search
 
 ## CLI
 To use the cronjob use the following in the terminal:
-`docker-compose exec backend python3 cron.py <command> <parameter>`
+`docker-compose exec backend python3 cli.py <command> <parameter>`
 
 List of commands:
 * `add-providers` - Adds/updates providers on your existing media
+* `cleanup-genres` - Fixes genres with spaces for the frontend
 * `fetch-media` - Fetches trending media and adds to DB
 * `full-setup` - The complete setup
 * `index-meilisearch` - Forces meilisearch to re-index
 * `remove-all-media` - Empties postgres for media
+* `remove-and-blacklist` - Removes an element from the databases and blacklists it
 * `remove-blacklisted-from-search` - Removes all blacklisted IDs
 * `remove-non-ascii-media` - Removes all non-ascii titles
 
-So as an example to update the media list with 500 pages you would do the following:
-`docker-compose exec backend python3 cron.py update-media 500`
+So as an example to update the media list with 1000 pages you would do the following:
+`docker-compose exec backend python3 cli.py update-media 1000`
 
 After updating the database you need to index MeiliSearch:
-`docker-compose exec backend python3 cron.py index-meilisearch`
+`docker-compose exec backend python3 cli.py index-meilisearch`
 
 *To do a full setup use the following command:*
-`docker-compose exec backend python3 cron.py full-setup <total_pages>`
+`docker-compose exec backend python3 cli.py full-setup <total_pages>`
 Optional: Add `--no-remove-ascii` to the end if you want to keep non-ascii titles.
 
 This will fetch media for the number of pages, and remove non ascii characters if False flag is not added.  This also indexes MeiliSearch.
 
 To drop the media database:
-`docker-compose exec backend python3 cron.py remove-all-media`
+`docker-compose exec backend python3 cli.py remove-all-media`
 
 To get help with the commands type:
-`docker-compose exec backend python3 cron.py --help`
+`docker-compose exec backend python3 cli.py --help`
 or
-`docker-compose exec backend python3 cron.py <command> --help`
+`docker-compose exec backend python3 cli.py <command> --help`
 
 
 ## Postgres CLI
