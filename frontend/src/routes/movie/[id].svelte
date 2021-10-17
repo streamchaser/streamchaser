@@ -89,7 +89,7 @@
 						<img
 							src="{IMG_URL}{movie.poster_path}"
 							class="object-contain h-96 w-full rounded-lg"
-							alt="Movie poster"
+                            alt="{movie.title}"
 						/>
 					</figure>
 					<div class="max-w-md card-body">
@@ -107,7 +107,7 @@
 					{#each movie.providers as provider}
 						<div class="avatar p-2">
 							<div class="mb-8 w-24 h-24 mask mask-squircle">
-								<img src="{IMG_URL}{provider.logo_path}" alt="Provider logo" />
+                                <img src="{IMG_URL}{provider.logo_path}" alt="{provider.provider_name}" />
 							</div>
 						</div>
 					{/each}
