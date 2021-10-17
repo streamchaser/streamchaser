@@ -3,13 +3,12 @@ from typing import List
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
-from schemas import Media
 from sqlalchemy.orm import Session
 
-from backend.app.db.crud import create_media
 from backend.app.db.crud import get_all_media
 from backend.app.db.crud import get_media_by_id
 from backend.app.db.database import get_db
+from backend.app.schemas import Media
 
 
 router = APIRouter(
@@ -34,12 +33,3 @@ async def read_all_media(
 ):
     """Reads all database media"""
     return get_all_media(db=db, skip=skip, limit=limit)
-
-
-@router.post("/", response_model=Media)
-async def post_media(media: Media, db: Session = Depends(get_db)):
-    """Creates a media to the database"""
-    db_media = get_media_by_id(db=db, media_id=media.id)
-    if db_media:
-        raise HTTPException(status_code=400, detail="Media already exists")
-    return create_media(db=db, media=media)

@@ -1,7 +1,7 @@
 from typing import Dict
 from typing import List
 
-from config import get_settings
+from backend.app.config import get_settings
 
 
 tmdb_key = get_settings().tmdb_key
