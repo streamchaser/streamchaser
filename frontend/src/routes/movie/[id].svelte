@@ -21,7 +21,11 @@
 		if (response.status == 200) {
             let jsonResponse = await response.json();
 			movieTitle = jsonResponse.title;
-			return await jsonResponse;
+
+			removePersonWithMissingProfilePath(jsonResponse.cast);
+			sortListByPopularity(jsonResponse.cast);
+
+			return jsonResponse;
 		} else {
 			console.error(response.statusText);
 			movieTitle = 'Error loading movie'
@@ -36,6 +40,22 @@
         	location.reload();
         }
         firstLoadCompleted = true;
+    }
+
+	const removePersonWithMissingProfilePath = (list) => {
+        for (let i = 0; i < list.length; i++) {
+            if (!list[i].profile_path) {
+                list.splice(i, 1);
+                i--;
+            }
+        }
+        return list
+    }
+
+    const sortListByPopularity = (list) => {
+        return list.sort((a, b) =>
+            b.popularity - a.popularity
+        );
     }
 
 	function routeToPage(mediaId) {
@@ -100,16 +120,14 @@
 				<h1 class="text-center text-3xl pt-5">Cast</h1>
 				<div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
 					{#each movie.cast.slice(0, castItemAmount) as person}
-						{#if person.profile_path}
-							<div on:click={() => routeToPerson(person.id)} class="card compact cursor-pointer bordered">
-								<figure>
-								<img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
-								</figure>
-								<div class="card-body">
-								<p><b>{person.name}</b> - <i>{person.character}</i></p>
-								</div>
+						<div on:click={() => routeToPerson(person.id)} class="card compact cursor-pointer bordered">
+							<figure>
+							<img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
+							</figure>
+							<div class="card-body">
+							<p><b>{person.name}</b> - <i>{person.character}</i></p>
 							</div>
-						{/if}
+						</div>
 					{/each}
 				</div>
 				<div class="flex space-x-1 justify-center">

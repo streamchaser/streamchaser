@@ -21,13 +21,36 @@
 		if (response.status == 200) {
             let jsonResponse = await response.json();
 			personName = jsonResponse.name;
-			return await jsonResponse;
+            removeMediaWithMissingPosterPath(jsonResponse.movie_credits);
+            removeMediaWithMissingPosterPath(jsonResponse.tv_credits);
+
+            sortListByPopularity(jsonResponse.movie_credits);
+            sortListByPopularity(jsonResponse.tv_credits);
+
+            return jsonResponse;
 		} else {
 			console.error(response.statusText);
 			personName = 'Error loading person'
 			throw new Error(response.statusText)
 		}
     };
+
+    const removeMediaWithMissingPosterPath = (list) => {
+        for (let i = 0; i < list.length; i++) {
+            if (!list[i].poster_path) {
+                list.splice(i, 1);
+                i--;
+            }
+        }
+        return list
+    }
+
+    const sortListByPopularity = (list) => {
+        return list.sort((a, b) =>
+            b.popularity - a.popularity
+        );
+    }
+
 
     function routeToMovie(mediaId) {
         goto(`/movie/${mediaId}`)
@@ -75,13 +98,11 @@
                 <h1 class="text-center text-3xl pt-5">Movies</h1>
                 <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
                     {#each person.movie_credits.slice(0, currentMovieAmount) as movie}
-                        {#if movie.poster_path}
-                            <div on:click={() => routeToMovie(movie.id)} class="card compact cursor-pointer bordered">
-                                <figure>
-                                    <img src="{LOW_RES_IMG_URL}{movie.poster_path}" alt="{movie.title}">
-                                </figure>
-                            </div>
-                        {/if}
+                        <div on:click={() => routeToMovie(movie.id)} class="card compact cursor-pointer bordered">
+                            <figure>
+                                <img src="{LOW_RES_IMG_URL}{movie.poster_path}" alt="{movie.title}">
+                            </figure>
+                        </div>
                     {/each}
                 </div>
                 <div class="flex space-x-1 justify-center p-1">
@@ -111,13 +132,11 @@
                 <h1 class="text-center text-3xl pt-5">Series</h1>
                 <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
                     {#each person.tv_credits.slice(0, currentTVAmount) as tv}
-                        {#if tv.poster_path}
-                            <div on:click={() => routeToTV(tv.id)} class="card compact cursor-pointer bordered">
-                                <figure>
-                                    <img src="{LOW_RES_IMG_URL}{tv.poster_path}" alt="{tv.name}">
-                                </figure>
-                            </div>
-                        {/if}
+                        <div on:click={() => routeToTV(tv.id)} class="card compact cursor-pointer bordered">
+                            <figure>
+                                <img src="{LOW_RES_IMG_URL}{tv.poster_path}" alt="{tv.name}">
+                            </figure>
+                        </div>
                     {/each}
                 </div>
                 <div class="flex space-x-1 justify-center p-1">

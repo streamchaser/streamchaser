@@ -23,7 +23,11 @@
 		if (response.status == 200) {
             let jsonResponse = await response.json();
 			tvTitle = jsonResponse.name;
-			return await jsonResponse;
+
+            removePersonWithMissingProfilePath(jsonResponse.cast);
+			sortListByPopularity(jsonResponse.cast);
+
+			return jsonResponse;
 		} else {
 			console.error(response.statusText);
 			tvTitle = 'Error loading tv'
@@ -38,6 +42,22 @@
             location.reload();
         }
         firstLoadCompleted = true;
+    }
+
+    const removePersonWithMissingProfilePath = (list) => {
+        for (let i = 0; i < list.length; i++) {
+            if (!list[i].profile_path) {
+                list.splice(i, 1);
+                i--;
+            }
+        }
+        return list
+    }
+
+    const sortListByPopularity = (list) => {
+        return list.sort((a, b) =>
+            b.popularity - a.popularity
+        );
     }
 
     function routeToPage(mediaId) {
