@@ -46,7 +46,7 @@
     }
 
     const sortListByPopularity = (list) => {
-        return list.sort((a, b) => 
+        return list.sort((a, b) =>
             b.popularity - a.popularity
         );
     }
