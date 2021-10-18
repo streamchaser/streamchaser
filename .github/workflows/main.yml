@@ -1,0 +1,17 @@
+name: CI
+
+# Events that trigger the workflow
+on: push
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+      - name: Run build
+        run: |
+          docker network create traefik
+          docker-compose build
+      - name: Run test suite
+        run: docker-compose run backend pytest -v ../tests

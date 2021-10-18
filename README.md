@@ -1,3 +1,4 @@
+[![CI](https://github.com/streamchaser/streamchaser/actions/workflows/main.yml/badge.svg)](https://github.com/streamchaser/streamchaser/actions/workflows/main.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/streamchaser/streamchaser/master.svg)](https://results.pre-commit.ci/latest/github/streamchaser/streamchaser/master)
 [![CodeFactor status](https://www.codefactor.io/repository/github/streamchaser/streamchaser/badge)](https://www.codefactor.io/repository/github/streamchaser/streamchaser)
 
