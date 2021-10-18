@@ -33,7 +33,7 @@ services:
         env_file:
             - .env
         volumes:
-            - ./backend/:/app/backend
+            - ./backend/:/app
         depends_on:
             - db
             - search

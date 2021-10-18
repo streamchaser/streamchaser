@@ -1,25 +1,24 @@
 import typer
+from app.api import fetch_trending_movies
+from app.api import fetch_trending_tv
+from app.api import media_converter
+from app.api import request_providers
+from app.config import get_settings
+from app.db import database
+from app.db.crud import delete_all_media
+from app.db.crud import delete_media_by_id
+from app.db.crud import get_all_media
+from app.db.crud import get_media_by_id
+from app.db.crud import update_media_provider_by_id
+from app.db.database_service import dump_genres_to_db
+from app.db.database_service import dump_media_to_db
+from app.db.database_service import format_genres
+from app.db.database_service import init_meilisearch_indexing
+from app.db.database_service import prune_non_ascii_media_from_db
+from app.db.search import client
+from app.db.search import update_index
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
-
-from backend.app.api import fetch_trending_movies
-from backend.app.api import fetch_trending_tv
-from backend.app.api import media_converter
-from backend.app.api import request_providers
-from backend.app.config import get_settings
-from backend.app.db import database
-from backend.app.db.crud import delete_all_media
-from backend.app.db.crud import delete_media_by_id
-from backend.app.db.crud import get_all_media
-from backend.app.db.crud import get_media_by_id
-from backend.app.db.crud import update_media_provider_by_id
-from backend.app.db.database_service import dump_genres_to_db
-from backend.app.db.database_service import dump_media_to_db
-from backend.app.db.database_service import format_genres
-from backend.app.db.database_service import init_meilisearch_indexing
-from backend.app.db.database_service import prune_non_ascii_media_from_db
-from backend.app.db.search import client
-from backend.app.db.search import update_index
 
 
 supported_country_codes = get_settings().supported_country_codes

@@ -1,7 +1,6 @@
+from app.api import get_person_from_id
+from app.schemas import Person
 from fastapi import APIRouter
-
-from backend.app.api import get_person_from_id
-from backend.app.schemas import Person
 
 
 router = APIRouter(

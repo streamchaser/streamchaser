@@ -1,18 +1,17 @@
 from typing import Dict
 
+from app.config import get_settings
+from app.db import models
+from app.db.database import engine
+from app.routers import genres
+from app.routers import media
+from app.routers import movie
+from app.routers import person
+from app.routers import providers
+from app.routers import search
+from app.routers import tv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from backend.app.config import get_settings
-from backend.app.db import models
-from backend.app.db.database import engine
-from backend.app.routers import genres
-from backend.app.routers import media
-from backend.app.routers import movie
-from backend.app.routers import person
-from backend.app.routers import providers
-from backend.app.routers import search
-from backend.app.routers import tv
 
 
 models.Base.metadata.create_all(bind=engine)

@@ -1,6 +1,5 @@
 import meilisearch
-
-from backend.app.config import get_settings
+from app.config import get_settings
 
 client = meilisearch.Client('http://search:7700', 'masterKey')
 

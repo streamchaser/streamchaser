@@ -1,10 +1,9 @@
 from typing import List
 from typing import Optional
 
+from app.db.search import client
 from fastapi import APIRouter
 from fastapi import Query
-
-from backend.app.db.search import client
 
 
 router = APIRouter(

@@ -1,14 +1,13 @@
 from typing import List
 
+from app.db.crud import get_all_media
+from app.db.crud import get_media_by_id
+from app.db.database import get_db
+from app.schemas import Media
 from fastapi import APIRouter
 from fastapi import Depends
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-
-from backend.app.db.crud import get_all_media
-from backend.app.db.crud import get_media_by_id
-from backend.app.db.database import get_db
-from backend.app.schemas import Media
 
 
 router = APIRouter(
