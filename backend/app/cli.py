@@ -148,7 +148,7 @@ def remove_and_blacklist(media_id: str):
         )
 
         typer.echo(f'Removing and blacklisting: {media_id}')
-        delete_media_by_id(db=db, id=media_id)
+        delete_media_by_id(db=db, media_id=media_id)
         typer.echo('Removed from database ✓')
 
         with open('../blacklist.txt', 'a+') as file:

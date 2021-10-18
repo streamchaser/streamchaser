@@ -149,7 +149,7 @@ def prune_non_ascii_media_from_db():
                     try:
                         letter.encode(encoding='utf-8').decode('ascii')
                     except UnicodeDecodeError:
-                        crud.delete_media_by_id(db=db, id=media.id)
+                        crud.delete_media_by_id(db=db, media_id=media.id)
                         break
         print('Media with non-ASCII titles have been pruned')
     except Exception as e:
