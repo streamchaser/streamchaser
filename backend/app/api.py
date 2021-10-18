@@ -2,18 +2,17 @@ from typing import Dict
 from typing import List
 
 import requests
-
-from backend.app.api_helpers import get_providers
-from backend.app.api_helpers import unique_id
-from backend.app.api_helpers import valid_original_title
-from backend.app.api_helpers import valid_release_date
-from backend.app.api_helpers import valid_title
-from backend.app.config import get_settings
-from backend.app.db import models
-from backend.app.schemas import Media
-from backend.app.schemas import Movie
-from backend.app.schemas import Person
-from backend.app.schemas import TV
+from app.api_helpers import get_providers
+from app.api_helpers import unique_id
+from app.api_helpers import valid_original_title
+from app.api_helpers import valid_release_date
+from app.api_helpers import valid_title
+from app.config import get_settings
+from app.db import models
+from app.schemas import Media
+from app.schemas import Movie
+from app.schemas import Person
+from app.schemas import TV
 
 
 tmdb_url = get_settings().tmdb_url
