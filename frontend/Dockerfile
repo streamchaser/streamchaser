@@ -1,5 +1,5 @@
 # Our Node base image
-FROM node:14.16.1
+FROM node:16-alpine
 
 # Set the Node environment to development to ensure all packages are installed
 ENV NODE_ENV development
