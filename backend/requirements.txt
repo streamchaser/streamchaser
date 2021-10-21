@@ -1,7 +1,7 @@
 sqlalchemy
 requests
 meilisearch
-psycopg2
+psycopg2-binary
 typer
 pytest
 tqdm
