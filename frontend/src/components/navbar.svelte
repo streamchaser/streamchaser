@@ -1,5 +1,5 @@
 <!-- https://daisyui.com/components/navbar -->
-<script>
+<script lang="ts">
     import {currentCountry} from '../stores/country.js';
 
     let selectedCountry = $currentCountry;
@@ -28,7 +28,7 @@
     <div class="sm:pl-4">
         <select bind:value={selectedCountry} on:change={currentCountry.set(selectedCountry)}
                 class="select select-ghost select-bordered max-sm">
-            <option disabled="disabled">Choose country</option>
+            <option disabled={false}>Choose country</option>
             {#each countries as country}
                 <option value={country.value}>{country.name}</option>
             {/each}

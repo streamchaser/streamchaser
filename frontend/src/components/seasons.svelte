@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
     import MediaQuery from 'svelte-media-query'
 
     export let seasons;
-    let currentTab = 0;
 
-    const LOW_RES_IMG_URL = 'https://image.tmdb.org/t/p/w500/';
+    const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
+
+    let currentTab: number = 0;
 
     const changeActiveTab = (index) => {
         currentTab = index;

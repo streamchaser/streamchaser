@@ -1,6 +1,6 @@
-<script>
-    export let href;
-    export let img_src;
+<script lang="ts">
+    export let href: string;
+    export let img_src: string;
 </script>
 
 <div class="avatar">

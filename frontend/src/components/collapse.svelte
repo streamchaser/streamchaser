@@ -1,8 +1,8 @@
-<script>
-    export let title;
-    export let description;
-    export let link;
-    export let linkText;
+<script lang="ts">
+    export let title: string;
+    export let description: string;
+    export let link: string;
+    export let linkText: string;
 </script>
 
 <div tabindex="0"
