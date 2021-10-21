@@ -155,7 +155,7 @@
                 autofocus
             />
         </div>
-        <div class="grid grid-cols-1 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-2 pb-1 pt-1 pr-2 pl-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 py-1 px-4">
             {#await fetchGenres()}
                 <p>...loading selection</p>
             {:then genres}
@@ -184,7 +184,7 @@
         </div>
         {#if media.hits}
             {#if media.hits.length > 0}
-                <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-2 pt-4 bg-base-100">
+                <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-4 bg-base-100">
                     {#each media.hits as media, mediaIndex}
                         <div on:click={routeToPage(media.id)}
                             class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
