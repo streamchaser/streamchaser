@@ -37,15 +37,15 @@ def create_media(db: Session, media: schemas.Media):
     return db_media
 
 
-def update_media_provider_by_id(db: Session, id: str, providers: List[Dict]):
-    db.query(models.Media).filter_by(id=id).update({
+def update_media_provider_by_id(db: Session, media_id: str, providers: List[Dict]):
+    db.query(models.Media).filter_by(id=media_id).update({
         'providers': providers
     })
     db.commit()
 
 
-def delete_media_by_id(db: Session, id: str):
-    db.query(models.Media).filter_by(id=id).delete()
+def delete_media_by_id(db: Session, media_id: str):
+    db.query(models.Media).filter_by(id=media_id).delete()
     db.commit()
 
 
