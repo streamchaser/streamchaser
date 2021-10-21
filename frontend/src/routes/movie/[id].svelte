@@ -6,13 +6,14 @@
 	import Footer from '../../components/footer.svelte';
     import {goto} from '$app/navigation';
     import Error from '../../components/error.svelte';
+    import Person from '../../components/person.svelte';
 
 	const MOVIE_DETAIL_URL = `${variables.apiPath}/movie/${$currentCountry}/${$page.params.id}`;
 	const IMG_URL = 'https://image.tmdb.org/t/p/original/';
 	const LOW_RES_IMG_URL = 'https://image.tmdb.org/t/p/w500/';
 	const SHOW_BUTTON_AMOUNT = 18;
 	const CAST_ITEM_START_AMOUNT = 9;
-	let castItemAmount = 9;
+
 	let movieTitle = 'Loading...';
 
 	const fetchMovieDetails = async () => {
@@ -63,10 +64,6 @@
         location.reload()
     }
 
-	function routeToPerson(mediaId){
-        goto(`/person/${mediaId}`)
-        location.reload()
-    }
 </script>
 
 <svelte:head>
@@ -113,42 +110,9 @@
 					{/each}
 				</div>
 			</div>
-			<!-- Person -->
-			{#if movie.cast.length != 0}
-				<h1 class="text-center text-3xl pt-5">Cast</h1>
-				<div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
-					{#each movie.cast.slice(0, castItemAmount) as person}
-						<div on:click={() => routeToPerson(person.id)} class="card compact cursor-pointer bordered">
-							<figure>
-							<img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
-							</figure>
-							<div class="card-body">
-							<p><b>{person.name}</b> - <i>{person.character}</i></p>
-							</div>
-						</div>
-					{/each}
-				</div>
-				<div class="flex space-x-1 justify-center">
-				{#if castItemAmount < movie.cast.length}
-					<button
-						on:click={() => castItemAmount = castItemAmount + SHOW_BUTTON_AMOUNT}
-						id="loadmore"
-						type="button"
-						class="btn">
-						Show more
-					</button>
-				{/if}
-				{#if castItemAmount > CAST_ITEM_START_AMOUNT}
-					<button
-						on:click={() => castItemAmount = castItemAmount - SHOW_BUTTON_AMOUNT}
-						id="loadmore"
-						type="button"
-						class="btn">
-						Show less
-					</button>
-				{/if}
-			</div>
-			{/if}
+
+			<Person media={movie} imgUrl={LOW_RES_IMG_URL} showButtonAmount={SHOW_BUTTON_AMOUNT} castItemStartAmount={CAST_ITEM_START_AMOUNT} />
+
 			<!-- Recommendations -->
 			{#if movie.recommendations.length != 0}
 				<h1 class="text-center text-3xl pt-5">Recommendations</h1>

@@ -7,6 +7,7 @@
     import {goto} from '$app/navigation';
     import Seasons from '../../components/seasons.svelte';
     import Error from '../../components/error.svelte';
+    import Person from '../../components/person.svelte';
 
 
     const TV_DETAIL_URL = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
@@ -14,7 +15,7 @@
     const LOW_RES_IMG_URL = 'https://image.tmdb.org/t/p/w500/';
 	const SHOW_BUTTON_AMOUNT = 18;
 	const CAST_ITEM_START_AMOUNT = 9;
-	let castItemAmount = 9;
+
     let tvTitle = 'Loading...';
 
     const fetchTVDetails = async () => {
@@ -62,11 +63,6 @@
 
     function routeToPage(mediaId) {
         goto(`/tv/${mediaId}`)
-        location.reload()
-    }
-
-    function routeToPerson(mediaId) {
-        goto(`/person/${mediaId}`)
         location.reload()
     }
 
@@ -119,44 +115,8 @@
 
             <Seasons seasons={tv.seasons} />
 
-            <!-- Person -->
-            {#if tv.cast.length != 0}
-                <h1 class="text-center text-3xl pt-5">Cast</h1>
-                <div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
-                    {#each tv.cast.slice(0, castItemAmount) as person}
-                        {#if person.profile_path}
-                            <div on:click={() => routeToPerson(person.id)} class="card compact cursor-pointer bordered">
-                                <figure>
-                                <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
-                                </figure>
-                                <div class="card-body">
-                                <p><b>{person.name}</b> - <i>{person.character}</i></p>
-                                </div>
-                            </div>
-                        {/if}
-                    {/each}
-                </div>
-                <div class="flex space-x-1 justify-center p-1">
-                    {#if castItemAmount < tv.cast.length}
-                        <button
-                            on:click={() => castItemAmount = castItemAmount + SHOW_BUTTON_AMOUNT}
-                            id="loadmore"
-                            type="button"
-                            class="btn">
-                            Show more
-                        </button>
-                    {/if}
-                    {#if castItemAmount > CAST_ITEM_START_AMOUNT}
-                        <button
-                            on:click={() => castItemAmount = castItemAmount - SHOW_BUTTON_AMOUNT}
-                            id="loadmore"
-                            type="button"
-                            class="btn">
-                            Show less
-                        </button>
-                    {/if}
-                </div>
-            {/if}
+            <Person media={tv} imgUrl={LOW_RES_IMG_URL} showButtonAmount={SHOW_BUTTON_AMOUNT} castItemStartAmount={CAST_ITEM_START_AMOUNT} />
+
             <!-- Recommendations -->
             {#if tv.recommendations.length != 0}
                 <h1 class="text-center text-3xl pt-5">Recommendations</h1>
