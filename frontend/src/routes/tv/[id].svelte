@@ -66,11 +66,6 @@
         location.reload()
     }
 
-    function routeToPerson(mediaId) {
-        goto(`/person/${mediaId}`)
-        location.reload()
-    }
-
 </script>
 
 <svelte:head>
