@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { removeContentWithMissingImagePath, routeToPage, sortListByPopularity  } from '../../utils'
     import { variables } from '../../variables.js'
     import {page} from '$app/stores';
@@ -6,14 +6,15 @@
     import Footer from '../../components/footer.svelte';
     import Error from '../../components/error.svelte';
 
-    const PERSON_DETAIL_URL = `${variables.apiPath}/person/${$page.params.id}`;
-    const IMG_URL = 'https://image.tmdb.org/t/p/original/';
-    const LOW_RES_IMG_URL = 'https://image.tmdb.org/t/p/w500/';
-    const SHOW_BUTTON_AMOUNT = 12;
-    const CAST_ITEM_START_AMOUNT = 6;
-    let currentMovieAmount  = 6;
-    let currentTVAmount = 6;
-    let personName = 'Loading...';
+    const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`;
+    const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
+    const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
+    const SHOW_BUTTON_AMOUNT: number = 12;
+    const CAST_ITEM_START_AMOUNT: number = 6;
+
+    let currentMovieAmount: number = 6;
+    let currentTVAmount: number = 6;
+    let personName: string = 'Loading...';
 
     const fetchPersonDetails = async () => {
 		const response = await fetch(PERSON_DETAIL_URL);

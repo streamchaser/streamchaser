@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { removeContentWithMissingImagePath, routeToPage, sortListByPopularity } from '../../utils'
     import {variables} from '../../variables.js'
     import {page} from '$app/stores';
@@ -10,11 +10,11 @@
     import Person from '../../components/person.svelte';
 
 
-    const TV_DETAIL_URL = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
-    const IMG_URL = 'https://image.tmdb.org/t/p/original/';
-    const LOW_RES_IMG_URL = 'https://image.tmdb.org/t/p/w500/';
-	const SHOW_BUTTON_AMOUNT = 18;
-	const CAST_ITEM_START_AMOUNT = 9;
+    const TV_DETAIL_URL: string = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
+    const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
+    const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
+	const SHOW_BUTTON_AMOUNT: number = 18;
+	const CAST_ITEM_START_AMOUNT: number = 9;
 
     let tvTitle = 'Loading...';
 

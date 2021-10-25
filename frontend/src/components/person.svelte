@@ -1,13 +1,12 @@
-<script>
+<script lang="ts">
     import {routeToPage} from "../utils";
 
-    export let imgUrl;
+    export let imgUrl: string;
     export let media;
-    export let showButtonAmount;
-    export let castItemStartAmount;
+    export let showButtonAmount: number;
+    export let castItemStartAmount: number;
 
-    let castItemAmount = 9;
-
+    let castItemAmount: number = 9;
 </script>
 
 {#if media.cast.length !== 0}

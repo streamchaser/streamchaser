@@ -1,5 +1,5 @@
-<script>
-    import { getDictValues, getKeyByValue, routeToPage  } from '../utils'
+<script lang="ts">
+    import { getKeyByValue, routeToPage } from '../utils'
 	import { variables } from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
@@ -10,24 +10,24 @@
     import {inputQuery} from "../stores/input";
     import {onMount} from 'svelte';
 
-    const searchUrl = `${variables.apiPath}/search/`;
-    const genreUrl = `${variables.apiPath}/genres/`;
-    const providerUrl = `${variables.apiPath}/providers/`;
-    const IMG_URL = 'https://image.tmdb.org/t/p/original/';
-	const LOW_RES_IMG_URL = 'https://image.tmdb.org/t/p/w500/';
-    const inputTimer = 200;
-    const shownProviders = 5;
-    const SHOW_BUTTON_AMOUNT = 21;
-    const MEDIA_START_AMOUNT = 21;
+    const SEARCH_URL: string = `${variables.apiPath}/search/`;
+    const GENRE_URL: string = `${variables.apiPath}/genres/`;
+    const PROVIDER_URL: string = `${variables.apiPath}/providers/`;
+    const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
+	const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
+    const INPUT_TIMER: number = 200;
+    const SHOWN_PROVIDERS: number = 5;
+    const SHOW_BUTTON_AMOUNT: number = 21;
+    const MEDIA_START_AMOUNT: number = 21;
 
-    let input = '';
+    let input: string = '';
     let timer;
     let media = [];
     let selectedGenres = [];
-    let providerAmounts = [];
-    let formattedGenres = {};
+    let providerAmounts: number[] = [];
+    let formattedGenres: {} = {};
     let activeProviders = [];
-    let currentMediaAmount = 21;
+    let currentMediaAmount: number = 21;
 
     // run search if we haven't received input in the last 200ms
     const debounceInput = () => {
@@ -35,10 +35,11 @@
         clearTimeout(timer);
         timer = setTimeout(() => {
             search()
-        }, inputTimer);
+        }, INPUT_TIMER);
     }
 
-    const hitProviderAmounts = (searchHits) => {
+    // TODO: Replace any with a Media type
+    const hitProviderAmounts = (searchHits: [any]) => {
         providerAmounts = [];
         searchHits.forEach(hit => {
             providerAmounts.push(hit.specific_providers.length);
@@ -58,9 +59,9 @@
 
         // Searches for all(*) if empty input
         const res = input !== '' ? await fetch(
-            searchUrl + input + "?c=" + $currentCountry + query + `&limit=${currentMediaAmount}`
+            SEARCH_URL + input + "?c=" + $currentCountry + query + `&limit=${currentMediaAmount}`
         ) : await fetch(
-            searchUrl + '*' + "?c=" + $currentCountry + query + `&limit=${currentMediaAmount}`
+            SEARCH_URL + '*' + "?c=" + $currentCountry + query + `&limit=${currentMediaAmount}`
         )
         $inputQuery = input;
         $currentGenres = selectedGenres;
@@ -69,13 +70,13 @@
     };
 
     const fetchProviders = async () => {
-        const res = await fetch(providerUrl + $currentCountry);
+        const res = await fetch(PROVIDER_URL + $currentCountry);
         activeProviders = await res.json();
         return activeProviders;
     };
 
     const fetchGenres = async () => {
-        const res = await fetch(genreUrl);
+        const res = await fetch(GENRE_URL);
         return await res.json();
     };
 
@@ -95,10 +96,17 @@
         firstLoadCompleted = true;
     };
 
-    const changeMediaAmount = (buttonElement) => {
+    const changeMediaAmount = (buttonElement: string) => {
         currentMediaAmount = buttonElement === 'loadmore' ? currentMediaAmount + SHOW_BUTTON_AMOUNT : currentMediaAmount - SHOW_BUTTON_AMOUNT;
         search()
-    };
+    }
+
+    const getFixedGenreValues = (genres: {}) => {
+        formattedGenres = genres;
+        return Object.keys(genres).map(function (key) {
+            return genres[key];
+        });
+    }
 
     onMount(async () => {
         const inputField = document.getElementById('input-field')
@@ -142,7 +150,7 @@
                 <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
                     bind:selected={selectedGenres}
                     on:change={debounceInput}
-                    options={getDictValues(genres)}
+                    options={getFixedGenreValues(genres)}
                     placeholder="Select genres..."
                 />
             {:catch error}
@@ -176,7 +184,7 @@
                                     <p class="text-center"><strong>No providers
                                         in {$currentCountry}</strong></p>
                                 </div>
-                            {:else if providerAmounts[mediaIndex] <= shownProviders}
+                            {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
                                 <div class="-space-x-4 avatar-group">
                                     {#each media.specific_providers as provider}
                                         <div class="avatar">
@@ -189,7 +197,7 @@
                                 </div>
                             {:else}
                                 <div class="-space-x-4 avatar-group">
-                                    {#each media.specific_providers.slice(0, shownProviders - 1) as provider}
+                                    {#each media.specific_providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
                                         <div class="avatar">
                                             <div class="w-12 h-12">
                                                 <img src="{IMG_URL}{provider.logo_path}"
@@ -199,7 +207,7 @@
                                     {/each}
                                     <div class="avatar placeholder">
                                         <div class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
-                                            <span>+{providerAmounts[mediaIndex] - shownProviders + 1}</span>
+                                            <span>+{providerAmounts[mediaIndex] -  + 1}</span>
                                         </div>
                                     </div>
                                 </div>
