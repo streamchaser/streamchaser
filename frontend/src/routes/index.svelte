@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getDictValues, getKeyByValue, routeToPage  } from '../utils'
+    import { getKeyByValue, routeToPage } from '../utils'
 	import { variables } from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
@@ -38,7 +38,8 @@
         }, INPUT_TIMER);
     }
 
-    const hitProviderAmounts = (searchHits) => {
+    // TODO: Replace any with a Media type
+    const hitProviderAmounts = (searchHits: [any]) => {
         providerAmounts = [];
         searchHits.forEach(hit => {
             providerAmounts.push(hit.specific_providers.length);
@@ -95,10 +96,17 @@
         firstLoadCompleted = true;
     };
 
-    const changeMediaAmount = (buttonElement) => {
+    const changeMediaAmount = (buttonElement: string) => {
         currentMediaAmount = buttonElement === 'loadmore' ? currentMediaAmount + SHOW_BUTTON_AMOUNT : currentMediaAmount - SHOW_BUTTON_AMOUNT;
         search()
-    };
+    }
+
+    const getFixedGenreValues = (genres: {}) => {
+        formattedGenres = genres;
+        return Object.keys(genres).map(function (key) {
+            return genres[key];
+        });
+    }
 
     onMount(async () => {
         const inputField = document.getElementById('input-field')
@@ -142,7 +150,7 @@
                 <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
                     bind:selected={selectedGenres}
                     on:change={debounceInput}
-                    options={getDictValues(genres)}
+                    options={getFixedGenreValues(genres)}
                     placeholder="Select genres..."
                 />
             {:catch error}
