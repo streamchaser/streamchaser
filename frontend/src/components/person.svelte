@@ -1,5 +1,5 @@
 <script>
-    import {goto} from '$app/navigation';
+    import {routeToPage} from "../utils";
 
     export let imgUrl;
     export let media;
@@ -8,11 +8,6 @@
 
     let castItemAmount = 9;
 
-    function routeToPerson(mediaId) {
-        goto(`/person/${mediaId}`)
-        location.reload()
-    }
-
 </script>
 
 {#if media.cast.length !== 0}
@@ -20,7 +15,7 @@
     <div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
         {#each media.cast.slice(0, castItemAmount) as person}
             {#if person.profile_path}
-                <div on:click={() => routeToPerson(person.id)}
+                <div on:click={() => routeToPage(person.id, "person")}
                      class="card compact cursor-pointer bordered">
                     <figure>
                         <img src="{imgUrl}{person.profile_path}" alt="{person.name}">

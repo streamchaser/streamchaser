@@ -1,7 +1,7 @@
 <script>
     export let error;
 
-    function goBack() {
+    const goBack = () => {
         window.history.back();
     }
 </script>

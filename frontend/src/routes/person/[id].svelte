@@ -1,9 +1,9 @@
 <script>
+    import { removeContentWithMissingImagePath, routeToPage, sortListByPopularity  } from '../../utils'
     import { variables } from '../../variables.js'
     import {page} from '$app/stores';
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
-    import {goto} from '$app/navigation';
     import Error from '../../components/error.svelte';
 
     const PERSON_DETAIL_URL = `${variables.apiPath}/person/${$page.params.id}`;
@@ -21,8 +21,8 @@
 		if (response.status == 200) {
             let jsonResponse = await response.json();
 			personName = jsonResponse.name;
-            removeMediaWithMissingPosterPath(jsonResponse.movie_credits);
-            removeMediaWithMissingPosterPath(jsonResponse.tv_credits);
+            removeContentWithMissingImagePath(jsonResponse.movie_credits, "poster_path");
+            removeContentWithMissingImagePath(jsonResponse.tv_credits, "poster_path");
 
             sortListByPopularity(jsonResponse.movie_credits);
             sortListByPopularity(jsonResponse.tv_credits);
@@ -34,33 +34,6 @@
 			throw new Error(response.statusText)
 		}
     };
-
-    const removeMediaWithMissingPosterPath = (list) => {
-        for (let i = 0; i < list.length; i++) {
-            if (!list[i].poster_path) {
-                list.splice(i, 1);
-                i--;
-            }
-        }
-        return list
-    }
-
-    const sortListByPopularity = (list) => {
-        return list.sort((a, b) =>
-            b.popularity - a.popularity
-        );
-    }
-
-
-    function routeToMovie(mediaId) {
-        goto(`/movie/${mediaId}`)
-        location.reload()
-    }
-
-    function routeToTV(mediaId) {
-        goto(`/tv/${mediaId}`)
-        location.reload()
-    }
 
 </script>
 
@@ -98,7 +71,7 @@
                 <h1 class="text-center text-3xl pt-5">Movies</h1>
                 <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
                     {#each person.movie_credits.slice(0, currentMovieAmount) as movie}
-                        <div on:click={() => routeToMovie(movie.id)} class="card compact cursor-pointer bordered">
+                        <div on:click={() => routeToPage(movie.id, "movie")} class="card compact cursor-pointer bordered">
                             <figure>
                                 <img src="{LOW_RES_IMG_URL}{movie.poster_path}" alt="{movie.title}">
                             </figure>
@@ -132,7 +105,7 @@
                 <h1 class="text-center text-3xl pt-5">Series</h1>
                 <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
                     {#each person.tv_credits.slice(0, currentTVAmount) as tv}
-                        <div on:click={() => routeToTV(tv.id)} class="card compact cursor-pointer bordered">
+                        <div on:click={() => routeToPage(tv.id, "tv")} class="card compact cursor-pointer bordered">
                             <figure>
                                 <img src="{LOW_RES_IMG_URL}{tv.poster_path}" alt="{tv.name}">
                             </figure>

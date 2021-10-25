@@ -1,10 +1,10 @@
 <script>
+    import { removeContentWithMissingImagePath, routeToPage, sortListByPopularity } from '../../utils'
     import {variables} from '../../variables.js'
     import {page} from '$app/stores';
     import {currentCountry} from '../../stores/country.js';
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
-    import {goto} from '$app/navigation';
     import Seasons from '../../components/seasons.svelte';
     import Error from '../../components/error.svelte';
     import Person from '../../components/person.svelte';
@@ -25,7 +25,7 @@
             let jsonResponse = await response.json();
 			tvTitle = jsonResponse.name;
 
-            removePersonWithMissingProfilePath(jsonResponse.cast);
+            removeContentWithMissingImagePath(jsonResponse.cast, "profile_path");
 			sortListByPopularity(jsonResponse.cast);
 
 			return jsonResponse;
@@ -43,27 +43,6 @@
             location.reload();
         }
         firstLoadCompleted = true;
-    }
-
-    const removePersonWithMissingProfilePath = (list) => {
-        for (let i = 0; i < list.length; i++) {
-            if (!list[i].profile_path) {
-                list.splice(i, 1);
-                i--;
-            }
-        }
-        return list
-    }
-
-    const sortListByPopularity = (list) => {
-        return list.sort((a, b) =>
-            b.popularity - a.popularity
-        );
-    }
-
-    function routeToPage(mediaId) {
-        goto(`/tv/${mediaId}`)
-        location.reload()
     }
 
 </script>
@@ -124,7 +103,7 @@
                     <div class="p-4 space-x-4 carousel carousel-center bg-neutral sm:rounded-box">
                     {#each tv.recommendations as recommendation}
                         {#if recommendation.poster_path}
-                            <div on:click={() => routeToPage(recommendation.id)} class="carousel-item h-96 w-64 p-1">
+                            <div on:click={() => routeToPage(recommendation.id, "tv")} class="carousel-item h-96 w-64 p-1">
                                 <img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer"
                                     alt="{recommendation.title}">
                             </div>

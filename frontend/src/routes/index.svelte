@@ -1,4 +1,5 @@
 <script>
+    import { getDictValues, getKeyByValue, routeToPage  } from '../utils'
 	import { variables } from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
@@ -7,7 +8,6 @@
     import {currentProviders} from '../stores/providers.js';
     import {currentGenres} from "../stores/genres";
     import {inputQuery} from "../stores/input";
-    import {goto} from '$app/navigation';
     import {onMount} from 'svelte';
 
     const searchUrl = `${variables.apiPath}/search/`;
@@ -68,17 +68,6 @@
         hitProviderAmounts(media.hits);
     };
 
-    const getKeyByValue = function (object, value) {
-        return Object.keys(object).find(key => object[key] === value);
-    }
-
-    const getDictValues = (dict) => {
-        formattedGenres = dict;
-        return Object.keys(dict).map(function (key) {
-            return dict[key];
-        });
-    }
-
     const fetchProviders = async () => {
         const res = await fetch(providerUrl + $currentCountry);
         activeProviders = await res.json();
@@ -90,7 +79,7 @@
         return await res.json();
     };
 
-    function resetProviders() {
+    const resetProviders = () => {
         $currentProviders = [];
     };
 
@@ -111,14 +100,6 @@
         search()
     };
 
-    function routeToPage(mediaId, replaceState) {
-        if (mediaId.startsWith('m')) {
-            goto(`/movie/${mediaId.slice(1)}`, {replaceState})
-        } else {
-            goto(`/tv/${mediaId.slice(1)}`, {replaceState})
-        }
-    }
-
     onMount(async () => {
         const inputField = document.getElementById('input-field')
         setTimeout(function () { inputField.select(); }, 100);
@@ -126,7 +107,6 @@
         if ($currentGenres !== []) {
             selectedGenres = $currentGenres
         }
-
         if ($inputQuery !== '') {
             input = $inputQuery;
             debounceInput();
