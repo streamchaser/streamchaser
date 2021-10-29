@@ -1,4 +1,5 @@
 import typer
+from app.adult_content_filter import brute_filter
 from app.api import fetch_trending_movies
 from app.api import fetch_trending_tv
 from app.api import media_converter
@@ -78,6 +79,11 @@ def index_meilisearch():
 @app.command()
 def cleanup_genres():
     format_genres()
+
+
+@app.command()
+def kill_hentai():
+    brute_filter()
 
 
 @app.command()
