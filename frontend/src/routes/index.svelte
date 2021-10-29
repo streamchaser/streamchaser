@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getKeyByValue, routeToPage } from '../utils'
+    import { getKeyByValue, routeToPage, getFixedGenreValues } from '../utils'
 	import { variables } from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
@@ -72,12 +72,11 @@
     const fetchProviders = async () => {
         const res = await fetch(PROVIDER_URL + $currentCountry);
         activeProviders = await res.json();
-        return activeProviders;
     };
 
     const fetchGenres = async () => {
         const res = await fetch(GENRE_URL);
-        return await res.json();
+        formattedGenres = await res.json();
     };
 
     const resetProviders = () => {
@@ -101,16 +100,12 @@
         search()
     }
 
-    const getFixedGenreValues = (genres: {}) => {
-        formattedGenres = genres;
-        return Object.keys(genres).map(function (key) {
-            return genres[key];
-        });
-    }
-
     onMount(async () => {
         const inputField = document.getElementById('input-field')
-        setTimeout(function () { inputField.select(); }, 100);
+        setTimeout(function () { inputField.select(); }, 20);
+
+        await fetchGenres();
+        await fetchProviders();
 
         if ($currentGenres !== []) {
             selectedGenres = $currentGenres
@@ -144,32 +139,20 @@
             />
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 py-1 px-4">
-            {#await fetchGenres()}
-                <p>...loading selection</p>
-            {:then genres}
-                <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
-                    bind:selected={selectedGenres}
-                    on:change={debounceInput}
-                    options={getFixedGenreValues(genres)}
-                    placeholder="Select genres..."
-                />
-            {:catch error}
-                <p>Select error! {error}</p>
-            {/await}
-
-            {#await fetchProviders()}
-                <p>...loading selection</p>
-            {:then}
-                <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
-                    bind:selected={$currentProviders}
-                    on:change={debounceInput}
-                    options={activeProviders}
-                    placeholder="Select providers..."
-                />
-            {:catch error}
-                <p>Select error! {error}</p>
-            {/await}
+            <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
+                bind:selected={selectedGenres}
+                on:change={debounceInput}
+                options={getFixedGenreValues(formattedGenres)}
+                placeholder="Select genres..."
+            />
+            <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
+                bind:selected={$currentProviders}
+                on:change={debounceInput}
+                options={activeProviders}
+                placeholder="Select providers..."
+            />
         </div>
+
         {#if media.hits}
             {#if media.hits.length > 0}
                 <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-4 bg-base-100">
