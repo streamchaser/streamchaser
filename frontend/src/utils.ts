@@ -6,6 +6,12 @@ export const getKeyByValue = (object: {}, value: string): string => {
     return Object.keys(object).find(key => object[key] === value);
 }
 
+export const getFixedGenreValues = (genres: {}) => {
+    return Object.keys(genres).map(function (key) {
+        return genres[key];
+    });
+}
+
 // Routing
 
 export const routeToPage = (mediaId: string, mediaType: string = undefined) => {
@@ -15,8 +21,8 @@ export const routeToPage = (mediaId: string, mediaType: string = undefined) => {
         let goToUrl = mediaId.startsWith('m') ?
             `/movie/${mediaId.slice(1)}` : `/tv/${mediaId.slice(1)}`;
         goto(goToUrl);
-    // On details page prefix t or m is already removed from mediaid, so we check for
-    // extra input parameter to see which media to route to
+        // On details page prefix t or m is already removed from mediaid, so we check for
+        // extra input parameter to see which media to route to
     } else if (mediaType === "tv" || mediaType === "movie") {
         let goToUrl = mediaType === "movie" ? `/movie/${mediaId}` : `/tv/${mediaId}`;
         goto(goToUrl);
