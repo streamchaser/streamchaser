@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-    <title>About Streamchaser</title>
+    <title>About - Streamchaser</title>
 </svelte:head>
 
 <div class="flex flex-col h-screen">
