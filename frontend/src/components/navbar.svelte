@@ -28,7 +28,7 @@
     <div class="sm:pl-4">
         <select bind:value={selectedCountry} on:change={currentCountry.set(selectedCountry)}
                 class="select select-ghost select-bordered max-sm">
-            <option disabled={false}>Choose country</option>
+            <option disabled={true}>Choose country</option>
             {#each countries as country}
                 <option value={country.value}>{country.name}</option>
             {/each}
