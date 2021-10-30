@@ -126,7 +126,7 @@
 </script>
 
 <svelte:head>
-    <title>Streamchaser {$currentCountry}</title>
+    <title>Streamchaser</title>
 </svelte:head>
 
 <div class="flex flex-col h-screen justify-between">
