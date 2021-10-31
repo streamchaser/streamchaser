@@ -39,7 +39,7 @@
 </script>
 
 <svelte:head>
-    <title>{personName}</title>
+    <title>{personName} - Streamchaser</title>
 </svelte:head>
 
 <div class="flex flex-col h-screen justify-between">

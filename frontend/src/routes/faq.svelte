@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-    <title>FAQ</title>
+    <title>FAQ - Streamchaser</title>
 </svelte:head>
 
 <div class="flex flex-col h-screen">

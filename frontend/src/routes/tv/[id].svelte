@@ -48,7 +48,7 @@
 </script>
 
 <svelte:head>
-    <title>{tvTitle}</title>
+    <title>{tvTitle} - Streamchaser</title>
 </svelte:head>
 
 <div class="flex flex-col h-screen justify-between">
