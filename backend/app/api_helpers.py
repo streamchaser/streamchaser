@@ -15,7 +15,7 @@ def valid_title(media: Dict) -> str:
 
 
 def valid_original_title(media: Dict) -> str:
-    if media.get('media_type') == 'movie':
+    if media.get('id').startswith('m'):
         return media.get('original_title')
 
     return media.get('original_name')

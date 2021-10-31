@@ -1,8 +1,13 @@
+import gzip
+import json
+import os
+
 import typer
+from app.api import fetch_jsongz_files
 from app.api import fetch_trending_movies
 from app.api import fetch_trending_tv
 from app.api import media_converter
-from app.api import request_providers
+from app.api import request_data
 from app.config import get_settings
 from app.db import database
 from app.db.crud import delete_all_media
@@ -24,6 +29,54 @@ from tqdm.contrib.concurrent import process_map
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
+
+
+@app.command()
+def fetch_jsongz():
+    fetch_jsongz_files()
+
+
+@app.command()
+def new_fetch_media(popularity: float) -> bool:
+    fetch_jsongz_files()
+
+    directory = '../json.gz_dumps'
+    data = []
+
+    for file in tqdm(os.listdir(directory), desc='Running through json.gz files'):
+        with gzip.open(os.path.join(directory, file), 'r') as f:
+            for line in f:
+                if (json.loads(line).get('popularity') > popularity
+                        and not json.loads(line).get('adult')):
+                    if 'movie' in file:
+                        item = json.loads(line)
+                        item['id'] = 'm'+str(item['id'])
+                        data.append(item)
+                    else:
+                        item = json.loads(line)
+                        item['id'] = 't'+str(item['id'])
+                        data.append(item)
+
+    print(f'media elements: {len(data)} with popularity over {popularity}')
+
+    media = media_converter(data)
+
+    try:
+        # Fills the database with media
+        process_map(
+            dump_media_to_db,
+            media,
+            chunksize=10,
+            # max_workers=10,
+            desc="Dumping media to Postgres"
+        )
+
+        dump_genres_to_db()
+
+    except Exception as e:
+        typer.echo('Failed to add element', e)
+
+    return True
 
 
 @app.command()
@@ -109,31 +162,29 @@ def remove_all_media():
 
 
 @app.command()
-def add_providers():
+def add_data():
     db = database.SessionLocal()
     all_media = get_all_media(db)
     db.close()
 
     # returns a list of dicts with media ids and provider data
-    providers = process_map(
-        request_providers, all_media, chunksize=25, desc="Fetching provider data"
+    media_data = process_map(
+        request_data, all_media, chunksize=25, desc="Fetching media data"
     )
 
-    for provider in tqdm(providers, desc="Updating database with provider data"):
-        update_media_provider_by_id(db, provider.get('media_id'), provider.get('data'))
+    for data in tqdm(media_data, desc="Updating database with media data"):
+        update_media_provider_by_id(db=db, media_id=data.get('media_id'), data=data)
 
 
-@app.command()
-def full_setup(total_pages: int, remove_non_ascii: bool = True):
-    if fetch_media(total_pages=total_pages):
-        if remove_non_ascii:
-            remove_non_ascii_media()
-        add_providers()
-        cleanup_genres()
-        index_meilisearch()
-        update_index()
-        remove_blacklisted_from_search()
-        typer.echo('Full setup complete!')
+def full_setup(popularity: float, remove_non_ascii: bool = True):
+    new_fetch_media(popularity)
+    if remove_non_ascii:
+        remove_non_ascii_media()
+    add_data()
+    cleanup_genres()
+    index_meilisearch()
+    update_index()
+    remove_blacklisted_from_search()
 
 
 @app.command()

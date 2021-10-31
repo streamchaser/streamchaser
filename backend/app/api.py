@@ -1,9 +1,12 @@
+import os
+from datetime import datetime
+from datetime import timedelta
+from pathlib import Path
 from typing import Dict
 from typing import List
 
 import requests
 from app.api_helpers import get_providers
-from app.api_helpers import unique_id
 from app.api_helpers import valid_original_title
 from app.api_helpers import valid_release_date
 from app.api_helpers import valid_title
@@ -17,6 +20,50 @@ from app.schemas import TV
 
 tmdb_url = get_settings().tmdb_url
 tmdb_key = get_settings().tmdb_key
+
+
+def fetch_jsongz_files():
+    day = 0
+    no_data = True
+
+    while no_data:
+        date = datetime.now() - timedelta(day)
+
+        print(f'Downloading dumps: {date.date()}')
+
+        directory = '../json.gz_dumps/'
+        Path(directory).mkdir(exist_ok=True)
+
+        tv_url = f"http://files.tmdb.org/p/exports/tv_series_ids_{date.month}" \
+            f"_{date.day}_{date.year}.json.gz"
+        movie_url = f"http://files.tmdb.org/p/exports/movie_ids_{date.month}_" \
+            f"{date.day}_{date.year}.json.gz"
+
+        movie_path = f"{directory}movie_ids_{date.month}" \
+            f"_{date.day}_{date.year}.json.gz"
+        tv_path = f"{directory}tv_series_ids_{date.month}" \
+            f"_{date.day}_{date.year}.json.gz"
+
+        movie_response = requests.get(movie_url, stream=True)
+        tv_response = requests.get(tv_url, stream=True)
+
+        if movie_response.status_code == 200 and tv_response.status_code == 200:
+            no_data = False
+            # First we remove the old files
+            if os.path.isdir(directory):
+                for file in os.listdir(directory):
+                    os.remove(os.path.join(directory, file))
+
+            with open(movie_path, 'wb') as f:
+                f.write(movie_response.raw.read())
+                print(f"[{movie_path}] downloaded succesfully".replace(directory, ''))
+
+            with open(tv_path, 'wb') as f:
+                f.write(tv_response.raw.read())
+                print(f"[{tv_path}] downloaded succesfully".replace(directory, ''))
+        else:
+            print('Downloads failed - trying 1 day earlier')
+            day += 1
 
 
 def fetch_trending_movies(page: int) -> Dict:
@@ -52,7 +99,7 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
     return [
         # pydantic Media schema
         Media(
-            id=unique_id(media),
+            id=media.get('id'),
             title=valid_title(media),
             original_title=valid_original_title(media),
             overview=media.get('overview'),
@@ -173,23 +220,29 @@ def get_genres() -> Dict:
     return {**movie_genre_dict, **tv_genre_dict}
 
 
-def request_providers(media: models.Media):
+def request_data(media: models.Media):
     tmdb_url = get_settings().tmdb_url
     tmdb_key = get_settings().tmdb_key
+
+    title = ''
 
     try:
         if media.id[0] == 'm':
             url = f'{tmdb_url}movie/{media.id[1:]}?api_key={tmdb_key}' \
                   '&append_to_response=watch/providers'
+            title = 'title'
 
         elif media.id[0] == 't':
             url = f'{tmdb_url}tv/{media.id[1:]}?api_key={tmdb_key}' \
                   '&append_to_response=watch/providers'
+            title = 'name'
 
-        media_provider_append = requests.get(url).json()
+        data = requests.get(url).json()
         return {
             'media_id': media.id,
-            'data': get_providers(media_provider_append.get('watch/providers'))
+            'title': data.get(title),
+            'poster_path': data.get('poster_path'),
+            'data': get_providers(data.get('watch/providers'))
             }
 
     except Exception as e:

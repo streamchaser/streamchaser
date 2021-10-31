@@ -1,5 +1,4 @@
 from typing import Dict
-from typing import List
 
 from app import schemas
 from app.db import models
@@ -37,9 +36,11 @@ def create_media(db: Session, media: schemas.Media):
     return db_media
 
 
-def update_media_provider_by_id(db: Session, media_id: str, providers: List[Dict]):
+def update_media_provider_by_id(db: Session, media_id: str, data: Dict):
     db.query(models.Media).filter_by(id=media_id).update({
-        'providers': providers
+        'providers': data.get('data'),
+        'title': data.get('title'),
+        'poster_path': data.get('poster_path')
     })
     db.commit()
 
