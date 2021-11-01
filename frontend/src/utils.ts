@@ -6,6 +6,12 @@ export const getKeyByValue = (object: {}, value: string): string => {
     return Object.keys(object).find(key => object[key] === value);
 }
 
+export const getFixedGenreValues = (genres: {}) => {
+    return Object.keys(genres).map(function (key) {
+        return genres[key];
+    });
+}
+
 // Routing
 
 export const routeToPage = (mediaId: string, mediaType: string = undefined) => {
