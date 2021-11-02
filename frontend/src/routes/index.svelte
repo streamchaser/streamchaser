@@ -25,8 +25,8 @@
     let media = [];
     let selectedGenres = [];
     let providerAmounts: number[] = [];
-    let formattedGenres: {} = {};
-    let activeProviders = [];
+    let formattedGenres: {} = {'':''};
+    let activeProviders = [''];
     let currentMediaAmount: number = 21;
 
     // run search if we haven't received input in the last 200ms
