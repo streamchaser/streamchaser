@@ -2,6 +2,7 @@
     import Collapse from "../components/collapse.svelte";
     import Footer from "../components/footer.svelte";
     import Navbar from "../components/navbar.svelte";
+    import CookieDisclaimer from '../components/cookie_disclaimer.svelte'
 </script>
 
 <svelte:head>
@@ -37,3 +38,4 @@
     </div>
     <Footer/>
 </div>
+<CookieDisclaimer />

@@ -2,6 +2,7 @@
     import Navbar from "../components/navbar.svelte";
     import Footer from "../components/footer.svelte";
     import Error from "../components/error.svelte";
+    import CookieDisclaimer from '../components/cookie_disclaimer.svelte'
     import { onMount } from "svelte";
 
     // This is a temp fix for the firefox dyanmic import bug
@@ -26,3 +27,4 @@
         <Footer />
     </div>
 {/if}
+<CookieDisclaimer />

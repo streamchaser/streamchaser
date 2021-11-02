@@ -5,6 +5,8 @@
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
     import Error from '../../components/error.svelte';
+    import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
+
 
     const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`;
     const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
@@ -140,3 +142,4 @@
     </div>
 <Footer/>
 </div>
+<CookieDisclaimer />
