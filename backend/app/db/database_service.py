@@ -110,11 +110,6 @@ def init_meilisearch_indexing():
 
             extract_unique_providers_to_txt(media_list, country_code)
 
-        print(
-            f'Meilisearch indexing {len(supported_country_codes)} x '
-            f'{len(media_list)} elements'
-        )
-
     except Exception as e:
         print(f'Error in database_service.py::init_meilisearch_indexing {e}')
 

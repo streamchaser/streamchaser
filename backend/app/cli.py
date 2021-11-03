@@ -71,8 +71,10 @@ def fetch_media(total_pages: int) -> bool:
 
 @app.command()
 def index_meilisearch():
+    typer.echo("Meilisearch is indexing...")
     init_meilisearch_indexing()
     update_index()
+    typer.echo("Meilisearch done indexing!")
 
 
 @app.command()
@@ -131,6 +133,7 @@ def full_setup(total_pages: int, remove_non_ascii: bool = True):
         index_meilisearch()
         update_index()
         remove_blacklisted_from_search()
+        typer.echo('Full setup complete!')
 
 
 @app.command()
