@@ -82,11 +82,6 @@ def init_meilisearch_indexing():
     try:
         media_list = crud.get_all_media(db=db)
 
-        print(
-            f'Meilisearch indexing {len(supported_country_codes)} x '
-            f'{len(media_list)} elements...'
-        )
-
         for country_code in supported_country_codes:
             media_list_as_dict = [
                 schemas.Media(
