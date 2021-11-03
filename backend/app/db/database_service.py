@@ -82,6 +82,11 @@ def init_meilisearch_indexing():
     try:
         media_list = crud.get_all_media(db=db)
 
+        print(
+            f'Meilisearch indexing {len(supported_country_codes)} x '
+            f'{len(media_list)} elements...'
+        )
+
         for country_code in supported_country_codes:
             media_list_as_dict = [
                 schemas.Media(
@@ -109,11 +114,6 @@ def init_meilisearch_indexing():
             client.index(f'media_{country_code}').add_documents(media_list_as_dict)
 
             extract_unique_providers_to_txt(media_list, country_code)
-
-        print(
-            f'Meilisearch indexing {len(supported_country_codes)} x '
-            f'{len(media_list)} elements'
-        )
 
     except Exception as e:
         print(f'Error in database_service.py::init_meilisearch_indexing {e}')
