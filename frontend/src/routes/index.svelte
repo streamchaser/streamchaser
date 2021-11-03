@@ -3,6 +3,7 @@
 	import { variables } from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
+    import CookieDisclaimer from '../components/cookie_disclaimer.svelte'
     import MultiSelect from 'svelte-multiselect'
     import {currentCountry} from '../stores/country.js';
     import {currentProviders} from '../stores/providers.js';
@@ -227,3 +228,4 @@
     </div>
     <Footer/>
 </div>
+<CookieDisclaimer />

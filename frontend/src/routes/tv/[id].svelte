@@ -8,6 +8,7 @@
     import Seasons from '../../components/seasons.svelte';
     import Error from '../../components/error.svelte';
     import Person from '../../components/person.svelte';
+    import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
 
 
     const TV_DETAIL_URL: string = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
@@ -118,3 +119,4 @@
     </div>
     <Footer/>
 </div>
+<CookieDisclaimer />

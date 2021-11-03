@@ -7,6 +7,8 @@
 	import Footer from '../../components/footer.svelte';
     import Error from '../../components/error.svelte';
     import Person from '../../components/person.svelte';
+    import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
+
 
 	const MOVIE_DETAIL_URL: string = `${variables.apiPath}/movie/${$currentCountry}/${$page.params.id}`;
 	const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
@@ -114,3 +116,4 @@
 	</div>
 	<Footer/>
 </div>
+<CookieDisclaimer />

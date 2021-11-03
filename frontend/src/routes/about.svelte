@@ -3,6 +3,7 @@
     import Footer from "../components/footer.svelte";
     import Navbar from "../components/navbar.svelte";
     import Avatar from "../components/avatar.svelte";
+    import CookieDisclaimer from '../components/cookie_disclaimer.svelte'
 </script>
 
 <svelte:head>
@@ -46,3 +47,4 @@
     </div>
     <Footer/>
 </div>
+<CookieDisclaimer />
