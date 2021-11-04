@@ -3,6 +3,7 @@
 	import { variables } from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
+    import NoResults from '../components/no_results.svelte';
     import CookieDisclaimer from '../components/cookie_disclaimer.svelte'
     import MultiSelect from 'svelte-multiselect'
     import {currentCountry} from '../stores/country.js';
@@ -234,9 +235,11 @@
                     {/if}
                 </div>
             {:else}
-                <div class="flex justify-around">
-                    <p>No results for: {input}</p>
-                </div>
+                <NoResults
+                    currentProviders={$currentProviders}
+                    currentGenres={$currentGenres}
+                    input={input}
+                />
             {/if}
         {/if}
     </div>
