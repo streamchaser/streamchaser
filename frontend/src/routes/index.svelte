@@ -129,7 +129,7 @@
     <Navbar />
     <div class="mb-auto container mx-auto">
         <h1 class="text-center text-3xl pt-4">streamchaser</h1>
-        <div class="form-control p-4">
+        <div class="form-control pb-2 pt-4 px-4">
             <input id="input-field"
                 type="text"
                 placeholder="Search in {$currentCountry}"
@@ -139,14 +139,28 @@
                 autofocus
             />
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 py-1 px-4">
-            <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
+        <div class="sm:grid sm:grid-cols-2 sm:gap-2 px-4">
+            <MultiSelect
+                --sms-options-bg="#2a2e37"
+                --sms-border="1pt solid #6B7280"
+                --sms-focus-border="2pt solid #6B7280"
+                --sms-active-color="#2a2e37"
+                --sms-remove-x-hover-focus-color="#6B7280"
+                --sms-li-selected-bg="#3d4451"
+                --sms-li-active-bg="#059669"
                 bind:selected={selectedGenres}
                 on:change={debounceInput}
                 options={getFixedGenreValues(formattedGenres)}
                 placeholder="Select genres..."
             />
-            <MultiSelect --sms-options-bg="var(--my-css-var, #404454)"
+            <MultiSelect
+                --sms-options-bg="#2a2e37"
+                --sms-border="1pt solid #6B7280"
+                --sms-focus-border="2pt solid #6B7280"
+                --sms-active-color="#2a2e37"
+                --sms-remove-x-hover-focus-color="#6B7280"
+                --sms-li-selected-bg="#3d4451"
+                --sms-li-active-bg="#059669"
                 bind:selected={$currentProviders}
                 on:change={debounceInput}
                 options={activeProviders}
@@ -156,7 +170,7 @@
 
         {#if media.hits}
             {#if media.hits.length > 0}
-                <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 p-4 bg-base-100">
+                <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4 bg-base-100">
                     {#each media.hits as media, mediaIndex}
                         <div on:click={routeToPage(media.id)}
                             class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
