@@ -3,6 +3,7 @@
 	import { variables } from '../variables.js'
     import Navbar from '../components/navbar.svelte';
     import Footer from '../components/footer.svelte';
+    import NoResults from '../components/no_results.svelte';
     import CookieDisclaimer from '../components/cookie_disclaimer.svelte'
     import MultiSelect from 'svelte-multiselect'
     import {currentCountry} from '../stores/country.js';
@@ -234,32 +235,11 @@
                     {/if}
                 </div>
             {:else}
-                <div class="flex flex-col">
-                    <div class="m-auto text-center max-w-xl">
-                        <p>No results for:</p>
-                        <p class="pb-1"><b><i>{input}</i></b></p>
-                        {#if $currentGenres.length > 0 && $currentProviders.length > 0}
-                            <p>With genres:</p>
-                            {#each $currentGenres as genre}
-                                <div class="badge mx-1">{genre}</div>
-                            {/each}
-                            <p class="pt-1">And providers:</p>
-                            {#each $currentProviders as provider}
-                                <div class="badge mx-1">{provider}</div>
-                            {/each}
-                        {:else if $currentGenres.length > 0}
-                            <p>With genres:</p>
-                            {#each $currentGenres as genre}
-                                <div class="badge mx-1">{genre}</div>
-                            {/each}
-                        {:else if $currentProviders.length > 0}
-                            <p>With providers:</p>
-                            {#each $currentProviders as provider}
-                                <div class="badge mx-1">{provider}</div>
-                            {/each}
-                        {/if}
-                    </div>
-                </div>
+                <NoResults
+                    currentProviders={$currentProviders}
+                    currentGenres={$currentGenres}
+                    input={input}
+                />
             {/if}
         {/if}
     </div>
