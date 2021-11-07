@@ -11,9 +11,11 @@
     const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`;
     const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
     const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
+    const INITIAL_BIOGRAPHY_LENGTH: number = 500;
     const SHOW_BUTTON_AMOUNT: number = 12;
     const CAST_ITEM_START_AMOUNT: number = 6;
 
+    let currentBiographyLength: number = INITIAL_BIOGRAPHY_LENGTH;
     let currentMovieAmount: number = 6;
     let currentTVAmount: number = 6;
     let personName: string = 'Loading...';
@@ -67,7 +69,16 @@
                     </figure>
                     <div class="max-w-md card-body">
                         <h2 class="card-title">{person.name}</h2>
-                        <p>{person.biography}</p>
+                        {#if currentBiographyLength <= INITIAL_BIOGRAPHY_LENGTH && person.biography.length > INITIAL_BIOGRAPHY_LENGTH}
+                            <p>{person.biography.slice(0, currentBiographyLength)}
+                                <a href="" class="cursor-pointer"
+                                    on:click={() => currentBiographyLength = person.biography.length}>
+                                    ...read more
+                                </a>
+                            </p>
+                        {:else}
+                            <p>{person.biography}</p>
+                        {/if}
                     </div>
                 </div>
             </div>
