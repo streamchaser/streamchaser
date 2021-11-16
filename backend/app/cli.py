@@ -1,3 +1,6 @@
+import logging
+import time
+
 import typer
 from app.api import fetch_trending_movies
 from app.api import fetch_trending_tv
@@ -17,9 +20,15 @@ from app.db.database_service import init_meilisearch_indexing
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.search import client
 from app.db.search import update_index
+from apscheduler.schedulers.background import BackgroundScheduler
 from tqdm import tqdm
 from tqdm.contrib.concurrent import process_map
 
+
+scheduler = BackgroundScheduler(timezone="Europe/Berlin")
+
+logging.basicConfig()
+logging.getLogger('apscheduler').setLevel(logging.DEBUG)
 
 supported_country_codes = get_settings().supported_country_codes
 
@@ -124,7 +133,18 @@ def add_providers():
 
 
 @app.command()
-def full_setup(total_pages: int, remove_non_ascii: bool = True):
+@scheduler.scheduled_job('cron', day_of_week='mon-sat', hour=3, minute=30)
+def update_providers():
+    add_providers()
+    index_meilisearch()
+    update_index()
+    remove_blacklisted_from_search()
+    typer.echo('Update providers complete!')
+
+
+@app.command()
+@scheduler.scheduled_job('cron', day_of_week='sun', hour=3, minute=30)
+def full_setup(total_pages: int = 500, remove_non_ascii: bool = True):
     if fetch_media(total_pages=total_pages):
         if remove_non_ascii:
             remove_non_ascii_media()
@@ -172,6 +192,34 @@ def remove_and_blacklist(media_id: str):
         typer.echo(f'An error occoured. {e}')
     finally:
         db.close()
+
+
+@app.command()
+def check_cron():
+    typer.echo(scheduler.print_jobs())
+
+
+@app.command()
+def start_cron():
+    if not scheduler.running:
+        typer.echo('Starting cron jobs...')
+        scheduler.start()
+    else:
+        typer.echo('Cron jobs already running!')
+        return
+    while True:
+        time.sleep(1)
+    scheduler.shutdown(wait=False)
+
+
+@app.command()
+def stop_cron():
+    if scheduler.running:
+        typer.echo('Attempting to stop cron...')
+        scheduler.shutdown(wait=False)
+        typer.echo('Succesfully stopped cron jobs!')
+    else:
+        typer.echo('Cron jobs not running!')
 
 
 if __name__ == "__main__":
