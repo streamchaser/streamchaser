@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { removeContentWithMissingImagePath, routeToPage, sortListByPopularity  } from '../../utils'
+    import { removeContentWithMissingImagePath, routeToPage, sortListByPopularity, removeDuplicates } from '../../utils'
     import { variables } from '../../variables.js'
     import {page} from '$app/stores';
     import Navbar from '../../components/navbar.svelte';
@@ -26,6 +26,9 @@
 			personName = jsonResponse.name;
             removeContentWithMissingImagePath(jsonResponse.movie_credits, "poster_path");
             removeContentWithMissingImagePath(jsonResponse.tv_credits, "poster_path");
+
+            removeDuplicates(jsonResponse.movie_credits);
+            removeDuplicates(jsonResponse.tv_credits);
 
             sortListByPopularity(jsonResponse.movie_credits);
             sortListByPopularity(jsonResponse.tv_credits);
