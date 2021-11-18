@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {routeToPage} from "../utils";
+    import {routeToPage} from "../../utils";
 
     export let imgUrl: string;
     export let media;

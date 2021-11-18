@@ -5,11 +5,12 @@
     import {currentCountry} from '../../stores/country.js';
     import Navbar from '../../components/navbar.svelte';
     import Footer from '../../components/footer.svelte';
-    import Seasons from '../../components/seasons.svelte';
+    import Seasons from '../../components/details/seasons.svelte';
     import Error from '../../components/error.svelte';
-    import Person from '../../components/person.svelte';
+    import Person from '../../components/details/person.svelte';
     import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
-    import ReadMore from '../../components/read_more.svelte'
+    import DetailsTopCard from '../../components/details/top_card.svelte'
+    import Recommendations from '../../components/details/recommendations.svelte'
 
 
     const TV_DETAIL_URL: string = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
@@ -61,64 +62,31 @@
         {#await fetchTVDetails()}
             <p>Loading...</p>
         {:then tv}
-            <!-- TV -->
-            <div
-                    class="flex items-center w-full px-4 py-10 bg-cover card bg-base-200"
-                    style="background-image: url(&quot;{IMG_URL}{tv.backdrop_path}&quot;);e"
-            >
-                <div class="card glass lg:card-side text-neutral-content">
-                    <figure class="p-6">
-                        <img
-                            src="{IMG_URL}{tv.poster_path}"
-                            class="object-contain h-96 w-full rounded-lg"
-                            alt="{tv.name}"
-                        />
-                    </figure>
-                    <div class="max-w-md card-body">
-                        <h2 class="card-title">{tv.name}</h2>
-                        <ReadMore currentDescriptionLength={currentDescriptionLength}
-                                  mediaDescription={tv.overview}
-                                  initialDescriptionLength={INITIAL_DESCRIPTION_LENGTH}
-                        />
-                        <div class="flex-wrap mt-2">
-                            {#each tv.genres as genre}
-                                <div class="badge mx-2">{genre}</div>
-                            {/each}
-                        </div>
-                    </div>
-                </div>
-                <!-- Provider -->
-                <div class="flex-nowrap pt-5">
-                    {#each tv.providers as provider}
-                        <div class="avatar p-2">
-                            <div class="mb-8 w-24 h-24 mask mask-squircle">
-                                <img src="{IMG_URL}{provider.logo_path}" alt="{provider.provider_name}"/>
-                            </div>
-                        </div>
-                    {/each}
-                </div>
-            </div>
+            <DetailsTopCard
+                backdropPath={tv.backdrop_path}
+                imgUrl={IMG_URL}
+                posterPath={tv.poster_path}
+                title={tv.name}
+                overview={tv.overview}
+                overviewLength={currentDescriptionLength}
+                initialOverviewLength={INITIAL_DESCRIPTION_LENGTH}
+                genres={tv.genres}
+                providers={tv.providers}
+            />
 
             <Seasons seasons={tv.seasons} />
 
-            <Person media={tv} imgUrl={LOW_RES_IMG_URL} showButtonAmount={SHOW_BUTTON_AMOUNT} castItemStartAmount={CAST_ITEM_START_AMOUNT} />
+            <Person
+                media={tv}
+                imgUrl={LOW_RES_IMG_URL}
+                showButtonAmount={SHOW_BUTTON_AMOUNT}
+                castItemStartAmount={CAST_ITEM_START_AMOUNT}
+            />
 
-            <!-- Recommendations -->
-            {#if tv.recommendations.length != 0}
-                <h1 class="text-center text-3xl pt-5">Recommendations</h1>
-                <div class="pt-5">
-                    <div class="p-4 space-x-4 carousel carousel-center bg-neutral sm:rounded-box">
-                    {#each tv.recommendations as recommendation}
-                        {#if recommendation.poster_path}
-                            <div on:click={() => routeToPage(recommendation.id, "tv")} class="carousel-item h-96 w-64 p-1">
-                                <img src="{IMG_URL}{recommendation.poster_path}" class="rounded-lg cursor-pointer"
-                                    alt="{recommendation.title}">
-                            </div>
-                        {/if}
-                    {/each}
-                </div>
-            </div>
-            {/if}
+            <Recommendations
+                recommendations={tv.recommendations}
+                imgUrl={IMG_URL}
+            />
         {:catch error}
             <Error error={error} />
         {/await}
