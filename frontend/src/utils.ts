@@ -15,21 +15,34 @@ export const getFixedGenreValues = (genres: {}) => {
 // Routing
 
 export const routeToPage = (mediaId: string, mediaType: string = undefined) => {
-    // If no mediatype is given we're on index page. Check if media is tv or movie
-    // by checking if mediaid starts with m or t, and route to details page
-    if (!mediaType) {
-        let goToUrl = mediaId.startsWith('m') ?
-            `/movie/${mediaId.slice(1)}` : `/tv/${mediaId.slice(1)}`;
-        goto(goToUrl);
-    // On details page prefix t or m is already removed from mediaid, so we check for
-    // extra input parameter to see which media to route to
-    } else if (mediaType === "tv" || mediaType === "movie") {
-        let goToUrl = mediaType === "movie" ? `/movie/${mediaId}` : `/tv/${mediaId}`;
-        goto(goToUrl);
-        location.reload();
-    } else if (mediaType === "person") {
-        goto(`/person/${mediaId}`);
-        location.reload();
+    switch (mediaType) {
+        case "tv":
+            window.location.href = `/tv/${mediaId}`;
+            break;
+        case "movie":
+            window.location.href = `/movie/${mediaId}`;
+            break;
+        case "person":
+            window.location.href = `/person/${mediaId}`;
+            break;
+        default:
+            // This is what happens on the index page
+            const startingChar = mediaId[0]
+            const slicedId = mediaId.slice(1)
+
+            switch (startingChar) {
+                case "t":
+                    window.location.href = `/tv/${slicedId}`;
+                    break;
+                case "m":
+                    window.location.href = `/movie/${slicedId}`;
+                    break;
+                case "p":
+                    window.location.href = `/person/${slicedId}`;
+                    break;
+                default:
+                    window.location.href = "/";
+            }
     }
 }
 
