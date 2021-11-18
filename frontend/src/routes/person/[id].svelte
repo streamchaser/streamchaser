@@ -6,14 +6,17 @@
     import Footer from '../../components/footer.svelte';
     import Error from '../../components/error.svelte';
     import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
+    import ReadMore from '../../components/read_more.svelte'
 
 
     const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`;
     const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
     const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
+    const INITIAL_BIOGRAPHY_LENGTH: number = 500;
     const SHOW_BUTTON_AMOUNT: number = 12;
     const CAST_ITEM_START_AMOUNT: number = 6;
 
+    let currentBiographyLength: number = INITIAL_BIOGRAPHY_LENGTH;
     let currentMovieAmount: number = 6;
     let currentTVAmount: number = 6;
     let personName: string = 'Loading...';
@@ -67,7 +70,10 @@
                     </figure>
                     <div class="max-w-md card-body">
                         <h2 class="card-title">{person.name}</h2>
-                        <p>{person.biography}</p>
+                        <ReadMore currentDescriptionLength={currentBiographyLength}
+                                  mediaDescription={person.biography}
+                                  initialDescriptionLength={INITIAL_BIOGRAPHY_LENGTH}
+                        />
                     </div>
                 </div>
             </div>
