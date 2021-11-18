@@ -9,6 +9,7 @@
     import Error from '../../components/error.svelte';
     import Person from '../../components/person.svelte';
     import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
+    import ReadMore from '../../components/read_more.svelte'
 
 
     const TV_DETAIL_URL: string = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
@@ -16,8 +17,10 @@
     const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
 	const SHOW_BUTTON_AMOUNT: number = 18;
 	const CAST_ITEM_START_AMOUNT: number = 9;
+    const INITIAL_DESCRIPTION_LENGTH = 500;
 
     let tvTitle = 'Loading...';
+    let currentDescriptionLength = INITIAL_DESCRIPTION_LENGTH;
 
     const fetchTVDetails = async () => {
 		const response = await fetch(TV_DETAIL_URL);
@@ -73,7 +76,10 @@
                     </figure>
                     <div class="max-w-md card-body">
                         <h2 class="card-title">{tv.name}</h2>
-                        <p>{tv.overview}</p>
+                        <ReadMore currentDescriptionLength={currentDescriptionLength}
+                                  mediaDescription={tv.overview}
+                                  initialDescriptionLength={INITIAL_DESCRIPTION_LENGTH}
+                        />
                         <div class="flex-wrap mt-2">
                             {#each tv.genres as genre}
                                 <div class="badge mx-2">{genre}</div>

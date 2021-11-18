@@ -6,6 +6,7 @@
     import Footer from '../../components/footer.svelte';
     import Error from '../../components/error.svelte';
     import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
+    import ReadMore from '../../components/read_more.svelte'
 
 
     const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`;
@@ -69,16 +70,10 @@
                     </figure>
                     <div class="max-w-md card-body">
                         <h2 class="card-title">{person.name}</h2>
-                        {#if currentBiographyLength <= INITIAL_BIOGRAPHY_LENGTH && person.biography.length > INITIAL_BIOGRAPHY_LENGTH}
-                            <p>{person.biography.slice(0, currentBiographyLength)}
-                                <a href="" class="cursor-pointer"
-                                    on:click={() => currentBiographyLength = person.biography.length}>
-                                    ...read more
-                                </a>
-                            </p>
-                        {:else}
-                            <p>{person.biography}</p>
-                        {/if}
+                        <ReadMore currentDescriptionLength={currentBiographyLength}
+                                  mediaDescription={person.biography}
+                                  initialDescriptionLength={INITIAL_BIOGRAPHY_LENGTH}
+                        />
                     </div>
                 </div>
             </div>
