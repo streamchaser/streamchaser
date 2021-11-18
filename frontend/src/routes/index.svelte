@@ -174,7 +174,7 @@
                 <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4 bg-base-100">
                     {#each media.hits as media, mediaIndex}
                         <div on:click={routeToPage(media.id)}
-                            class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
+                            class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform sm:hover:scale-110 m-1">
                             <figure>
                                 <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt="media poster"/>
                             </figure>
