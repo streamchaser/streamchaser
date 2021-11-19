@@ -11,6 +11,7 @@
     import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
     import TopCard from '../../components/details/top_card.svelte'
     import Recommendations from '../../components/details/recommendations.svelte'
+	import Spinner from '../../components/loading/spinner.svelte'
 
 
     const TV_DETAIL_URL: string = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
@@ -54,7 +55,7 @@
     <Navbar/>
     <div class="container mx-auto pb-2">
         {#await fetchTVDetails()}
-            <p>Loading...</p>
+            <Spinner />
         {:then tv}
             <TopCard
                 backdropPath={tv.backdrop_path}
@@ -69,7 +70,10 @@
 
             <Person cast={tv.cast} />
 
-            <Recommendations recommendations={tv.recommendations} />
+            <Recommendations
+                recommendations={tv.recommendations}
+                mediaType={'tv'}
+            />
         {:catch error}
             <Error error={error} />
         {/await}
