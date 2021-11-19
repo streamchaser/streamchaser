@@ -8,6 +8,7 @@
     import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
     import TopCard from '../../components/details/top_card.svelte'
     import PersonMedia from '../../components/details/person_media.svelte'
+	import Spinner from '../../components/loading/spinner.svelte'
 
 
     const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`;
@@ -47,7 +48,7 @@
     <Navbar/>
     <div class="container mx-auto pb-2">
         {#await fetchPersonDetails()}
-            <p>Loading...</p>
+            <Spinner />
         {:then person}
             <TopCard
                 backdropPath={person.movie_credits[0].backdrop_path}
