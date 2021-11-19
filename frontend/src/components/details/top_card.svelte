@@ -18,7 +18,7 @@
 <div
     class="flex items-center w-full px-4 py-10 bg-cover card bg-base-200"
     style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e">
-    <div class="card glass lg:card-side text-neutral-content">
+    <div class="card lg:card-side bg-gray-700 bg-opacity-90 bordered text-neutral-content">
         <figure class="p-6">
             <img
                 src="{IMG_URL}{posterPath}"
@@ -26,7 +26,7 @@
                 alt={title}
             />
         </figure>
-        <div class="max-w-md card-body">
+        <div class="card-body max-w-md">
             <h2 class="card-title">{title}</h2>
             <ReadMore
                 currentDescriptionLength={currentOverviewLength}
@@ -42,11 +42,12 @@
             {/if}
         </div>
     </div>
+
     {#if providers}
         <div class="flex-nowrap pt-5">
             {#each providers as provider}
-                <div class="avatar p-2">
-                    <div class="mb-8 w-24 h-24 mask mask-squircle">
+                <div class="avatar p-1">
+                    <div class="mb-8 w-20 h-20 mask mask-squircle">
                         <img
                             src="{IMG_URL}{provider.logo_path}"
                             alt={provider.provider_name}
