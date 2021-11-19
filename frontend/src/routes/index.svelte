@@ -16,11 +16,7 @@
     const SEARCH_URL: string = `${variables.apiPath}/search/`;
     const GENRE_URL: string = `${variables.apiPath}/genres/`;
     const PROVIDER_URL: string = `${variables.apiPath}/providers/`;
-    const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
-	const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
     const INPUT_TIMER: number = 200;
-    const SHOWN_PROVIDERS: number = 5;
-    const SHOW_BUTTON_AMOUNT: number = 21;
     const MEDIA_START_AMOUNT: number = 21;
 
     let input: string = '';
@@ -167,15 +163,11 @@
 
         <MediaSearch
             media={media}
-            lowResUrl={LOW_RES_IMG_URL}
-            imgUrl={IMG_URL}
             providerAmounts={providerAmounts}
             currentCountry={$currentCountry}
-            shownProviders={SHOWN_PROVIDERS}
             currentProviders={$currentProviders}
-            bind:currentMediaAmount={currentMediaAmount}
             mediaStartAmount={MEDIA_START_AMOUNT}
-            showButtonAmount={SHOW_BUTTON_AMOUNT}
+            bind:currentMediaAmount={currentMediaAmount}
             input={input}
             currentGenres={$currentGenres}
             search={search}

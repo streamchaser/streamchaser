@@ -8,19 +8,13 @@
     import Error from '../../components/error.svelte';
     import Person from '../../components/details/person.svelte';
     import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
-    import DetailsTopCard from '../../components/details/top_card.svelte'
+    import TopCard from '../../components/details/top_card.svelte'
     import Recommendations from '../../components/details/recommendations.svelte'
 
 
 	const MOVIE_DETAIL_URL: string = `${variables.apiPath}/movie/${$currentCountry}/${$page.params.id}`;
-	const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
-	const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
-	const SHOW_BUTTON_AMOUNT: number = 18;
-	const CAST_ITEM_START_AMOUNT: number = 9;
-    const INITIAL_DESCRIPTION_LENGTH = 500;
 
 	let movieTitle: string = 'Loading...';
-    let currentDescriptionLength = INITIAL_DESCRIPTION_LENGTH;
 
 	const fetchMovieDetails = async () => {
 		const response = await fetch(MOVIE_DETAIL_URL);
@@ -61,29 +55,18 @@
 		{#await fetchMovieDetails()}
 			<p>Loading...</p>
 		{:then movie}
-			<DetailsTopCard
+			<TopCard
 				backdropPath={movie.backdrop_path}
-				imgUrl={IMG_URL}
 				posterPath={movie.poster_path}
 				title={movie.title}
 				overview={movie.overview}
-				overviewLength={currentDescriptionLength}
-				initialOverviewLength={INITIAL_DESCRIPTION_LENGTH}
 				genres={movie.genres}
 				providers={movie.providers}
 			/>
 
-			<Person
-				media={movie}
-				imgUrl={LOW_RES_IMG_URL}
-				showButtonAmount={SHOW_BUTTON_AMOUNT}
-				castItemStartAmount={CAST_ITEM_START_AMOUNT}
-			/>
+			<Person cast={movie.cast}/>
 
-			<Recommendations
-				recommendations={movie.recommendations}
-				imgUrl={IMG_URL}
-			/>
+			<Recommendations recommendations={movie.recommendations} />
 		{:catch error}
 			<Error error={error} />
 		{/await}

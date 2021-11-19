@@ -9,19 +9,13 @@
     import Error from '../../components/error.svelte';
     import Person from '../../components/details/person.svelte';
     import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
-    import DetailsTopCard from '../../components/details/top_card.svelte'
+    import TopCard from '../../components/details/top_card.svelte'
     import Recommendations from '../../components/details/recommendations.svelte'
 
 
     const TV_DETAIL_URL: string = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`;
-    const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
-    const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
-	const SHOW_BUTTON_AMOUNT: number = 18;
-	const CAST_ITEM_START_AMOUNT: number = 9;
-    const INITIAL_DESCRIPTION_LENGTH = 500;
 
     let tvTitle = 'Loading...';
-    let currentDescriptionLength = INITIAL_DESCRIPTION_LENGTH;
 
     const fetchTVDetails = async () => {
 		const response = await fetch(TV_DETAIL_URL);
@@ -62,31 +56,20 @@
         {#await fetchTVDetails()}
             <p>Loading...</p>
         {:then tv}
-            <DetailsTopCard
+            <TopCard
                 backdropPath={tv.backdrop_path}
-                imgUrl={IMG_URL}
                 posterPath={tv.poster_path}
                 title={tv.name}
                 overview={tv.overview}
-                overviewLength={currentDescriptionLength}
-                initialOverviewLength={INITIAL_DESCRIPTION_LENGTH}
                 genres={tv.genres}
                 providers={tv.providers}
             />
 
             <Seasons seasons={tv.seasons} />
 
-            <Person
-                media={tv}
-                imgUrl={LOW_RES_IMG_URL}
-                showButtonAmount={SHOW_BUTTON_AMOUNT}
-                castItemStartAmount={CAST_ITEM_START_AMOUNT}
-            />
+            <Person cast={tv.cast} />
 
-            <Recommendations
-                recommendations={tv.recommendations}
-                imgUrl={IMG_URL}
-            />
+            <Recommendations recommendations={tv.recommendations} />
         {:catch error}
             <Error error={error} />
         {/await}
