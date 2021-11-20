@@ -7,7 +7,7 @@
     export let mediaType: string
 </script>
 
-{#if recommendations.length}
+{#if recommendations.length >= 5}
     <h1 class="text-center text-3xl pt-5">Recommendations</h1>
     <div class="pt-5">
         <div class="p-4 space-x-4 carousel carousel-center bg-neutral sm:rounded-box">
@@ -15,7 +15,7 @@
                 {#if recommendation.poster_path}
                     <div
                         on:click={() => routeToPage(recommendation.id, mediaType)}
-                        class="carousel-item h-96 w-64 p-1">
+                        class="carousel-item h-full w-1/2 sm:w-48 p-1">
                         <img
                             src="{IMG_URL}{recommendation.poster_path}"
                             class="rounded-lg cursor-pointer"
