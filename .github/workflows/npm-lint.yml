@@ -1,0 +1,13 @@
+name: Run npm Lint & Svelte Check
+on: [push]
+jobs:
+  Run-npm-Lint-and-Svelte-Check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: cd frontend/ && npm install
+      - run: cd frontend/ && npm run lint
+      - run: cd frontend/ && npm run check

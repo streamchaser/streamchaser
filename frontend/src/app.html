@@ -1,30 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-<head>
+  <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TTQ0NCGTQQ"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-TTQ0NCGTQQ"
+    ></script>
     <script>
-        const host = window.location.hostname;
-        if(host == "streamchaser.tv") {
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-TTQ0NCGTQQ');
+      const host = window.location.hostname
+      if (host == "streamchaser.tv") {
+        window.dataLayer = window.dataLayer || []
+        function gtag() {
+          dataLayer.push(arguments)
         }
+        gtag("js", new Date())
+        gtag("config", "G-TTQ0NCGTQQ")
+      }
     </script>
-    <meta charset="utf-8"/>
-    <link rel="icon" href="/favicon.png"/>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.png" />
     <!-- Tailwind -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1/dist/tailwind.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
     <!-- DaisyUI -->
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.13.2/dist/full.css" rel="stylesheet" type="text/css"/>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@1.13.2/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
     <!-- Theme Change -->
-    <link href="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"/>
+    <link href="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"/>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
+    />
     %svelte.head%
-</head>
-<body>
-<div id="svelte">%svelte.body%</div>
-</body>
+  </head>
+  <body>
+    <div id="svelte">%svelte.body%</div>
+  </body>
 </html>
