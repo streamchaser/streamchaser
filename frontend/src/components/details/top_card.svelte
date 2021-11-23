@@ -16,13 +16,13 @@
 </script>
 
 <div
-    class="flex items-center w-full px-4 py-10 bg-cover card bg-base-200"
+    class="flex items-center px-4 py-10 bg-cover card bg-base-200"
     style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e">
-    <div class="card lg:card-side bg-gray-700 bg-opacity-90 bordered text-neutral-content">
-        <figure class="p-6">
+    <div class="card sm:card-side bg-gray-700 bg-opacity-90 bordered text-neutral-content">
+        <figure class="pt-10 pr-10 pl-10 sm:p-6">
             <img
                 src="{IMG_URL}{posterPath}"
-                class="object-contain h-96 w-full rounded-lg"
+                class="object-contain sm:max-h-96 w-full rounded-lg"
                 alt={title}
             />
         </figure>
@@ -44,17 +44,32 @@
     </div>
 
     {#if providers}
-        <div class="flex-nowrap pt-5">
-            {#each providers as provider}
-                <div class="avatar p-1">
-                    <div class="mb-8 w-20 h-20 mask mask-squircle">
+        {#if !providers.length}
+            <div class="pt-5">
+                <div class="badge badge-lg">No providers</div>
+            </div>
+        {:else if providers.length > 5}
+            <div class="grid grid-rows-2 grid-flow-col pt-5">
+                {#each providers as provider}
+                    <div class="mask mask-squircle p-1">
                         <img
                             src="{IMG_URL}{provider.logo_path}"
                             alt={provider.provider_name}
                         />
                     </div>
-                </div>
-            {/each}
-        </div>
+                {/each}
+            </div>
+        {:else}
+            <div class="flex justify-center pt-5">
+                {#each providers as provider}
+                    <div class="mask mask-squircle p-1">
+                        <img
+                            src="{IMG_URL}{provider.logo_path}"
+                            alt={provider.provider_name}
+                        />
+                    </div>
+                {/each}
+            </div>
+        {/if}
     {/if}
 </div>
