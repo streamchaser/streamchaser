@@ -16,6 +16,7 @@ from app.schemas import Media
 from app.schemas import Movie
 from app.schemas import Person
 from app.schemas import TV
+from tqdm import tqdm
 
 
 tmdb_url = get_settings().tmdb_url
@@ -78,23 +79,6 @@ def fetch_trending_tv(page: int) -> Dict:
 
 def media_converter(mixed_list: List[Dict]) -> List[Media]:
     """Takes a list movie/tv json ["results"] and converts it to Media"""
-    movie_url = 'https://api.themoviedb.org/3/genre/movie/list?' \
-                f'api_key={tmdb_key}'
-    tv_url = 'https://api.themoviedb.org/3/genre/tv/list?' \
-             f'api_key={tmdb_key}'
-
-    movie_genres = requests.get(movie_url).json()
-    tv_genres = requests.get(tv_url).json()
-
-    movie_genre_dict = {
-        genre['id']: genre['name'] for genre in movie_genres['genres']
-    }
-    tv_genre_dict = {
-        genre['id']: genre['name'] for genre in tv_genres['genres']
-    }
-
-    # Only keeps the unique keys
-    genre_dict = {**movie_genre_dict, **tv_genre_dict}
 
     return [
         # pydantic Media schema
@@ -104,13 +88,11 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
             original_title=valid_original_title(media),
             overview=media.get('overview'),
             release_date=valid_release_date(media),
-            genres=[
-                genre_dict.get(genre_id) for genre_id in media.get('genre_ids')
-            ] if media.get('genre_ids') else ['Unknown'],
+            genres=[],
             poster_path=media.get('poster_path'),
             popularity=media.get('popularity')
         ).dict()
-        for media in mixed_list
+        for media in tqdm(mixed_list, desc='Merging movie & tv into media')
     ]
 
 
@@ -221,9 +203,6 @@ def get_genres() -> Dict:
 
 
 def request_data(media: models.Media):
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-
     title = ''
 
     try:
@@ -238,12 +217,16 @@ def request_data(media: models.Media):
             title = 'name'
 
         data = requests.get(url).json()
+
         return {
             'media_id': media.id,
             'title': data.get(title),
             'poster_path': data.get('poster_path'),
-            'data': get_providers(data.get('watch/providers'))
-            }
+            'providers': get_providers(data.get('watch/providers')),
+            'genres': [
+                genre.get('name') for genre in data.get('genres')
+            ] if data.get('genres') else ['Unknown']
+        }
 
     except Exception as e:
         print(e)

@@ -37,7 +37,7 @@ def fetch_jsongz():
 
 
 @app.command()
-def new_fetch_media(popularity: float) -> bool:
+def new_fetch_media(popularity: float = 0) -> bool:
     fetch_jsongz_files()
 
     directory = '../json.gz_dumps'
@@ -46,7 +46,7 @@ def new_fetch_media(popularity: float) -> bool:
     for file in tqdm(os.listdir(directory), desc='Running through json.gz files'):
         with gzip.open(os.path.join(directory, file), 'r') as f:
             for line in f:
-                if (json.loads(line).get('popularity') > popularity
+                if (json.loads(line).get('popularity') >= popularity
                         and not json.loads(line).get('adult')):
                     if 'movie' in file:
                         item = json.loads(line)
@@ -57,7 +57,7 @@ def new_fetch_media(popularity: float) -> bool:
                         item['id'] = 't'+str(item['id'])
                         data.append(item)
 
-    print(f'media elements: {len(data)} with popularity over {popularity}')
+    typer.echo(f'media elements: {len(data)} with popularity >= {popularity}')
 
     media = media_converter(data)
 
@@ -75,8 +75,6 @@ def new_fetch_media(popularity: float) -> bool:
 
     except Exception as e:
         typer.echo('Failed to add element', e)
-
-    return True
 
 
 @app.command()
@@ -176,7 +174,8 @@ def add_data():
         update_media_provider_by_id(db=db, media_id=data.get('media_id'), data=data)
 
 
-def full_setup(popularity: float, remove_non_ascii: bool = True):
+@app.command()
+def full_setup(popularity: float = 0, remove_non_ascii: bool = False):
     new_fetch_media(popularity)
     if remove_non_ascii:
         remove_non_ascii_media()

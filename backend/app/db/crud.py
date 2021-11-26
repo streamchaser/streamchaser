@@ -11,9 +11,12 @@ def get_media_by_id(db: Session, media_id: str):
     return db.query(models.Media).filter(models.Media.id == media_id).first()
 
 
-def get_all_media(db: Session, skip: int = 0, limit: int = 50000):
+def get_all_media(db: Session, skip: int = 0, limit: int = 0):
     """Gets all Media-types limited by 'limit'
     """
+    if not limit:
+        return db.query(models.Media).offset(skip).all()
+
     return db.query(models.Media).offset(skip).limit(limit).all()
 
 
@@ -38,7 +41,8 @@ def create_media(db: Session, media: schemas.Media):
 
 def update_media_provider_by_id(db: Session, media_id: str, data: Dict):
     db.query(models.Media).filter_by(id=media_id).update({
-        'providers': data.get('data'),
+        'genres': data.get('genres'),
+        'providers': data.get('providers'),
         'title': data.get('title'),
         'poster_path': data.get('poster_path')
     })
