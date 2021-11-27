@@ -2,7 +2,8 @@ import os
 from datetime import datetime
 from datetime import timedelta
 from pathlib import Path
-from typing import Dict, Generator
+from typing import Dict
+from typing import Generator
 from typing import List
 
 import requests
@@ -16,7 +17,6 @@ from app.schemas import Media
 from app.schemas import Movie
 from app.schemas import Person
 from app.schemas import TV
-from tqdm import tqdm
 
 
 tmdb_url = get_settings().tmdb_url
@@ -222,6 +222,7 @@ def request_data(media: models.Media):
             'media_id': media.id,
             'title': data.get(title),
             'poster_path': data.get('poster_path'),
+            'popularity': data.get('popularity'),
             'providers': get_providers(data.get('watch/providers')),
             'genres': [
                 genre.get('name') for genre in data.get('genres')

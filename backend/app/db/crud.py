@@ -39,12 +39,13 @@ def create_media(db: Session, media: schemas.Media):
     return db_media
 
 
-def update_media_provider_by_id(db: Session, media_id: str, data: Dict):
+def update_media_data_by_id(db: Session, media_id: str, data: Dict):
     db.query(models.Media).filter_by(id=media_id).update({
         'genres': data.get('genres'),
         'providers': data.get('providers'),
         'title': data.get('title'),
-        'poster_path': data.get('poster_path')
+        'poster_path': data.get('poster_path'),
+        'popularity': data.get('popularity'),
     })
     db.commit()
 

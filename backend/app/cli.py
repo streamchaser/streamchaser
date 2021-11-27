@@ -1,12 +1,12 @@
 import gzip
 import json
+import math
 import os
+from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
 import typer
 from app.api import fetch_jsongz_files
-from app.api import fetch_trending_movies
-from app.api import fetch_trending_tv
 from app.api import media_converter
 from app.api import request_data
 from app.config import get_settings
@@ -15,16 +15,17 @@ from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
 from app.db.crud import get_all_media
 from app.db.crud import get_media_by_id
-from app.db.crud import update_media_provider_by_id
-from app.db.database_service import dump_genres_to_db, media_model_to_schema
+from app.db.crud import update_media_data_by_id
+from app.db.database_service import dump_genres_to_db
 from app.db.database_service import dump_media_to_db
 from app.db.database_service import format_genres
 from app.db.database_service import init_meilisearch_indexing
+from app.db.database_service import media_model_to_schema
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.search import client
 from app.db.search import update_index
+from app.util import chunk_list
 from tqdm import tqdm
-from tqdm.contrib.concurrent import process_map
 
 
 supported_country_codes = get_settings().supported_country_codes
@@ -67,7 +68,11 @@ def new_fetch_media(popularity: float = 0):
     media_schema_iter = map(media_model_to_schema, media)
 
     db = database.SessionLocal()
-    for media in tqdm(media_schema_iter, total=data_length, desc='Dumping media to database'):
+    for media in tqdm(
+        media_schema_iter,
+        total=data_length,
+        desc='Dumping media to database'
+    ):
         dump_media_to_db(db=db, media=media)
 
 
@@ -116,13 +121,23 @@ def add_data():
     all_media = get_all_media(db)
     db.close()
 
-    # returns a list of dicts with media ids and provider data
-    media_data = process_map(
-        request_data, all_media, chunksize=25, desc="Fetching media data"
-    )
+    all_media_length = len(all_media)
+    chunk_size = 1000
+    chunk_loops = math.ceil(all_media_length / chunk_size)
 
-    for data in tqdm(media_data, desc="Updating database with media data"):
-        update_media_provider_by_id(db=db, media_id=data.get('media_id'), data=data)
+    print(f"About to fetch and update the DB with {all_media_length} API calls, \
+          this might take while")
+    for media_chunk in tqdm(
+        chunk_list(all_media, chunk_size),
+        total=chunk_loops,
+        desc='Fetching providers and updating DB'
+    ):
+        # returns a list of dicts with media ids and provider data
+        with ThreadPoolExecutor() as executor:
+            media_data = executor.map(request_data, media_chunk)
+
+        for data in media_data:
+            update_media_data_by_id(db=db, media_id=data.get('media_id'), data=data)
 
 
 @app.command()
