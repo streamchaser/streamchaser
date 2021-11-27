@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from datetime import timedelta
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Generator
 from typing import List
 
 import requests
@@ -77,10 +77,10 @@ def fetch_trending_tv(page: int) -> Dict:
     return requests.get(url).json()["results"]
 
 
-def media_converter(mixed_list: List[Dict]) -> List[Media]:
+def media_converter(mixed_list: List[Dict]) -> Generator[Media, None, None]:
     """Takes a list movie/tv json ["results"] and converts it to Media"""
 
-    return [
+    return (
         # pydantic Media schema
         Media(
             id=media.get('id'),
@@ -92,8 +92,8 @@ def media_converter(mixed_list: List[Dict]) -> List[Media]:
             poster_path=media.get('poster_path'),
             popularity=media.get('popularity')
         ).dict()
-        for media in tqdm(mixed_list, desc='Merging movie & tv into media')
-    ]
+        for media in mixed_list
+    )
 
 
 async def get_person_from_id(person_id: int):

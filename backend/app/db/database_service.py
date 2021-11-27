@@ -9,10 +9,10 @@ from sqlalchemy.exc import IntegrityError
 from tqdm import tqdm
 
 
-def dump_media_to_db(media: models.Media) -> None:
+def media_model_to_schema(media: models.Media) -> schemas.Media:
     """Turns Media-model into a Media-schemas, and adds to Media table"""
 
-    formatted_media = schemas.Media(
+    return schemas.Media(
         id=media.get("id"),
         title=media.get("title"),
         original_title=media.get("original_title"),
@@ -22,11 +22,13 @@ def dump_media_to_db(media: models.Media) -> None:
         poster_path=media.get("poster_path"),
         popularity=media.get('popularity')
     )
+
+
+def dump_media_to_db(db: database.SessionLocal, media: models.Media) -> None:
     try:
-        db = database.SessionLocal()
-        db_media = crud.get_media_by_id(db=db, media_id=formatted_media.id)
+        db_media = crud.get_media_by_id(db=db, media_id=media.id)
         if not db_media:
-            crud.create_media(db=db, media=formatted_media)
+            crud.create_media(db=db, media=media)
     except IntegrityError:  # Still a bit unsure why this only happens sometimes
         pass
     finally:

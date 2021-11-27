@@ -1,6 +1,7 @@
 import gzip
 import json
 import os
+from typing import Optional
 
 import typer
 from app.api import fetch_jsongz_files
@@ -15,7 +16,7 @@ from app.db.crud import delete_media_by_id
 from app.db.crud import get_all_media
 from app.db.crud import get_media_by_id
 from app.db.crud import update_media_provider_by_id
-from app.db.database_service import dump_genres_to_db
+from app.db.database_service import dump_genres_to_db, media_model_to_schema
 from app.db.database_service import dump_media_to_db
 from app.db.database_service import format_genres
 from app.db.database_service import init_meilisearch_indexing
@@ -37,7 +38,7 @@ def fetch_jsongz():
 
 
 @app.command()
-def new_fetch_media(popularity: float = 0) -> bool:
+def new_fetch_media(popularity: float = 0):
     fetch_jsongz_files()
 
     directory = '../json.gz_dumps'
@@ -57,67 +58,17 @@ def new_fetch_media(popularity: float = 0) -> bool:
                         item['id'] = 't'+str(item['id'])
                         data.append(item)
 
-    typer.echo(f'media elements: {len(data)} with popularity >= {popularity}')
+    data_length = len(data)
+
+    typer.echo(f'media elements: {data_length} with popularity >= {popularity}')
 
     media = media_converter(data)
 
-    try:
-        # Fills the database with media
-        process_map(
-            dump_media_to_db,
-            media,
-            chunksize=10,
-            # max_workers=10,
-            desc="Dumping media to Postgres"
-        )
+    media_schema_iter = map(media_model_to_schema, media)
 
-        dump_genres_to_db()
-
-    except Exception as e:
-        typer.echo('Failed to add element', e)
-
-
-@app.command()
-def fetch_media(total_pages: int) -> bool:
-    if 1 <= total_pages <= 1000:
-        trending_movies = process_map(
-            fetch_trending_movies,
-            range(1, total_pages),
-            desc="Fetching trending movies"
-        )
-
-        trending_tv = process_map(
-            fetch_trending_tv, range(1, total_pages), desc="Fetching trending tv"
-        )
-
-        trending_media = media_converter(
-            [
-                media
-                for sublist in trending_movies + trending_tv
-                for media in sublist
-            ]
-        )
-
-        try:
-            # Fills the database with media
-            process_map(
-                dump_media_to_db,
-                trending_media,
-                chunksize=10,
-                # max_workers=10,
-                desc="Dumping media to Postgres"
-            )
-
-            dump_genres_to_db()
-
-        except Exception as e:
-            typer.echo('Failed to add element', e)
-
-        return True
-
-    else:
-        typer.echo('Method only supports between 1 & 500 pages')
-        return False
+    db = database.SessionLocal()
+    for media in tqdm(media_schema_iter, total=data_length, desc='Dumping media to database'):
+        dump_media_to_db(db=db, media=media)
 
 
 @app.command()
@@ -175,11 +126,12 @@ def add_data():
 
 
 @app.command()
-def full_setup(popularity: float = 0, remove_non_ascii: bool = False):
-    new_fetch_media(popularity)
+def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
+    new_fetch_media(popularity if popularity else 0)
     if remove_non_ascii:
         remove_non_ascii_media()
     add_data()
+    dump_genres_to_db()
     cleanup_genres()
     index_meilisearch()
     update_index()
