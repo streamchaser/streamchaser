@@ -1,3 +1,4 @@
+import asyncio
 from typing import Dict
 
 from app.config import get_settings
@@ -14,10 +15,18 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
-models.Base.metadata.create_all(bind=engine)
-
-
 app = FastAPI()
+
+
+@app.on_event("startup")
+async def init_db():
+    try:
+        models.Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(e)
+        print("Will try to connect to the database again in 2 seconds...")
+        asyncio.sleep(2)
+        models.Base.metadata.create_all(bind=engine)
 
 
 streamchaser_url = get_settings().streamchaser_url
