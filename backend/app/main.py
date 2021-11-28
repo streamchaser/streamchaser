@@ -25,7 +25,7 @@ async def init_db():
     except Exception as e:
         print(e)
         print("Will try to connect to the database again in 2 seconds...")
-        asyncio.sleep(2)
+        await asyncio.sleep(2)
         models.Base.metadata.create_all(bind=engine)
 
 

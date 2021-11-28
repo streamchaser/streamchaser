@@ -1,6 +1,5 @@
 import gzip
 import json
-import math
 import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
@@ -11,9 +10,10 @@ from app.api import media_converter
 from app.api import request_data
 from app.config import get_settings
 from app.db import database
+from app.db.crud import count_all_media
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
-from app.db.crud import get_all_media
+from app.db.crud import get_all_media_iter
 from app.db.crud import get_media_by_id
 from app.db.crud import update_media_data_by_id
 from app.db.database_service import dump_genres_to_db
@@ -24,7 +24,6 @@ from app.db.database_service import media_model_to_schema
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.search import client
 from app.db.search import update_index
-from app.util import chunk_list
 from tqdm import tqdm
 
 
@@ -118,26 +117,17 @@ def remove_all_media():
 @app.command()
 def add_data():
     db = database.SessionLocal()
-    all_media = get_all_media(db)
+    all_media_length = count_all_media(db)
+    all_media_iter = get_all_media_iter(db)
+
+    typer.echo(f'{all_media_length} media to process, this will take a while :)')
+    with ThreadPoolExecutor() as executor:
+        media_data = executor.map(request_data, all_media_iter)
+
+    for data in tqdm(media_data, total=all_media_length, desc="Updating DB with media"):
+        update_media_data_by_id(db=db, media_id=data.get('media_id'), data=data)
+
     db.close()
-
-    all_media_length = len(all_media)
-    chunk_size = 1000
-    chunk_loops = math.ceil(all_media_length / chunk_size)
-
-    print(f"About to fetch and update the DB with {all_media_length} API calls, \
-          this might take while")
-    for media_chunk in tqdm(
-        chunk_list(all_media, chunk_size),
-        total=chunk_loops,
-        desc='Fetching providers and updating DB'
-    ):
-        # returns a list of dicts with media ids and provider data
-        with ThreadPoolExecutor() as executor:
-            media_data = executor.map(request_data, media_chunk)
-
-        for data in media_data:
-            update_media_data_by_id(db=db, media_id=data.get('media_id'), data=data)
 
 
 @app.command()
