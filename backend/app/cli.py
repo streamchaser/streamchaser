@@ -1,24 +1,32 @@
+import gzip
+import json
+import math
+import os
+from concurrent.futures import ThreadPoolExecutor
+from typing import Optional
+
 import typer
-from app.api import fetch_trending_movies
-from app.api import fetch_trending_tv
+from app.api import fetch_jsongz_files
 from app.api import media_converter
-from app.api import request_providers
+from app.api import request_data
 from app.config import get_settings
 from app.db import database
+from app.db.crud import count_all_media
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
-from app.db.crud import get_all_media
 from app.db.crud import get_media_by_id
-from app.db.crud import update_media_provider_by_id
+from app.db.crud import update_media_data_by_id
+from app.db.database import engine
 from app.db.database_service import dump_genres_to_db
 from app.db.database_service import dump_media_to_db
 from app.db.database_service import format_genres
 from app.db.database_service import init_meilisearch_indexing
+from app.db.database_service import media_model_to_schema
 from app.db.database_service import prune_non_ascii_media_from_db
+from app.db.models import Media
 from app.db.search import client
 from app.db.search import update_index
 from tqdm import tqdm
-from tqdm.contrib.concurrent import process_map
 
 
 supported_country_codes = get_settings().supported_country_codes
@@ -27,46 +35,46 @@ app = typer.Typer()
 
 
 @app.command()
-def fetch_media(total_pages: int) -> bool:
-    if 1 <= total_pages <= 1000:
-        trending_movies = process_map(
-            fetch_trending_movies,
-            range(1, total_pages),
-            desc="Fetching trending movies"
-        )
+def fetch_jsongz():
+    fetch_jsongz_files()
 
-        trending_tv = process_map(
-            fetch_trending_tv, range(1, total_pages), desc="Fetching trending tv"
-        )
 
-        trending_media = media_converter(
-            [
-                media
-                for sublist in trending_movies + trending_tv
-                for media in sublist
-            ]
-        )
+@app.command()
+def fetch_media(popularity: float = 0):
+    fetch_jsongz_files()
 
-        try:
-            # Fills the database with media
-            process_map(
-                dump_media_to_db,
-                trending_media,
-                chunksize=10,
-                # max_workers=10,
-                desc="Dumping media to Postgres"
-            )
+    directory = '../json.gz_dumps'
+    data = []
 
-            dump_genres_to_db()
+    for file in tqdm(os.listdir(directory), desc='Running through json.gz files'):
+        with gzip.open(os.path.join(directory, file), 'r') as f:
+            for line in f:
+                if (json.loads(line).get('popularity') >= popularity
+                        and not json.loads(line).get('adult')):
+                    if 'movie' in file:
+                        item = json.loads(line)
+                        item['id'] = 'm'+str(item['id'])
+                        data.append(item)
+                    else:
+                        item = json.loads(line)
+                        item['id'] = 't'+str(item['id'])
+                        data.append(item)
 
-        except Exception as e:
-            typer.echo('Failed to add element', e)
+    data_length = len(data)
 
-        return True
+    typer.echo(f'media elements: {data_length} with popularity >= {popularity}')
 
-    else:
-        typer.echo('Method only supports between 1 & 500 pages')
-        return False
+    media = media_converter(data)
+
+    media_schema_iter = map(media_model_to_schema, media)
+
+    db = database.SessionLocal()
+    for media in tqdm(
+        media_schema_iter,
+        total=data_length,
+        desc='Dumping media to database'
+    ):
+        dump_media_to_db(db=db, media=media)
 
 
 @app.command()
@@ -109,31 +117,45 @@ def remove_all_media():
 
 
 @app.command()
-def add_providers():
+def add_data():
     db = database.SessionLocal()
-    all_media = get_all_media(db)
+    chunk_size = 1000
+    all_media_length = count_all_media(db)
+    chunk_loops = math.ceil(all_media_length / chunk_size)  # Will always round up
+
+    with engine.connect() as conn:
+        result = conn.execution_options(stream_results=True).execute(
+            Media.__table__.select()
+        )
+
+        typer.echo(f"Processing {all_media_length} media in {chunk_loops} chunks")
+        with tqdm(
+            total=chunk_loops, desc="Updating media and dumping to DB"
+        ) as progress_bar:
+            while chunk := result.fetchmany(chunk_size):
+                with ThreadPoolExecutor() as executor:
+                    media_data = executor.map(request_data, chunk)
+
+                for data in media_data:
+                    update_media_data_by_id(
+                        db=db, media_id=data.get("media_id"), data=data
+                    )
+
+                progress_bar.update(1)
     db.close()
-
-    # returns a list of dicts with media ids and provider data
-    providers = process_map(
-        request_providers, all_media, chunksize=25, desc="Fetching provider data"
-    )
-
-    for provider in tqdm(providers, desc="Updating database with provider data"):
-        update_media_provider_by_id(db, provider.get('media_id'), provider.get('data'))
 
 
 @app.command()
-def full_setup(total_pages: int, remove_non_ascii: bool = True):
-    if fetch_media(total_pages=total_pages):
-        if remove_non_ascii:
-            remove_non_ascii_media()
-        add_providers()
-        cleanup_genres()
-        index_meilisearch()
-        update_index()
-        remove_blacklisted_from_search()
-        typer.echo('Full setup complete!')
+def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
+    fetch_media(popularity if popularity else 0)
+    if remove_non_ascii:
+        remove_non_ascii_media()
+    add_data()
+    dump_genres_to_db()
+    cleanup_genres()
+    index_meilisearch()
+    update_index()
+    remove_blacklisted_from_search()
 
 
 @app.command()
