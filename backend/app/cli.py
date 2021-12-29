@@ -1,5 +1,6 @@
 import gzip
 import json
+import math
 import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
@@ -13,15 +14,16 @@ from app.db import database
 from app.db.crud import count_all_media
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
-from app.db.crud import get_all_media_iter
 from app.db.crud import get_media_by_id
 from app.db.crud import update_media_data_by_id
+from app.db.database import engine
 from app.db.database_service import dump_genres_to_db
 from app.db.database_service import dump_media_to_db
 from app.db.database_service import format_genres
 from app.db.database_service import init_meilisearch_indexing
 from app.db.database_service import media_model_to_schema
 from app.db.database_service import prune_non_ascii_media_from_db
+from app.db.models import Media
 from app.db.search import client
 from app.db.search import update_index
 from tqdm import tqdm
@@ -38,7 +40,7 @@ def fetch_jsongz():
 
 
 @app.command()
-def new_fetch_media(popularity: float = 0):
+def fetch_media(popularity: float = 0):
     fetch_jsongz_files()
 
     directory = '../json.gz_dumps'
@@ -117,22 +119,35 @@ def remove_all_media():
 @app.command()
 def add_data():
     db = database.SessionLocal()
+    chunk_size = 1000
     all_media_length = count_all_media(db)
-    all_media_iter = get_all_media_iter(db)
+    chunk_loops = math.ceil(all_media_length / chunk_size)  # Will always round up
 
-    typer.echo(f'{all_media_length} media to process, this will take a while :)')
-    with ThreadPoolExecutor() as executor:
-        media_data = executor.map(request_data, all_media_iter)
+    with engine.connect() as conn:
+        result = conn.execution_options(stream_results=True).execute(
+            Media.__table__.select()
+        )
 
-    for data in tqdm(media_data, total=all_media_length, desc="Updating DB with media"):
-        update_media_data_by_id(db=db, media_id=data.get('media_id'), data=data)
+        typer.echo(f"Processing {all_media_length} media in {chunk_loops} chunks")
+        with tqdm(
+            total=chunk_loops, desc="Updating media and dumping to DB"
+        ) as progress_bar:
+            while chunk := result.fetchmany(chunk_size):
+                with ThreadPoolExecutor() as executor:
+                    media_data = executor.map(request_data, chunk)
 
+                for data in media_data:
+                    update_media_data_by_id(
+                        db=db, media_id=data.get("media_id"), data=data
+                    )
+
+                progress_bar.update(1)
     db.close()
 
 
 @app.command()
 def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
-    new_fetch_media(popularity if popularity else 0)
+    fetch_media(popularity if popularity else 0)
     if remove_non_ascii:
         remove_non_ascii_media()
     add_data()
