@@ -1,5 +1,6 @@
 <script lang="ts">
     import ReadMore from "./read_more.svelte";
+    import { currentCountry } from '../../stores/country.js';
 
     const INITIAL_OVERVIEW_LENGTH: number = 500;
     const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
@@ -46,7 +47,7 @@
     {#if providers}
         {#if !providers.length}
             <div class="pt-5">
-                <div class="badge badge-lg">No providers</div>
+                <div class="badge badge-lg">No providers in {$currentCountry}</div>
             </div>
         {:else if providers.length > 5}
             <div class="grid grid-rows-2 grid-flow-col pt-5">
