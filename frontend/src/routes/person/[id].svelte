@@ -62,7 +62,7 @@
             <PersonMedia
                 media={person.movie_credits}
                 mediaType={'movie'}
-                title={'Movie'}
+                title={'Movies'}
             />
 
             <PersonMedia
