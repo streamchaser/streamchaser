@@ -1,6 +1,8 @@
 <script lang="ts">
     import ReadMore from "./read_more.svelte";
     import { currentCountry } from '../../stores/country.js';
+    import { currentGenres } from '../../stores/genres.js';
+    import { inputQuery } from '../../stores/input.js'
 
     const INITIAL_OVERVIEW_LENGTH: number = 500;
     const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
@@ -13,6 +15,12 @@
     export let providers: []
 
     let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH;
+
+    const changeGenreAndRedirectHome = (genre) => {
+        $currentGenres = [genre]
+        $inputQuery = ''
+        window.location.href = "/"
+    }
 
 </script>
 
@@ -37,7 +45,11 @@
             {#if genres}
                 <div class="flex-wrap mt-2">
                     {#each genres as genre}
-                        <div class="badge mx-2">{genre}</div>
+                        <div
+                            on:click={() => changeGenreAndRedirectHome(genre)}
+                            class="badge badge-primary mx-2 transform hover:scale-110 cursor-pointer">
+                            {genre}
+                        </div>
                     {/each}
                 </div>
             {/if}
