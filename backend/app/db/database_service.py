@@ -9,10 +9,10 @@ from sqlalchemy.exc import IntegrityError
 from tqdm import tqdm
 
 
-def dump_media_to_db(media: models.Media) -> None:
+def media_model_to_schema(media: models.Media) -> schemas.Media:
     """Turns Media-model into a Media-schemas, and adds to Media table"""
 
-    formatted_media = schemas.Media(
+    return schemas.Media(
         id=media.get("id"),
         title=media.get("title"),
         original_title=media.get("original_title"),
@@ -22,11 +22,13 @@ def dump_media_to_db(media: models.Media) -> None:
         poster_path=media.get("poster_path"),
         popularity=media.get('popularity')
     )
+
+
+def dump_media_to_db(db: database.SessionLocal, media: models.Media) -> None:
     try:
-        db = database.SessionLocal()
-        db_media = crud.get_media_by_id(db=db, media_id=formatted_media.id)
+        db_media = crud.get_media_by_id(db=db, media_id=media.id)
         if not db_media:
-            crud.create_media(db=db, media=formatted_media)
+            crud.create_media(db=db, media=media)
     except IntegrityError:  # Still a bit unsure why this only happens sometimes
         pass
     finally:
@@ -78,40 +80,36 @@ def init_meilisearch_indexing():
     """
     supported_country_codes = get_settings().supported_country_codes
 
-    db = database.SessionLocal()
-    try:
-        media_list = crud.get_all_media(db=db)
+    for country_code in supported_country_codes:
+        db = database.SessionLocal()
+        all_media_iter = crud.get_all_media_iter(db=db)
+        db.close()
 
-        for country_code in supported_country_codes:
-            media_list_as_dict = [
-                schemas.Media(
-                    id=media.id,
-                    title=media.title,
-                    original_title=media.original_title,
-                    overview=media.overview,
-                    release_date=media.release_date,
-                    genres=media.genres,
-                    poster_path=media.poster_path,
-                    popularity=media.popularity,
-                    specific_provider_names=[
-                        provider.get(country_code).get('provider_name')
-                        for provider in media.providers
-                        if provider.get(country_code)
-                    ],
-                    specific_providers=[
-                        provider.get(country_code)
-                        for provider in media.providers
-                        if provider.get(country_code)
-                    ]
-                ).dict()
-                for media in media_list
-            ]
-            client.index(f'media_{country_code}').add_documents(media_list_as_dict)
+        client.index(f'media_{country_code}').add_documents([
+            schemas.Media(
+                id=media.id,
+                title=media.title,
+                original_title=media.original_title,
+                overview=media.overview,
+                release_date=media.release_date,
+                genres=media.genres,
+                poster_path=media.poster_path,
+                popularity=media.popularity,
+                specific_provider_names=[
+                    provider.get(country_code).get('provider_name')
+                    for provider in media.providers
+                    if provider.get(country_code)
+                ],
+                specific_providers=[
+                    provider.get(country_code)
+                    for provider in media.providers
+                    if provider.get(country_code)
+                ]
+            ).dict()
+            for media in all_media_iter
+        ])
 
-            extract_unique_providers_to_txt(media_list, country_code)
-
-    except Exception as e:
-        print(f'Error in database_service.py::init_meilisearch_indexing {e}')
+        extract_unique_providers_to_txt(all_media_iter, country_code)
 
 
 def extract_unique_providers_to_txt(media_list, country_code):

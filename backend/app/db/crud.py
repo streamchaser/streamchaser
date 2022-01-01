@@ -1,5 +1,4 @@
 from typing import Dict
-from typing import List
 
 from app import schemas
 from app.db import models
@@ -12,10 +11,21 @@ def get_media_by_id(db: Session, media_id: str):
     return db.query(models.Media).filter(models.Media.id == media_id).first()
 
 
-def get_all_media(db: Session, skip: int = 0, limit: int = 50000):
+def get_all_media(db: Session, skip: int = 0, limit: int = 0) -> list[models.Media]:
     """Gets all Media-types limited by 'limit'
     """
+    if not limit:
+        return db.query(models.Media).all()
+
     return db.query(models.Media).offset(skip).limit(limit).all()
+
+
+def get_all_media_iter(db: Session):
+    return db.query(models.Media)
+
+
+def count_all_media(db: Session) -> int:
+    return db.query(models.Media).count()
 
 
 def create_media(db: Session, media: schemas.Media):
@@ -37,9 +47,13 @@ def create_media(db: Session, media: schemas.Media):
     return db_media
 
 
-def update_media_provider_by_id(db: Session, media_id: str, providers: List[Dict]):
+def update_media_data_by_id(db: Session, media_id: str, data: Dict):
     db.query(models.Media).filter_by(id=media_id).update({
-        'providers': providers
+        'genres': data.get('genres'),
+        'providers': data.get('providers'),
+        'title': data.get('title'),
+        'poster_path': data.get('poster_path'),
+        'popularity': data.get('popularity'),
     })
     db.commit()
 

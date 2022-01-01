@@ -8,10 +8,10 @@ from pydantic import BaseModel
 
 class Media(BaseModel):
     id: str
-    title: str
+    title: Optional[str]
     original_title: str
-    overview: str
-    release_date: str
+    overview: Optional[str]
+    release_date: Optional[str]
     genres: Optional[Any]  # Rapand told me to do it :'( #TODO: find a proper solution
     poster_path: Optional[str]
     popularity: Optional[int]
