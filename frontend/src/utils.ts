@@ -45,9 +45,9 @@ export const routeToPage = (mediaId: string, mediaType: string = undefined, ctrl
     }
 
     if (ctrlDown) {
-        window.open(url); 
+        window.open(url);
     } else {
-        window.location.href = url; 
+        window.location.href = url;
     }
 }
 
