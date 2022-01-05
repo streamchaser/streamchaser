@@ -30,15 +30,15 @@ Authors 👷:
 Here's how to get the application up and running for development
 
 ### Prerequisites
-* Got Git installed
-* Got Docker installed
+* Got **Git** installed
+* Got **Docker** installed
 
-1. Clone the repo `git clone https://github.com/AndreasPB/streamchaser.git`
-2. Add .env in root, backend and frontend
-    * Backend: TMDB_KEY
-    * Frontend: VITE_API_PATH(path of the backend), VITE_IPINFO_KEY
+1. Clone the repo `git clone https://github.com/streamchaser/streamchaser.git`
+2. Add `.env` in root, backend and frontend
+    * Backend: `TMDB_KEY`
+    * Frontend: `VITE_API_PATH`(path of the backend), `VITE_IPINFO_KEY`
 3. Build the container `docker-compose up --build -d`
-4. Run `docker-compose exec backend python3 cli.py full-setup <total_pages>`
+4. Run `docker-compose exec backend python3 cli.py full-setup <popularity>`
 5. Go to http://localhost/ and search
 
 ## CLI
@@ -46,9 +46,10 @@ To use the cronjob use the following in the terminal:
 `docker-compose exec backend python3 cli.py <command> <parameter>`
 
 List of commands:
-* `add-providers` - Adds/updates providers on your existing media
+* `fetch-jsongz` Downloads the files that contains all media we iterate over
+* `add-data` - Adds/updates the data on the existing media from the DB
 * `cleanup-genres` - Fixes genres with spaces for the frontend
-* `fetch-media` - Fetches trending media and adds to DB
+* `fetch-media` - Runs `fetch-jsongz` and fetches media from TMDB and adds to the DB
 * `full-setup` - The complete setup
 * `index-meilisearch` - Forces meilisearch to re-index
 * `remove-all-media` - Empties postgres for media
@@ -56,17 +57,18 @@ List of commands:
 * `remove-blacklisted-from-search` - Removes all blacklisted IDs
 * `remove-non-ascii-media` - Removes all non-ascii titles
 
-So as an example to update the media list with 1000 pages you would do the following:
-`docker-compose exec backend python3 cli.py update-media 1000`
+So as an example to update the media list with all media with a popularity over 5:
+`docker-compose exec backend python3 cli.py add-data 5`
 
 After updating the database you need to index MeiliSearch:
 `docker-compose exec backend python3 cli.py index-meilisearch`
 
 *To do a full setup use the following command:*
-`docker-compose exec backend python3 cli.py full-setup <total_pages>`
-Optional: Add `--no-remove-ascii` to the end if you want to keep non-ascii titles.
+`docker-compose exec backend python3 cli.py full-setup <popularity>`
+Optional: Add `--remove-ascii` to the end if you want to prune non-ascii titles.
 
-This will fetch media for the number of pages, and remove non ascii characters if False flag is not added.  This also indexes MeiliSearch.
+This will fetch media within the popularity limit, and index MeiliSearch.
+Popularity defaults to 0, and will fetch all media if that is the case.
 
 To drop the media database:
 `docker-compose exec backend python3 cli.py remove-all-media`
