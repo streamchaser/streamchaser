@@ -15,7 +15,7 @@
     <div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
         {#each cast.slice(0, castItemAmount) as person}
             {#if person.profile_path}
-                <div on:click={() => routeToPage(person.id, "person")}
+                <div on:click={(e) => routeToPage(person.id, "person", e?.ctrlKey || false)}
                      class="card compact cursor-pointer bordered">
                     <figure>
                         <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">

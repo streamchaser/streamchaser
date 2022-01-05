@@ -14,7 +14,7 @@
             {#each recommendations as recommendation}
                 {#if recommendation.poster_path}
                     <div
-                        on:click={() => routeToPage(recommendation.id, mediaType)}
+                        on:click={(e) => routeToPage(recommendation.id, mediaType, e?.ctrlKey || false)}
                         class="carousel-item h-96 w-64 p-1">
                         <img
                             src="{IMG_URL}{recommendation.poster_path}"

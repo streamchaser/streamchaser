@@ -17,7 +17,7 @@
     <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
         {#each media.slice(0, mediaAmount) as media}
             <div
-                on:click={() => routeToPage(media.id, mediaType)}
+                on:click={(e) => routeToPage(media.id, mediaType, e?.ctrlKey || false)}
                 class="card compact cursor-pointer bordered">
                 <figure>
                     {#if mediaType === 'movie'}

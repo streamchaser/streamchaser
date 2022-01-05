@@ -12,16 +12,17 @@ export const getFixedGenreValues = (genres: {}) => {
 
 // Routing
 
-export const routeToPage = (mediaId: string, mediaType: string = undefined) => {
+export const routeToPage = (mediaId: string, mediaType: string = undefined, ctrlDown: boolean = false) => {
+    let url;
     switch (mediaType) {
         case "tv":
-            window.location.href = `/tv/${mediaId}`;
+            url = `/tv/${mediaId}`;
             break;
         case "movie":
-            window.location.href = `/movie/${mediaId}`;
+            url = `/movie/${mediaId}`;
             break;
         case "person":
-            window.location.href = `/person/${mediaId}`;
+            url = `/person/${mediaId}`;
             break;
         default:
             // This is what happens on the index page
@@ -30,17 +31,23 @@ export const routeToPage = (mediaId: string, mediaType: string = undefined) => {
 
             switch (startingChar) {
                 case "t":
-                    window.location.href = `/tv/${slicedId}`;
+                    url = `/tv/${slicedId}`;
                     break;
                 case "m":
-                    window.location.href = `/movie/${slicedId}`;
+                    url = `/movie/${slicedId}`;
                     break;
                 case "p":
-                    window.location.href = `/person/${slicedId}`;
+                    url = `/person/${slicedId}`;
                     break;
                 default:
-                    window.location.href = "/";
+                    url = "/";
             }
+    }
+
+    if (ctrlDown) {
+        window.open(url); 
+    } else {
+        window.location.href = url; 
     }
 }
 
