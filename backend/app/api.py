@@ -35,15 +35,15 @@ def fetch_jsongz_files():
         directory = '../json.gz_dumps/'
         Path(directory).mkdir(exist_ok=True)
 
-        tv_url = f"http://files.tmdb.org/p/exports/tv_series_ids_{date.month}" \
-            f"_{date.day}_{date.year}.json.gz"
-        movie_url = f"http://files.tmdb.org/p/exports/movie_ids_{date.month}_" \
-            f"{date.day}_{date.year}.json.gz"
+        tv_url = f"http://files.tmdb.org/p/exports/tv_series_ids_{date.month:02d}" \
+            f"_{date.day:02d}_{date.year}.json.gz"
+        movie_url = f"http://files.tmdb.org/p/exports/movie_ids_{date.month:02d}_" \
+            f"{date.day:02d}_{date.year}.json.gz"
 
-        movie_path = f"{directory}movie_ids_{date.month}" \
-            f"_{date.day}_{date.year}.json.gz"
-        tv_path = f"{directory}tv_series_ids_{date.month}" \
-            f"_{date.day}_{date.year}.json.gz"
+        movie_path = f"{directory}movie_ids_{date.month:02d}" \
+            f"_{date.day:02d}_{date.year}.json.gz"
+        tv_path = f"{directory}tv_series_ids_{date.month:02d}" \
+            f"_{date.day:02d}_{date.year}.json.gz"
 
         movie_response = requests.get(movie_url, stream=True)
         tv_response = requests.get(tv_url, stream=True)
@@ -63,6 +63,11 @@ def fetch_jsongz_files():
                 f.write(tv_response.raw.read())
                 print(f"[{tv_path}] downloaded succesfully".replace(directory, ''))
         else:
+            # if we have tried to get data for more than 30 days we give up
+            if day >= 30:
+                print('No downloads for 30 days - giving up')
+                exit(1)
+
             print('Downloads failed - trying 1 day earlier')
             day += 1
 
