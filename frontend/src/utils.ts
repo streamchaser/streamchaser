@@ -10,37 +10,26 @@ export const getFixedGenreValues = (genres: {}) => {
     });
 }
 
-// Routing
+export const mediaIdToUrlConverter = (
+    mediaId: string,
+    mediaType: string = undefined
+) => {
+    if (["movie", "tv", "person"].indexOf(mediaType) !== -1) {
+        return `/${mediaType}/${mediaId}`
+    } else {
+        const startingChar = mediaId[0]
+        const slicedId = mediaId.slice(1)
 
-export const routeToPage = (mediaId: string, mediaType: string = undefined) => {
-    switch (mediaType) {
-        case "tv":
-            window.location.href = `/tv/${mediaId}`;
-            break;
-        case "movie":
-            window.location.href = `/movie/${mediaId}`;
-            break;
-        case "person":
-            window.location.href = `/person/${mediaId}`;
-            break;
-        default:
-            // This is what happens on the index page
-            const startingChar = mediaId[0]
-            const slicedId = mediaId.slice(1)
-
-            switch (startingChar) {
-                case "t":
-                    window.location.href = `/tv/${slicedId}`;
-                    break;
-                case "m":
-                    window.location.href = `/movie/${slicedId}`;
-                    break;
-                case "p":
-                    window.location.href = `/person/${slicedId}`;
-                    break;
-                default:
-                    window.location.href = "/";
-            }
+        switch (startingChar) {
+            case "t":
+                return `/tv/${slicedId}`
+            case "m":
+                return `/movie/${slicedId}`
+            case "p":
+                return `/person/${slicedId}`
+            default:
+                return "/"
+        }
     }
 }
 

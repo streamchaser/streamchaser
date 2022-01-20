@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { routeToPage } from '../../utils'
+    import { mediaIdToUrlConverter } from '../../utils'
 
     const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
     const SHOW_BUTTON_AMOUNT: number = 12;
@@ -16,8 +16,7 @@
     <h1 class="text-center text-3xl pt-5">{title}</h1>
     <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
         {#each media.slice(0, mediaAmount) as media}
-            <div
-                on:click={() => routeToPage(media.id, mediaType)}
+            <a href="{mediaIdToUrlConverter(media.id, mediaType)}"
                 class="card compact cursor-pointer bordered">
                 <figure>
                     {#if mediaType === 'movie'}
@@ -32,7 +31,7 @@
                     />
                     {/if}
                 </figure>
-            </div>
+            </a>
         {/each}
     </div>
     <div class="flex space-x-1 justify-center p-1">

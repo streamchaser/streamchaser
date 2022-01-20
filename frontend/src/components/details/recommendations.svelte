@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { routeToPage } from '../../utils'
+    import { mediaIdToUrlConverter } from '../../utils'
 
     const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
 
@@ -13,15 +13,14 @@
         <div class="p-4 space-x-4 carousel carousel-center bg-neutral sm:rounded-box">
             {#each recommendations as recommendation}
                 {#if recommendation.poster_path}
-                    <div
-                        on:click={() => routeToPage(recommendation.id, mediaType)}
+                    <a href="{mediaIdToUrlConverter(recommendation.id, mediaType)}"
                         class="carousel-item h-96 w-64 p-1">
                         <img
                             src="{IMG_URL}{recommendation.poster_path}"
                             class="rounded-lg cursor-pointer"
                             alt={recommendation.title}
                         />
-                    </div>
+                    </a>
                 {/if}
             {/each}
         </div>

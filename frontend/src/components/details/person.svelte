@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {routeToPage} from "../../utils";
+    import { mediaIdToUrlConverter } from "../../utils";
 
     const LOW_RES_IMG_URL: string = 'https://image.tmdb.org/t/p/w500/';
     const SHOW_BUTTON_AMOUNT: number = 18;
@@ -15,7 +15,7 @@
     <div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
         {#each cast.slice(0, castItemAmount) as person}
             {#if person.profile_path}
-                <div on:click={() => routeToPage(person.id, "person")}
+                <a href="{mediaIdToUrlConverter(person.id, 'person')}"
                      class="card compact cursor-pointer bordered">
                     <figure>
                         <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
@@ -23,7 +23,7 @@
                     <div class="card-body">
                         <p><b>{person.name}</b> - <i>{person.character}</i></p>
                     </div>
-                </div>
+                </a>
             {/if}
         {/each}
     </div>
