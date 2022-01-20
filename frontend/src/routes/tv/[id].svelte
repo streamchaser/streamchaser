@@ -64,6 +64,9 @@
                 overview={tv.overview}
                 genres={tv.genres}
                 providers={tv.providers}
+                runtime={null}
+                imdbId={null}
+                releaseDate={tv.first_air_date}
             />
 
             <Seasons seasons={tv.seasons} />

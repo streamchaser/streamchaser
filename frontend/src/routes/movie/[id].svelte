@@ -62,6 +62,9 @@
 				overview={movie.overview}
 				genres={movie.genres}
 				providers={movie.providers}
+				runtime={movie.runtime}
+				imdbId={movie.imdb_id}
+				releaseDate={movie.release_date}
 			/>
 
 			<Person cast={movie.cast}/>
