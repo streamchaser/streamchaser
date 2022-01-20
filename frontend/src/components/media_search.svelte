@@ -27,7 +27,7 @@
 <!-- TODO: Why is both checks needed? -->
 {#if media.hits}
     {#if media.hits.length}
-        <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4 bg-base-100">
+        <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4">
             {#each media.hits as media, mediaIndex}
                 <a href="{mediaIdToUrlConverter(media.id)}"
                     class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
