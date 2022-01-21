@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { routeToPage } from '../utils'
+    import { mediaIdToUrlConverter } from '../utils'
     import NoResults from '../components/no_results.svelte';
 
     const SHOWN_PROVIDERS: number = 5;
@@ -29,8 +29,7 @@
     {#if media.hits.length}
         <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4 bg-base-100">
             {#each media.hits as media, mediaIndex}
-                <div
-                    on:click={routeToPage(media.id)}
+                <a href="{mediaIdToUrlConverter(media.id)}"
                     class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
                     <figure>
                         <img
@@ -79,7 +78,7 @@
                             </div>
                         </div>
                     {/if}
-                </div>
+                </a>
             {/each}
         </div>
         <div class="flex space-x-1 justify-center p-1">
