@@ -19,6 +19,7 @@ from app.db.crud import update_media_data_by_id
 from app.db.database import engine
 from app.db.database_service import dump_genres_to_db
 from app.db.database_service import dump_media_to_db
+from app.db.database_service import extract_unique_providers_to_txt
 from app.db.database_service import format_genres
 from app.db.database_service import init_meilisearch_indexing
 from app.db.database_service import media_model_to_schema
@@ -79,10 +80,8 @@ def fetch_media(popularity: float = 0):
 
 @app.command()
 def index_meilisearch():
-    typer.echo("Meilisearch is indexing...")
-    init_meilisearch_indexing()
+    init_meilisearch_indexing(chunk_size=10000)
     update_index()
-    typer.echo("Meilisearch done indexing!")
 
 
 @app.command()
@@ -124,7 +123,7 @@ def add_data():
     chunk_loops = math.ceil(all_media_length / chunk_size)  # Will always round up
 
     with engine.connect() as conn:
-        result = conn.execution_options(stream_results=True).execute(
+        media_stream = conn.execution_options(stream_results=True).execute(
             Media.__table__.select()
         )
 
@@ -132,7 +131,7 @@ def add_data():
         with tqdm(
             total=chunk_loops, desc="Updating media and dumping to DB"
         ) as progress_bar:
-            while chunk := result.fetchmany(chunk_size):
+            while chunk := media_stream.fetchmany(chunk_size):
                 with ThreadPoolExecutor() as executor:
                     media_data = executor.map(request_data, chunk)
 
@@ -154,6 +153,7 @@ def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
     dump_genres_to_db()
     cleanup_genres()
     index_meilisearch()
+    extract_unique_providers_to_txt()
     update_index()
     remove_blacklisted_from_search()
 
