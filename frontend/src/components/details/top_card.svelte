@@ -25,6 +25,15 @@
         window.location.href = "/"
     }
 
+    const getFormattedRuntime = (minutes: number): string => {
+        let hours = Math.floor(minutes / 60)
+        let remainingMinutes = minutes - hours * 60
+        if (hours) {
+            return hours + 'h ' + remainingMinutes + 'm'
+        } else {
+            return remainingMinutes + 'm'
+        }
+    }
 </script>
 
 <div
@@ -50,12 +59,11 @@
                 {/if}
             </div>
             {#if releaseDate && runtime}
-                <h3><i>Runtime: {runtime} minutes</i></h3>
-                <h3 class="pb-3"><i>Release date: {releaseDate}</i></h3>
+                <h3 class="pb-3"><i>{new Date(releaseDate).getFullYear()} • {getFormattedRuntime(runtime)}</i></h3>
             {:else if releaseDate}
-                <h3 class="pb-3"><i>Release date: {releaseDate}</i></h3>
+                <h3 class="pb-3"><i>{new Date(releaseDate).getFullYear()}</i></h3>
             {:else if runtime}
-                <h3 class="pb-3"><i>Runtime: {runtime}</i></h3>
+                <h3 class="pb-3"><i>{getFormattedRuntime(runtime)}</i></h3>
             {/if}
             <ReadMore
                 currentDescriptionLength={currentOverviewLength}

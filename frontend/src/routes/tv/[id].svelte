@@ -64,7 +64,7 @@
                 overview={tv.overview}
                 genres={tv.genres}
                 providers={tv.providers}
-                runtime={null}
+                runtime={tv.episode_run_time[0]}
                 imdbId={null}
                 releaseDate={tv.first_air_date}
             />
