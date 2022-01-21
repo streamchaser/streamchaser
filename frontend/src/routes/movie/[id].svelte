@@ -34,15 +34,9 @@
 		}
 	};
 
-	let firstLoadCompleted = false;
-
 	$: if($currentCountry) {
-        if (firstLoadCompleted) {
-        	location.reload();
-        }
-        firstLoadCompleted = true;
+        fetchMovieDetails()
     }
-
 </script>
 
 <svelte:head>
