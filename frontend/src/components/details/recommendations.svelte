@@ -14,6 +14,7 @@
             {#each recommendations as recommendation}
                 {#if recommendation.poster_path}
                     <a href="{mediaIdToUrlConverter(recommendation.id, mediaType)}"
+                        target="_self"
                         class="carousel-item h-96 w-64 p-1">
                         <img
                             src="{IMG_URL}{recommendation.poster_path}"
