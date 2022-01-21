@@ -80,10 +80,8 @@ def fetch_media(popularity: float = 0):
 
 @app.command()
 def index_meilisearch():
-    typer.echo("Meilisearch is indexing...")
     init_meilisearch_indexing(chunk_size=10000)
     update_index()
-    typer.echo("Meilisearch done indexing!")
 
 
 @app.command()
