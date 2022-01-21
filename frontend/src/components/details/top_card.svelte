@@ -4,7 +4,7 @@
     import { currentGenres } from '../../stores/genres.js';
     import { inputQuery } from '../../stores/input.js'
 
-    const INITIAL_OVERVIEW_LENGTH: number = 500;
+    const INITIAL_OVERVIEW_LENGTH: number = 550;
     const IMG_URL: string = 'https://image.tmdb.org/t/p/original/';
 
     export let backdropPath: string
@@ -13,6 +13,9 @@
     export let overview: string
     export let genres: []
     export let providers: []
+    export let runtime: number
+    export let imdbId: string
+    export let releaseDate: string
 
     let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH;
 
@@ -22,6 +25,15 @@
         window.location.href = "/"
     }
 
+    const getFormattedRuntime = (minutes: number): string => {
+        let hours = Math.floor(minutes / 60)
+        let remainingMinutes = minutes - hours * 60
+        if (hours) {
+            return hours + 'h ' + remainingMinutes + 'm'
+        } else {
+            return remainingMinutes + 'm'
+        }
+    }
 </script>
 
 <div
@@ -36,7 +48,23 @@
             />
         </figure>
         <div class="card-body max-w-md">
-            <h2 class="card-title">{title}</h2>
+            <div class="flex justify-between">
+                <h2 class="card-title">{title}</h2>
+                {#if imdbId}
+                <a href="https://www.imdb.com/title/{imdbId}">
+                    <div class="badge badge-primary mx-2 transform hover:scale-110 cursor-pointer">
+                        IMDb
+                    </div>
+                </a>
+                {/if}
+            </div>
+            {#if releaseDate && runtime}
+                <h3 class="pb-3"><i>{new Date(releaseDate).getFullYear()} • {getFormattedRuntime(runtime)}</i></h3>
+            {:else if releaseDate}
+                <h3 class="pb-3"><i>{new Date(releaseDate).getFullYear()}</i></h3>
+            {:else if runtime}
+                <h3 class="pb-3"><i>{getFormattedRuntime(runtime)}</i></h3>
+            {/if}
             <ReadMore
                 currentDescriptionLength={currentOverviewLength}
                 mediaDescription={overview}

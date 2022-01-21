@@ -57,6 +57,9 @@
                 overview={person.biography}
                 genres={null}
                 providers={null}
+                runtime={null}
+                imdbId={null}
+                releaseDate={null}
             />
 
             <PersonMedia
