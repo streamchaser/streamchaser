@@ -121,7 +121,6 @@
 <div class="flex flex-col h-screen justify-between">
     <Navbar />
     <div class="mb-auto container mx-auto">
-        <h1 class="text-center text-3xl pt-4">streamchaser</h1>
         <div class="form-control pb-2 pt-4 px-4">
             <input id="input-field"
                 type="text"

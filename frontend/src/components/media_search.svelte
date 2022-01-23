@@ -27,7 +27,8 @@
 <!-- TODO: Why is both checks needed? -->
 {#if media.hits}
     {#if media.hits.length}
-        <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4">
+        <div class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
+                    md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4">
             {#each media.hits as media, mediaIndex}
                 <a href="{mediaIdToUrlConverter(media.id)}"
                     class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
@@ -58,7 +59,7 @@
                                     <div class="w-12 h-12">
                                         <img
                                             src="{IMG_URL}{provider.logo_path}"
-                                            alt="provider logo"
+                                            alt="{provider.name}"
                                         />
                                     </div>
                                 </div>
@@ -71,7 +72,7 @@
                                     <div class="w-12 h-12">
                                         <img
                                             src="{IMG_URL}{provider.logo_path}"
-                                            alt="provider logo"
+                                            alt="{provider.name}"
                                         />
                                     </div>
                                 </div>
@@ -87,20 +88,10 @@
                         </div>
                     {/if}
                 </a>
+            </div>
             {/each}
         </div>
         <div class="flex space-x-1 justify-center p-1">
-            {#if currentMediaAmount < media.nbHits}
-                <button
-                    on:click={() => {
-                        changeMediaAmount("loadmore");
-                    }}
-                    id="loadmore"
-                    type="button"
-                    class="btn">
-                    Show more
-                </button>
-            {/if}
             {#if currentMediaAmount > mediaStartAmount}
                 <button
                     on:click={() => {
@@ -110,6 +101,17 @@
                     type="button"
                     class="btn">
                     Show less
+                </button>
+            {/if}
+            {#if currentMediaAmount < media.nbHits}
+                <button
+                    on:click={() => {
+                        changeMediaAmount("loadmore");
+                    }}
+                    id="loadmore"
+                    type="button"
+                    class="btn btn-primary">
+                    Show more
                 </button>
             {/if}
         </div>

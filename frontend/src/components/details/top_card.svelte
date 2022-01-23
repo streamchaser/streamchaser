@@ -63,7 +63,7 @@
                 <h2 class="card-title">{title}</h2>
                 {#if imdbId}
                 <a href="https://www.imdb.com/title/{imdbId}">
-                    <div class="badge badge-primary mx-2 transform hover:scale-110 cursor-pointer">
+                    <div class="badge badge-primary mx-2 transform hover:opacity-50 cursor-pointer">
                         IMDb
                     </div>
                 </a>
@@ -86,7 +86,7 @@
                     {#each genres as genre}
                         <div
                             on:click={() => changeGenreAndRedirectHome(genre)}
-                            class="badge badge-primary mx-2 transform hover:scale-110 cursor-pointer">
+                            class="badge badge-primary mx-2 transform hover:opacity-50 cursor-pointer">
                             {genre}
                         </div>
                     {/each}

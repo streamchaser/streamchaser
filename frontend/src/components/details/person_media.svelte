@@ -17,7 +17,7 @@
     <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
         {#each media.slice(0, mediaAmount) as media}
             <a href="{mediaIdToUrlConverter(media.id, mediaType)}"
-                class="card compact cursor-pointer bordered">
+                class="card compact bordered  cursor-pointer hover:opacity-50 shadow-md">
                 <figure>
                     {#if mediaType === 'movie'}
                     <img
@@ -35,15 +35,6 @@
         {/each}
     </div>
     <div class="flex space-x-1 justify-center p-1">
-        {#if mediaAmount < media.length}
-            <button
-                on:click={() => (mediaAmount = mediaAmount + SHOW_BUTTON_AMOUNT)}
-                id="loadmore"
-                type="button"
-                class="btn">
-                Show more
-            </button>
-        {/if}
         {#if mediaAmount > CAST_ITEM_START_AMOUNT}
             <button
                 on:click={() => (mediaAmount = mediaAmount - SHOW_BUTTON_AMOUNT)}
@@ -51,6 +42,15 @@
                 type="button"
                 class="btn">
                 Show less
+            </button>
+        {/if}
+        {#if mediaAmount < media.length}
+            <button
+                on:click={() => (mediaAmount = mediaAmount + SHOW_BUTTON_AMOUNT)}
+                id="loadmore"
+                type="button"
+                class="btn btn-primary">
+                Show more
             </button>
         {/if}
     </div>
