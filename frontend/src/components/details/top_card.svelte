@@ -104,7 +104,7 @@
                 <div class="badge badge-lg shadow-2xl">No providers in {$currentCountry}</div>
             </div>
         {:else}
-            <div class="sm:flex sm:justify-center grid grid-cols-4 content-center pt-5">
+            <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
                 {#each providers as provider}
                 <div class="avatar tooltip" data-tip="{provider.provider_name}">
                     <div data-tip="{provider.provider_name}"
