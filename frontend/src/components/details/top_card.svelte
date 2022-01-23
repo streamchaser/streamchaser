@@ -39,7 +39,8 @@
 <div
     class="flex items-center px-4 py-10 bg-cover card bg-base-200"
     style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e">
-    <div class="card sm:card-side bg-gray-700 bg-opacity-90 bordered text-neutral-content">
+    <div class="card sm:card-side bg-gray-700 bg-opacity-90 bordered
+                text-neutral-content shadow-md">
         {#if posterPath}
         <figure class="pt-10 pr-10 pl-10 sm:p-6">
             <img
@@ -63,7 +64,8 @@
                 <h2 class="card-title">{title}</h2>
                 {#if imdbId}
                 <a href="https://www.imdb.com/title/{imdbId}">
-                    <div class="badge badge-primary mx-2 transform hover:opacity-50 cursor-pointer">
+                    <div class="badge badge-secondary mx-2 transform
+                                hover:contrast-75">
                         IMDb
                     </div>
                 </a>
@@ -86,7 +88,8 @@
                     {#each genres as genre}
                         <div
                             on:click={() => changeGenreAndRedirectHome(genre)}
-                            class="badge badge-primary mx-2 transform hover:opacity-50 cursor-pointer">
+                            class="badge badge-primary mx-2 my-1 transform cursor-pointer
+                                   hover:contrast-75">
                             {genre}
                         </div>
                     {/each}

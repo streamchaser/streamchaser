@@ -31,12 +31,14 @@
                     md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4">
             {#each media.hits as media, mediaIndex}
                 <a href="{mediaIdToUrlConverter(media.id)}"
-                    class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
+                    class="card compact w-auto transition duration-500 ease-in-out
+                           bordered bg-neutral transform m-1 shadow-md
+                           hover:contrast-75 hover:ring-2 ring-primary">
                         {#if media.poster_path}
                         <figure>
                             <img
                                 src="{LOW_RES_IMG_URL}{media.poster_path}"
-                                alt="media poster"
+                                alt="{media.tite}"
                             />
                         </figure>
                         {:else}
@@ -55,7 +57,7 @@
                     {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
                         <div class="-space-x-4 avatar-group">
                             {#each media.specific_providers as provider}
-                                <div class="avatar">
+                                <div class="avatar border-neutral">
                                     <div class="w-12 h-12">
                                         <img
                                             src="{IMG_URL}{provider.logo_path}"
@@ -68,7 +70,7 @@
                     {:else}
                         <div class="-space-x-4 avatar-group">
                             {#each media.specific_providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
-                                <div class="avatar">
+                                <div class="avatar border-neutral">
                                     <div class="w-12 h-12">
                                         <img
                                             src="{IMG_URL}{provider.logo_path}"
@@ -77,7 +79,7 @@
                                     </div>
                                 </div>
                             {/each}
-                            <div class="avatar placeholder">
+                            <div class="avatar placeholder border-neutral">
                                 <div
                                     class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
                                     <span>
@@ -88,7 +90,6 @@
                         </div>
                     {/if}
                 </a>
-            </div>
             {/each}
         </div>
         <div class="flex space-x-1 justify-center p-1">

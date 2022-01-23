@@ -17,7 +17,8 @@
     <div class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
         {#each media.slice(0, mediaAmount) as media}
             <a href="{mediaIdToUrlConverter(media.id, mediaType)}"
-                class="card compact bordered  cursor-pointer hover:opacity-50 shadow-md">
+                class="card compact bordered shadow-md
+                       hover:contrast-75 hover:ring-2 ring-primary">
                 <figure>
                     {#if mediaType === 'movie'}
                     <img

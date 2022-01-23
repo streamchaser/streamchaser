@@ -17,7 +17,8 @@
         {#each cast.slice(0, castItemAmount) as person}
             {#if person.profile_path}
                 <a href="{mediaIdToUrlConverter(person.id, 'person')}"
-                     class="card compact bordered hover:opacity-50 shadow-md">
+                     class="card compact bordered shadow-md
+                            hover:contrast-75 hover:ring-2 ring-primary">
                     <figure>
                         <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
                     </figure>
