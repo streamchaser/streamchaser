@@ -99,7 +99,6 @@
                         changeMediaAmount("loadless");
                     }}
                     id="loadless"
-                    type="button"
                     class="btn">
                     Show less
                 </button>
@@ -110,7 +109,6 @@
                         changeMediaAmount("loadmore");
                     }}
                     id="loadmore"
-                    type="button"
                     class="btn btn-primary">
                     Show more
                 </button>

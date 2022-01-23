@@ -37,7 +37,7 @@
 </script>
 
 <div
-    class="flex items-center px-4 py-10 bg-cover card bg-base-200"
+    class="flex items-center px-4 py-10 bg-cover card bg-base-200 shadow-md"
     style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e">
     <div class="card sm:card-side bg-gray-700 bg-opacity-90 bordered
                 text-neutral-content shadow-md">
@@ -101,28 +101,21 @@
     {#if providers}
         {#if !providers.length}
             <div class="pt-5">
-                <div class="badge badge-lg">No providers in {$currentCountry}</div>
-            </div>
-        {:else if providers.length > 5}
-            <div class="grid grid-rows-2 grid-flow-col pt-5">
-                {#each providers as provider}
-                    <div class="mask mask-squircle p-1">
-                        <img
-                            src="{IMG_URL}{provider.logo_path}"
-                            alt={provider.provider_name}
-                        />
-                    </div>
-                {/each}
+                <div class="badge badge-lg shadow-2xl">No providers in {$currentCountry}</div>
             </div>
         {:else}
-            <div class="flex justify-center pt-5">
+            <div class="sm:flex sm:justify-center grid grid-cols-4 content-center pt-5">
                 {#each providers as provider}
-                    <div class="mask mask-squircle p-1">
+                <div class="avatar tooltip" data-tip="{provider.provider_name}">
+                    <div data-tip="{provider.provider_name}"
+                         class="mb-2 rounded-full w-20 h-20 ring ring-gray-700
+                                ring-offset-base-100 ring-offset-2">
                         <img
                             src="{IMG_URL}{provider.logo_path}"
                             alt={provider.provider_name}
                         />
                     </div>
+                </div>
                 {/each}
             </div>
         {/if}

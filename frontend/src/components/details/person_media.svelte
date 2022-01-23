@@ -40,7 +40,6 @@
             <button
                 on:click={() => (mediaAmount = mediaAmount - SHOW_BUTTON_AMOUNT)}
                 id="loadmore"
-                type="button"
                 class="btn">
                 Show less
             </button>
@@ -49,7 +48,6 @@
             <button
                 on:click={() => (mediaAmount = mediaAmount + SHOW_BUTTON_AMOUNT)}
                 id="loadmore"
-                type="button"
                 class="btn btn-primary">
                 Show more
             </button>

@@ -17,7 +17,7 @@
         {#each cast.slice(0, castItemAmount) as person}
             {#if person.profile_path}
                 <a href="{mediaIdToUrlConverter(person.id, 'person')}"
-                     class="card compact bordered shadow-md
+                     class="card compact bordered shadow-md bg-neutral
                             hover:contrast-75 hover:ring-2 ring-primary">
                     <figure>
                         <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
@@ -33,7 +33,6 @@
         {#if castItemAmount > CAST_ITEM_START_AMOUNT}
             <button
                 on:click={() => castItemAmount = castItemAmount - SHOW_BUTTON_AMOUNT}
-                type="button"
                 class="btn">
                 Show less
             </button>
@@ -41,7 +40,6 @@
         {#if castItemAmount < cast.length}
             <button
                 on:click={() => castItemAmount = castItemAmount + SHOW_BUTTON_AMOUNT}
-                type="button"
                 class="btn btn-primary">
                 Show more
             </button>
