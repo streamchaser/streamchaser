@@ -31,12 +31,20 @@
             {#each media.hits as media, mediaIndex}
                 <a href="{mediaIdToUrlConverter(media.id)}"
                     class="card compact bordered w-auto transition duration-500 ease-in-out cursor-pointer transform hover:scale-110 m-1">
-                    <figure>
-                        <img
-                            src="{LOW_RES_IMG_URL}{media.poster_path}"
-                            alt="media poster"
-                        />
-                    </figure>
+                        {#if media.poster_path}
+                        <figure>
+                            <img
+                                src="{LOW_RES_IMG_URL}{media.poster_path}"
+                                alt="media poster"
+                            />
+                        </figure>
+                        {:else}
+                        <figure class="grid place-items-center bg-primary-content h-5/6">
+                            <h2 class="text-center text-black text-lg">
+                                <strong>{media.title}</strong>
+                            </h2>
+                        </figure>
+                        {/if}
                     {#if providerAmounts[mediaIndex] === 0}
                         <div class="card-body">
                             <p class="text-center">

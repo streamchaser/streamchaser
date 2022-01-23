@@ -40,6 +40,7 @@
     class="flex items-center px-4 py-10 bg-cover card bg-base-200"
     style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e">
     <div class="card sm:card-side bg-gray-700 bg-opacity-90 bordered text-neutral-content">
+        {#if posterPath}
         <figure class="pt-10 pr-10 pl-10 sm:p-6">
             <img
                 src="{IMG_URL}{posterPath}"
@@ -47,6 +48,16 @@
                 alt={title}
             />
         </figure>
+        {:else}
+        <figure class="pt-10 pr-10 pl-10 sm:p-6">
+            <div class="h-96 bg-primary-content object-contain sm:max-h-96 rounded-lg
+                grid place-items-center">
+                <h2 class="w-64 text-center text-black text-lg">
+                    <strong>{title}</strong>
+                </h2>
+            </div>
+        </figure>
+        {/if}
         <div class="card-body max-w-md">
             <div class="flex justify-between">
                 <h2 class="card-title">{title}</h2>
