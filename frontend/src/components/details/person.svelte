@@ -12,11 +12,13 @@
 
 {#if cast.length}
     <h1 class="text-center text-3xl pt-5">Cast</h1>
-    <div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
+    <div class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7
+                md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4">
         {#each cast.slice(0, castItemAmount) as person}
             {#if person.profile_path}
                 <a href="{mediaIdToUrlConverter(person.id, 'person')}"
-                     class="card compact cursor-pointer bordered">
+                     class="card compact bordered shadow-md bg-neutral
+                            hover:contrast-75 hover:ring-2 ring-primary">
                     <figure>
                         <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt="{person.name}">
                     </figure>
@@ -27,21 +29,19 @@
             {/if}
         {/each}
     </div>
-    <div class="flex space-x-1 justify-center">
-        {#if castItemAmount < cast.length}
-            <button
-                    on:click={() => castItemAmount = castItemAmount + SHOW_BUTTON_AMOUNT}
-                    type="button"
-                    class="btn">
-                Show more
-            </button>
-        {/if}
+    <div class="flex space-x-1 justify-center pt-5">
         {#if castItemAmount > CAST_ITEM_START_AMOUNT}
             <button
-                    on:click={() => castItemAmount = castItemAmount - SHOW_BUTTON_AMOUNT}
-                    type="button"
-                    class="btn">
+                on:click={() => castItemAmount = castItemAmount - SHOW_BUTTON_AMOUNT}
+                class="btn">
                 Show less
+            </button>
+        {/if}
+        {#if castItemAmount < cast.length}
+            <button
+                on:click={() => castItemAmount = castItemAmount + SHOW_BUTTON_AMOUNT}
+                class="btn btn-primary">
+                Show more
             </button>
         {/if}
     </div>

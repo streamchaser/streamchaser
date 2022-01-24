@@ -121,7 +121,6 @@
 <div class="flex flex-col h-screen justify-between">
     <Navbar />
     <div class="mb-auto container mx-auto">
-        <h1 class="text-center text-3xl pt-4">streamchaser</h1>
         <div class="form-control pb-2 pt-4 px-4">
             <input id="input-field"
                 type="text"
@@ -137,7 +136,7 @@
                 --sms-options-bg="#2a2e37"
                 --sms-border="1pt solid #6B7280"
                 --sms-focus-border="2pt solid #6B7280"
-                --sms-active-color="#2a2e37"
+                --sms-active-color="#570df8"
                 --sms-remove-x-hover-focus-color="#6B7280"
                 --sms-li-selected-bg="#3d4451"
                 --sms-li-active-bg="#059669"
@@ -150,7 +149,7 @@
                 --sms-options-bg="#2a2e37"
                 --sms-border="1pt solid #6B7280"
                 --sms-focus-border="2pt solid #6B7280"
-                --sms-active-color="#2a2e37"
+                --sms-active-color="#570df8"
                 --sms-remove-x-hover-focus-color="#6B7280"
                 --sms-li-selected-bg="#3d4451"
                 --sms-li-active-bg="#059669"

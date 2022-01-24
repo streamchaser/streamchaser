@@ -10,7 +10,6 @@
         <button
             on:click={() => window.history.back()}
             id="goback"
-            type="button"
             class="btn">
             Back to safety
         </button>
