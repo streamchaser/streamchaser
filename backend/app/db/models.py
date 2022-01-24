@@ -7,7 +7,7 @@ from sqlalchemy.sql.schema import Column
 
 
 class Media(Base):
-    __tablename__ = 'media'
+    __tablename__ = "media"
 
     id = Column(String, primary_key=True)
     title = Column(String, nullable=True)
@@ -21,7 +21,7 @@ class Media(Base):
 
 
 class Genre(Base):
-    __tablename__ = 'genres'
+    __tablename__ = "genres"
 
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
