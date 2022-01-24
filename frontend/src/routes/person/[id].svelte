@@ -1,82 +1,87 @@
 <script lang="ts">
-    import { removeContentWithMissingImagePath, sortListByPopularity, removeDuplicates } from '../../utils'
-    import { variables } from '../../variables.js'
-    import {page} from '$app/stores';
-    import Navbar from '../../components/navbar.svelte';
-    import Footer from '../../components/footer.svelte';
-    import Error from '../../components/error.svelte';
-    import CookieDisclaimer from '../../components/cookie_disclaimer.svelte'
-    import TopCard from '../../components/details/top_card.svelte'
-    import PersonMedia from '../../components/details/person_media.svelte'
-	import Spinner from '../../components/loading/spinner.svelte'
+  import {
+    removeContentWithMissingImagePath,
+    sortListByPopularity,
+    removeDuplicates,
+  } from "../../utils"
+  import { variables } from "../../variables.js"
+  import { page } from "$app/stores"
+  import Navbar from "../../components/navbar.svelte"
+  import Footer from "../../components/footer.svelte"
+  import Error from "../../components/error.svelte"
+  import CookieDisclaimer from "../../components/cookie_disclaimer.svelte"
+  import TopCard from "../../components/details/top_card.svelte"
+  import PersonMedia from "../../components/details/person_media.svelte"
+  import Spinner from "../../components/loading/spinner.svelte"
 
+  const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`
 
-    const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`;
+  let personName: string = "Loading..."
 
-    let personName: string = 'Loading...';
+  const fetchPersonDetails = async () => {
+    const response = await fetch(PERSON_DETAIL_URL)
 
-    const fetchPersonDetails = async () => {
-		const response = await fetch(PERSON_DETAIL_URL);
+    if (response.status == 200) {
+      let jsonResponse = await response.json()
+      personName = jsonResponse.name
+      removeContentWithMissingImagePath(
+        jsonResponse.movie_credits,
+        "poster_path"
+      )
+      removeContentWithMissingImagePath(jsonResponse.tv_credits, "poster_path")
 
-		if (response.status == 200) {
-            let jsonResponse = await response.json();
-			personName = jsonResponse.name;
-            removeContentWithMissingImagePath(jsonResponse.movie_credits, "poster_path");
-            removeContentWithMissingImagePath(jsonResponse.tv_credits, "poster_path");
+      removeDuplicates(jsonResponse.movie_credits)
+      removeDuplicates(jsonResponse.tv_credits)
 
-            removeDuplicates(jsonResponse.movie_credits);
-            removeDuplicates(jsonResponse.tv_credits);
+      sortListByPopularity(jsonResponse.movie_credits)
+      sortListByPopularity(jsonResponse.tv_credits)
 
-            sortListByPopularity(jsonResponse.movie_credits);
-            sortListByPopularity(jsonResponse.tv_credits);
-
-            return jsonResponse;
-		} else {
-			console.error(response.statusText);
-			personName = 'Error loading person'
-			throw new Error(response.statusText)
-		}
-    };
-
+      return jsonResponse
+    } else {
+      console.error(response.statusText)
+      personName = "Error loading person"
+      throw new Error(response.statusText)
+    }
+  }
 </script>
 
 <svelte:head>
-    <title>{personName} - Streamchaser</title>
+  <title>{personName} - Streamchaser</title>
 </svelte:head>
 
 <div class="flex flex-col h-screen justify-between">
-    <Navbar/>
-    <div class="container mx-auto pb-2">
-        {#await fetchPersonDetails()}
-            <Spinner />
-        {:then person}
-            <TopCard
-                backdropPath={person.movie_credits[0].backdrop_path}
-                posterPath={person.profile_path}
-                title={person.name}
-                overview={person.biography}
-                genres={null}
-                providers={null}
-                runtime={null}
-                imdbId={null}
-                releaseDate={null}
-            />
+  <Navbar />
+  <div class="container mx-auto pb-2">
+    {#await fetchPersonDetails()}
+      <Spinner />
+    {:then person}
+      <TopCard
+        backdropPath={person.movie_credits[0].backdrop_path}
+        posterPath={person.profile_path}
+        title={person.name}
+        overview={person.biography}
+        genres={null}
+        providers={null}
+        runtime={null}
+        imdbId={null}
+        releaseDate={null}
+      />
 
-            <PersonMedia
-                media={person.movie_credits}
-                mediaType={'movie'}
-                title={'Movies'}
-            />
+      <PersonMedia
+        media={person.movie_credits}
+        mediaType={"movie"}
+        title={"Movies"}
+      />
 
-            <PersonMedia
-                media={person.tv_credits}
-                mediaType={'tv'}
-                title={'Series'}
-            />
-        {:catch error}
-            <Error error={error} />
-        {/await}
-    </div>
-<Footer/>
+      <PersonMedia
+        media={person.tv_credits}
+        mediaType={"tv"}
+        title={"Series"}
+      />
+    {:catch error}
+      <Error {error} />
+    {/await}
+  </div>
+  <Footer />
 </div>
 <CookieDisclaimer />

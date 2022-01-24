@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { cookieDisclaimer } from "../stores/cookie_disclaimer.js";
-  import { onMount } from "svelte";
+  import { cookieDisclaimer } from "../stores/cookie_disclaimer.js"
+  import { onMount } from "svelte"
 
-  let loadDisclaimer = false;
+  let loadDisclaimer = false
 
   onMount(async () => {
-    setTimeout(() => (loadDisclaimer = true), 100);
-  });
+    setTimeout(() => (loadDisclaimer = true), 100)
+  })
 </script>
 
 {#if loadDisclaimer}
