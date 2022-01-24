@@ -10,16 +10,14 @@ repos:
   - repo: https://github.com/psf/black
     rev: 21.9b0
     hooks:
-    - id: black
-      language_version: python3.9
+      - id: black
+        language_version: python3.9
 
   - repo: https://github.com/pycqa/flake8
     rev: 4.0.1
     hooks:
-    - id: flake8
-      args:
-        - "--max-line-length=88"
-        - "--ignore=E203"
+      - id: flake8
+        args: [--max-line-length=88, --ignore=E203]
 
   - repo: https://github.com/asottile/reorder_python_imports
     rev: v2.6.0
@@ -32,6 +30,6 @@ repos:
       - id: prettier
         args: [--write, --no-semi]
         additional_dependencies:
-          - prettier
+          - prettier@2.5.1
           - prettier-plugin-svelte@v2.6.0
           - svelte@v3.46.2
