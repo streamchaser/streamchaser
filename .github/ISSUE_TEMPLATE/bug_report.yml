@@ -1,6 +1,6 @@
 name: Bug report
 description: Create a report to help us improve
-labels: [ 'bug :bug:', 'prio:low :zzz:' ]
+labels: ["bug :bug:", "prio:low :zzz:"]
 
 body:
   - type: checkboxes

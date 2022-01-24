@@ -13,14 +13,12 @@
   <div class="animate-spin rounded-full h-32 w-32 border-b-8 border-neutral" />
 </div>
 {#if tooLongLoad}
-  <h2 class="flex justify-center pt-6">This page is taking longer to load than usual...</h2>
+  <h2 class="flex justify-center pt-6">
+    This page is taking longer to load than usual...
+  </h2>
   <br />
   <div class="flex justify-center">
-    <button
-      on:click={() => window.history.back()}
-      id="goback"
-      class="btn btn-primary"
-    >
+    <button on:click={() => window.history.back()} id="goback" class="btn btn-primary">
       Back to safety
     </button>
   </div>
