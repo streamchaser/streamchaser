@@ -4,8 +4,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 
-SQLALCHEMY_DATABASE_URL = f'postgresql://{get_settings().psql_user}:' \
-    f'{get_settings().psql_pwd}@db:5432/streamchaser'
+SQLALCHEMY_DATABASE_URL = (
+    f"postgresql://{get_settings().psql_user}:"
+    f"{get_settings().psql_pwd}@db:5432/streamchaser"
+)
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

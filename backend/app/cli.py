@@ -44,26 +44,27 @@ def fetch_jsongz():
 def fetch_media(popularity: float = 0):
     fetch_jsongz_files()
 
-    directory = '../json.gz_dumps'
+    directory = "../json.gz_dumps"
     data = []
 
-    for file in tqdm(os.listdir(directory), desc='Running through json.gz files'):
-        with gzip.open(os.path.join(directory, file), 'r') as f:
+    for file in tqdm(os.listdir(directory), desc="Running through json.gz files"):
+        with gzip.open(os.path.join(directory, file), "r") as f:
             for line in f:
-                if (json.loads(line).get('popularity') >= popularity
-                        and not json.loads(line).get('adult')):
-                    if 'movie' in file:
+                if json.loads(line).get("popularity") >= popularity and not json.loads(
+                    line
+                ).get("adult"):
+                    if "movie" in file:
                         item = json.loads(line)
-                        item['id'] = 'm'+str(item['id'])
+                        item["id"] = "m" + str(item["id"])
                         data.append(item)
                     else:
                         item = json.loads(line)
-                        item['id'] = 't'+str(item['id'])
+                        item["id"] = "t" + str(item["id"])
                         data.append(item)
 
     data_length = len(data)
 
-    typer.echo(f'media elements: {data_length} with popularity >= {popularity}')
+    typer.echo(f"media elements: {data_length} with popularity >= {popularity}")
 
     media = media_converter(data)
 
@@ -71,9 +72,7 @@ def fetch_media(popularity: float = 0):
 
     db = database.SessionLocal()
     for media in tqdm(
-        media_schema_iter,
-        total=data_length,
-        desc='Dumping media to database'
+        media_schema_iter, total=data_length, desc="Dumping media to database"
     ):
         dump_media_to_db(db=db, media=media)
 
@@ -91,15 +90,13 @@ def cleanup_genres():
 
 @app.command()
 def remove_blacklisted_from_search():
-    blacklisted_media = [
-        line.rstrip() for line in open('../blacklist.txt')
-    ]
+    blacklisted_media = [line.rstrip() for line in open("../blacklist.txt")]
     for country_code in supported_country_codes:
-        client.index(f'media_{country_code}').delete_documents(blacklisted_media)
+        client.index(f"media_{country_code}").delete_documents(blacklisted_media)
 
     typer.echo(
-        f'Attempted to remove {len(blacklisted_media)} blacklisted media elements in '
-        f'{len(supported_country_codes)} indexes'
+        f"Attempted to remove {len(blacklisted_media)} blacklisted media elements in "
+        f"{len(supported_country_codes)} indexes"
     )
 
 
@@ -112,7 +109,7 @@ def remove_non_ascii_media():
 def remove_all_media():
     db = database.SessionLocal()
     delete_all_media(db=db)
-    typer.echo('All media has been deleted')
+    typer.echo("All media has been deleted")
 
 
 @app.command()
@@ -164,34 +161,33 @@ def remove_and_blacklist(media_id: str):
         db = database.SessionLocal()
         media = get_media_by_id(db=db, media_id=media_id)
         if not media:
-            typer.echo(f'Cannot find media: {media_id}')
+            typer.echo(f"Cannot find media: {media_id}")
             raise typer.Abort()
 
         typer.confirm(
-            f'Are you sure you want to remove & blacklist [{media.title}]?',
-            abort=True
+            f"Are you sure you want to remove & blacklist [{media.title}]?", abort=True
         )
 
-        typer.echo(f'Removing and blacklisting: {media_id}')
+        typer.echo(f"Removing and blacklisting: {media_id}")
         delete_media_by_id(db=db, media_id=media_id)
-        typer.echo('Removed from database ✓')
+        typer.echo("Removed from database ✓")
 
-        with open('../blacklist.txt', 'a+') as file:
+        with open("../blacklist.txt", "a+") as file:
             file.seek(0)
             if media_id in file.read().splitlines():
-                typer.echo(f'{media_id} already in blacklist')
+                typer.echo(f"{media_id} already in blacklist")
             else:
-                file.write(f'{media_id}\n')
-                typer.echo('Added to blacklist ✓')
+                file.write(f"{media_id}\n")
+                typer.echo("Added to blacklist ✓")
 
         for country_code in supported_country_codes:
-            client.index(f'media_{country_code}').delete_document(media_id)
+            client.index(f"media_{country_code}").delete_document(media_id)
 
-        typer.echo('Meilisearch updated ✓')
-        typer.echo(f'{media_id} has succesfully been removed & blacklisted')
+        typer.echo("Meilisearch updated ✓")
+        typer.echo(f"{media_id} has succesfully been removed & blacklisted")
 
     except Exception as e:
-        typer.echo(f'An error occoured. {e}')
+        typer.echo(f"An error occoured. {e}")
     finally:
         db.close()
 
