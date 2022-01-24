@@ -41,10 +41,7 @@
         >
           {#if media.poster_path}
             <figure>
-              <img
-                src="{LOW_RES_IMG_URL}{media.poster_path}"
-                alt={media.tite}
-              />
+              <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt={media.tite} />
             </figure>
           {:else}
             <figure class="grid place-items-center bg-primary-content h-5/6">
@@ -64,10 +61,7 @@
               {#each media.specific_providers as provider}
                 <div class="avatar border-neutral">
                   <div class="w-12 h-12">
-                    <img
-                      src="{IMG_URL}{provider.logo_path}"
-                      alt={provider.name}
-                    />
+                    <img src="{IMG_URL}{provider.logo_path}" alt={provider.name} />
                   </div>
                 </div>
               {/each}
@@ -77,10 +71,7 @@
               {#each media.specific_providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
                 <div class="avatar border-neutral">
                   <div class="w-12 h-12">
-                    <img
-                      src="{IMG_URL}{provider.logo_path}"
-                      alt={provider.name}
-                    />
+                    <img src="{IMG_URL}{provider.logo_path}" alt={provider.name} />
                   </div>
                 </div>
               {/each}

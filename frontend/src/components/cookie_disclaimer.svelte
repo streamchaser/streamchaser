@@ -19,19 +19,16 @@
               <b>🍪 Cookies on Streamchaser</b>
             </h4>
             <p>
-              We use cookies to improve your experience. We save your country
-              and chosen providers, and store this data for your next visit. For
-              convenience during your session we keep your genres and input. We
-              use third-party cookies to enhance the experience and our service,
-              and to analyse the use of our site. Your continued browsing means
-              that you have understood and accepted this.
+              We use cookies to improve your experience. We save your country and chosen
+              providers, and store this data for your next visit. For convenience during
+              your session we keep your genres and input. We use third-party cookies to
+              enhance the experience and our service, and to analyse the use of our
+              site. Your continued browsing means that you have understood and accepted
+              this.
             </p>
           </label>
           <div class="flex justify-center">
-            <a
-              href="https://www.cookiesandyou.com/about-cookies/"
-              target="_blank"
-            >
+            <a href="https://www.cookiesandyou.com/about-cookies/" target="_blank">
               <button class="btn btn-sm btn-ghost mr-2">About cookies</button>
             </a>
             <button

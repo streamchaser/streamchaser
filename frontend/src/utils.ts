@@ -46,10 +46,7 @@ export const removeDuplicates = (arr: any[]) => {
 
 // Sorting of shown content and handling of missing content -->
 
-export const removeContentWithMissingImagePath = (
-  list: [],
-  pathName: string
-) => {
+export const removeContentWithMissingImagePath = (list: [], pathName: string) => {
   for (let i = 0; i < list.length; i++) {
     if (!list[i][pathName]) {
       list.splice(i, 1)

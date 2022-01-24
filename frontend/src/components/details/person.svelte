@@ -24,10 +24,7 @@
                             hover:contrast-75 hover:ring-2 ring-primary"
         >
           <figure>
-            <img
-              src="{LOW_RES_IMG_URL}{person.profile_path}"
-              alt={person.name}
-            />
+            <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt={person.name} />
           </figure>
           <div class="card-body">
             <p><b>{person.name}</b> - <i>{person.character}</i></p>

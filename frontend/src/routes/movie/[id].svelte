@@ -71,10 +71,7 @@
 
       <Person cast={movie.cast} />
 
-      <Recommendations
-        recommendations={movie.recommendations}
-        mediaType={"movie"}
-      />
+      <Recommendations recommendations={movie.recommendations} mediaType={"movie"} />
     {:catch error}
       <Error {error} />
     {/await}

@@ -24,10 +24,7 @@
     if (response.status == 200) {
       let jsonResponse = await response.json()
       personName = jsonResponse.name
-      removeContentWithMissingImagePath(
-        jsonResponse.movie_credits,
-        "poster_path"
-      )
+      removeContentWithMissingImagePath(jsonResponse.movie_credits, "poster_path")
       removeContentWithMissingImagePath(jsonResponse.tv_credits, "poster_path")
 
       removeDuplicates(jsonResponse.movie_credits)
@@ -67,17 +64,9 @@
         releaseDate={null}
       />
 
-      <PersonMedia
-        media={person.movie_credits}
-        mediaType={"movie"}
-        title={"Movies"}
-      />
+      <PersonMedia media={person.movie_credits} mediaType={"movie"} title={"Movies"} />
 
-      <PersonMedia
-        media={person.tv_credits}
-        mediaType={"tv"}
-        title={"Series"}
-      />
+      <PersonMedia media={person.tv_credits} mediaType={"tv"} title={"Series"} />
     {:catch error}
       <Error {error} />
     {/await}

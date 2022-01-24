@@ -18,11 +18,7 @@
   </h2>
   <br />
   <div class="flex justify-center">
-    <button
-      on:click={() => window.history.back()}
-      id="goback"
-      class="btn btn-primary"
-    >
+    <button on:click={() => window.history.back()} id="goback" class="btn btn-primary">
       Back to safety
     </button>
   </div>

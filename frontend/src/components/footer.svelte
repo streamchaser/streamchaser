@@ -27,8 +27,7 @@
             src="../../tmdb.svg/"
             alt="The Movie Database logo"
           />
-        </a> &nbsp This product uses the TMDB API but is not endorsed or certified
-        by TMDB
+        </a> &nbsp This product uses the TMDB API but is not endorsed or certified by TMDB
       </p>
     </div>
   </div>

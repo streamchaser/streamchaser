@@ -80,11 +80,7 @@
       </div>
       {#if releaseDate && runtime}
         <h3 class="pb-3">
-          <i
-            >{new Date(releaseDate).getFullYear()} • {getFormattedRuntime(
-              runtime
-            )}</i
-          >
+          <i>{new Date(releaseDate).getFullYear()} • {getFormattedRuntime(runtime)}</i>
         </h3>
       {:else if releaseDate}
         <h3 class="pb-3"><i>{new Date(releaseDate).getFullYear()}</i></h3>
@@ -128,10 +124,7 @@
               class="mb-2 rounded-full w-20 h-20 ring ring-gray-700
                                 ring-offset-base-100 ring-offset-2"
             >
-              <img
-                src="{IMG_URL}{provider.logo_path}"
-                alt={provider.provider_name}
-              />
+              <img src="{IMG_URL}{provider.logo_path}" alt={provider.provider_name} />
             </div>
           </div>
         {/each}

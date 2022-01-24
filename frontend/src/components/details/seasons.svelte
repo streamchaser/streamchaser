@@ -27,10 +27,7 @@
             : season.name.substr(season.name.indexOf(" ") + 1)}
         </div>
       {:else}
-        <div
-          on:click={() => changeActiveTab(index)}
-          class="tab tab-lg tab-bordered"
-        >
+        <div on:click={() => changeActiveTab(index)} class="tab tab-lg tab-bordered">
           {season.name === "Specials"
             ? "S"
             : season.name.substr(season.name.indexOf(" ") + 1)}
@@ -65,21 +62,15 @@
               <div class="card-body">
                 <div class="card-title">{season.name}</div>
                 <div class="text-xl">
-                  {season.air_date
-                    ? season.air_date.split("-")[0]
-                    : "No air date"}
+                  {season.air_date ? season.air_date.split("-")[0] : "No air date"}
                   | {season.episode_count} episodes
                 </div>
                 <div class="text-lg">
-                  {season.air_date
-                    ? `Premiered on ${season.air_date}`
-                    : "Hasn't aired"}
+                  {season.air_date ? `Premiered on ${season.air_date}` : "Hasn't aired"}
                 </div>
                 &nbsp
                 <div class="text-base">
-                  {season.overview
-                    ? season.overview
-                    : "No season overview available."}
+                  {season.overview ? season.overview : "No season overview available."}
                 </div>
               </div>
             </div>
@@ -109,16 +100,12 @@
               {/if}
               <div class="mx-4 my-2">
                 <div class="text-xl">
-                  {season.air_date
-                    ? season.air_date.split("-")[0]
-                    : "No air date"}
+                  {season.air_date ? season.air_date.split("-")[0] : "No air date"}
                   | {season.episode_count} episodes
                 </div>
                 &nbsp
                 <div class="text-lg">
-                  {season.air_date
-                    ? `Premiered on ${season.air_date}`
-                    : "Hasn't aired"}
+                  {season.air_date ? `Premiered on ${season.air_date}` : "Hasn't aired"}
                 </div>
                 &nbsp
                 <ReadMore
