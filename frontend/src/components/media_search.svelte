@@ -31,9 +31,8 @@
                     md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4">
             {#each media.hits as media, mediaIndex}
                 <a href="{mediaIdToUrlConverter(media.id)}"
-                    class="card compact w-auto transition duration-500 ease-in-out
-                           bordered bg-neutral transform m-1 shadow-md
-                           hover:contrast-75 hover:ring-2 ring-primary">
+                    class="card compact w-auto bordered bg-neutral m-1
+                           shadow-md hover:contrast-75 hover:ring-2 ring-primary">
                         {#if media.poster_path}
                         <figure>
                             <img
