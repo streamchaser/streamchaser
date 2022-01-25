@@ -20,10 +20,7 @@
   let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
 
   const changeGenreAndRedirectHome = (genre) => {
-    console.log(genre)
-    console.log($currentGenres)
     $currentGenres = [genre]
-    console.log($currentGenres)
     $inputQuery = ""
     window.location.href = "/"
   }

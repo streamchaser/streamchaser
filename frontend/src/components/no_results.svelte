@@ -2,7 +2,6 @@
   export let currentProviders: []
   export let currentGenres: []
   export let input: string
-  console.log(currentGenres)
 </script>
 
 <div class="flex flex-col">

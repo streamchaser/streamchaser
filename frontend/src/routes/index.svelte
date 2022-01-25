@@ -10,7 +10,7 @@
   import { currentProviders } from "../stores/providers.js"
   import { currentGenres } from "../stores/genres"
   import { inputQuery } from "../stores/input"
-  import { currentTheme } from "../stores/theme.js"
+  import { chosenTheme } from "../stores/theme.js"
   import { onMount } from "svelte"
   import DaisyuiThemes from "daisyui/colors/themes.js"
 
@@ -135,7 +135,7 @@
 <div class="flex flex-col h-screen justify-between">
   <Navbar />
   <div class="container mb-auto mx-auto">
-    <div class="bg-neutral sm:rounded-lg pb-2 pt-6 px-6">
+    <div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-6">
       <div class="form-control">
         <input
           id="input-field"
@@ -150,27 +150,27 @@
       <div class="sm:grid sm:grid-cols-2 sm:gap-2">
         <MultiSelect
           outerDivClass="bg-base-100"
-          --sms-options-bg={DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             "neutral-focus"
           ]}
-          --sms-text-color={DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             "neutral-content"
           ]}
-          --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             'primary'
           ]}"
-          --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             'primary'
           ]}"
-          --sms-active-color={DaisyuiThemes[`[data-theme=${$currentTheme}]`]["primary"]}
+          --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
           --sms-remove-x-hover-focus-color={DaisyuiThemes[
-            `[data-theme=${$currentTheme}]`
+            `[data-theme=${$chosenTheme}]`
           ]["base-content"]}
-          --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             "neutral"
           ]}
-          --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$currentTheme}]`]["primary"]}
-          --sms-selected-color={DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+          --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             "primary"
           ]}
           bind:selected={selectedGenres}
@@ -180,27 +180,27 @@
         />
         <MultiSelect
           outerDivClass="bg-base-100"
-          --sms-options-bg={DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             "neutral-focus"
           ]}
-          --sms-text-color={DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             "neutral-content"
           ]}
-          --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             'primary'
           ]}"
-          --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             'primary'
           ]}"
-          --sms-active-color={DaisyuiThemes[`[data-theme=${$currentTheme}]`]["primary"]}
+          --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
           --sms-remove-x-hover-focus-color={DaisyuiThemes[
-            `[data-theme=${$currentTheme}]`
+            `[data-theme=${$chosenTheme}]`
           ]["base-content"]}
-          --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             "neutral"
           ]}
-          --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$currentTheme}]`]["primary"]}
-          --sms-selected-color={DaisyuiThemes[`[data-theme=${$currentTheme}]`][
+          --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+          --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
             "primary"
           ]}
           bind:selected={$currentProviders}

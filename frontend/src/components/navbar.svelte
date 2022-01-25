@@ -3,7 +3,7 @@
   import { themeChange } from "theme-change"
   import { onMount } from "svelte"
   import { currentCountry } from "../stores/country.js"
-  import { currentTheme } from "../stores/theme.js"
+  import { chosenTheme } from "../stores/theme.js"
 
   let selectedCountry = $currentCountry
 
@@ -15,13 +15,15 @@
     { name: "USA", value: "US" },
   ]
 
+  const themes = ["🌚 dark", "🌲 forest", "🎃 halloween", "💎 luxury", "🌆 synthwave"]
+
   onMount(() => {
     themeChange(false)
   })
 </script>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
-  <div class="flex-none px-2 mx-2">
+  <div class="flex-none sm:px-2 sm:mx-2">
     <a href="/">
       <span class="text-lg font-bold"> streamchaser </span>
     </a>
@@ -31,6 +33,24 @@
     <div class="items-stretch hidden sm:flex">
       <a class="btn btn-ghost btn-sm rounded-btn" href="/about"> About </a>
       <a class="btn btn-ghost btn-sm rounded-btn" href="/faq"> FAQ </a>
+    </div>
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" class="btn btn-ghost btn-sm rounded-btn text-xl">🎨</div>
+      <ul
+        tabindex="0"
+        class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+      >
+        {#each themes as theme}
+          <li>
+            <a
+              data-set-theme={theme.split(" ")[1]}
+              data-act-class="ACTIVECLASS"
+              on:click={() => ($chosenTheme = theme.split(" ")[1])}
+              >{theme}
+            </a>
+          </li>
+        {/each}
+      </ul>
     </div>
   </div>
   <div class="sm:pl-4">
@@ -43,16 +63,6 @@
       {#each countries as country}
         <option value={country.value}>{country.name}</option>
       {/each}
-    </select>
-    <select
-      class="select select-bordered select-primary w-full max-w-xs"
-      data-choose-theme
-      bind:value={$currentTheme}
-    >
-      <option disabled={true}>Choose theme</option>
-      <option>dark</option>
-      <option>forest</option>
-      <option>halloween</option>
     </select>
   </div>
 </div>
