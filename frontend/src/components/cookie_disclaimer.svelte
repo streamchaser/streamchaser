@@ -12,7 +12,7 @@
 {#if loadDisclaimer}
   {#if !$cookieDisclaimer}
     <div class="flex justify-center">
-      <div class="alert fixed sm:bottom-2 bottom-0 max-w-2xl">
+      <div class="alert shadow fixed sm:bottom-2 bottom-0 max-w-2xl">
         <div class="flex flex-col">
           <label class="pb-2">
             <h4 class="flex justify-center pb-1">

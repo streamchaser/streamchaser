@@ -55,10 +55,10 @@
     {:else}
       <figure class="pt-10 pr-10 pl-10 sm:p-6">
         <div
-          class="h-96 bg-primary-content object-contain sm:max-h-96 rounded-lg
+          class="h-96 bg-slate-100 object-contain sm:max-h-96 rounded-lg
                 grid place-items-center"
         >
-          <h2 class="w-64 text-center text-neutral-content text-lg">
+          <h2 class="w-64 text-center text-gray-900 text-lg">
             <strong>{title}</strong>
           </h2>
         </div>

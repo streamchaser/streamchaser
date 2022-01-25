@@ -4,12 +4,12 @@
 
   export let seasons
 
-  const DESKTOP_INITIAL_OVERVIEW_LENGTH: number = 550
+  const INITIAL_OVERVIEW_LENGTH: number = 600
 
   const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
 
   let currentTab: number = 0
-  let desktopCurrentOverviewLength: number = DESKTOP_INITIAL_OVERVIEW_LENGTH
+  let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
 
   const changeActiveTab = (index) => {
     currentTab = index
@@ -109,11 +109,11 @@
                 </div>
                 &nbsp
                 <ReadMore
-                  currentDescriptionLength={desktopCurrentOverviewLength}
+                  currentDescriptionLength={currentOverviewLength}
                   mediaDescription={season.overview
                     ? season.overview
                     : "No season overview available."}
-                  initialDescriptionLength={DESKTOP_INITIAL_OVERVIEW_LENGTH}
+                  initialDescriptionLength={INITIAL_OVERVIEW_LENGTH}
                 />
               </div>
             </div>

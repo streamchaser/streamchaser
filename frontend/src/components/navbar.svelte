@@ -41,13 +41,16 @@
         class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
       >
         {#each themes as theme}
-          <li>
-            <a
-              data-set-theme={theme.split(" ")[1]}
-              data-act-class="ACTIVECLASS"
-              on:click={() => ($chosenTheme = theme.split(" ")[1])}
-              >{theme}
-            </a>
+          <li
+            data-set-theme={theme.split(" ")[1]}
+            data-act-class="ACTIVECLASS"
+            on:click={() => ($chosenTheme = theme.split(" ")[1])}
+          >
+            {#if $chosenTheme == theme.split(" ")[1]}
+              <a class="bg-primary hover:bg-primary">{theme}</a>
+            {:else}
+              <a>{theme}</a>
+            {/if}
           </li>
         {/each}
       </ul>

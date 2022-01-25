@@ -44,8 +44,8 @@
               <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt={media.tite} />
             </figure>
           {:else}
-            <figure class="grid place-items-center bg-primary-content h-5/6">
-              <h2 class="text-center text-lg">
+            <figure class="grid place-items-center bg-slate-100 h-5/6">
+              <h2 class="text-center text-lg text-gray-900">
                 <strong>{media.title}</strong>
               </h2>
             </figure>
