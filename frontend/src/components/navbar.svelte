@@ -15,7 +15,7 @@
     { name: "USA", value: "US" },
   ]
 
-  const themes = ["🌚 dark", "🌲 forest", "🎃 halloween", "💎 luxury", "🌆 synthwave"]
+  const themes = ["💎 luxury", "🌚 dark", "🌲 forest", "🎃 halloween", "🌆 synthwave"]
 
   onMount(() => {
     themeChange(false)

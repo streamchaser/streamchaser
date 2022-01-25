@@ -118,11 +118,11 @@
     {:else}
       <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
         {#each providers as provider}
-          <div class="avatar tooltip" data-tip={provider.provider_name}>
+          <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
             <div
               data-tip={provider.provider_name}
-              class="mb-2 rounded-full w-20 h-20 ring ring-gray-700
-                                ring-offset-base-100 ring-offset-2"
+              class="mb-2 rounded-full w-20 h-20 ring ring-neutral
+                                ring-offset-neutral ring-offset-2"
             >
               <img src="{IMG_URL}{provider.logo_path}" alt={provider.provider_name} />
             </div>
