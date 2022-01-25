@@ -10,7 +10,11 @@
     </div>
     <div class="grid grid-flow-col gap-4 p-4">
       <a href="https://github.com/streamchaser/streamchaser">
-        <img src="../../github.svg" alt="Github logo" />
+        <img
+          src="../../GitHub-Mark-Light-120px-plus.png"
+          alt="Github logo"
+          class="h-16 w-16"
+        />
       </a>
     </div>
     <div>
