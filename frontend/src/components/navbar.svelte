@@ -1,6 +1,9 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
+  import { themeChange } from "theme-change"
+  import { onMount } from "svelte"
   import { currentCountry } from "../stores/country.js"
+  import { currentTheme } from "../stores/theme.js"
 
   let selectedCountry = $currentCountry
 
@@ -11,6 +14,10 @@
     { name: "UK", value: "GB" },
     { name: "USA", value: "US" },
   ]
+
+  onMount(() => {
+    themeChange(false)
+  })
 </script>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
@@ -30,12 +37,22 @@
     <select
       bind:value={selectedCountry}
       on:change={currentCountry.set(selectedCountry)}
-      class="select select-ghost select-bordered max-sm"
+      class="select select-primary select-bordered max-sm"
     >
       <option disabled={true}>Choose country</option>
       {#each countries as country}
         <option value={country.value}>{country.name}</option>
       {/each}
+    </select>
+    <select
+      class="select select-bordered select-primary w-full max-w-xs"
+      data-choose-theme
+      bind:value={$currentTheme}
+    >
+      <option disabled={true}>Choose theme</option>
+      <option>dark</option>
+      <option>forest</option>
+      <option>halloween</option>
     </select>
   </div>
 </div>

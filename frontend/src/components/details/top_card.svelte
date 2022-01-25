@@ -20,7 +20,10 @@
   let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
 
   const changeGenreAndRedirectHome = (genre) => {
+    console.log(genre)
+    console.log($currentGenres)
     $currentGenres = [genre]
+    console.log($currentGenres)
     $inputQuery = ""
     window.location.href = "/"
   }
@@ -37,7 +40,7 @@
 </script>
 
 <div
-  class="flex items-center px-4 py-10 bg-cover card bg-base-200 shadow-md"
+  class="flex items-center px-4 py-10 bg-cover card bg-gray-500 shadow-md"
   style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e"
 >
   <div
@@ -58,7 +61,7 @@
           class="h-96 bg-primary-content object-contain sm:max-h-96 rounded-lg
                 grid place-items-center"
         >
-          <h2 class="w-64 text-center text-black text-lg">
+          <h2 class="w-64 text-center text-neutral-content text-lg">
             <strong>{title}</strong>
           </h2>
         </div>

@@ -31,7 +31,7 @@
   {#if media.hits.length}
     <div
       class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
-                    md:grid-cols-4 sm:grid-cols-3 gap-2 px-4 pt-2 pb-4"
+                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-2 pb-4"
     >
       {#each media.hits as media, mediaIndex}
         <a
@@ -45,14 +45,14 @@
             </figure>
           {:else}
             <figure class="grid place-items-center bg-primary-content h-5/6">
-              <h2 class="text-center text-black text-lg">
+              <h2 class="text-center text-lg">
                 <strong>{media.title}</strong>
               </h2>
             </figure>
           {/if}
           {#if providerAmounts[mediaIndex] === 0}
             <div class="card-body">
-              <p class="text-center">
+              <p class="text-center text-neutral-content">
                 <strong>No providers in {currentCountry}</strong>
               </p>
             </div>
