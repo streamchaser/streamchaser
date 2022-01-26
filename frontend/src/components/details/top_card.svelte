@@ -37,7 +37,7 @@
 </script>
 
 <div
-  class="flex items-center px-4 py-10 bg-cover card bg-base-200 shadow-md"
+  class="flex items-center px-4 py-10 bg-cover card bg-gray-500 shadow-md"
   style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e"
 >
   <div
@@ -55,10 +55,10 @@
     {:else}
       <figure class="pt-10 pr-10 pl-10 sm:p-6">
         <div
-          class="h-96 bg-primary-content object-contain sm:max-h-96 rounded-lg
+          class="h-96 bg-slate-100 object-contain sm:max-h-96 rounded-lg
                 grid place-items-center"
         >
-          <h2 class="w-64 text-center text-black text-lg">
+          <h2 class="w-64 text-center text-gray-900 text-lg">
             <strong>{title}</strong>
           </h2>
         </div>
@@ -118,11 +118,11 @@
     {:else}
       <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
         {#each providers as provider}
-          <div class="avatar tooltip" data-tip={provider.provider_name}>
+          <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
             <div
               data-tip={provider.provider_name}
-              class="mb-2 rounded-full w-20 h-20 ring ring-gray-700
-                                ring-offset-base-100 ring-offset-2"
+              class="mb-2 rounded-full w-20 h-20 ring ring-neutral
+                                ring-offset-neutral ring-offset-2"
             >
               <img src="{IMG_URL}{provider.logo_path}" alt={provider.provider_name} />
             </div>

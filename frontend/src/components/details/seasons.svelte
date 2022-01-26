@@ -4,12 +4,12 @@
 
   export let seasons
 
-  const DESKTOP_INITIAL_OVERVIEW_LENGTH: number = 550
+  const INITIAL_OVERVIEW_LENGTH: number = 600
 
   const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
 
   let currentTab: number = 0
-  let desktopCurrentOverviewLength: number = DESKTOP_INITIAL_OVERVIEW_LENGTH
+  let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
 
   const changeActiveTab = (index) => {
     currentTab = index
@@ -61,15 +61,15 @@
               {/if}
               <div class="card-body">
                 <div class="card-title">{season.name}</div>
-                <div class="text-xl">
+                <div class="text-xl text-netural-content">
                   {season.air_date ? season.air_date.split("-")[0] : "No air date"}
                   | {season.episode_count} episodes
                 </div>
-                <div class="text-lg">
+                <div class="text-lg text-netural-content">
                   {season.air_date ? `Premiered on ${season.air_date}` : "Hasn't aired"}
                 </div>
                 &nbsp
-                <div class="text-base">
+                <div class="text-netural-content">
                   {season.overview ? season.overview : "No season overview available."}
                 </div>
               </div>
@@ -99,21 +99,21 @@
                 </figure>
               {/if}
               <div class="mx-4 my-2">
-                <div class="text-xl">
+                <div class="text-xl text-netural-content">
                   {season.air_date ? season.air_date.split("-")[0] : "No air date"}
                   | {season.episode_count} episodes
                 </div>
                 &nbsp
-                <div class="text-lg">
+                <div class="text-lg text-netural-content">
                   {season.air_date ? `Premiered on ${season.air_date}` : "Hasn't aired"}
                 </div>
                 &nbsp
                 <ReadMore
-                  currentDescriptionLength={desktopCurrentOverviewLength}
+                  currentDescriptionLength={currentOverviewLength}
                   mediaDescription={season.overview
                     ? season.overview
                     : "No season overview available."}
-                  initialDescriptionLength={DESKTOP_INITIAL_OVERVIEW_LENGTH}
+                  initialDescriptionLength={INITIAL_OVERVIEW_LENGTH}
                 />
               </div>
             </div>

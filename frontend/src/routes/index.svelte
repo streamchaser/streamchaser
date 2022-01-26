@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getKeyByValue, routeToPage, getFixedGenreValues } from "../utils"
+  import { getKeyByValue, getFixedGenreValues } from "../utils"
   import { variables } from "../variables.js"
   import Navbar from "../components/navbar.svelte"
   import Footer from "../components/footer.svelte"
@@ -10,7 +10,9 @@
   import { currentProviders } from "../stores/providers.js"
   import { currentGenres } from "../stores/genres"
   import { inputQuery } from "../stores/input"
+  import { chosenTheme } from "../stores/theme.js"
   import { onMount } from "svelte"
+  import DaisyuiThemes from "daisyui/colors/themes.js"
 
   const SEARCH_URL: string = `${variables.apiPath}/search/`
   const GENRE_URL: string = `${variables.apiPath}/genres/`
@@ -132,47 +134,82 @@
 
 <div class="flex flex-col h-screen justify-between">
   <Navbar />
-  <div class="mb-auto container mx-auto">
-    <div class="form-control pb-2 pt-4 px-4">
-      <input
-        id="input-field"
-        type="text"
-        placeholder="Search in {$currentCountry}"
-        class="input input-bordered"
-        bind:value={input}
-        on:input={debounceInput}
-        autofocus
-      />
+  <div class="container mb-auto mx-auto">
+    <div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-6">
+      <div class="form-control">
+        <input
+          id="input-field"
+          type="text"
+          placeholder="Search in {$currentCountry}"
+          class="input input-primary input-bordered"
+          bind:value={input}
+          on:input={debounceInput}
+          autofocus
+        />
+      </div>
+      <div class="sm:grid sm:grid-cols-2 sm:gap-2">
+        <MultiSelect
+          outerDivClass="bg-base-100"
+          --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            "neutral-focus"
+          ]}
+          --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            "neutral-content"
+          ]}
+          --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            'primary'
+          ]}"
+          --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            'primary'
+          ]}"
+          --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+          --sms-remove-x-hover-focus-color={DaisyuiThemes[
+            `[data-theme=${$chosenTheme}]`
+          ]["base-content"]}
+          --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            "neutral"
+          ]}
+          --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+          --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            "primary"
+          ]}
+          bind:selected={selectedGenres}
+          on:change={debounceInput}
+          options={getFixedGenreValues(formattedGenres)}
+          placeholder="Select genres..."
+        />
+        <MultiSelect
+          outerDivClass="bg-base-100"
+          --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            "neutral-focus"
+          ]}
+          --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            "neutral-content"
+          ]}
+          --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            'primary'
+          ]}"
+          --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            'primary'
+          ]}"
+          --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+          --sms-remove-x-hover-focus-color={DaisyuiThemes[
+            `[data-theme=${$chosenTheme}]`
+          ]["base-content"]}
+          --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            "neutral"
+          ]}
+          --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+          --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+            "primary"
+          ]}
+          bind:selected={$currentProviders}
+          on:change={debounceInput}
+          options={activeProviders}
+          placeholder="Select providers..."
+        />
+      </div>
     </div>
-    <div class="sm:grid sm:grid-cols-2 sm:gap-2 px-4">
-      <MultiSelect
-        --sms-options-bg="#2a2e37"
-        --sms-border="1pt solid #6B7280"
-        --sms-focus-border="2pt solid #6B7280"
-        --sms-active-color="#570df8"
-        --sms-remove-x-hover-focus-color="#6B7280"
-        --sms-li-selected-bg="#3d4451"
-        --sms-li-active-bg="#059669"
-        bind:selected={selectedGenres}
-        on:change={debounceInput}
-        options={getFixedGenreValues(formattedGenres)}
-        placeholder="Select genres..."
-      />
-      <MultiSelect
-        --sms-options-bg="#2a2e37"
-        --sms-border="1pt solid #6B7280"
-        --sms-focus-border="2pt solid #6B7280"
-        --sms-active-color="#570df8"
-        --sms-remove-x-hover-focus-color="#6B7280"
-        --sms-li-selected-bg="#3d4451"
-        --sms-li-active-bg="#059669"
-        bind:selected={$currentProviders}
-        on:change={debounceInput}
-        options={activeProviders}
-        placeholder="Select providers..."
-      />
-    </div>
-
     <MediaSearch
       {media}
       {providerAmounts}

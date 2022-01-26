@@ -27,7 +27,9 @@
             <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt={person.name} />
           </figure>
           <div class="card-body">
-            <p><b>{person.name}</b> - <i>{person.character}</i></p>
+            <p class="text-neutral-content">
+              <b>{person.name}</b> - <i>{person.character}</i>
+            </p>
           </div>
         </a>
       {/if}
