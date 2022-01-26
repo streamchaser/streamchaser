@@ -20,7 +20,7 @@
       {#if person.profile_path}
         <a
           href={mediaIdToUrlConverter(person.id, "person")}
-          class="card compact bordered shadow-md bg-neutral
+          class="card compact bordered shadow-md bg-neutral-focus
                             hover:contrast-75 hover:ring-2 ring-primary"
         >
           <figure>

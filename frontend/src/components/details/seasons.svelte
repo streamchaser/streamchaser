@@ -80,7 +80,7 @@
       <MediaQuery query="(min-width: 1025px)" let:matches>
         {#if matches}
           {#if index === currentTab}
-            <div class="card card-side bg-neutral bordered lg:w-5/6 xl:w-3/5">
+            <div class="card card-side bg-neutral-focus bordered lg:w-5/6 xl:w-3/5">
               {#if season.poster_path}
                 <figure>
                   <img
