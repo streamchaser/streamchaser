@@ -49,6 +49,8 @@
 
 <svelte:head>
   <title>{movieTitle} - Streamchaser</title>
+  <meta property="og:title" content={movieTitle} />
+  <meta property="og:description" content={"asdasdasdasdasdasdasdasdasdasd"} />
 </svelte:head>
 
 <div class="flex flex-col h-screen justify-between">
