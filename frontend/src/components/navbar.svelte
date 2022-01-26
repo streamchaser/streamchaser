@@ -15,7 +15,13 @@
     { name: "USA", value: "US" },
   ]
 
-  const themes = ["💎 luxury", "🌚 dark", "🌲 forest", "🎃 halloween", "🌆 synthwave"]
+  const themes = [
+    { icon: "💎", value: "luxury" },
+    { icon: "🌚", value: "dark" },
+    { icon: "🌲", value: "forest" },
+    { icon: "🎃", value: "halloween" },
+    { icon: "🌆", value: "synthwave" },
+  ]
 
   onMount(() => {
     themeChange(false)
@@ -42,14 +48,17 @@
       >
         {#each themes as theme}
           <li
-            data-set-theme={theme.split(" ")[1]}
+            data-set-theme={theme.value}
             data-act-class="ACTIVECLASS"
-            on:click={() => ($chosenTheme = theme.split(" ")[1])}
+            on:click={() => ($chosenTheme = theme.value)}
           >
-            {#if $chosenTheme == theme.split(" ")[1]}
-              <a class="bg-primary hover:bg-primary">{theme}</a>
+            {#if $chosenTheme == theme.value}
+              <a class="bg-primary hover:bg-primary">
+                {theme.icon}
+                {theme.value}
+              </a>
             {:else}
-              <a>{theme}</a>
+              <a>{theme.icon} {theme.value}</a>
             {/if}
           </li>
         {/each}
