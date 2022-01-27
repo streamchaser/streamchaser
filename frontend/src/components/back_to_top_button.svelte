@@ -2,15 +2,15 @@
   export let showOnPx = 150
   let hidden = true
 
-  function goTop() {
+  const goTop = () => {
     document.body.scrollIntoView({ behavior: "smooth" })
   }
 
-  function scrollContainer() {
+  const scrollContainer = () => {
     return document.documentElement || document.body
   }
 
-  function handleOnScroll() {
+  const handleOnScroll = () => {
     if (!scrollContainer()) {
       return
     }
