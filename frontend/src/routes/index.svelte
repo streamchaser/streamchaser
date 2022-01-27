@@ -6,6 +6,7 @@
   import CookieDisclaimer from "../components/cookie_disclaimer.svelte"
   import MultiSelect from "svelte-multiselect"
   import MediaSearch from "../components/media_search.svelte"
+  import BackToTopButton from "../components/back_to_top_button.svelte"
   import { currentCountry } from "../stores/country.js"
   import { currentProviders } from "../stores/providers.js"
   import { currentGenres } from "../stores/genres"
@@ -222,6 +223,7 @@
       {search}
     />
   </div>
+  <BackToTopButton />
   <Footer />
 </div>
 <CookieDisclaimer />
