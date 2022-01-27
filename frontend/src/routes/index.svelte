@@ -8,6 +8,7 @@
   import { currentGenres } from "../stores/genres"
   import { inputQuery } from "../stores/input"
   import { chosenTheme } from "../stores/theme.js"
+  import { limit } from "../stores/limit.js"
   import { onMount } from "svelte"
   import DT from "daisyui/colors/themes.js"
   import type { Genre, Media, Meilisearch } from "../types"
@@ -16,6 +17,7 @@
   const GENRE_URL = `${variables.apiPath}/genres/`
   const PROVIDER_URL = `${variables.apiPath}/providers/`
   const INPUT_TIMER = 200
+  const MEDIA_START_AMOUNT = 21
 
   let mediaStartAmount: number
   let currentMediaAmount: number
@@ -29,7 +31,7 @@
 
   // run search if we haven't received input in the last 200ms
   const debounceInput = () => {
-    currentMediaAmount = mediaStartAmount
+    $limit = MEDIA_START_AMOUNT
     clearTimeout(timer)
     timer = setTimeout(() => {
       search()
@@ -58,20 +60,10 @@
     const res =
       input !== ""
         ? await fetch(
-            SEARCH_URL +
-              input +
-              "?c=" +
-              $currentCountry +
-              query +
-              `&limit=${currentMediaAmount}`
+            SEARCH_URL + input + "?c=" + $currentCountry + query + `&limit=${$limit}`
           )
         : await fetch(
-            SEARCH_URL +
-              "*" +
-              "?c=" +
-              $currentCountry +
-              query +
-              `&limit=${currentMediaAmount}`
+            SEARCH_URL + "*" + "?c=" + $currentCountry + query + `&limit=${$limit}`
           )
     $inputQuery = input
     meilisearch = await res.json()
@@ -203,8 +195,8 @@
   {providerAmounts}
   currentCountry={$currentCountry}
   currentProviders={$currentProviders}
-  mediaStartAmount={mediaStartAmount}
-  bind:currentMediaAmount
+  mediaStartAmount={MEDIA_START_AMOUNT}
+  bind:$limit
   {input}
   currentGenres={$currentGenres}
   {search}
