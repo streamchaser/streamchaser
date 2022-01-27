@@ -21,16 +21,15 @@ EXPOSE 24678
 
 ### DEV ###
 FROM base as dev
-RUN echo "Starting the frontend as development"
 
 # Run the application for development
+RUN echo "Starting the frontend as development"
 CMD ["npm", "run", "dev", "--host", "0.0.0.0"]
 
 
 ### PROD ###
 FROM base as prod
-RUN echo "Starting the frontend as production"
 
 # Build the application for production and start the server
-RUN npm run build
+RUN echo "Starting the frontend as production" && npm run build
 CMD ["node", "./build"]
