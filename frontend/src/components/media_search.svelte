@@ -4,7 +4,6 @@
   import type { Meilisearch } from "../types"
 
   const SHOWN_PROVIDERS: number = 5
-  const SHOW_BUTTON_AMOUNT: number = 21
   const IMG_URL: string = "https://image.tmdb.org/t/p/original/"
   const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
 
@@ -12,6 +11,7 @@
   export let providerAmounts: number[]
   export let currentCountry: string
   export let currentProviders: string[]
+  export let showButtonAmount: number
   export let mediaStartAmount: number
   export let currentMediaAmount: number
   export let input: string
@@ -21,8 +21,8 @@
   const changeMediaAmount = (buttonElement: string) => {
     currentMediaAmount =
       buttonElement === "loadmore"
-        ? currentMediaAmount + SHOW_BUTTON_AMOUNT
-        : currentMediaAmount - SHOW_BUTTON_AMOUNT
+        ? currentMediaAmount + showButtonAmount
+        : currentMediaAmount - showButtonAmount
     search()
   }
 </script>

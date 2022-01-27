@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { calculateAmountOfShownItems } from "../utils"
   import { variables } from "../variables.js"
   import Select from "svelte-select"
   import MediaSearch from "../components/media_search.svelte"
@@ -15,7 +16,9 @@
   const GENRE_URL = `${variables.apiPath}/genres/`
   const PROVIDER_URL = `${variables.apiPath}/providers/`
   const INPUT_TIMER = 200
-  const MEDIA_START_AMOUNT = 21
+
+  let mediaStartAmount: number
+  let currentMediaAmount: number
 
   let input = ""
   let timer: NodeJS.Timeout
@@ -23,11 +26,10 @@
   let providerAmounts: number[] = []
   let genres: Genre[]
   let activeProviders = [""]
-  let currentMediaAmount = 21
 
   // run search if we haven't received input in the last 200ms
   const debounceInput = () => {
-    currentMediaAmount = MEDIA_START_AMOUNT
+    currentMediaAmount = mediaStartAmount
     clearTimeout(timer)
     timer = setTimeout(() => {
       search()
@@ -103,6 +105,10 @@
 
   onMount(async () => {
     const inputField = document.getElementById("input-field") as HTMLInputElement
+    const VIEWPORT_WIDTH = window.visualViewport.width
+    currentMediaAmount = calculateAmountOfShownItems(VIEWPORT_WIDTH)
+    mediaStartAmount = calculateAmountOfShownItems(VIEWPORT_WIDTH)
+
     setTimeout(function () {
       inputField.select()
     }, 20)
@@ -197,7 +203,7 @@
   {providerAmounts}
   currentCountry={$currentCountry}
   currentProviders={$currentProviders}
-  mediaStartAmount={MEDIA_START_AMOUNT}
+  mediaStartAmount={mediaStartAmount}
   bind:currentMediaAmount
   {input}
   currentGenres={$currentGenres}
