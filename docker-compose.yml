@@ -5,6 +5,8 @@ services:
     build:
       context: ./frontend
       target: "dev" # Specify which stage of the dockerfile to use
+      args:
+        - APP_ENV=dev
     restart: always
     container_name: frontend
     command: npm run dev
