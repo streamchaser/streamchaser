@@ -12,12 +12,14 @@ RUN npm install
 
 WORKDIR /usr/src/app
 
-# Build the application for production
-RUN npm run build
-
 # Expose port 3000 for the SvelteKit app and 24678 for Vite's HMR
 EXPOSE 3000
 EXPOSE 24678
 
-# Start the svelte build result
-CMD ["node", "./build"]
+# TODO: Make the file multi-stage #134
+# Run the application for development
+CMD ["npm", "run", "dev", "--host", "0.0.0.0"]
+
+# Build the application for production and start the server
+# RUN npm run build
+# CMD ["node", "./build"]
