@@ -25,6 +25,6 @@
 
 <svelte:window on:scroll={handleOnScroll} />
 
-<div class="fixed top-0 left-0 p-5 transition-all">
+<div class="fixed top-0 left-0 p-5 transition-all opacity-80">
   <button class="btn btn-secondary shadow-md" on:click={goTop} class:hidden>▲</button>
 </div>
