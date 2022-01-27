@@ -2,7 +2,9 @@ version: "3.3"
 
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      target: "dev" # Specify which stage of the dockerfile to use
     restart: always
     container_name: frontend
     command: npm run dev
