@@ -4,9 +4,9 @@ services:
   frontend:
     build:
       context: ./frontend
-      target: "dev" # Specify which stage of the dockerfile to use
+      target: ${APP_ENVIRONMENT} # Specify which stage of the dockerfile to use
       args:
-        - APP_ENV=dev
+        - APP_ENV=${APP_ENVIRONMENT}
     restart: always
     container_name: frontend
     env_file:

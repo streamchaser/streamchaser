@@ -31,5 +31,5 @@ CMD ["npm", "run", "dev", "--host", "0.0.0.0"]
 FROM base as prod
 
 # Build the application for production and start the server
-RUN echo "Starting the frontend as production" && npm run build
+RUN npm run build
 CMD ["node", "./build"]
