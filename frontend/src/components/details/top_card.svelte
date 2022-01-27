@@ -37,11 +37,11 @@
 </script>
 
 <div
-  class="flex items-center px-4 py-10 bg-cover card bg-gray-500 shadow-md"
+  class="flex items-center px-4 py-10 bg-cover card bg-base-100 shadow-md"
   style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e"
 >
   <div
-    class="card sm:card-side bg-gray-700 bg-opacity-90 bordered
+    class="card sm:card-side bg-base-100 bg-opacity-90 bordered
                 text-neutral-content shadow-md"
   >
     {#if posterPath}
