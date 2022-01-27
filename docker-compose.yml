@@ -2,10 +2,13 @@ version: "3.3"
 
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      target: ${APP_ENVIRONMENT} # Specify which stage of the dockerfile to use
+      args:
+        - APP_ENV=${APP_ENVIRONMENT}
     restart: always
     container_name: frontend
-    command: npm run dev
     env_file:
       - .env
     ports:
@@ -46,7 +49,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-web.rule=Host(`api.${HOST_NAME}`)"
       - "traefik.http.routers.backend-web.entrypoints=web"
-      # - "traefik.http.routers.api-web.middlewares=redirect@file"
       - "traefik.http.routers.backend-secured.rule=Host(`api.${HOST_NAME}`)"
       - "traefik.http.routers.backend-secured.entrypoints=web-secured"
       - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"

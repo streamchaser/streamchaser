@@ -1,5 +1,7 @@
-# Our Node base image
-FROM node:16-alpine
+ARG APP_ENV=dev
+
+## BASE ###
+FROM node:16-alpine as base
 
 # Change our current working directory
 WORKDIR /usr/src/app
@@ -7,7 +9,7 @@ WORKDIR /usr/src/app
 # Copy all local files into the image
 COPY . .
 
-# install node_modules
+# Install dependencies
 RUN npm install
 
 WORKDIR /usr/src/app
@@ -16,10 +18,18 @@ WORKDIR /usr/src/app
 EXPOSE 3000
 EXPOSE 24678
 
-# TODO: Make the file multi-stage #134
+
+### DEV ###
+FROM base as dev
+
 # Run the application for development
+RUN echo "Starting the frontend as development"
 CMD ["npm", "run", "dev", "--host", "0.0.0.0"]
 
+
+### PROD ###
+FROM base as prod
+
 # Build the application for production and start the server
-# RUN npm run build
-# CMD ["node", "./build"]
+RUN npm run build
+CMD ["node", "./build"]
