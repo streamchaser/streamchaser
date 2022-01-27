@@ -8,11 +8,34 @@
   let selectedCountry = $currentCountry
 
   const countries = [
-    { name: "Denmark", value: "DK" },
-    { name: "Germany", value: "DE" },
-    { name: "Sweden", value: "SE" },
-    { name: "UK", value: "GB" },
-    { name: "USA", value: "US" },
+    { name: "Denmark", value: "DK", icon: "🇩🇰" },
+    { name: "Germany", value: "DE", icon: "🇩🇪" },
+    { name: "Sweden", value: "SE", icon: "🇸🇪" },
+    { name: "UK", value: "GB", icon: "🇬🇧" },
+    { name: "USA", value: "US", icon: "🇺🇸" },
+    { name: "Norway", value: "NO", icon: "🇳🇴" },
+    { name: "Netherlands", value: "NL", icon: "🇳🇱" },
+    { name: "Spain", value: "ES", icon: "🇪🇸" },
+    { name: "India", value: "IN", icon: "🇮🇳" },
+    { name: "France", value: "FR", icon: "🇫🇷" },
+    { name: "Finland", value: "FI", icon: "🇫🇮" },
+    { name: "Switzerland", value: "CH", icon: "🇨🇭" },
+    { name: "New Zealand", value: "NZ", icon: "🇳🇿" },
+    { name: "Hungary", value: "HU", icon: "🇭🇺" },
+    { name: "Italy", value: "IT", icon: "🇮🇹" },
+    { name: "Belgium", value: "BE", icon: "🇧🇪" },
+    { name: "Russia", value: "RU", icon: "🇷🇺" },
+    { name: "Austria", value: "AT", icon: "🇦🇹" },
+    { name: "Australia", value: "AU", icon: "🇦🇺" },
+    { name: "Bulgaria", value: "BG", icon: "🇧🇬" },
+    { name: "Croatia", value: "HR", icon: "🇭🇷" },
+    { name: "Czechia", value: "CZ", icon: "🇨🇿" },
+    { name: "Estonia", value: "EE", icon: "🇪🇪" },
+    { name: "Greece", value: "GR", icon: "🇬🇷" },
+    { name: "Ireland", value: "IE", icon: "🇮🇪" },
+    { name: "Latvia", value: "LV", icon: "🇱🇻" },
+    { name: "Poland", value: "PL", icon: "🇵🇱" },
+    { name: "Romania", value: "RO", icon: "🇷🇴" },
   ]
 
   const themes = [
@@ -73,7 +96,7 @@
     >
       <option disabled={true}>Choose country</option>
       {#each countries as country}
-        <option value={country.value}>{country.name}</option>
+        <option value={country.value}>{country.icon} {country.name}</option>
       {/each}
     </select>
   </div>

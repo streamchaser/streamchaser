@@ -22,7 +22,37 @@ class Settings(BaseSettings):
     streamchaser_url: str = "localhost"
     tmdb_key: str = "no key"
     tmdb_url: str = "https://api.themoviedb.org/3/"
-    supported_country_codes: list[str] = ["DK", "GB", "DE", "SE", "US"]
+    supported_country_codes: list[str] = [
+        "DK",
+        "GB",
+        "DE",
+        "SE",
+        "US",
+        "NL",
+        "RU",
+        "IN",
+        "FR",
+        "FI",
+        "CH",
+        "NZ",
+        "HU",
+        "IT",
+        "BE",
+        "NO",
+        "AT",
+        "AU",
+        "BG",
+        "HR",
+        "CZ",
+        "EE",
+        "GR",
+        "IE",
+        "LV",
+        "ES",
+        "PL",
+        "RO",
+        "PT",
+    ]
 
     # Postgres setting
     psql_user: str = "postgres"
