@@ -31,5 +31,6 @@ assets/build
 
 backend/.env
 frontend/.env
+frontend/build
 /letsencrypt
 backend/json.gz_dumps

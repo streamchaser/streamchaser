@@ -10,7 +10,7 @@
 </script>
 
 <div class="flex justify-center items-center">
-  <div class="animate-spin rounded-full h-32 w-32 border-b-8 border-neutral" />
+  <div class="animate-spin rounded-full h-32 w-32 border-b-8 border-primary" />
 </div>
 {#if tooLongLoad}
   <h2 class="flex justify-center pt-6">

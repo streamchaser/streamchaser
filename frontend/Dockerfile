@@ -1,23 +1,35 @@
-# Our Node base image
-FROM node:16-alpine
+ARG APP_ENV=dev
 
-# Set the Node environment to development to ensure all packages are installed
-ENV NODE_ENV development
+## BASE ###
+FROM node:16-alpine as base
 
 # Change our current working directory
 WORKDIR /usr/src/app
 
-# Copy over `package.json` and lock files to optimize the build process
-COPY ["package.json", "package-lock.json*", ".env*", "./"]
-# Install Node modules
+# Copy all local files into the image
+COPY . .
+
+# Install dependencies
 RUN npm install
 
-# Copy over rest of the project files
-COPY . .
+WORKDIR /usr/src/app
 
 # Expose port 3000 for the SvelteKit app and 24678 for Vite's HMR
 EXPOSE 3000
 EXPOSE 24678
 
-# Run and set the host to 0.0.0.0 so we can access the web app from outside
-# CMD ["npm", "run", "dev", "--host", "0.0.0.0"]
+
+### DEV ###
+FROM base as dev
+
+# Run the application for development
+RUN echo "Starting the frontend as development"
+CMD ["npm", "run", "dev", "--host", "0.0.0.0"]
+
+
+### PROD ###
+FROM base as prod
+
+# Build the application for production and start the server
+RUN npm run build
+CMD ["node", "./build"]

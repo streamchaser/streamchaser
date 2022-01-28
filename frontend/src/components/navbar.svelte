@@ -1,6 +1,9 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
+  import { themeChange } from "theme-change"
+  import { onMount } from "svelte"
   import { currentCountry } from "../stores/country.js"
+  import { chosenTheme } from "../stores/theme.js"
 
   let selectedCountry = $currentCountry
 
@@ -11,10 +14,22 @@
     { name: "UK", value: "GB" },
     { name: "USA", value: "US" },
   ]
+
+  const themes = [
+    { icon: "💎", value: "luxury" },
+    { icon: "🌚", value: "dark" },
+    { icon: "🌲", value: "forest" },
+    { icon: "🎃", value: "halloween" },
+    { icon: "🌆", value: "synthwave" },
+  ]
+
+  onMount(() => {
+    themeChange(false)
+  })
 </script>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
-  <div class="flex-none px-2 mx-2">
+  <div class="flex-none sm:px-2 sm:mx-2">
     <a href="/">
       <span class="text-lg font-bold"> streamchaser </span>
     </a>
@@ -25,12 +40,36 @@
       <a class="btn btn-ghost btn-sm rounded-btn" href="/about"> About </a>
       <a class="btn btn-ghost btn-sm rounded-btn" href="/faq"> FAQ </a>
     </div>
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" class="btn btn-ghost btn-sm rounded-btn text-xl">🎨</div>
+      <ul
+        tabindex="0"
+        class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+      >
+        {#each themes as theme}
+          <li
+            data-set-theme={theme.value}
+            data-act-class="ACTIVECLASS"
+            on:click={() => ($chosenTheme = theme.value)}
+          >
+            {#if $chosenTheme == theme.value}
+              <a class="bg-primary hover:bg-primary">
+                {theme.icon}
+                {theme.value}
+              </a>
+            {:else}
+              <a>{theme.icon} {theme.value}</a>
+            {/if}
+          </li>
+        {/each}
+      </ul>
+    </div>
   </div>
   <div class="sm:pl-4">
     <select
       bind:value={selectedCountry}
       on:change={currentCountry.set(selectedCountry)}
-      class="select select-ghost select-bordered max-sm"
+      class="select select-primary select-bordered max-sm"
     >
       <option disabled={true}>Choose country</option>
       {#each countries as country}
