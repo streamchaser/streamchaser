@@ -6,12 +6,12 @@
   import CookieDisclaimer from "../components/cookie_disclaimer.svelte"
 </script>
 
-<div class="flex flex-col h-screen justify-between">
+<div class="flex flex-col h-screen">
   <Navbar />
-  <div class="container mb-auto mx-auto">
+  <div class="flex-grow">
     <slot />
   </div>
   <BackToTopButton />
   <Footer />
+  <CookieDisclaimer />
 </div>
-<CookieDisclaimer />

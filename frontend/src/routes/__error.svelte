@@ -18,7 +18,5 @@
 </svelte:head>
 
 {#if loadError}
-  <div class="flex flex-col h-screen justify-between">
-    <Error error={"404 Page not found"} />
-  </div>
+  <Error error={"404 Page not found"} />
 {/if}
