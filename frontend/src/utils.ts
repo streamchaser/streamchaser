@@ -65,20 +65,25 @@ export const uniqueArray = (list: object[], filterBy: string) => {
 }
 
 export const calculateAmountOfShownItems = (viewportWidth: number) => {
-  if (viewportWidth < 640) {
-    console.log("sm")
-    return 12
-  } else if (viewportWidth > 764 && viewportWidth < 768) {
-    console.log("md")
-    return 16
-  } else if (viewportWidth > 1024 && viewportWidth < 1024) {
-    console.log("lg")
-    return 20
-  } else if (viewportWidth > 1280 && viewportWidth < 1280) {
-    console.log("xl")
-    return 24
-  } else if (viewportWidth > 1536) {
+  console.log(viewportWidth)
+  if (viewportWidth >= 1536) {
     console.log("2xl")
-    return 24
+    return 35
+  } else if (viewportWidth >= 1280) {
+    console.log("xl")
+    return 30
+  } else if (viewportWidth >= 1024) {
+    console.log("lg")
+    return 25
+  } else if (viewportWidth >= 764) {
+    console.log("md")
+    return 20
+  } else if (viewportWidth >= 640) {
+    console.log("sm")
+    return 15
+  } else {
+    // Less than SM
+    console.log("less than SM")
+    return 10
   }
 }

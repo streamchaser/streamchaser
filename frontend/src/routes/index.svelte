@@ -19,15 +19,15 @@
   const INPUT_TIMER = 200
   const MEDIA_START_AMOUNT = 21
 
-  let mediaStartAmount: number
-  let currentMediaAmount: number
-
   let input = ""
   let timer: NodeJS.Timeout
   let meilisearch: Meilisearch
   let providerAmounts: number[] = []
   let genres: Genre[]
   let activeProviders = [""]
+  let viewPortWidth: number
+  let currentMediaAmount: number
+  let mediaStartAmount: number
 
   // run search if we haven't received input in the last 200ms
   const debounceInput = () => {
@@ -48,6 +48,13 @@
   const search = async () => {
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
+
+    // Sets the width of the viewport
+    viewPortWidth = window.visualViewport.width
+    currentMediaAmount = calculateAmountOfShownItems(viewPortWidth)
+    mediaStartAmount = calculateAmountOfShownItems(viewPortWidth)
+
+    console.log(viewPortWidth, currentMediaAmount, mediaStartAmount)
     let query = ""
     for (let i = 0; i < $currentGenres.length; i++) {
       query += `&g=${$currentGenres[i].value}`
@@ -60,10 +67,20 @@
     const res =
       input !== ""
         ? await fetch(
-            SEARCH_URL + input + "?c=" + $currentCountry + query + `&limit=${$limit}`
+            SEARCH_URL +
+              input +
+              "?c=" +
+              $currentCountry +
+              query +
+              `&limit=${currentMediaAmount}`
           )
         : await fetch(
-            SEARCH_URL + "*" + "?c=" + $currentCountry + query + `&limit=${$limit}`
+            SEARCH_URL +
+              "*" +
+              "?c=" +
+              $currentCountry +
+              query +
+              `&limit=${currentMediaAmount}`
           )
     $inputQuery = input
     meilisearch = await res.json()
