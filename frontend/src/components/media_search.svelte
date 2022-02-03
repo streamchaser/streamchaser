@@ -39,6 +39,11 @@
           class="card compact w-auto bordered bg-neutral m-1
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
         >
+          {#if media.id.charAt(0) == "t"}
+            <div class="absolute top-0 right-0 mx-1 -mt-1 opacity-85">
+              <div class="badge badge-sm">TV</div>
+            </div>
+          {/if}
           {#if media.poster_path}
             <figure>
               <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt={media.tite} />
