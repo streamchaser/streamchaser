@@ -1,7 +1,0 @@
-sqlalchemy
-requests
-meilisearch
-psycopg2-binary
-typer
-pytest
-tqdm
