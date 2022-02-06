@@ -8,9 +8,9 @@ from pydantic import BaseSettings
 
 
 class Environment(str, Enum):
-    DEVELOPMENT = "development"
-    TESTING = "testing"
-    PRODUCTION = "production"
+    DEVELOPMENT = "dev"
+    TESTING = "test"
+    PRODUCTION = "prod"
 
 
 class Settings(BaseSettings):
@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     """
 
     # Misc streamchaser settings
-    environment: Environment = Environment.PRODUCTION
+    environment: Environment = Environment.DEVELOPMENT
     streamchaser_url: str = "localhost"
     tmdb_key: Optional[str] = "no key"
     tmdb_url: str = "https://api.themoviedb.org/3/"
