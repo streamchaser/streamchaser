@@ -17,6 +17,8 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    depends_on:
+      - traefik
     networks:
       - traefik
       - streamchaser
@@ -40,6 +42,7 @@ services:
     depends_on:
       - db
       - search
+      - traefik
     links:
       - db
     networks:

@@ -32,5 +32,6 @@ assets/build
 backend/.env
 frontend/.env
 frontend/build
+frontend/.svelte-kit
 /letsencrypt
 backend/json.gz_dumps
