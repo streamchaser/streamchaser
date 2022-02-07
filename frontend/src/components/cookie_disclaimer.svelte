@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade, fly } from "svelte/transition"
   import { cookieDisclaimer } from "../stores/cookie_disclaimer.js"
   import { onMount } from "svelte"
 
@@ -11,7 +12,7 @@
 
 {#if loadDisclaimer}
   {#if !$cookieDisclaimer}
-    <div class="flex justify-center">
+    <div class="flex justify-center" in:fade out:fly={{ y: 200, duration: 1000 }}>
       <div class="alert shadow fixed sm:bottom-2 bottom-0 max-w-2xl">
         <div class="flex flex-col">
           <label class="pb-2">
