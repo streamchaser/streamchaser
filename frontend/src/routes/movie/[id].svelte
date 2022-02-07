@@ -7,11 +7,8 @@
   import { variables } from "../../variables.js"
   import { page } from "$app/stores"
   import { currentCountry } from "../../stores/country.js"
-  import Navbar from "../../components/navbar.svelte"
-  import Footer from "../../components/footer.svelte"
   import Error from "../../components/error.svelte"
   import Person from "../../components/details/person.svelte"
-  import CookieDisclaimer from "../../components/cookie_disclaimer.svelte"
   import TopCard from "../../components/details/top_card.svelte"
   import Recommendations from "../../components/details/recommendations.svelte"
   import Spinner from "../../components/loading/spinner.svelte"
@@ -51,31 +48,24 @@
   <title>{movieTitle} - Streamchaser</title>
 </svelte:head>
 
-<div class="flex flex-col h-screen justify-between">
-  <Navbar />
-  <div class="container mx-auto pb-2">
-    {#await fetchMovieDetails()}
-      <Spinner />
-    {:then movie}
-      <TopCard
-        backdropPath={movie.backdrop_path}
-        posterPath={movie.poster_path}
-        title={movie.title}
-        overview={movie.overview}
-        genres={movie.genres}
-        providers={movie.providers}
-        runtime={movie.runtime}
-        imdbId={movie.imdb_id}
-        releaseDate={movie.release_date}
-      />
+{#await fetchMovieDetails()}
+  <Spinner />
+{:then movie}
+  <TopCard
+    backdropPath={movie.backdrop_path}
+    posterPath={movie.poster_path}
+    title={movie.title}
+    overview={movie.overview}
+    genres={movie.genres}
+    providers={movie.providers}
+    runtime={movie.runtime}
+    imdbId={movie.imdb_id}
+    releaseDate={movie.release_date}
+  />
 
-      <Person cast={movie.cast} />
+  <Person cast={movie.cast} />
 
-      <Recommendations recommendations={movie.recommendations} mediaType={"movie"} />
-    {:catch error}
-      <Error {error} />
-    {/await}
-  </div>
-  <Footer />
-</div>
-<CookieDisclaimer />
+  <Recommendations recommendations={movie.recommendations} mediaType={"movie"} />
+{:catch error}
+  <Error {error} />
+{/await}

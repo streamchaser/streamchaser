@@ -6,10 +6,7 @@
   } from "../../utils"
   import { variables } from "../../variables.js"
   import { page } from "$app/stores"
-  import Navbar from "../../components/navbar.svelte"
-  import Footer from "../../components/footer.svelte"
   import Error from "../../components/error.svelte"
-  import CookieDisclaimer from "../../components/cookie_disclaimer.svelte"
   import TopCard from "../../components/details/top_card.svelte"
   import PersonMedia from "../../components/details/person_media.svelte"
   import Spinner from "../../components/loading/spinner.svelte"
@@ -46,31 +43,24 @@
   <title>{personName} - Streamchaser</title>
 </svelte:head>
 
-<div class="flex flex-col h-screen justify-between">
-  <Navbar />
-  <div class="container mx-auto pb-2">
-    {#await fetchPersonDetails()}
-      <Spinner />
-    {:then person}
-      <TopCard
-        backdropPath={person.movie_credits[0].backdrop_path}
-        posterPath={person.profile_path}
-        title={person.name}
-        overview={person.biography}
-        genres={null}
-        providers={null}
-        runtime={null}
-        imdbId={null}
-        releaseDate={null}
-      />
+{#await fetchPersonDetails()}
+  <Spinner />
+{:then person}
+  <TopCard
+    backdropPath={person.movie_credits[0].backdrop_path}
+    posterPath={person.profile_path}
+    title={person.name}
+    overview={person.biography}
+    genres={null}
+    providers={null}
+    runtime={null}
+    imdbId={null}
+    releaseDate={null}
+  />
 
-      <PersonMedia media={person.movie_credits} mediaType={"movie"} title={"Movies"} />
+  <PersonMedia media={person.movie_credits} mediaType={"movie"} title={"Movies"} />
 
-      <PersonMedia media={person.tv_credits} mediaType={"tv"} title={"Series"} />
-    {:catch error}
-      <Error {error} />
-    {/await}
-  </div>
-  <Footer />
-</div>
-<CookieDisclaimer />
+  <PersonMedia media={person.tv_credits} mediaType={"tv"} title={"Series"} />
+{:catch error}
+  <Error {error} />
+{/await}

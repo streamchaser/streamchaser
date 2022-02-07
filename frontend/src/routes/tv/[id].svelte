@@ -53,33 +53,26 @@
   <title>{tvTitle} - Streamchaser</title>
 </svelte:head>
 
-<div class="flex flex-col h-screen justify-between">
-  <Navbar />
-  <div class="container mx-auto pb-2">
-    {#await fetchTVDetails()}
-      <Spinner />
-    {:then tv}
-      <TopCard
-        backdropPath={tv.backdrop_path}
-        posterPath={tv.poster_path}
-        title={tv.name}
-        overview={tv.overview}
-        genres={tv.genres}
-        providers={tv.providers}
-        runtime={tv.episode_run_time[0]}
-        imdbId={null}
-        releaseDate={tv.first_air_date}
-      />
+{#await fetchTVDetails()}
+  <Spinner />
+{:then tv}
+  <TopCard
+    backdropPath={tv.backdrop_path}
+    posterPath={tv.poster_path}
+    title={tv.name}
+    overview={tv.overview}
+    genres={tv.genres}
+    providers={tv.providers}
+    runtime={tv.episode_run_time[0]}
+    imdbId={null}
+    releaseDate={tv.first_air_date}
+  />
 
-      <Seasons seasons={tv.seasons} />
+  <Seasons seasons={tv.seasons} />
 
-      <Person cast={tv.cast} />
+  <Person cast={tv.cast} />
 
-      <Recommendations recommendations={tv.recommendations} mediaType={"tv"} />
-    {:catch error}
-      <Error {error} />
-    {/await}
-  </div>
-  <Footer />
-</div>
-<CookieDisclaimer />
+  <Recommendations recommendations={tv.recommendations} mediaType={"tv"} />
+{:catch error}
+  <Error {error} />
+{/await}

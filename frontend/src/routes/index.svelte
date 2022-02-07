@@ -1,12 +1,8 @@
 <script lang="ts">
   import { getKeyByValue, getFixedGenreValues } from "../utils"
   import { variables } from "../variables.js"
-  import Navbar from "../components/navbar.svelte"
-  import Footer from "../components/footer.svelte"
-  import CookieDisclaimer from "../components/cookie_disclaimer.svelte"
   import MultiSelect from "svelte-multiselect"
   import MediaSearch from "../components/media_search.svelte"
-  import BackToTopButton from "../components/back_to_top_button.svelte"
   import { currentCountry } from "../stores/country.js"
   import { currentProviders } from "../stores/providers.js"
   import { currentGenres } from "../stores/genres"
@@ -133,97 +129,77 @@
   <title>Streamchaser</title>
 </svelte:head>
 
-<div class="flex flex-col h-screen justify-between">
-  <Navbar />
-  <div class="container mb-auto mx-auto">
-    <div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-6">
-      <div class="form-control">
-        <input
-          id="input-field"
-          type="text"
-          placeholder="Search in {$currentCountry}"
-          class="input input-primary input-bordered"
-          bind:value={input}
-          on:input={debounceInput}
-          autofocus
-        />
-      </div>
-      <div class="sm:grid sm:grid-cols-2 sm:gap-2">
-        <MultiSelect
-          outerDivClass="bg-base-100"
-          --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            "neutral-focus"
-          ]}
-          --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            "neutral-content"
-          ]}
-          --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            'primary'
-          ]}"
-          --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            'primary'
-          ]}"
-          --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-          --sms-remove-x-hover-focus-color={DaisyuiThemes[
-            `[data-theme=${$chosenTheme}]`
-          ]["base-content"]}
-          --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            "neutral"
-          ]}
-          --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-          --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            "primary"
-          ]}
-          bind:selected={selectedGenres}
-          on:change={debounceInput}
-          options={getFixedGenreValues(formattedGenres)}
-          placeholder="Select genres..."
-        />
-        <MultiSelect
-          outerDivClass="bg-base-100"
-          --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            "neutral-focus"
-          ]}
-          --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            "neutral-content"
-          ]}
-          --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            'primary'
-          ]}"
-          --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            'primary'
-          ]}"
-          --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-          --sms-remove-x-hover-focus-color={DaisyuiThemes[
-            `[data-theme=${$chosenTheme}]`
-          ]["base-content"]}
-          --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            "neutral"
-          ]}
-          --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-          --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-            "primary"
-          ]}
-          bind:selected={$currentProviders}
-          on:change={debounceInput}
-          options={activeProviders}
-          placeholder="Select providers..."
-        />
-      </div>
-    </div>
-    <MediaSearch
-      {media}
-      {providerAmounts}
-      currentCountry={$currentCountry}
-      currentProviders={$currentProviders}
-      mediaStartAmount={MEDIA_START_AMOUNT}
-      bind:currentMediaAmount
-      {input}
-      currentGenres={$currentGenres}
-      {search}
+<div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-6">
+  <div class="form-control">
+    <input
+      id="input-field"
+      type="text"
+      placeholder="Search in {$currentCountry}"
+      class="input input-primary input-bordered"
+      bind:value={input}
+      on:input={debounceInput}
+      autofocus
     />
   </div>
-  <BackToTopButton />
-  <Footer />
+  <div class="sm:grid sm:grid-cols-2 sm:gap-2">
+    <MultiSelect
+      outerDivClass="bg-base-100"
+      --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral-focus"]}
+      --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+        "neutral-content"
+      ]}
+      --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+        'primary'
+      ]}"
+      --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+        'primary'
+      ]}"
+      --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+      --sms-remove-x-hover-focus-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+        "base-content"
+      ]}
+      --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral"]}
+      --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+      --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+      bind:selected={selectedGenres}
+      on:change={debounceInput}
+      options={getFixedGenreValues(formattedGenres)}
+      placeholder="Select genres..."
+    />
+    <MultiSelect
+      outerDivClass="bg-base-100"
+      --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral-focus"]}
+      --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+        "neutral-content"
+      ]}
+      --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+        'primary'
+      ]}"
+      --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+        'primary'
+      ]}"
+      --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+      --sms-remove-x-hover-focus-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+        "base-content"
+      ]}
+      --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral"]}
+      --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+      --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
+      bind:selected={$currentProviders}
+      on:change={debounceInput}
+      options={activeProviders}
+      placeholder="Select providers..."
+    />
+  </div>
 </div>
-<CookieDisclaimer />
+<MediaSearch
+  {media}
+  {providerAmounts}
+  currentCountry={$currentCountry}
+  currentProviders={$currentProviders}
+  mediaStartAmount={MEDIA_START_AMOUNT}
+  bind:currentMediaAmount
+  {input}
+  currentGenres={$currentGenres}
+  {search}
+/>
