@@ -1,6 +1,8 @@
 import asyncio
 from typing import Dict
+from typing import Union
 
+from app.config import Environment
 from app.config import get_settings
 from app.db import models
 from app.db.database import engine
@@ -13,6 +15,7 @@ from app.routers import search
 from app.routers import tv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 
 app = FastAPI()
@@ -30,14 +33,15 @@ async def init_db():
 
 
 streamchaser_url = get_settings().streamchaser_url
-origins = [
-    f"http://{streamchaser_url}:8080",
-    f"https://{streamchaser_url}:8080",
-    f"http://{streamchaser_url}",
-    f"https://{streamchaser_url}",
-    f"http://api.{streamchaser_url}",
-    f"https://api.{streamchaser_url}",
-]
+
+if get_settings().environment == Environment.PRODUCTION:
+    origins = [
+        f"http://{streamchaser_url}",
+        f"https://{streamchaser_url}",
+    ]
+else:
+    print("Running CORS origins in development mode")
+    origins = ["*"]
 
 
 app.add_middleware(
@@ -59,6 +63,11 @@ app.include_router(person.router)
 
 
 @app.get("/")
-async def root() -> Dict:
+async def root() -> Union[Dict, RedirectResponse]:
     """Home page"""
-    return {"data": "Welcome to the API - Go to /docs for the Swagger documentation"}
+    if get_settings().environment == Environment.PRODUCTION:
+        return {
+            "data": "Welcome to the API - Go to /docs for the Swagger documentation"
+        }
+    else:
+        return RedirectResponse(url="/docs")
