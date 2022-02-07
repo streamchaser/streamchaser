@@ -6,25 +6,25 @@ FROM node:16-alpine as base
 # Change our current working directory
 WORKDIR /usr/src/app
 
-# Copy all local files into the image
-COPY . .
+# Copy over `package.json` and lock files to optimize the build process
+COPY ["package.json", "package-lock.json*", "./"]
 
 # Install dependencies
 RUN npm install
 
-WORKDIR /usr/src/app
+# Copy all local files into the image
+COPY . .
 
 # Expose port 3000 for the SvelteKit app and 24678 for Vite's HMR
 EXPOSE 3000
 EXPOSE 24678
-
 
 ### DEV ###
 FROM base as dev
 
 # Run the application for development
 RUN echo "Starting the frontend as development"
-CMD ["npm", "run", "dev", "--host", "0.0.0.0"]
+CMD ["npm", "run", "dev"]
 
 
 ### PROD ###
