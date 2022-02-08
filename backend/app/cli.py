@@ -1,8 +1,10 @@
+import asyncio
 import gzip
 import json
 import math
 import os
 from concurrent.futures import ThreadPoolExecutor
+from functools import wraps
 from typing import Optional
 
 import typer
@@ -24,10 +26,19 @@ from app.db.database_service import format_genres
 from app.db.database_service import init_meilisearch_indexing
 from app.db.database_service import media_model_to_schema
 from app.db.database_service import prune_non_ascii_media_from_db
+from app.db.document import Provider
 from app.db.models import Media
 from app.db.search import client
 from app.db.search import update_index
 from tqdm import tqdm
+
+
+def coro(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        return asyncio.run(f(*args, **kwargs))
+
+    return wrapper
 
 
 supported_country_codes = get_settings().supported_country_codes
@@ -142,6 +153,36 @@ def add_data():
 
 
 @app.command()
+async def crap_func():
+    provider_list = ["Netflix", "Amazon Prime Video", "Hulu", "Disney+"]
+    country_code = "DK"
+
+    provider = Provider(country_code=country_code, providers=provider_list)
+    await Provider.insert_one(provider)
+    typer.echo("Done pooping!")
+
+
+@app.command()
+@coro
+async def hest():
+    provider_list = ["Netflix", "Amazon Prime Video", "Hulu", "Disney+"]
+    country_code = "DK"
+
+    provider = Provider(country_code=country_code, providers=provider_list)
+    await Provider.insert_one(provider)
+    typer.echo("Done pooping!")
+
+
+@coro
+@app.command()
+def lort():
+    typer.echo("Crap")
+    loop = asyncio.get_event_loop()
+    coroutine = crap_func()
+    loop.run_until_complete(coroutine)
+
+
+@app.command()
 def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
     fetch_media(popularity if popularity else 0)
     if remove_non_ascii:
@@ -150,7 +191,7 @@ def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
     dump_genres_to_db()
     cleanup_genres()
     index_meilisearch()
-    extract_unique_providers_to_txt()
+    asyncio.run(extract_unique_providers_to_txt())
     update_index()
     remove_blacklisted_from_search()
 

@@ -8,6 +8,7 @@ from app.db import database
 from app.db import models
 from app.db.crud import count_all_media
 from app.db.database import engine
+from app.db.document import Provider
 from app.db.models import Media
 from app.db.search import client
 from sqlalchemy.exc import IntegrityError
@@ -125,7 +126,8 @@ def init_meilisearch_indexing(chunk_size: int):
                 pbar.update(1)
 
 
-def extract_unique_providers_to_txt():
+# TODO: Move providers to a DB
+async def extract_unique_providers_to_txt():
     db = database.SessionLocal()
     media_list = crud.get_all_media(db=db)
 
@@ -136,9 +138,14 @@ def extract_unique_providers_to_txt():
             for provider in media.providers
             if provider.get(country_code)
         }
-        ordered_provider_list = sorted(provider_set)
+
+        provider_list = list(provider_set)
+
+        provider = Provider(country_code=country_code, providers=provider_list)
+        await Provider.insert_one(provider)
+
         with open(f"../providers_{country_code}.txt", "w") as file:
-            for provider in ordered_provider_list:
+            for provider in provider_list:
                 file.write(f"{provider}\n")
 
 

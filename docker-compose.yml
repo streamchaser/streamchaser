@@ -37,6 +37,8 @@ services:
     container_name: backend
     env_file:
       - .env
+    ports:
+      - 1337:1337
     volumes:
       - ./backend/:/app
     depends_on:
@@ -115,6 +117,30 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`monitor.${HOST_NAME}`)"
       - "traefik.http.routers.api.service=api@internal"
+  mongo:
+    image: mongo:5.0.6
+    container_name: mongo
+    restart: always
+    networks:
+      - streamchaser
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    networks:
+      - streamchaser
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
 
 networks:
   traefik:
