@@ -25,10 +25,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend-web.rule=Host(`${HOST_NAME}`)"
-      - "traefik.http.routers.frontend-web.entrypoints=web"
       # - "traefik.http.routers.frontend-web.middlewares=redirect@file"
       - "traefik.http.routers.frontend-secured.rule=Host(`${HOST_NAME}`)"
-      - "traefik.http.routers.frontend-secured.entrypoints=web-secured"
       - "traefik.http.routers.frontend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
   backend:
@@ -51,9 +49,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend-web.rule=Host(`api.${HOST_NAME}`)"
-      - "traefik.http.routers.backend-web.entrypoints=web"
       - "traefik.http.routers.backend-secured.rule=Host(`api.${HOST_NAME}`)"
-      - "traefik.http.routers.backend-secured.entrypoints=web-secured"
       - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
   search:
