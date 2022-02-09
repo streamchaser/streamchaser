@@ -16,6 +16,7 @@ __pycache__/
 
 # Data
 pgdata
+providers_txt
 backend/providers???.txt
 
 # Frontend
