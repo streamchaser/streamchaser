@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     """
 
     # Misc streamchaser settings
-    environment: Environment = Environment.DEVELOPMENT
+    app_environment: Environment = Environment.DEVELOPMENT
     streamchaser_url: str = "localhost"
     tmdb_key: Optional[str] = "no key"
     tmdb_url: str = "https://api.themoviedb.org/3/"
