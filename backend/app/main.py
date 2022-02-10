@@ -3,6 +3,7 @@ import asyncio
 from app.config import Environment
 from app.config import get_settings
 from app.db import models
+from app.db.cache import redis
 from app.db.database import engine
 from app.routers import genres
 from app.routers import media
@@ -23,6 +24,8 @@ app = FastAPI()
 async def init_db():
     try:
         models.Base.metadata.create_all(bind=engine)
+        # Makes sure the redis connection is active
+        redis
     except Exception as e:
         print(e)
         print("Will try to connect to the database again in 2 seconds...")

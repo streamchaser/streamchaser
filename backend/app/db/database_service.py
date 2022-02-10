@@ -1,3 +1,4 @@
+import json
 from math import ceil
 
 from app import schemas
@@ -6,6 +7,7 @@ from app.config import get_settings
 from app.db import crud
 from app.db import database
 from app.db import models
+from app.db.cache import redis
 from app.db.crud import count_all_media
 from app.db.database import engine
 from app.db.models import Media
@@ -40,11 +42,37 @@ def dump_media_to_db(db: database.SessionLocal, media: models.Media) -> None:
         db.close()
 
 
-def dump_genres_to_db() -> None:
+async def dump_genres_to_db() -> None:
     """Turns a dict of genres into Genre-schemas, and feeds them to crud create"""
     # TODO: connection should probably be done in a safer way
     db = database.SessionLocal()
     genres = get_genres()
+
+    formatted_genre_list = [
+        schemas.Genre(
+            id=x,
+            name=genres[x],
+            value=genres[x],
+        )
+        for x in genres
+    ]
+
+    fixed_formatted_genres = [
+        schemas.Genre(
+            id=genre.id,
+            name=genre.name,
+            value=str(genre.name).replace(" & ", "%20%26%20"),
+        )
+        if " & " in genre.name
+        else genre
+        for genre in formatted_genre_list
+    ]
+    formatted_genre_list_to_dict = [genre.json() for genre in fixed_formatted_genres]
+    await redis.delete("genre_list")
+    await redis.rpush("genre_list", *formatted_genre_list_to_dict)
+    genre_json = await redis.lrange("genre_list", 0, -1)
+    cool_move = list(map(json.loads, genre_json))
+    print(cool_move)
 
     for key in genres:
         formatted_genre = schemas.Genre(

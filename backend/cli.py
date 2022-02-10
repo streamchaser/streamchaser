@@ -1,8 +1,10 @@
+import asyncio
 import gzip
 import json
 import math
 import os
 from concurrent.futures import ThreadPoolExecutor
+from functools import wraps
 from typing import Optional
 
 import typer
@@ -29,10 +31,17 @@ from app.db.search import client
 from app.db.search import update_index
 from tqdm import tqdm
 
-
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
+
+
+def coroutine(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        return asyncio.run(f(*args, **kwargs))
+
+    return wrapper
 
 
 @app.command()
@@ -139,6 +148,12 @@ def add_data():
 
                 progress_bar.update(1)
     db.close()
+
+
+@app.command()
+@coroutine
+async def add_data_async():
+    await dump_genres_to_db()
 
 
 @app.command()

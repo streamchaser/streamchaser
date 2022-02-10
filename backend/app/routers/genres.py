@@ -1,4 +1,6 @@
-from app.db.crud import get_all_genres
+import json
+
+from app.db.cache import redis
 from app.db.database import get_db
 from fastapi import APIRouter
 from fastapi import Depends
@@ -15,5 +17,8 @@ router = APIRouter(
 @router.get("/")
 async def read_all_genres(db: Session = Depends(get_db)):
     """Reads all genres, returns only name and value"""
-    db_genres = get_all_genres(db=db)
-    return {genre.name: genre.value for genre in db_genres}
+    # redis
+    # db_genres = get_all_genres(db=db)
+    genre_json = await redis.lrange("genre_list", 0, -1)
+    return list(map(json.loads, genre_json))
+    # return {genre.name: genre.value for genre in db_genres}
