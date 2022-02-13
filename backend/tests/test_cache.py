@@ -3,9 +3,9 @@ from app.db.database_service import insert_genres_to_cache
 from pytest import fixture
 
 test_genre_dict = {
-    1: "NoSpaces",
-    2: "Two Spaces",
-    3: "A Lot of Spaces",
+    1: "NoAmpersands",
+    2: "One & Ampersand",
+    3: "A & Lot & of & Ampersands",
 }
 
 
@@ -15,16 +15,20 @@ async def clear_db():
     Setup the test database.
     """
     await Genre.delete()
+    assert not await Genre.select()
     yield
+    await Genre.delete()
 
 
-async def test_create_genre_cache():
+async def test_insert_genres_to_cache():
     """
     Test that the genre cache is created and populated correctly.
     """
-    assert not await Genre.select()
-
     await insert_genres_to_cache(test_genre_dict)
 
-    assert await Genre.select()
-    assert len(await Genre.select()) == 3
+    genres = await Genre.select()
+
+    assert genres
+    assert len(genres) == 3
+    for genre in genres:
+        assert "&" not in genre.value
