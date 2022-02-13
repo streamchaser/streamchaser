@@ -66,12 +66,3 @@ class Person(BaseModel):
     movie_credits: list[dict] | None
     tv_credits: list[dict] | None
     gender: int
-
-
-class Genre(BaseModel):
-    id: int
-    name: str
-    value: str
-
-    class Config:
-        orm_mode = True

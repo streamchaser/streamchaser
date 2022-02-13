@@ -1,4 +1,3 @@
-import json
 from math import ceil
 
 from app import schemas
@@ -7,7 +6,7 @@ from app.config import get_settings
 from app.db import crud
 from app.db import database
 from app.db import models
-from app.db.cache import redis
+from app.db.cache import Genre
 from app.db.crud import count_all_media
 from app.db.database import engine
 from app.db.models import Media
@@ -42,70 +41,22 @@ def dump_media_to_db(db: database.SessionLocal, media: models.Media) -> None:
         db.close()
 
 
-async def dump_genres_to_db() -> None:
+async def insert_genres_to_cache() -> None:
     """Turns a dict of genres into Genre-schemas, and feeds them to crud create"""
     # TODO: connection should probably be done in a safer way
-    db = database.SessionLocal()
     genres = get_genres()
 
-    formatted_genre_list = [
-        schemas.Genre(
-            id=x,
-            name=genres[x],
-            value=genres[x],
+    fixed_genres = [
+        Genre(
+            name=genre,
+            value=genre.replace(" & ", "%20%26%20"),
         )
-        for x in genres
+        if " & " in genre
+        else Genre(name=genre, value=genre)
+        for genre in genres.values()
     ]
 
-    fixed_formatted_genres = [
-        schemas.Genre(
-            id=genre.id,
-            name=genre.name,
-            value=str(genre.name).replace(" & ", "%20%26%20"),
-        )
-        if " & " in genre.name
-        else genre
-        for genre in formatted_genre_list
-    ]
-    formatted_genre_list_to_dict = [genre.json() for genre in fixed_formatted_genres]
-    await redis.delete("genre_list")
-    await redis.rpush("genre_list", *formatted_genre_list_to_dict)
-    genre_json = await redis.lrange("genre_list", 0, -1)
-    cool_move = list(map(json.loads, genre_json))
-    print(cool_move)
-
-    for key in genres:
-        formatted_genre = schemas.Genre(
-            id=key,
-            name=genres[key],
-            value=genres[key],
-        )
-
-        db_genre = crud.get_genre_by_id(db=db, genre_id=key)
-        if not db_genre:
-            crud.create_genre(db=db, genre=formatted_genre)
-    db.close()
-
-
-def format_genres() -> None:
-    """Finds any genre name containing ampersand (&), formats the name to work with the
-    TMDb query, and calls crud update
-    """
-    db = database.SessionLocal()
-    genres = crud.get_all_genres(db=db)
-
-    formatted_genres = [
-        schemas.Genre(
-            id=genre.id,
-            name=str(genre.name).replace(" & ", "%20%26%20"),
-            value=genre.name,
-        )
-        for genre in genres
-        if " & " in genre.name
-    ]
-
-    for genre in formatted_genres:
-        crud.update_genre_name(db, genre)
+    await Genre.insert(fixed_genres)
 
 
 def init_meilisearch_indexing(chunk_size: int):

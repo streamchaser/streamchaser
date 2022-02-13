@@ -1,10 +1,5 @@
-import json
-
-from app.db.cache import redis
-from app.db.database import get_db
+from app.db.cache import Genre
 from fastapi import APIRouter
-from fastapi import Depends
-from sqlalchemy.orm import Session
 
 
 router = APIRouter(
@@ -14,11 +9,7 @@ router = APIRouter(
 )
 
 
-@router.get("/")
-async def read_all_genres(db: Session = Depends(get_db)):
+@router.get("/", response_model=list[Genre])
+async def read_all_genres():
     """Reads all genres, returns only name and value"""
-    # redis
-    # db_genres = get_all_genres(db=db)
-    genre_json = await redis.lrange("genre_list", 0, -1)
-    return list(map(json.loads, genre_json))
-    # return {genre.name: genre.value for genre in db_genres}
+    return await Genre.select()

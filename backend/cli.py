@@ -19,11 +19,10 @@ from app.db.crud import delete_media_by_id
 from app.db.crud import get_media_by_id
 from app.db.crud import update_media_data_by_id
 from app.db.database import engine
-from app.db.database_service import dump_genres_to_db
 from app.db.database_service import dump_media_to_db
 from app.db.database_service import extract_unique_providers_to_txt
-from app.db.database_service import format_genres
 from app.db.database_service import init_meilisearch_indexing
+from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import media_model_to_schema
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.models import Media
@@ -93,11 +92,6 @@ def index_meilisearch():
 
 
 @app.command()
-def cleanup_genres():
-    format_genres()
-
-
-@app.command()
 def remove_blacklisted_from_search():
     blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
     for country_code in supported_country_codes:
@@ -152,18 +146,18 @@ def add_data():
 
 @app.command()
 @coroutine
-async def add_data_async():
-    await dump_genres_to_db()
+async def insert_to_redis_cache():
+    await insert_genres_to_cache()
 
 
 @app.command()
-def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
+@coroutine
+async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
+    await insert_genres_to_cache()
     fetch_media(popularity if popularity else 0)
     if remove_non_ascii:
         remove_non_ascii_media()
     add_data()
-    dump_genres_to_db()
-    cleanup_genres()
     index_meilisearch()
     extract_unique_providers_to_txt()
     update_index()
