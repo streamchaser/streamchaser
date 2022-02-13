@@ -9,6 +9,7 @@ from typing import Optional
 
 import typer
 from app.api import fetch_jsongz_files
+from app.api import get_genres
 from app.api import media_converter
 from app.api import request_data
 from app.config import get_settings
@@ -147,13 +148,13 @@ def add_data():
 @app.command()
 @coroutine
 async def insert_to_redis_cache():
-    await insert_genres_to_cache()
+    await insert_genres_to_cache(get_genres())
 
 
 @app.command()
 @coroutine
 async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
-    await insert_genres_to_cache()
+    await insert_genres_to_cache(get_genres())
     fetch_media(popularity if popularity else 0)
     if remove_non_ascii:
         remove_non_ascii_media()

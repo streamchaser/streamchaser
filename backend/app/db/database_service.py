@@ -1,7 +1,6 @@
 from math import ceil
 
 from app import schemas
-from app.api import get_genres
 from app.config import get_settings
 from app.db import crud
 from app.db import database
@@ -41,10 +40,8 @@ def dump_media_to_db(db: database.SessionLocal, media: models.Media) -> None:
         db.close()
 
 
-async def insert_genres_to_cache() -> None:
+async def insert_genres_to_cache(genres: dict) -> None:
     """Turns a dict of genres into Genre-schemas, and feeds them to crud create"""
-    # TODO: connection should probably be done in a safer way
-    genres = get_genres()
 
     fixed_genres = [
         Genre(
