@@ -12,6 +12,7 @@ from app.api import media_converter
 from app.api import request_data
 from app.config import get_settings
 from app.db import database
+from app.db.cache import redis
 from app.db.crud import count_all_media
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
@@ -134,6 +135,12 @@ def add_data():
 
                 progress_bar.update(1)
     db.close()
+
+
+@app.command()
+@coroutine
+async def smth_redis():
+    await redis.flushdb()
 
 
 @app.command()

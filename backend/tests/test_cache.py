@@ -1,6 +1,7 @@
 import asyncio
 
 from app.db.cache import Genre
+from app.db.cache import redis
 from app.db.database_service import insert_genres_to_cache
 from pytest import fixture
 
@@ -24,7 +25,7 @@ async def prepare_db():
     Setup the test database at session scope
     Makes sure the db is empty before starting a test session
     """
-    await Genre.delete()
+    await redis.flushdb()
     yield
 
 
@@ -34,7 +35,7 @@ async def reset_db():
     Cleans up after each test at function scope
     """
     yield
-    await Genre.delete()
+    await redis.flushdb()
 
 
 async def test_insert_genres_to_cache():
