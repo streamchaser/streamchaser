@@ -30,13 +30,6 @@ async def init_db():
         models.Base.metadata.create_all(bind=engine)
 
 
-@app.on_event("startup")
-async def init_cache():
-    if get_settings().fill_cache_on_starup:
-        # TODO: Add a check if the cache is empty
-        ...
-
-
 streamchaser_url = get_settings().streamchaser_url
 
 

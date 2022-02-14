@@ -1,3 +1,5 @@
+import asyncio
+
 from app.db.cache import Genre
 from app.db.database_service import insert_genres_to_cache
 from pytest import fixture
@@ -9,11 +11,18 @@ test_genre_dict = {
 }
 
 
-@fixture(autouse=True, scope="module")
+@fixture(scope="session")
+def event_loop():
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
+
+
+@fixture(autouse=True, scope="session")
 async def prepare_db():
     """
-    Setup the test database at module scope
-    Makes sure the db is empty before the first test
+    Setup the test database at session scope
+    Makes sure the db is empty before starting a test session
     """
     await Genre.delete()
     yield
@@ -39,5 +48,6 @@ async def test_insert_genres_to_cache():
 
     assert genres
     assert len(genres) == 3
+    assert "&" in genres[2].name
     for genre in genres:
         assert "&" not in genre.value
