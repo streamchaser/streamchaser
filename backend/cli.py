@@ -1,10 +1,8 @@
-import asyncio
 import gzip
 import json
 import math
 import os
 from concurrent.futures import ThreadPoolExecutor
-from functools import wraps
 from typing import Optional
 
 import typer
@@ -29,19 +27,12 @@ from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.models import Media
 from app.db.search import client
 from app.db.search import update_index
+from app.util import coroutine
 from tqdm import tqdm
 
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
-
-
-def coroutine(f):
-    @wraps(f)
-    def wrapper(*args, **kwargs):
-        return asyncio.run(f(*args, **kwargs))
-
-    return wrapper
 
 
 @app.command()
@@ -147,7 +138,7 @@ def add_data():
 
 @app.command()
 @coroutine
-async def insert_to_redis_cache():
+async def genres_to_cache():
     await insert_genres_to_cache(get_genres())
 
 
