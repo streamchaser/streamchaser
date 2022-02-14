@@ -9,13 +9,21 @@ test_genre_dict = {
 }
 
 
-@fixture(autouse=True)
-async def clear_db():
+@fixture(autouse=True, scope="module")
+async def prepare_db():
     """
-    Setup the test database.
+    Setup the test database at module scope
+    Makes sure the db is empty before the first test
     """
     await Genre.delete()
-    assert not await Genre.select()
+    yield
+
+
+@fixture(autouse=True)
+async def reset_db():
+    """
+    Cleans up after each test at function scope
+    """
     yield
     await Genre.delete()
 
@@ -24,6 +32,7 @@ async def test_insert_genres_to_cache():
     """
     Test that the genre cache is created and populated correctly.
     """
+    assert not await Genre.select()
     await insert_genres_to_cache(test_genre_dict)
 
     genres = await Genre.select()
