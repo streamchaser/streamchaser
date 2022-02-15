@@ -49,6 +49,6 @@ async def test_insert_genres_to_cache():
 
     assert genres
     assert len(genres) == 3
-    assert "&" in genres[2].name
+    assert "&" in genres[2].label
     for genre in genres:
         assert "&" not in genre.value

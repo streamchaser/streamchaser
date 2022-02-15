@@ -139,7 +139,7 @@ def add_data():
 
 @app.command()
 @coroutine
-async def smth_redis():
+async def flush_cache():
     await redis.flushdb()
 
 

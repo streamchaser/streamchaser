@@ -6,8 +6,8 @@ from pydantic_aioredis import Store
 
 class Genre(Model):
     # the _primary_key_field is mandatory
-    _primary_key_field: str = "name"
-    name: str
+    _primary_key_field: str = "label"
+    label: str
     value: str
 
 

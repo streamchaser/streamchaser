@@ -45,11 +45,11 @@ async def insert_genres_to_cache(genres: dict) -> None:
 
     fixed_genres = [
         Genre(
-            name=genre,
+            label=genre,
             value=genre.replace(" & ", "%20%26%20"),
         )
         if " & " in genre
-        else Genre(name=genre, value=genre)
+        else Genre(label=genre, value=genre)
         for genre in genres.values()
     ]
 

@@ -19,7 +19,6 @@ class Settings(BaseSettings):
 
     # Misc streamchaser settings
     app_environment: Environment = Environment.DEVELOPMENT
-    fill_cache_on_starup: bool = True
     streamchaser_url: str = "localhost"
     tmdb_key: str = "no key"
     tmdb_url: str = "https://api.themoviedb.org/3/"
