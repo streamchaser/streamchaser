@@ -1,6 +1,5 @@
 from enum import Enum
 from functools import lru_cache
-from pathlib import Path
 from typing import List
 from typing import Optional
 
@@ -30,9 +29,6 @@ class Settings(BaseSettings):
     # Postgres setting
     psql_user: str = "postgres"
     psql_pwd: str = "postgres"
-
-    class Config:
-        env_file = Path("../.env")
 
 
 @lru_cache

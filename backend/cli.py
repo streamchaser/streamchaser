@@ -90,7 +90,7 @@ def cleanup_genres():
 
 @app.command()
 def remove_blacklisted_from_search():
-    blacklisted_media = [line.rstrip() for line in open("../blacklist.txt")]
+    blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
     for country_code in supported_country_codes:
         client.index(f"media_{country_code}").delete_documents(blacklisted_media)
 
