@@ -72,5 +72,4 @@ async def root() -> Union[Dict, RedirectResponse]:
         return {
             "data": "Welcome to the API - Go to /docs for the Swagger documentation"
         }
-    else:
-        return RedirectResponse(url="/docs")
+    return RedirectResponse(url="/docs")
