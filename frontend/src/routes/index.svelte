@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { getKeyByValue, getFixedGenreValues } from "../utils"
   import { variables } from "../variables.js"
-  import MultiSelect from "svelte-multiselect"
+  import Select from "svelte-select"
   import MediaSearch from "../components/media_search.svelte"
   import { currentCountry } from "../stores/country.js"
   import { currentProviders } from "../stores/providers.js"
@@ -22,7 +21,7 @@
   let media = []
   let selectedGenres = []
   let providerAmounts: number[] = []
-  let formattedGenres: {} = { "": "" }
+  let genres
   let activeProviders = [""]
   let currentMediaAmount: number = 21
 
@@ -48,7 +47,7 @@
     // Example: "?g=Action&g=Comedy&g=Drama"
     let query = ""
     for (let i = 0; i < selectedGenres.length; i++) {
-      query += `&g=${getKeyByValue(formattedGenres, selectedGenres[i])}`
+      query += `&g=${selectedGenres[i]}`
     }
     for (let i = 0; i < $currentProviders.length; i++) {
       query += `&p=${$currentProviders[i]}`
@@ -86,7 +85,7 @@
 
   const fetchGenres = async () => {
     const res = await fetch(GENRE_URL)
-    formattedGenres = await res.json()
+    genres = await res.json()
   }
 
   const resetProviders = () => {
@@ -141,53 +140,68 @@
       autofocus
     />
   </div>
-  <div class="sm:grid sm:grid-cols-2 sm:gap-2">
-    <MultiSelect
-      outerDivClass="bg-base-100"
-      --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral-focus"]}
-      --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        "neutral-content"
-      ]}
-      --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        'primary'
-      ]}"
-      --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        'primary'
-      ]}"
-      --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      --sms-remove-x-hover-focus-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        "base-content"
-      ]}
-      --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral"]}
-      --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      bind:selected={selectedGenres}
-      on:change={debounceInput}
-      options={getFixedGenreValues(formattedGenres)}
+  <div
+    class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 svelte-select"
+    style="
+             --borderRadius: var(--rounded-btn, .5rem);
+             --background: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`]['base-100']};
+             --border: 1px solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'primary'
+    ]};
+             --borderFocusColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'primary'
+    ]};
+             --borderHoverColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'primary'
+    ]};
+             --itemIsActiveColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'primary'
+    ]};
+             --multiItemActiveColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'primary'
+    ]};
+             --multiItemBG: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`]['primary']};
+             --multiItemActiveBG: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'primary-focus'
+    ]};
+             --itemIsActiveBG: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'neutral'
+    ]}
+             --clearSelectHoverColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'base-content'
+    ]};
+             --listBackground: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+      'neutral'
+    ]};
+             --itemHoverBG: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`]['primary']}
+              "
+  >
+    <Select
+      on:select={(e) => {
+        if (e.detail) {
+          e.detail.forEach(({ value }) => selectedGenres.push(value))
+          debounceInput()
+        }
+      }}
+      on:clear={(e) => {
+        selectedGenres.splice(selectedGenres.indexOf(e.detail["value"]))
+        debounceInput()
+      }}
+      items={genres}
+      isMulti={true}
       placeholder="Select genres..."
     />
-    <MultiSelect
-      outerDivClass="bg-base-100"
-      --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral-focus"]}
-      --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        "neutral-content"
-      ]}
-      --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        'primary'
-      ]}"
-      --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        'primary'
-      ]}"
-      --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      --sms-remove-x-hover-focus-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        "base-content"
-      ]}
-      --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral"]}
-      --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      bind:selected={$currentProviders}
-      on:change={debounceInput}
-      options={activeProviders}
+    <Select
+      on:select={(e) => {
+        e.detail.forEach(({ value }) => $currentProviders.push(value))
+        debounceInput()
+      }}
+      on:clear={(e) => {
+        $currentProviders.splice($currentProviders.indexOf(e.detail["value"]))
+        debounceInput()
+      }}
+      items={activeProviders}
+      isMulti={true}
       placeholder="Select providers..."
     />
   </div>
@@ -203,3 +217,11 @@
   currentGenres={$currentGenres}
   {search}
 />
+
+<style>
+  @media (max-width: 768px) {
+    .svelte-select {
+      --margin: 5px;
+    }
+  }
+</style>

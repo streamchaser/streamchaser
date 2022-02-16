@@ -27,6 +27,7 @@
     "@macfja/svelte-persistent-store": "^1.2.0",
     "daisyui": "^1.25.3",
     "svelte-media-query": "^1.1.1",
+    "svelte-select": "^4.4.7",
     "theme-change": "^2.0.2"
   }
 }
