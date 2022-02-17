@@ -12,4 +12,16 @@ router = APIRouter(
 async def read_all_providers(country_code):
     """Reads all the providers from providers.txt"""
     # TODO: Should live in a database instead of a .txt-file
-    return [line.rstrip() for line in open(f"providers_{country_code.upper()}.txt")]
+
+    flatrate_provders = [
+        line.rstrip()
+        for line in open(
+            f"providers_txt/flatrate/providers_{country_code.upper()}.txt"
+        )
+    ]
+    free_provders = [
+        line.rstrip()
+        for line in open(f"providers_txt/free/providers_{country_code.upper()}.txt")
+    ]
+
+    return [*flatrate_provders, *free_provders]

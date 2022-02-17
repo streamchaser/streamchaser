@@ -36,8 +36,9 @@
   // TODO: Replace any with a Media type
   const hitProviderAmounts = (searchHits: [any]) => {
     providerAmounts = []
-    searchHits.forEach(hit => {
-      providerAmounts.push(hit.specific_providers.length)
+    searchHits.forEach((hit) => {
+      const combinedLength = hit.flatrate_providers.length + hit.free_providers.length
+      providerAmounts.push(combinedLength)
     })
   }
 

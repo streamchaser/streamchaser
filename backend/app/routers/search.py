@@ -16,7 +16,8 @@ async def search(
     limit: int,
     c: str,
     g: list[str] | None = Query(None),
-    p: list[str] | None = Query(None),
+    frp: list[str] = Query(None),
+    flp: list[str] = Query(None),
 ):
     """
     # Our endpoint for the MeiliSearch API
@@ -26,20 +27,28 @@ async def search(
     * **p**: Optional provider query
     """
     genres = g
-    providers = p
+    free_providers = frp
+    flatrate_providers = flp
     country_code = c
 
-    if genres and providers:
+    if genres and (frp or flp):
         genre_list: list[str] = [f'genres="{genre}"' for genre in genres]
-        provider_list: list[list[str]] = [
-            [f'specific_provider_names="{providers}"' for providers in providers]
+        flatrate_provider_list: list[list[str]] = [
+            [
+                f'flatrate_provider_names="{providers}"'
+                for providers in flatrate_providers
+            ]
+        ]
+
+        free_provider_list: list[list[str]] = [
+            [f'free_provider_names="{providers}"' for providers in free_providers]
         ]
 
         return client.index(f"media_{country_code}").search(
             user_input,
             {
                 "limit": limit,
-                "filter": genre_list + provider_list,
+                "filter": genre_list + flatrate_provider_list + free_provider_list,
                 "sort": ["popularity:desc"],
             },
         )
@@ -53,7 +62,7 @@ async def search(
                 "sort": ["popularity:desc"],
             },
         )
-    elif providers:
+    elif frp or flp:
         return client.index(f"media_{country_code}").search(
             user_input,
             {
@@ -61,8 +70,12 @@ async def search(
                 # This is using OR logic
                 "filter": [
                     [
-                        f'specific_provider_names="{providers}"'
-                        for providers in providers
+                        f'flatrate_provider_names="{providers}"'
+                        for providers in flatrate_providers
+                    ]
+                    + [
+                        f'free_provider_names="{providers}"'
+                        for providers in free_providers
                     ]
                 ],
                 "sort": ["popularity:desc"],
