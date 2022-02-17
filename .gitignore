@@ -29,7 +29,7 @@ assets/build
 /.svelte-kit
 /package
 
-backend/.env
+.env
 frontend/.env
 frontend/build
 frontend/.svelte-kit

@@ -11,7 +11,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run build
         run: |
+          export COMPOSE_DOCKER_CLI_BUILD=1
+          export DOCKER_BUILDKIT=1
+          touch .env
           docker network create traefik
           docker-compose build
       - name: Run test suite
-        run: docker-compose run backend pytest -v ../tests
+        run: docker-compose run backend pytest -v tests

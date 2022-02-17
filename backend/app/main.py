@@ -34,7 +34,8 @@ async def init_db():
 
 streamchaser_url = get_settings().streamchaser_url
 
-if get_settings().environment == Environment.PRODUCTION:
+
+if get_settings().app_environment == Environment.PRODUCTION:
     origins = [
         f"http://{streamchaser_url}",
         f"https://{streamchaser_url}",
@@ -65,9 +66,8 @@ app.include_router(person.router)
 @app.get("/")
 async def root() -> Union[Dict, RedirectResponse]:
     """Home page"""
-    if get_settings().environment == Environment.PRODUCTION:
+    if get_settings().app_environment == Environment.PRODUCTION:
         return {
             "data": "Welcome to the API - Go to /docs for the Swagger documentation"
         }
-    else:
-        return RedirectResponse(url="/docs")
+    return RedirectResponse(url="/docs")
