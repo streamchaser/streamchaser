@@ -1,23 +1,20 @@
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
 
 from pydantic import BaseModel
 
 
 class Media(BaseModel):
     id: str
-    title: Optional[str]
+    title: str | None
     original_title: str
-    overview: Optional[str]
-    release_date: Optional[str]
-    genres: Optional[Any]  # Rapand told me to do it :'( #TODO: find a proper solution
-    poster_path: Optional[str]
-    popularity: Optional[int]
-    providers: Optional[List[Dict]]
-    specific_provider_names: Optional[List[str]]
-    specific_providers: Optional[List[Dict]]
+    overview: str | None
+    release_date: str | None
+    genres: Any | None  # Rapand told me to do it :'( #TODO: find a proper solution
+    poster_path: str | None
+    popularity: int | None
+    providers: list[dict] | None
+    specific_provider_names: list[str] | None
+    specific_providers: list[dict] | None
 
     class Config:
         # Makes use of database syntax "media.id" instead of "media['id']
@@ -29,45 +26,45 @@ class Movie(BaseModel):
     title: str
     release_date: str
     overview: str
-    genres: Optional[List[str]]
-    imdb_id: Optional[str]
-    runtime: Optional[str]
-    providers: Optional[List[Dict]]
-    recommendations: List[Dict]
-    poster_path: Optional[str]
+    genres: list[str] | None
+    imdb_id: str | None
+    runtime: str | None
+    providers: list[dict] | None
+    recommendations: list[dict]
+    poster_path: str | None
     popularity: int
-    backdrop_path: Optional[str]
-    cast: List[Dict]
+    backdrop_path: str | None
+    cast: list[dict]
 
 
 class TV(BaseModel):
     id: int
     name: str
-    first_air_date: Optional[str]
+    first_air_date: str | None
     overview: str
-    genres: Optional[List[str]]
-    episode_run_time: List[int]
-    providers: Optional[List[Dict]]
-    recommendations: Optional[List[Dict]]
-    poster_path: Optional[str]
+    genres: list[str] | None
+    episode_run_time: list[int]
+    providers: list[dict] | None
+    recommendations: list[dict] | None
+    poster_path: str | None
     popularity: int
     number_of_seasons: int
-    seasons: List[Dict]
-    backdrop_path: Optional[str]
-    cast: List[Dict]
+    seasons: list[dict]
+    backdrop_path: str | None
+    cast: list[dict]
 
 
 class Person(BaseModel):
     id: int
     name: str
-    birthdate: Optional[str]
-    deathday: Optional[str]
+    birthdate: str | None
+    deathday: str | None
     biography: str
-    place_of_birth: Optional[str]
-    aslo_knows_as: Optional[str]
-    profile_path: Optional[str]
-    movie_credits: Optional[List[Dict]]
-    tv_credits: Optional[List[Dict]]
+    place_of_birth: str | None
+    aslo_knows_as: str | None
+    profile_path: str | None
+    movie_credits: list[dict] | None
+    tv_credits: list[dict] | None
     gender: int
 
 
