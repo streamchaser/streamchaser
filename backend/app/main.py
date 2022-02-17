@@ -1,6 +1,4 @@
 import asyncio
-from typing import Dict
-from typing import Union
 
 from app.config import Environment
 from app.config import get_settings
@@ -64,7 +62,7 @@ app.include_router(person.router)
 
 
 @app.get("/")
-async def root() -> Union[Dict, RedirectResponse]:
+async def root() -> dict | RedirectResponse:
     """Home page"""
     if get_settings().app_environment == Environment.PRODUCTION:
         return {

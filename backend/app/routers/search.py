@@ -1,6 +1,3 @@
-from typing import List
-from typing import Optional
-
 from app.db.search import client
 from fastapi import APIRouter
 from fastapi import Query
@@ -18,8 +15,8 @@ async def search(
     user_input: str,
     limit: int,
     c: str,
-    g: Optional[List[str]] = Query(None),
-    p: Optional[List[str]] = Query(None),
+    g: list[str] | None = Query(None),
+    p: list[str] | None = Query(None),
 ):
     """
     # Our endpoint for the MeiliSearch API
@@ -33,8 +30,8 @@ async def search(
     country_code = c
 
     if genres and providers:
-        genre_list: List[str] = [f'genres="{genre}"' for genre in genres]
-        provider_list: List[List[str]] = [
+        genre_list: list[str] = [f'genres="{genre}"' for genre in genres]
+        provider_list: list[list[str]] = [
             [f'specific_provider_names="{providers}"' for providers in providers]
         ]
 

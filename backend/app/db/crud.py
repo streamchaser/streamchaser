@@ -1,5 +1,3 @@
-from typing import Dict
-
 from app import schemas
 from app.db import models
 from sqlalchemy.orm import Session
@@ -44,7 +42,7 @@ def create_media(db: Session, media: schemas.Media):
     return db_media
 
 
-def update_media_data_by_id(db: Session, media_id: str, data: Dict):
+def update_media_data_by_id(db: Session, media_id: str, data: dict):
     db.query(models.Media).filter_by(id=media_id).update(
         {
             "genres": data.get("genres"),

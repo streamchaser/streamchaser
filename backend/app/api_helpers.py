@@ -1,34 +1,31 @@
-from typing import Dict
-from typing import List
-
 from app.config import get_settings
 
 
 tmdb_key = get_settings().tmdb_key
 
 
-def valid_title(media: Dict) -> str:
+def valid_title(media: dict) -> str:
     if media.get("media_type") == "movie":
         return media.get("title")
 
     return media.get("name")
 
 
-def valid_original_title(media: Dict) -> str:
+def valid_original_title(media: dict) -> str:
     if media.get("id").startswith("m"):
         return media.get("original_title")
 
     return media.get("original_name")
 
 
-def valid_release_date(media: Dict) -> str:
+def valid_release_date(media: dict) -> str:
     if media.get("media_type") == "movie":
         return str(media.get("release_date"))
 
     return str(media.get("first_air_date"))
 
 
-def unique_id(media: Dict) -> str:
+def unique_id(media: dict) -> str:
     if media.get("media_type") == "movie":
         return f"m{media.get('id')}"
     elif media.get("media_type") == "tv":
@@ -40,7 +37,7 @@ def unique_id(media: Dict) -> str:
         return str(media.get("id"))
 
 
-def get_providers(providers: Dict, country_code: str = "all") -> List[Dict]:
+def get_providers(providers: dict, country_code: str = "all") -> list[dict]:
     """Gets list of provider data for a movie from a specified country code"""
 
     try:

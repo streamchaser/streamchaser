@@ -2,9 +2,7 @@ import os
 from datetime import datetime
 from datetime import timedelta
 from pathlib import Path
-from typing import Dict
 from typing import Generator
-from typing import List
 
 import requests
 from app.api_helpers import get_providers
@@ -80,17 +78,17 @@ def fetch_jsongz_files():
             day += 1
 
 
-def fetch_trending_movies(page: int) -> Dict:
+def fetch_trending_movies(page: int) -> dict:
     url = f"{tmdb_url}trending/movie/week?api_key={tmdb_key}&page={page}"
     return requests.get(url).json()["results"]
 
 
-def fetch_trending_tv(page: int) -> Dict:
+def fetch_trending_tv(page: int) -> dict:
     url = f"{tmdb_url}trending/tv/week?api_key={tmdb_key}&page={page}"
     return requests.get(url).json()["results"]
 
 
-def media_converter(mixed_list: List[Dict]) -> Generator[Media, None, None]:
+def media_converter(mixed_list: list[dict]) -> Generator[Media, None, None]:
     """Takes a list movie/tv json ["results"] and converts it to Media"""
 
     return (
@@ -192,7 +190,7 @@ def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
     )
 
 
-def get_genres() -> Dict:
+def get_genres() -> dict:
     """Gets genres from movies and tv-series to translate genre_ids"""
     movie_url = "https://api.themoviedb.org/3/genre/movie/list?" f"api_key={tmdb_key}"
     tv_url = "https://api.themoviedb.org/3/genre/tv/list?" f"api_key={tmdb_key}"
@@ -242,7 +240,7 @@ def request_data(media: models.Media):
         print(e)
 
 
-def get_recommendations(recommendations: Dict) -> List[Dict]:
+def get_recommendations(recommendations: dict) -> list[dict]:
     """Gets list of recommended movies for a movie"""
 
     return [result for result in recommendations["results"]]
