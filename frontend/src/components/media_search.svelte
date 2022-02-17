@@ -36,7 +36,7 @@
       {#each media.hits as media, mediaIndex}
         <a
           href={mediaIdToUrlConverter(media.id)}
-          class="card compact w-auto bordered bg-neutral m-1
+          class="card compact w-auto bordered bg-neutral-focus m-1
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
         >
           {#if media.id.charAt(0) == "t"}
@@ -64,7 +64,7 @@
           {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
             <div class="-space-x-4 avatar-group">
               {#each media.specific_providers as provider}
-                <div class="avatar border-neutral">
+                <div class="avatar border-neutral-focus">
                   <div class="w-12 h-12">
                     <img src="{IMG_URL}{provider.logo_path}" alt={provider.name} />
                   </div>
@@ -74,13 +74,13 @@
           {:else}
             <div class="-space-x-4 avatar-group">
               {#each media.specific_providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
-                <div class="avatar border-neutral">
+                <div class="avatar border-neutral-focus">
                   <div class="w-12 h-12">
                     <img src="{IMG_URL}{provider.logo_path}" alt={provider.name} />
                   </div>
                 </div>
               {/each}
-              <div class="avatar placeholder border-neutral">
+              <div class="avatar placeholder border-neutral-focus">
                 <div
                   class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content"
                 >
