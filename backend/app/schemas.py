@@ -12,7 +12,7 @@ class Media(BaseModel):
     genres: Any | None  # Rapand told me to do it :'( #TODO: find a proper solution
     poster_path: str | None
     popularity: int | None
-    provider_name: list[str] | None
+    provider_names: list[str] | None
     providers: list[dict] | None
 
     class Config:

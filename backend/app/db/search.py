@@ -9,7 +9,7 @@ supported_country_codes = get_settings().supported_country_codes
 def update_index():
     for country_code in supported_country_codes:
         client.index(f"media_{country_code}").update_filterable_attributes(
-            ["genres", "specific_provider_names"]
+            ["genres", "provider_names"]
         )
 
         # Isolated the important

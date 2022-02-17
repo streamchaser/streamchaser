@@ -12,7 +12,8 @@
   export let title: string
   export let overview: string
   export let genres: []
-  export let providers: []
+  export let freeProviders: []
+  export let flatrateProviders: []
   export let runtime: number
   export let imdbId: string
   export let releaseDate: string
@@ -108,8 +109,8 @@
     </div>
   </div>
 
-  {#if providers}
-    {#if !providers.length}
+  {#if freeProviders || flatrateProviders}
+    {#if !freeProviders.length && !flatrateProviders.length}
       <div class="pt-5">
         <div class="badge badge-lg shadow-2xl">
           No providers in {$currentCountry}
@@ -117,7 +118,7 @@
       </div>
     {:else}
       <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
-        {#each providers as provider}
+        {#each freeProviders.concat(flatrateProviders) as provider}
           <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
             <div
               data-tip={provider.provider_name}

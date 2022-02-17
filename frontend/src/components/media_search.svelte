@@ -63,7 +63,7 @@
             </div>
           {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
             <div class="-space-x-4 avatar-group">
-              {#each media.free_providers.concat(media.flatrate_providers) as provider}
+              {#each media.providers as provider}
                 <div class="avatar border-neutral-focus">
                   <div class="w-12 h-12">
                     <img src="{IMG_URL}{provider.logo_path}" alt={provider.name} />
@@ -73,9 +73,7 @@
             </div>
           {:else}
             <div class="-space-x-4 avatar-group">
-              {#each media.free_providers
-                .concat(media.flatrate_providers)
-                .slice(0, SHOWN_PROVIDERS - 1) as provider}
+              {#each media.providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
                 <div class="avatar border-neutral-focus">
                   <div class="w-12 h-12">
                     <img src="{IMG_URL}{provider.logo_path}" alt={provider.name} />

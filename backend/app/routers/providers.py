@@ -15,9 +15,7 @@ async def read_all_providers(country_code):
 
     flatrate_provders = [
         line.rstrip()
-        for line in open(
-            f"providers_txt/flatrate/providers_{country_code.upper()}.txt"
-        )
+        for line in open(f"providers_txt/flatrate/providers_{country_code.upper()}.txt")
     ]
     free_provders = [
         line.rstrip()

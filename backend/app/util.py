@@ -13,3 +13,7 @@ def coroutine(f):
         return asyncio.run(f(*args, **kwargs))
 
     return wrapper
+
+
+def unique_list(flatrate: list, free: list) -> list:
+    return [provider for provider in free if provider not in flatrate] + flatrate

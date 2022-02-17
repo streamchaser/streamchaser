@@ -57,7 +57,8 @@
     title={movie.title}
     overview={movie.overview}
     genres={movie.genres}
-    providers={movie.providers}
+    freeProviders={movie.free_providers}
+    flatrateProviders={movie.flatrate_providers}
     runtime={movie.runtime}
     imdbId={movie.imdb_id}
     releaseDate={movie.release_date}

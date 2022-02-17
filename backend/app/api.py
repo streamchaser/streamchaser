@@ -158,10 +158,10 @@ async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
             imdb_id=movie.get("imdb_id"),
             runtime=movie.get("runtime"),
             flatrate_providers=get_providers(
-                "flatrate", movies.get("watch/providers"), country_code
+                "flatrate", movie.get("watch/providers"), country_code
             ),
             free_providers=get_providers(
-                "free", movies.get("watch/providers"), country_code
+                "free", movie.get("watch/providers"), country_code
             ),
             recommendations=get_recommendations(movie.get("recommendations")),
             poster_path=movie.get("poster_path"),
@@ -194,7 +194,9 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
             flatrate_providers=get_providers(
                 "flatrate", tv.get("watch/providers"), country_code
             ),
-            free_providers=get_providers("free", tv.get("watch/providers"), country_code),
+            free_providers=get_providers(
+                "free", tv.get("watch/providers"), country_code
+            ),
             recommendations=get_recommendations(tv.get("recommendations")),
             poster_path=tv.get("poster_path"),
             popularity=tv.get("popularity"),

@@ -11,6 +11,7 @@ from app.db.crud import count_all_media
 from app.db.database import engine
 from app.db.models import Media
 from app.db.search import client
+from app.util import unique_list
 from sqlalchemy.exc import IntegrityError
 from tqdm import tqdm
 
@@ -85,24 +86,18 @@ def init_meilisearch_indexing(chunk_size: int):
                                 genres=media.genres,
                                 poster_path=media.poster_path,
                                 popularity=media.popularity,
-                                flatrate_provider_names=[
+                                provider_names=[
                                     provider.get(country_code).get("provider_name")
-                                    for provider in media.flatrate_providers
+                                    for provider in unique_list(
+                                        media.flatrate_providers, media.free_providers
+                                    )
                                     if provider.get(country_code)
                                 ],
-                                free_provider_names=[
-                                    provider.get(country_code).get("provider_name")
-                                    for provider in media.free_providers
-                                    if provider.get(country_code)
-                                ],
-                                flatrate_providers=[
+                                providers=[
                                     provider.get(country_code)
-                                    for provider in media.flatrate_providers
-                                    if provider.get(country_code)
-                                ],
-                                free_providers=[
-                                    provider.get(country_code)
-                                    for provider in media.free_providers
+                                    for provider in unique_list(
+                                        media.flatrate_providers, media.free_providers
+                                    )
                                     if provider.get(country_code)
                                 ],
                             ).dict()
@@ -116,8 +111,8 @@ def extract_unique_providers_to_txt():
     db = database.SessionLocal()
     media_list = crud.get_all_media(db=db)
 
-    flatrate_dir = "../providers_txt/flatrate/"
-    free_dir = "../providers_txt/free/"
+    flatrate_dir = "providers_txt/flatrate/"
+    free_dir = "providers_txt/free/"
 
     Path(free_dir).mkdir(exist_ok=True, parents=True)
     Path(flatrate_dir).mkdir(exist_ok=True, parents=True)
@@ -144,7 +139,8 @@ def extract_unique_providers_to_txt():
 
         with open(f"{free_dir}providers_{country_code}.txt", "w") as file:
             for provider in ordered_free_provider_list:
-                file.write(f"{provider}\n")
+                if provider not in ordered_flatrate_provider_list:
+                    file.write(f"{provider}\n")
 
 
 def prune_non_ascii_media_from_db():
