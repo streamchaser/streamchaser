@@ -34,8 +34,6 @@ async def init_db():
 
 streamchaser_url = get_settings().streamchaser_url
 
-print(get_settings().tmdb_key)
-
 
 if get_settings().app_environment == Environment.PRODUCTION:
     origins = [

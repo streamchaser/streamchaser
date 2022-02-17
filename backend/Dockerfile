@@ -1,7 +1,7 @@
 ARG APP_ENVIRONMENT=dev
 
 
-FROM python:3.9-slim as base
+FROM --platform=linux/amd64 python:3.9-slim as base
 
 WORKDIR /app
 
