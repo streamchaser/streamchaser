@@ -8,7 +8,7 @@
 
 <div class="flex flex-col h-screen">
   <Navbar />
-  <div class="flex-grow">
+  <div class="container mb-auto mx-auto">
     <slot />
   </div>
   <BackToTopButton />
