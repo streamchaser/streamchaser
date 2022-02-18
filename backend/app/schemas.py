@@ -61,7 +61,7 @@ class Person(BaseModel):
     deathday: str | None
     biography: str
     place_of_birth: str | None
-    aslo_knows_as: str | None
+    also_known_as: list[str] | None
     profile_path: str | None
     movie_credits: list[dict] | None
     tv_credits: list[dict] | None
