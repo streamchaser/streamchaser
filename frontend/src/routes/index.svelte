@@ -8,7 +8,7 @@
   import { inputQuery } from "../stores/input"
   import { chosenTheme } from "../stores/theme.js"
   import { onMount } from "svelte"
-  import DaisyuiThemes from "daisyui/colors/themes.js"
+  import DT from "daisyui/colors/themes.js"
 
   const SEARCH_URL: string = `${variables.apiPath}/search/`
   const GENRE_URL: string = `${variables.apiPath}/genres/`
@@ -19,7 +19,6 @@
   let input: string = ""
   let timer
   let media = []
-  let selectedGenres = []
   let providerAmounts: number[] = []
   let genres
   let activeProviders = [""]
@@ -46,11 +45,11 @@
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
     let query = ""
-    for (let i = 0; i < selectedGenres.length; i++) {
-      query += `&g=${selectedGenres[i]}`
+    for (let i = 0; i < $currentGenres.length; i++) {
+      query += `&g=${$currentGenres[i].value}`
     }
     for (let i = 0; i < $currentProviders.length; i++) {
-      query += `&p=${$currentProviders[i]}`
+      query += `&p=${$currentProviders[i].value}`
     }
 
     // Searches for all(*) if empty input
@@ -73,7 +72,6 @@
               `&limit=${currentMediaAmount}`
           )
     $inputQuery = input
-    $currentGenres = selectedGenres
     media = await res.json()
     hitProviderAmounts(media.hits)
   }
@@ -112,9 +110,6 @@
     await fetchGenres()
     await fetchProviders()
 
-    if ($currentGenres !== []) {
-      selectedGenres = $currentGenres
-    }
     if ($inputQuery !== "") {
       input = $inputQuery
       debounceInput()
@@ -141,69 +136,64 @@
     />
   </div>
   <div
-    class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 svelte-select"
+    class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
     style="
+
              --borderRadius: var(--rounded-btn, .5rem);
-             --background: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`]['base-100']};
-             --border: 1px solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-      'primary'
+             --background: {DT[`[data-theme=${$chosenTheme}]`]['base-100']};
+             --border: 1px solid {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --borderFocusColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --borderHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --itemIsActiveColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --multiItemBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --multiItemActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-focus']};
+             --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`][
+      'primary-accent'
     ]};
-             --borderFocusColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-      'primary'
-    ]};
-             --borderHoverColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-      'primary'
-    ]};
-             --itemIsActiveColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-      'primary'
-    ]};
-             --multiItemActiveColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-      'primary'
-    ]};
-             --multiItemBG: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`]['primary']};
-             --multiItemActiveBG: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-      'primary-focus'
-    ]};
-             --itemIsActiveBG: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-      'neutral'
-    ]}
-             --clearSelectHoverColor: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
+             --itemIsActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['neutral']}
+             --clearSelectHoverColor: {DT[`[data-theme=${$chosenTheme}]`][
       'base-content'
     ]};
-             --listBackground: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-      'neutral'
-    ]};
-             --itemHoverBG: {DaisyuiThemes[`[data-theme=${$chosenTheme}]`]['primary']}
+             --listBackground: {DT[`[data-theme=${$chosenTheme}]`]['neutral']};
+             --itemHoverBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --inputColor: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']}
               "
   >
-    <Select
-      on:select={(e) => {
-        if (e.detail) {
-          e.detail.forEach(({ value }) => selectedGenres.push(value))
-          debounceInput()
-        }
-      }}
-      on:clear={(e) => {
-        selectedGenres.splice(selectedGenres.indexOf(e.detail["value"]))
-        debounceInput()
-      }}
-      items={genres}
-      isMulti={true}
-      placeholder="Select genres..."
-    />
-    <Select
-      on:select={(e) => {
-        e.detail.forEach(({ value }) => $currentProviders.push(value))
-        debounceInput()
-      }}
-      on:clear={(e) => {
-        $currentProviders.splice($currentProviders.indexOf(e.detail["value"]))
-        debounceInput()
-      }}
-      items={activeProviders}
-      isMulti={true}
-      placeholder="Select providers..."
-    />
+    <div class="mb-2 sm:mb-0">
+      <Select
+        on:select={(e) => {
+          $currentGenres = e.detail ? e.detail : []
+          search()
+        }}
+        on:clear={(e) => {
+          $currentGenres = e.detail
+            ? $currentGenres.splice($currentGenres.indexOf(e.detail.value))
+            : []
+        }}
+        value={$currentGenres.length ? $currentGenres : null}
+        items={genres}
+        isMulti={true}
+        placeholder="Select genres..."
+      />
+    </div>
+    <div>
+      <Select
+        on:select={(e) => {
+          $currentProviders = e.detail ? e.detail : []
+          search()
+        }}
+        on:clear={(e) => {
+          $currentProviders = e.detail
+            ? $currentProviders.splice($currentProviders.indexOf(e.detail.value))
+            : []
+        }}
+        value={$currentProviders.length ? $currentProviders : null}
+        items={activeProviders}
+        isMulti={true}
+        placeholder="Select providers..."
+      />
+    </div>
   </div>
 </div>
 <MediaSearch
@@ -217,11 +207,3 @@
   currentGenres={$currentGenres}
   {search}
 />
-
-<style>
-  @media (max-width: 768px) {
-    .svelte-select {
-      --margin: 5px;
-    }
-  }
-</style>
