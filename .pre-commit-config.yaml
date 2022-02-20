@@ -31,7 +31,7 @@ repos:
     rev: v2.5.1
     hooks:
       - id: prettier
-        args: [--write, --no-semi, --print-width=88]
+        args: [--write, --no-semi, --print-width=88, --arrow-parens=avoid]
         additional_dependencies:
           - prettier@2.5.1
           - prettier-plugin-svelte@v2.6.0

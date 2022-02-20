@@ -1,7 +1,7 @@
 // Generic Javascript Functions
 
 export const getKeyByValue = (object: {}, value: string): string => {
-  return Object.keys(object).find((key) => object[key] === value)
+  return Object.keys(object).find(key => object[key] === value)
 }
 
 export const getFixedGenreValues = (genres: {}) => {
