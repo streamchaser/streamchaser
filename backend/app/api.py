@@ -4,6 +4,7 @@ from datetime import timedelta
 from pathlib import Path
 from typing import Generator
 
+import httpx
 import requests
 from app.api_helpers import get_providers
 from app.api_helpers import valid_original_title
@@ -115,25 +116,27 @@ async def get_person_from_id(person_id: int):
         "&append_to_response=movie_credits,tv_credits"
     )
 
-    person = requests.get(url).json()
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        person = response.json()
 
-    # pydantic schema for a person
-    return Person(
-        id=person.get("id"),
-        name=person.get("name"),
-        birthdate=person.get("birthdate"),
-        deathday=person.get("deathday"),
-        biography=person.get("biography"),
-        place_of_birth=person.get("place_of_birth"),
-        also_known_as=person.get("also_known_as"),
-        profile_path=person.get("profile_path"),
-        gender=person.get("gender"),
-        movie_credits=person.get("movie_credits").get("cast"),
-        tv_credits=person.get("tv_credits").get("cast"),
-    )
+        # pydantic schema for a person
+        return Person(
+            id=person.get("id"),
+            name=person.get("name"),
+            birthdate=person.get("birthdate"),
+            deathday=person.get("deathday"),
+            biography=person.get("biography"),
+            place_of_birth=person.get("place_of_birth"),
+            also_known_as=person.get("also_known_as"),
+            profile_path=person.get("profile_path"),
+            gender=person.get("gender"),
+            movie_credits=person.get("movie_credits").get("cast"),
+            tv_credits=person.get("tv_credits").get("cast"),
+        )
 
 
-def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
+async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
     """Gets data of a movie from an id"""
     # Here we make 3 api calls into 1 using the append_to_response header
     url = (
@@ -141,27 +144,29 @@ def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
         "&append_to_response=watch/providers,recommendations,credits"
     )
 
-    movies = requests.get(url).json()
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        movie = response.json()
 
-    # pydantic schema for a movie
-    return Movie(
-        id=movies.get("id"),
-        title=movies.get("title"),
-        release_date=movies.get("release_date"),
-        overview=movies.get("overview"),
-        genres=[genre.get("name") for genre in movies.get("genres")],
-        imdb_id=movies.get("imdb_id"),
-        runtime=movies.get("runtime"),
-        providers=get_providers(movies.get("watch/providers"), country_code),
-        recommendations=get_recommendations(movies.get("recommendations")),
-        poster_path=movies.get("poster_path"),
-        cast=movies.get("credits").get("cast"),
-        popularity=movies.get("popularity"),
-        backdrop_path=movies.get("backdrop_path"),
-    )
+        # pydantic schema for a movie
+        return Movie(
+            id=movie.get("id"),
+            title=movie.get("title"),
+            release_date=movie.get("release_date"),
+            overview=movie.get("overview"),
+            genres=[genre.get("name") for genre in movie.get("genres")],
+            imdb_id=movie.get("imdb_id"),
+            runtime=movie.get("runtime"),
+            providers=get_providers(movie.get("watch/providers"), country_code),
+            recommendations=get_recommendations(movie.get("recommendations")),
+            poster_path=movie.get("poster_path"),
+            cast=movie.get("credits").get("cast"),
+            popularity=movie.get("popularity"),
+            backdrop_path=movie.get("backdrop_path"),
+        )
 
 
-def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
+async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
     """Gets data of a tv series from an id"""
     # Here we make 3 api calls into 1 using the append_to_response header
     url = (
@@ -169,25 +174,27 @@ def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
         "&append_to_response=watch/providers,recommendations,credits"
     )
 
-    tv = requests.get(url).json()
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url)
+        tv = response.json()
 
-    # pydantic schema for a tv series
-    return TV(
-        id=tv.get("id"),
-        name=tv.get("name"),
-        first_air_date=tv.get("first_air_date"),
-        overview=tv.get("overview"),
-        genres=[genre.get("name") for genre in tv.get("genres")],
-        episode_run_time=tv.get("episode_run_time"),
-        providers=get_providers(tv.get("watch/providers"), country_code),
-        recommendations=get_recommendations(tv.get("recommendations")),
-        poster_path=tv.get("poster_path"),
-        popularity=tv.get("popularity"),
-        number_of_seasons=tv.get("number_of_seasons"),
-        seasons=tv.get("seasons"),
-        backdrop_path=tv.get("backdrop_path"),
-        cast=tv.get("credits").get("cast"),
-    )
+        # pydantic schema for a tv series
+        return TV(
+            id=tv.get("id"),
+            name=tv.get("name"),
+            first_air_date=tv.get("first_air_date"),
+            overview=tv.get("overview"),
+            genres=[genre.get("name") for genre in tv.get("genres")],
+            episode_run_time=tv.get("episode_run_time"),
+            providers=get_providers(tv.get("watch/providers"), country_code),
+            recommendations=get_recommendations(tv.get("recommendations")),
+            poster_path=tv.get("poster_path"),
+            popularity=tv.get("popularity"),
+            number_of_seasons=tv.get("number_of_seasons"),
+            seasons=tv.get("seasons"),
+            backdrop_path=tv.get("backdrop_path"),
+            cast=tv.get("credits").get("cast"),
+        )
 
 
 def get_genres() -> dict:

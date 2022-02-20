@@ -13,4 +13,4 @@ router = APIRouter(
 @router.get("/{country_code}/{movie_id}")
 async def get_movie(movie_id: int, country_code: str) -> Movie:
     """Specific Movie page"""
-    return get_movie_from_id(movie_id, country_code.upper())
+    return await get_movie_from_id(movie_id, country_code.upper())
