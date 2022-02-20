@@ -137,7 +137,7 @@ def extract_unique_providers_to_txt():
             if provider.get(country_code)
         }
         ordered_provider_list = sorted(provider_set)
-        with open(f"../providers_{country_code}.txt", "w") as file:
+        with open(f"providers_{country_code}.txt", "w") as file:
             for provider in ordered_provider_list:
                 file.write(f"{provider}\n")
 
