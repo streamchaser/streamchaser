@@ -11,7 +11,7 @@
   let currentTab: number = 0
   let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
 
-  const changeActiveTab = (index) => {
+  const changeActiveTab = index => {
     currentTab = index
   }
 </script>
