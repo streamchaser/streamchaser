@@ -118,7 +118,9 @@
       </div>
     {:else}
       <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
-        {#each freeProviders.concat(flatrateProviders) as provider}
+        {#each [...new Map(freeProviders
+              .concat(flatrateProviders)
+              .map(item => [item["provider_id"], item])).values()] as provider}
           <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
             <div
               data-tip={provider.provider_name}
