@@ -20,7 +20,7 @@
   let timer
   let media = []
   let providerAmounts: number[] = []
-  let genres
+  let genres: []
   let activeProviders = [""]
   let currentMediaAmount: number = 21
 
