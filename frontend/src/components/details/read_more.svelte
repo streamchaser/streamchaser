@@ -1,7 +1,7 @@
 <script lang="ts">
-  export let currentDescriptionLength
-  export let mediaDescription
-  export let initialDescriptionLength
+  export let currentDescriptionLength: number
+  export let mediaDescription: string
+  export let initialDescriptionLength: number
 </script>
 
 {#if currentDescriptionLength <= initialDescriptionLength && mediaDescription.length > initialDescriptionLength}

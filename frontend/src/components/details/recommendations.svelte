@@ -1,9 +1,10 @@
 <script lang="ts">
   import { mediaIdToUrlConverter } from "../../utils"
+  import type { Recommendation } from "../types"
 
-  const IMG_URL: string = "https://image.tmdb.org/t/p/original/"
+  const IMG_URL = "https://image.tmdb.org/t/p/original/"
 
-  export let recommendations: []
+  export let recommendations: Recommendation[]
   export let mediaType: string
 </script>
 

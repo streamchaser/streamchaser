@@ -9,20 +9,21 @@
   import { chosenTheme } from "../stores/theme.js"
   import { onMount } from "svelte"
   import DT from "daisyui/colors/themes.js"
+  import type { Media, Meilisearch } from "../types"
 
-  const SEARCH_URL: string = `${variables.apiPath}/search/`
-  const GENRE_URL: string = `${variables.apiPath}/genres/`
-  const PROVIDER_URL: string = `${variables.apiPath}/providers/`
-  const INPUT_TIMER: number = 200
-  const MEDIA_START_AMOUNT: number = 21
+  const SEARCH_URL = `${variables.apiPath}/search/`
+  const GENRE_URL = `${variables.apiPath}/genres/`
+  const PROVIDER_URL = `${variables.apiPath}/providers/`
+  const INPUT_TIMER = 200
+  const MEDIA_START_AMOUNT = 21
 
-  let input: string = ""
-  let timer
-  let media = []
+  let input = ""
+  let timer: NodeJS.Timeout
+  let meilisearch: Meilisearch
   let providerAmounts: number[] = []
   let genres: []
   let activeProviders = [""]
-  let currentMediaAmount: number = 21
+  let currentMediaAmount = 21
 
   // run search if we haven't received input in the last 200ms
   const debounceInput = () => {
@@ -33,8 +34,7 @@
     }, INPUT_TIMER)
   }
 
-  // TODO: Replace any with a Media type
-  const hitProviderAmounts = (searchHits: [any]) => {
+  const hitProviderAmounts = (searchHits: Media[]) => {
     providerAmounts = []
     searchHits.forEach(hit => {
       providerAmounts.push(hit.providers.length)
@@ -72,8 +72,9 @@
               `&limit=${currentMediaAmount}`
           )
     $inputQuery = input
-    media = await res.json()
-    hitProviderAmounts(media.hits)
+    meilisearch = await res.json()
+    console.log(meilisearch)
+    hitProviderAmounts(meilisearch.hits)
   }
 
   const fetchProviders = async () => {
@@ -102,7 +103,7 @@
   }
 
   onMount(async () => {
-    const inputField = document.getElementById("input-field")
+    const inputField = document.getElementById("input-field") as HTMLInputElement
     setTimeout(function () {
       inputField.select()
     }, 20)
@@ -197,7 +198,7 @@
   </div>
 </div>
 <MediaSearch
-  {media}
+  {meilisearch}
   {providerAmounts}
   currentCountry={$currentCountry}
   currentProviders={$currentProviders}
