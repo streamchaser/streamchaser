@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let currentProviders: []
-  export let currentGenres: []
+  export let currentProviders: string[]
+  export let currentGenres: string[]
   export let input: string
 </script>
 

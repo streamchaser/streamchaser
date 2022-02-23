@@ -11,7 +11,7 @@ export const getFixedGenreValues = (genres: {}) => {
 }
 
 export const mediaIdToUrlConverter = (
-  mediaId: string,
+  mediaId: number,
   mediaType: string = undefined
 ) => {
   if (["movie", "tv", "person"].indexOf(mediaType) !== -1) {
@@ -33,7 +33,7 @@ export const mediaIdToUrlConverter = (
   }
 }
 
-export const removeDuplicates = (arr: any[]) => {
+export const removeDuplicates = (arr: object[]) => {
   let unique_ids = []
   for (let i = 0; i < arr.length; i++) {
     if (unique_ids.includes(arr[i].id)) {
@@ -46,7 +46,7 @@ export const removeDuplicates = (arr: any[]) => {
 
 // Sorting of shown content and handling of missing content -->
 
-export const removeContentWithMissingImagePath = (list: [], pathName: string) => {
+export const removeContentWithMissingImagePath = (list: object[], pathName: string) => {
   for (let i = 0; i < list.length; i++) {
     if (!list[i][pathName]) {
       list.splice(i, 1)
@@ -56,7 +56,7 @@ export const removeContentWithMissingImagePath = (list: [], pathName: string) =>
 }
 
 // TODO: Replace any with Media type
-export const sortListByPopularity = (list: [any]) => {
+export const sortListByPopularity = (list: object[]) => {
   list.sort((a, b) => b.popularity - a.popularity)
 }
 

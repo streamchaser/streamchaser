@@ -1,13 +1,14 @@
 <script lang="ts">
   import { mediaIdToUrlConverter } from "../../utils"
+  import type { Cast } from "../../types"
 
-  const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
-  const SHOW_BUTTON_AMOUNT: number = 18
-  const CAST_ITEM_START_AMOUNT: number = 9
+  export let cast: Cast[]
 
-  export let cast
+  const LOW_RES_IMG_URL = "https://image.tmdb.org/t/p/w500/"
+  const SHOW_BUTTON_AMOUNT = 18
+  const CAST_ITEM_START_AMOUNT = 9
 
-  let castItemAmount: number = 9
+  let castItemAmount = 9
 </script>
 
 {#if cast.length}

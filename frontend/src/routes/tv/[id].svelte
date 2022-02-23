@@ -1,23 +1,16 @@
 <script lang="ts">
-  import {
-    removeContentWithMissingImagePath,
-    routeToPage,
-    sortListByPopularity,
-  } from "../../utils"
+  import { removeContentWithMissingImagePath, sortListByPopularity } from "../../utils"
   import { variables } from "../../variables.js"
   import { page } from "$app/stores"
   import { currentCountry } from "../../stores/country.js"
-  import Navbar from "../../components/navbar.svelte"
-  import Footer from "../../components/footer.svelte"
   import Seasons from "../../components/details/seasons.svelte"
   import Error from "../../components/error.svelte"
   import Person from "../../components/details/person.svelte"
-  import CookieDisclaimer from "../../components/cookie_disclaimer.svelte"
   import TopCard from "../../components/details/top_card.svelte"
   import Recommendations from "../../components/details/recommendations.svelte"
   import Spinner from "../../components/loading/spinner.svelte"
 
-  const TV_DETAIL_URL: string = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`
+  const TV_DETAIL_URL = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`
 
   let tvTitle = "Loading..."
 
