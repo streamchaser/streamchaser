@@ -7,10 +7,10 @@ FROM node:16-alpine as base
 WORKDIR /usr/src/app
 
 # Copy over `package.json` and lock files to optimize the build process
-COPY ["package.json", "package-lock.json*", "./"]
+COPY package.json yarn.lock* ./
 
 # Install dependencies
-RUN npm install
+RUN yarn install && yarn cache clean
 
 # Copy all local files into the image
 COPY . .
@@ -24,12 +24,12 @@ FROM base as dev
 
 # Run the application for development
 RUN echo "Starting the frontend as development"
-CMD ["npm", "run", "dev"]
+CMD yarn run dev
 
 
 ### PROD ###
 FROM base as prod
 
 # Build the application for production and start the server
-RUN npm run build
-CMD ["node", "./build"]
+RUN yarn run build
+CMD node ./build
