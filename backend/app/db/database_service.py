@@ -1,11 +1,11 @@
 from math import ceil
 
 from app import schemas
-from app.api import get_genres
 from app.config import get_settings
 from app.db import crud
 from app.db import database
 from app.db import models
+from app.db.cache import Genre
 from app.db.crud import count_all_media
 from app.db.database import engine
 from app.db.models import Media
@@ -40,44 +40,20 @@ def dump_media_to_db(db: database.SessionLocal, media: models.Media) -> None:
         db.close()
 
 
-def dump_genres_to_db() -> None:
+async def insert_genres_to_cache(genres: dict) -> None:
     """Turns a dict of genres into Genre-schemas, and feeds them to crud create"""
-    # TODO: connection should probably be done in a safer way
-    db = database.SessionLocal()
-    genres = get_genres()
 
-    for key in genres:
-        formatted_genre = schemas.Genre(
-            id=key,
-            name=genres[key],
-            value=genres[key],
+    fixed_genres = [
+        Genre(
+            label=genre,
+            value=genre.replace(" & ", "%20%26%20"),
         )
-
-        db_genre = crud.get_genre_by_id(db=db, genre_id=key)
-        if not db_genre:
-            crud.create_genre(db=db, genre=formatted_genre)
-    db.close()
-
-
-def format_genres() -> None:
-    """Finds any genre name containing ampersand (&), formats the name to work with the
-    TMDb query, and calls crud update
-    """
-    db = database.SessionLocal()
-    genres = crud.get_all_genres(db=db)
-
-    formatted_genres = [
-        schemas.Genre(
-            id=genre.id,
-            name=str(genre.name).replace(" & ", "%20%26%20"),
-            value=genre.name,
-        )
-        for genre in genres
-        if " & " in genre.name
+        if " & " in genre
+        else Genre(label=genre, value=genre)
+        for genre in genres.values()
     ]
 
-    for genre in formatted_genres:
-        crud.update_genre_name(db, genre)
+    await Genre.insert(fixed_genres)
 
 
 def init_meilisearch_indexing(chunk_size: int):

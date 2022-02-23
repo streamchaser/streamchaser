@@ -63,28 +63,3 @@ def delete_media_by_id(db: Session, media_id: str):
 def delete_all_media(db: Session):
     db.query(models.Media).delete()
     db.commit()
-
-
-def get_genre_by_id(db: Session, genre_id: str):
-    """Gets a single Media-type by the id"""
-    return db.query(models.Genre).filter(models.Genre.id == genre_id).first()
-
-
-def get_all_genres(db: Session):
-    """Gets all Genre-types"""
-    return db.query(models.Genre).all()
-
-
-def create_genre(db: Session, genre: schemas.Genre):
-    """Adds a Genre-type to the database"""
-    db_genre = models.Genre(id=genre.id, name=genre.name, value=genre.value)
-    db.add(db_genre)
-    db.commit()
-    return db_genre
-
-
-def update_genre_name(db: Session, genre: schemas.Genre):
-    db_genre = models.Genre(id=genre.id, name=genre.name, value=genre.value)
-
-    db.query(models.Genre).filter_by(id=genre.id).update({"name": db_genre.name})
-    db.commit()

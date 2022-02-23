@@ -7,28 +7,29 @@ from typing import Optional
 
 import typer
 from app.api import fetch_jsongz_files
+from app.api import get_genres
 from app.api import media_converter
 from app.api import request_data
 from app.config import get_settings
 from app.db import database
+from app.db.cache import redis
 from app.db.crud import count_all_media
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
 from app.db.crud import get_media_by_id
 from app.db.crud import update_media_data_by_id
 from app.db.database import engine
-from app.db.database_service import dump_genres_to_db
 from app.db.database_service import dump_media_to_db
 from app.db.database_service import extract_unique_providers_to_txt
-from app.db.database_service import format_genres
 from app.db.database_service import init_meilisearch_indexing
+from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import media_model_to_schema
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.models import Media
 from app.db.search import client
 from app.db.search import update_index
+from app.util import coroutine
 from tqdm import tqdm
-
 
 supported_country_codes = get_settings().supported_country_codes
 
@@ -81,11 +82,6 @@ def fetch_media(popularity: float = 0):
 def index_meilisearch():
     init_meilisearch_indexing(chunk_size=10000)
     update_index()
-
-
-@app.command()
-def cleanup_genres():
-    format_genres()
 
 
 @app.command()
@@ -142,13 +138,25 @@ def add_data():
 
 
 @app.command()
-def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
+@coroutine
+async def flush_cache():
+    await redis.flushdb()
+
+
+@app.command()
+@coroutine
+async def genres_to_cache():
+    await insert_genres_to_cache(get_genres())
+
+
+@app.command()
+@coroutine
+async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
+    await insert_genres_to_cache(get_genres())
     fetch_media(popularity if popularity else 0)
     if remove_non_ascii:
         remove_non_ascii_media()
     add_data()
-    dump_genres_to_db()
-    cleanup_genres()
     index_meilisearch()
     extract_unique_providers_to_txt()
     update_index()
