@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { getKeyByValue, getFixedGenreValues } from "../utils"
   import { variables } from "../variables.js"
-  import MultiSelect from "svelte-multiselect"
+  import Select from "svelte-select"
   import MediaSearch from "../components/media_search.svelte"
   import { currentCountry } from "../stores/country.js"
   import { currentProviders } from "../stores/providers.js"
@@ -9,7 +8,7 @@
   import { inputQuery } from "../stores/input"
   import { chosenTheme } from "../stores/theme.js"
   import { onMount } from "svelte"
-  import DaisyuiThemes from "daisyui/colors/themes.js"
+  import DT from "daisyui/colors/themes.js"
 
   const SEARCH_URL: string = `${variables.apiPath}/search/`
   const GENRE_URL: string = `${variables.apiPath}/genres/`
@@ -20,9 +19,8 @@
   let input: string = ""
   let timer
   let media = []
-  let selectedGenres = []
   let providerAmounts: number[] = []
-  let formattedGenres: {} = { "": "" }
+  let genres: []
   let activeProviders = [""]
   let currentMediaAmount: number = 21
 
@@ -47,11 +45,11 @@
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
     let query = ""
-    for (let i = 0; i < selectedGenres.length; i++) {
-      query += `&g=${getKeyByValue(formattedGenres, selectedGenres[i])}`
+    for (let i = 0; i < $currentGenres.length; i++) {
+      query += `&g=${$currentGenres[i].value}`
     }
     for (let i = 0; i < $currentProviders.length; i++) {
-      query += `&p=${$currentProviders[i]}`
+      query += `&p=${$currentProviders[i].value}`
     }
 
     // Searches for all(*) if empty input
@@ -74,7 +72,6 @@
               `&limit=${currentMediaAmount}`
           )
     $inputQuery = input
-    $currentGenres = selectedGenres
     media = await res.json()
     hitProviderAmounts(media.hits)
   }
@@ -86,7 +83,7 @@
 
   const fetchGenres = async () => {
     const res = await fetch(GENRE_URL)
-    formattedGenres = await res.json()
+    genres = await res.json()
   }
 
   const resetProviders = () => {
@@ -113,9 +110,6 @@
     await fetchGenres()
     await fetchProviders()
 
-    if ($currentGenres !== []) {
-      selectedGenres = $currentGenres
-    }
     if ($inputQuery !== "") {
       input = $inputQuery
       debounceInput()
@@ -141,55 +135,65 @@
       autofocus
     />
   </div>
-  <div class="sm:grid sm:grid-cols-2 sm:gap-2">
-    <MultiSelect
-      outerDivClass="bg-base-100"
-      --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral-focus"]}
-      --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        "neutral-content"
-      ]}
-      --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        'primary'
-      ]}"
-      --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        'primary'
-      ]}"
-      --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      --sms-remove-x-hover-focus-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        "base-content"
-      ]}
-      --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral"]}
-      --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      bind:selected={selectedGenres}
-      on:change={debounceInput}
-      options={getFixedGenreValues(formattedGenres)}
-      placeholder="Select genres..."
-    />
-    <MultiSelect
-      outerDivClass="bg-base-100"
-      --sms-options-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral-focus"]}
-      --sms-text-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        "neutral-content"
-      ]}
-      --sms-border="1pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        'primary'
-      ]}"
-      --sms-focus-border="2pt solid {DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        'primary'
-      ]}"
-      --sms-active-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      --sms-remove-x-hover-focus-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`][
-        "base-content"
-      ]}
-      --sms-li-selected-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["neutral"]}
-      --sms-li-active-bg={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      --sms-selected-color={DaisyuiThemes[`[data-theme=${$chosenTheme}]`]["primary"]}
-      bind:selected={$currentProviders}
-      on:change={debounceInput}
-      options={activeProviders}
-      placeholder="Select providers..."
-    />
+  <div
+    class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
+    style="
+
+             --borderRadius: var(--rounded-btn, .5rem);
+             --background: {DT[`[data-theme=${$chosenTheme}]`]['base-100']};
+             --border: 1px solid {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --borderFocusColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --borderHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --itemIsActiveColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --multiItemBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --multiItemActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-focus']};
+             --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`][
+      'primary-accent'
+    ]};
+             --itemIsActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['neutral']}
+             --clearSelectHoverColor: {DT[`[data-theme=${$chosenTheme}]`][
+      'base-content'
+    ]};
+             --listBackground: {DT[`[data-theme=${$chosenTheme}]`]['neutral']};
+             --itemHoverBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --inputColor: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']}
+              "
+  >
+    <div class="mb-2 sm:mb-0">
+      <Select
+        on:select={e => {
+          $currentGenres = e.detail ? e.detail : []
+          search()
+        }}
+        on:clear={e => {
+          $currentGenres = e.detail
+            ? $currentGenres.splice($currentGenres.indexOf(e.detail.value))
+            : []
+        }}
+        value={$currentGenres.length ? $currentGenres : null}
+        items={genres}
+        isMulti={true}
+        placeholder="Select genres..."
+      />
+    </div>
+    <div>
+      <Select
+        on:select={e => {
+          $currentProviders = e.detail ? e.detail : []
+          search()
+        }}
+        on:clear={e => {
+          $currentProviders = e.detail
+            ? $currentProviders.splice($currentProviders.indexOf(e.detail.value))
+            : []
+        }}
+        value={$currentProviders.length ? $currentProviders : null}
+        items={activeProviders}
+        isMulti={true}
+        placeholder="Select providers..."
+      />
+    </div>
   </div>
 </div>
 <MediaSearch
