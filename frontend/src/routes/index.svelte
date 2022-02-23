@@ -162,11 +162,11 @@
   >
     <div class="mb-2 sm:mb-0">
       <Select
-        on:select={(e) => {
+        on:select={e => {
           $currentGenres = e.detail ? e.detail : []
           search()
         }}
-        on:clear={(e) => {
+        on:clear={e => {
           $currentGenres = e.detail
             ? $currentGenres.splice($currentGenres.indexOf(e.detail.value))
             : []
@@ -179,11 +179,11 @@
     </div>
     <div>
       <Select
-        on:select={(e) => {
+        on:select={e => {
           $currentProviders = e.detail ? e.detail : []
           search()
         }}
-        on:clear={(e) => {
+        on:clear={e => {
           $currentProviders = e.detail
             ? $currentProviders.splice($currentProviders.indexOf(e.detail.value))
             : []
