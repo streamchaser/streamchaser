@@ -8,7 +8,6 @@
   import { currentGenres } from "../stores/genres"
   import { inputQuery } from "../stores/input"
   import { chosenTheme } from "../stores/theme.js"
-  import { limit } from "../stores/limit.js"
   import { onMount } from "svelte"
   import DT from "daisyui/colors/themes.js"
   import type { Genre, Media, Meilisearch } from "../types"
@@ -17,7 +16,6 @@
   const GENRE_URL = `${variables.apiPath}/genres/`
   const PROVIDER_URL = `${variables.apiPath}/providers/`
   const INPUT_TIMER = 200
-  const MEDIA_START_AMOUNT = 21
 
   let input = ""
   let timer: NodeJS.Timeout
@@ -31,9 +29,9 @@
 
   // run search if we haven't received input in the last 200ms
   const debounceInput = () => {
-    $limit = MEDIA_START_AMOUNT
     clearTimeout(timer)
     timer = setTimeout(() => {
+      setViewportToDefault()
       search()
     }, INPUT_TIMER)
   }
@@ -45,16 +43,20 @@
     })
   }
 
+  const setViewportToDefault = () => {
+    viewPortWidth = window.visualViewport.width
+    currentMediaAmount = calculateAmountOfShownItems(viewPortWidth)
+    mediaStartAmount = currentMediaAmount
+  }
+
   const search = async () => {
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
 
-    // Sets the width of the viewport
-    viewPortWidth = window.visualViewport.width
-    currentMediaAmount = calculateAmountOfShownItems(viewPortWidth)
-    mediaStartAmount = calculateAmountOfShownItems(viewPortWidth)
+    if (!currentMediaAmount) {
+      setViewportToDefault()
+    }
 
-    console.log(viewPortWidth, currentMediaAmount, mediaStartAmount)
     let query = ""
     for (let i = 0; i < $currentGenres.length; i++) {
       query += `&g=${$currentGenres[i].value}`
@@ -107,6 +109,7 @@
     if (firstLoadCompleted) {
       resetProviders()
       fetchProviders()
+      setViewportToDefault()
       search()
     }
     firstLoadCompleted = true
@@ -114,9 +117,6 @@
 
   onMount(async () => {
     const inputField = document.getElementById("input-field") as HTMLInputElement
-    const VIEWPORT_WIDTH = window.visualViewport.width
-    currentMediaAmount = calculateAmountOfShownItems(VIEWPORT_WIDTH)
-    mediaStartAmount = calculateAmountOfShownItems(VIEWPORT_WIDTH)
 
     setTimeout(function () {
       inputField.select()
@@ -175,6 +175,7 @@
       <Select
         on:select={e => {
           $currentGenres = e.detail ? e.detail : []
+          setViewportToDefault()
           search()
         }}
         on:clear={e => {
@@ -192,6 +193,7 @@
       <Select
         on:select={e => {
           $currentProviders = e.detail ? e.detail : []
+          setViewportToDefault()
           search()
         }}
         on:clear={e => {
@@ -212,9 +214,9 @@
   {providerAmounts}
   currentCountry={$currentCountry}
   currentProviders={$currentProviders}
-  mediaStartAmount={MEDIA_START_AMOUNT}
-  bind:$limit
+  bind:currentMediaAmount
   {input}
   currentGenres={$currentGenres}
   {search}
+  {mediaStartAmount}
 />

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { mediaIdToUrlConverter } from "../utils"
+  import InfiniteLoading from "svelte-infinite-loading"
   import NoResults from "../components/no_results.svelte"
   import type { Meilisearch } from "../types"
 
@@ -11,23 +12,20 @@
   export let providerAmounts: number[]
   export let currentCountry: string
   export let currentProviders: string[]
-  export let showButtonAmount: number
   export let mediaStartAmount: number
   export let currentMediaAmount: number
   export let input: string
   export let currentGenres: string[]
   export let search: Function
 
-  const changeMediaAmount = (buttonElement: string) => {
-    currentMediaAmount =
-      buttonElement === "loadmore"
-        ? currentMediaAmount + showButtonAmount
-        : currentMediaAmount - showButtonAmount
-    search()
+  export const loadMoreData = async ({ detail: { loaded } }) => {
+    currentMediaAmount += mediaStartAmount
+    await search().then(() => {
+      loaded()
+    })
   }
 </script>
 
-<!-- TODO: Why is both checks needed? -->
 {#if meilisearch && meilisearch.hits.length}
   <div
     class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
@@ -98,30 +96,11 @@
       </a>
     {/each}
   </div>
-  <div class="flex space-x-1 justify-center p-1">
-    {#if currentMediaAmount > mediaStartAmount}
-      <button
-        on:click={() => {
-          changeMediaAmount("loadless")
-        }}
-        id="loadless"
-        class="btn"
-      >
-        Show less
-      </button>
-    {/if}
-    {#if currentMediaAmount < meilisearch.nbHits}
-      <button
-        on:click={() => {
-          changeMediaAmount("loadmore")
-        }}
-        id="loadmore"
-        class="btn btn-primary"
-      >
-        Show more
-      </button>
-    {/if}
-  </div>
+  {#if meilisearch.hits.length === meilisearch.limit}
+    <InfiniteLoading on:infinite={loadMoreData} />
+  {:else}
+    <p class="text-center italic">Showing {meilisearch.hits.length} results</p>
+  {/if}
 {:else}
   <NoResults {currentProviders} {currentGenres} {input} />
 {/if}
