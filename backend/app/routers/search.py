@@ -32,7 +32,7 @@ async def search(
     if genres and providers:
         genre_list: list[str] = [f'genres="{genre}"' for genre in genres]
         provider_list: list[list[str]] = [
-            [f'specific_provider_names="{providers}"' for providers in providers]
+            [f'provider_names="{providers}"' for providers in providers]
         ]
 
         return client.index(f"media_{country_code}").search(
@@ -60,10 +60,7 @@ async def search(
                 "limit": limit,
                 # This is using OR logic
                 "filter": [
-                    [
-                        f'specific_provider_names="{providers}"'
-                        for providers in providers
-                    ]
+                    [f'provider_names="{providers}"' for providers in providers]
                 ],
                 "sort": ["popularity:desc"],
             },

@@ -59,3 +59,7 @@ export const removeContentWithMissingImagePath = (list: [], pathName: string) =>
 export const sortListByPopularity = (list: [any]) => {
   list.sort((a, b) => b.popularity - a.popularity)
 }
+
+export const uniqueArray = (list: object[], filterBy: string) => {
+  return [...new Map(list.map(item => [item[filterBy], item])).values()]
+}

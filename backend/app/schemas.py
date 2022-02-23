@@ -12,9 +12,8 @@ class Media(BaseModel):
     genres: Any | None  # Rapand told me to do it :'( #TODO: find a proper solution
     poster_path: str | None
     popularity: int | None
+    provider_names: list[str] | None
     providers: list[dict] | None
-    specific_provider_names: list[str] | None
-    specific_providers: list[dict] | None
 
     class Config:
         # Makes use of database syntax "media.id" instead of "media['id']
@@ -29,7 +28,8 @@ class Movie(BaseModel):
     genres: list[str] | None
     imdb_id: str | None
     runtime: str | None
-    providers: list[dict] | None
+    flatrate_providers: list[dict] | None
+    free_providers: list[dict] | None
     recommendations: list[dict]
     poster_path: str | None
     popularity: int
@@ -44,7 +44,8 @@ class TV(BaseModel):
     overview: str
     genres: list[str] | None
     episode_run_time: list[int]
-    providers: list[dict] | None
+    flatrate_providers: list[dict] | None
+    free_providers: list[dict] | None
     recommendations: list[dict] | None
     poster_path: str | None
     popularity: int

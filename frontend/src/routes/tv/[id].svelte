@@ -62,7 +62,8 @@
     title={tv.name}
     overview={tv.overview}
     genres={tv.genres}
-    providers={tv.providers}
+    freeProviders={tv.free_providers}
+    flatrateProviders={tv.flatrate_providers}
     runtime={tv.episode_run_time[0]}
     imdbId={null}
     releaseDate={tv.first_air_date}

@@ -16,7 +16,7 @@ __pycache__/
 
 # Data
 pgdata
-backend/providers???.txt
+providers_txt
 
 # Frontend
 *.DS_Store

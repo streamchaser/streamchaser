@@ -46,7 +46,8 @@ def update_media_data_by_id(db: Session, media_id: str, data: dict):
     db.query(models.Media).filter_by(id=media_id).update(
         {
             "genres": data.get("genres"),
-            "providers": data.get("providers"),
+            "flatrate_providers": data.get("flatrate_providers"),
+            "free_providers": data.get("free_providers"),
             "title": data.get("title"),
             "poster_path": data.get("poster_path"),
             "popularity": data.get("popularity"),

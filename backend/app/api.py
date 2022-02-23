@@ -157,7 +157,12 @@ async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
             genres=[genre.get("name") for genre in movie.get("genres")],
             imdb_id=movie.get("imdb_id"),
             runtime=movie.get("runtime"),
-            providers=get_providers(movie.get("watch/providers"), country_code),
+            flatrate_providers=get_providers(
+                "flatrate", movie.get("watch/providers"), country_code
+            ),
+            free_providers=get_providers(
+                "free", movie.get("watch/providers"), country_code
+            ),
             recommendations=get_recommendations(movie.get("recommendations")),
             poster_path=movie.get("poster_path"),
             cast=movie.get("credits").get("cast"),
@@ -186,7 +191,12 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
             overview=tv.get("overview"),
             genres=[genre.get("name") for genre in tv.get("genres")],
             episode_run_time=tv.get("episode_run_time"),
-            providers=get_providers(tv.get("watch/providers"), country_code),
+            flatrate_providers=get_providers(
+                "flatrate", tv.get("watch/providers"), country_code
+            ),
+            free_providers=get_providers(
+                "free", tv.get("watch/providers"), country_code
+            ),
             recommendations=get_recommendations(tv.get("recommendations")),
             poster_path=tv.get("poster_path"),
             popularity=tv.get("popularity"),
@@ -237,7 +247,10 @@ def request_data(media: models.Media):
             "title": data.get(title),
             "poster_path": data.get("poster_path"),
             "popularity": data.get("popularity"),
-            "providers": get_providers(data.get("watch/providers")),
+            "flatrate_providers": get_providers(
+                "flatrate", data.get("watch/providers")
+            ),
+            "free_providers": get_providers("free", data.get("watch/providers")),
             "genres": [genre.get("name") for genre in data.get("genres")]
             if data.get("genres")
             else ["Unknown"],

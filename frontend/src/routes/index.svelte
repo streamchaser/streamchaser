@@ -37,7 +37,7 @@
   const hitProviderAmounts = (searchHits: [any]) => {
     providerAmounts = []
     searchHits.forEach(hit => {
-      providerAmounts.push(hit.specific_providers.length)
+      providerAmounts.push(hit.providers.length)
     })
   }
 

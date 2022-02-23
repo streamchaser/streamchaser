@@ -17,7 +17,8 @@ class Media(Base):
     genres = Column(postgresql.ARRAY(String), nullable=True)
     poster_path = Column(String, nullable=True)
     popularity = Column(Integer, nullable=True)
-    providers = Column(postgresql.ARRAY(JSON), nullable=True)
+    flatrate_providers = Column(postgresql.ARRAY(JSON), nullable=True)
+    free_providers = Column(postgresql.ARRAY(JSON), nullable=True)
 
 
 class Genre(Base):

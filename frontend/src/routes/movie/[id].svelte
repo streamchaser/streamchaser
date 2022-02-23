@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    removeContentWithMissingImagePath,
-    routeToPage,
-    sortListByPopularity,
-  } from "../../utils"
+  import { removeContentWithMissingImagePath, sortListByPopularity } from "../../utils"
   import { variables } from "../../variables.js"
   import { page } from "$app/stores"
   import { currentCountry } from "../../stores/country.js"
@@ -57,7 +53,8 @@
     title={movie.title}
     overview={movie.overview}
     genres={movie.genres}
-    providers={movie.providers}
+    freeProviders={movie.free_providers}
+    flatrateProviders={movie.flatrate_providers}
     runtime={movie.runtime}
     imdbId={movie.imdb_id}
     releaseDate={movie.release_date}

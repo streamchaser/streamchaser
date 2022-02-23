@@ -37,7 +37,9 @@ def unique_id(media: dict) -> str:
         return str(media.get("id"))
 
 
-def get_providers(providers: dict, country_code: str = "all") -> list[dict]:
+def get_providers(
+    provider_type: str, providers: dict, country_code: str = "all"
+) -> list[dict]:
     """Gets list of provider data for a movie from a specified country code"""
 
     try:
@@ -45,14 +47,16 @@ def get_providers(providers: dict, country_code: str = "all") -> list[dict]:
             return [
                 {country: provider}
                 for country in providers.get("results")
-                if providers.get("results").get(country).get("flatrate")
-                for provider in providers.get("results").get(country).get("flatrate")
+                if providers.get("results").get(country).get(provider_type)
+                for provider in providers.get("results").get(country).get(provider_type)
             ]
 
         return [
             provider
-            for provider in providers.get("results").get(country_code).get("flatrate")
-            if providers.get("results").get(country_code).get("flatrate")
+            for provider in providers.get("results")
+            .get(country_code)
+            .get(provider_type)
+            if providers.get("results").get(country_code).get(provider_type)
         ]
     except (AttributeError, TypeError):
         # If no providers for given country code
