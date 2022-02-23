@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    removeContentWithMissingImagePath,
-    routeToPage,
-    sortListByPopularity,
-  } from "../../utils"
+  import { removeContentWithMissingImagePath, sortListByPopularity } from "../../utils"
   import { variables } from "../../variables.js"
   import { page } from "$app/stores"
   import { currentCountry } from "../../stores/country.js"

@@ -3,6 +3,7 @@
   import { currentCountry } from "../../stores/country.js"
   import { currentGenres } from "../../stores/genres.js"
   import { inputQuery } from "../../stores/input.js"
+  import { uniqueArray } from "../../utils"
 
   const INITIAL_OVERVIEW_LENGTH: number = 550
   const IMG_URL: string = "https://image.tmdb.org/t/p/original/"
@@ -118,9 +119,7 @@
       </div>
     {:else}
       <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
-        {#each [...new Map(freeProviders
-              .concat(flatrateProviders)
-              .map(item => [item["provider_id"], item])).values()] as provider}
+        {#each uniqueArray(freeProviders.concat(flatrateProviders), "provider_id") as provider}
           <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
             <div
               data-tip={provider.provider_name}
