@@ -56,7 +56,7 @@ export const removeContentWithMissingImagePath = (list: object[], pathName: stri
 }
 
 // TODO: Replace any with Media type
-export const sortListByPopularity = (list: any[]) => {
+export const sortListByPopularity = (list: object[]) => {
   list.sort((a, b) => b.popularity - a.popularity)
 }
 

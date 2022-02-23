@@ -9,7 +9,7 @@
   import { chosenTheme } from "../stores/theme.js"
   import { onMount } from "svelte"
   import DT from "daisyui/colors/themes.js"
-  import type { Media, Meilisearch } from "../types"
+  import type { Genre, Media, Meilisearch } from "../types"
 
   const SEARCH_URL = `${variables.apiPath}/search/`
   const GENRE_URL = `${variables.apiPath}/genres/`
@@ -21,7 +21,7 @@
   let timer: NodeJS.Timeout
   let meilisearch: Meilisearch
   let providerAmounts: number[] = []
-  let genres: []
+  let genres: Genre[]
   let activeProviders = [""]
   let currentMediaAmount = 21
 
@@ -73,7 +73,6 @@
           )
     $inputQuery = input
     meilisearch = await res.json()
-    console.log(meilisearch)
     hitProviderAmounts(meilisearch.hits)
   }
 
