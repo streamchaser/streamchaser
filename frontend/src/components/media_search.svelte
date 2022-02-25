@@ -18,7 +18,7 @@
   export let currentGenres: string[]
   export let search: Function
 
-  export const loadMoreData = async ({ detail: { loaded } }) => {
+  const loadMoreData = async ({ detail: { loaded } }) => {
     currentMediaAmount += mediaStartAmount
     await search().then(() => {
       loaded()

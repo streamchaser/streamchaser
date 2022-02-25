@@ -1,56 +1,64 @@
 <script lang="ts">
-  import { mediaIdToUrlConverter } from "../../utils"
+  import InfiniteLoading from "svelte-infinite-loading"
+  import {
+    mediaIdToUrlConverter,
+    calculateAmountOfShownItems,
+    removeDuplicates,
+    sortListByPopularity,
+    removeContentWithMissingImagePath,
+  } from "../../utils"
 
   const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
-  const SHOW_BUTTON_AMOUNT: number = 12
-  const CAST_ITEM_START_AMOUNT: number = 6
-
   export let media: []
-  export let mediaType: string
-  export let title: string
+  let currentMediaAmount = calculateAmountOfShownItems(
+    window.visualViewport.width,
+    [32, 28, 24, 20, 16, 10]
+  )
+  const mediaStartAmount = currentMediaAmount
 
-  let mediaAmount: number = 6
+  const loadMoreData = async ({ detail: { loaded } }) => {
+    currentMediaAmount += mediaStartAmount
+    loaded()
+  }
+
+  const getMediaTitle = media => {
+    if (media.id.charAt(0) == "m") {
+      return media.title
+    } else {
+      return media.name
+    }
+  }
+
+  removeDuplicates(media)
+  removeContentWithMissingImagePath(media, "poster_path")
+  sortListByPopularity(media)
 </script>
 
 {#if media.length}
-  <h1 class="text-center text-3xl pt-5">{title}</h1>
+  <h1 class="text-center text-3xl pt-5">Movies & Series</h1>
   <div
-    class="grid grid-cols-2 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4"
+    class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-7 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4"
   >
-    {#each media.slice(0, mediaAmount) as media}
+    {#each media.slice(0, currentMediaAmount) as media}
       <a
-        href={mediaIdToUrlConverter(media.id, mediaType)}
+        href={mediaIdToUrlConverter(media.id)}
         class="card compact bordered shadow-md
                        hover:contrast-75 hover:ring-2 ring-primary"
       >
+        {#if media.id.charAt(0) == "t"}
+          <div class="absolute top-0 right-0 mx-1 -mt-1 opacity-85">
+            <div class="badge badge-sm">TV</div>
+          </div>
+        {/if}
         <figure>
-          {#if mediaType === "movie"}
-            <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt={media.title} />
-          {:else}
-            <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt={media.name} />
-          {/if}
+          <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt={getMediaTitle(media)} />
         </figure>
       </a>
     {/each}
   </div>
-  <div class="flex space-x-1 justify-center p-1">
-    {#if mediaAmount > CAST_ITEM_START_AMOUNT}
-      <button
-        on:click={() => (mediaAmount = mediaAmount - SHOW_BUTTON_AMOUNT)}
-        id="loadmore"
-        class="btn"
-      >
-        Show less
-      </button>
-    {/if}
-    {#if mediaAmount < media.length}
-      <button
-        on:click={() => (mediaAmount = mediaAmount + SHOW_BUTTON_AMOUNT)}
-        id="loadmore"
-        class="btn btn-primary"
-      >
-        Show more
-      </button>
-    {/if}
-  </div>
+  {#if media.length > currentMediaAmount}
+    <InfiniteLoading on:infinite={loadMoreData} />
+  {:else}
+    <p class="text-center italic">Showing {media.length} results</p>
+  {/if}
 {/if}

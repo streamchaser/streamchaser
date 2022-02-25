@@ -64,24 +64,27 @@ export const uniqueArray = (list: object[], filterBy: string) => {
   return [...new Map(list.map(item => [item[filterBy], item])).values()]
 }
 
-export const calculateAmountOfShownItems = (viewportWidth: number) => {
+export const calculateAmountOfShownItems = (
+  viewportWidth: number,
+  amounts: number[]
+) => {
   if (viewportWidth >= 1536) {
     //console.log("2xl")
-    return 35
+    return amounts[0]
   } else if (viewportWidth >= 1280) {
     //console.log("xl")
-    return 30
+    return amounts[1]
   } else if (viewportWidth >= 1024) {
     //console.log("lg")
-    return 25
+    return amounts[2]
   } else if (viewportWidth >= 764) {
     //console.log("md")
-    return 20
+    return amounts[3]
   } else if (viewportWidth >= 640) {
     //console.log("sm")
-    return 15
+    return amounts[4]
   } else {
     //console.log("less than SM")
-    return 10
+    return amounts[5]
   }
 }
