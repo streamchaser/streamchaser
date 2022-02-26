@@ -10,7 +10,7 @@
   <h2 class="flex justify-center">The requested site could not be reached</h2>
   <br />
   <div class="flex justify-center">
-    <button on:click={() => window.history.back()} id="goback" class="btn">
+    <button on:click={() => (window.location.href = "/")} id="goback" class="btn">
       Back to safety
     </button>
   </div>

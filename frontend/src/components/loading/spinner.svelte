@@ -24,7 +24,7 @@
     <br />
     <div class="flex justify-center">
       <button
-        on:click={() => window.history.back()}
+        on:click={() => (window.location.href = "/")}
         id="goback"
         class="btn btn-primary"
       >
