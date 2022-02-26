@@ -20,4 +20,5 @@ async def get_movie(movie_id: int, country_code: str) -> Movie:
         return json.loads(cached_movie)
     movie = await get_movie_from_id(movie_id, country_code.upper())
     await redis.set(f"movie:{country_code}_{movie_id}", movie.json())
+    await redis.expire(f"movie:{country_code}_{movie_id}", 60 * 60 * 24)  # 1 day
     return movie

@@ -20,4 +20,5 @@ async def get_person(person_id: int) -> Person:
         return json.loads(cached_person)
     person = await get_person_from_id(person_id)
     await redis.set(f"person:{person_id}", person.json())
+    await redis.expire(f"person:{person_id}", 60 * 60 * 24)  # 1 day
     return person

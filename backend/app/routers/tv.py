@@ -20,4 +20,5 @@ async def get_tv(tv_id: int, country_code: str) -> TV:
         return json.loads(cached_tv)
     tv = await get_tv_from_id(tv_id, country_code.upper())
     await redis.set(f"tv:{country_code}_{tv_id}", tv.json())
+    await redis.expire(f"tv:{country_code}_{tv_id}", 60 * 60 * 24)  # 1 day
     return tv
