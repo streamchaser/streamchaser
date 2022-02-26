@@ -107,15 +107,11 @@
       inputField.select()
     }, 20)
 
-    await fetchGenres()
-    await fetchProviders()
-
     if ($inputQuery !== "") {
       input = $inputQuery
-      debounceInput()
-    } else {
-      await search()
     }
+
+    await Promise.all([fetchGenres(), fetchProviders(), search()])
   })
 </script>
 
