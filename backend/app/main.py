@@ -3,6 +3,7 @@ import asyncio
 from app.config import Environment
 from app.config import get_settings
 from app.db import models
+from app.db.cache import redis
 from app.db.database import engine
 from app.routers import genres
 from app.routers import media
@@ -28,6 +29,11 @@ async def init_db():
         print("Will try to connect to the database again in 2 seconds...")
         await asyncio.sleep(2)
         models.Base.metadata.create_all(bind=engine)
+
+
+@app.on_event("shutdown")
+async def close_db():
+    await redis.close()
 
 
 streamchaser_url = get_settings().streamchaser_url

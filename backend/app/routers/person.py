@@ -1,4 +1,7 @@
+import json
+
 from app.api import get_person_from_id
+from app.db.cache import redis
 from app.schemas import Person
 from fastapi import APIRouter
 
@@ -13,4 +16,8 @@ router = APIRouter(
 @router.get("/{person_id}")
 async def get_person(person_id: int) -> Person:
     """Specific TV page"""
-    return await get_person_from_id(person_id)
+    if cached_person := (await redis.get(f"person:{person_id}")):
+        return json.loads(cached_person)
+    person = await get_person_from_id(person_id)
+    await redis.set(f"person:{person_id}", person.json())
+    return person
