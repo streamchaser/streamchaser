@@ -3,6 +3,7 @@
   import InfiniteLoading from "svelte-infinite-loading"
   import NoResults from "../components/no_results.svelte"
   import type { Meilisearch } from "../types"
+  import Spinner from "../components/loading/spinner.svelte"
 
   const SHOWN_PROVIDERS: number = 5
   const IMG_URL: string = "https://image.tmdb.org/t/p/original/"
@@ -101,6 +102,8 @@
   {:else}
     <p class="text-center italic">Showing {meilisearch.hits.length} results</p>
   {/if}
-{:else}
+{:else if meilisearch && meilisearch.hits.length === 0}
   <NoResults {currentProviders} {currentGenres} {input} />
+{:else}
+  <Spinner />
 {/if}
