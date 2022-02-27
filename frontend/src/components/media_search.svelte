@@ -2,6 +2,7 @@
   import { mediaIdToUrlConverter } from "../utils"
   import NoResults from "../components/no_results.svelte"
   import type { Meilisearch } from "../types"
+  import Spinner from "../components/loading/spinner.svelte"
 
   const SHOWN_PROVIDERS: number = 5
   const SHOW_BUTTON_AMOUNT: number = 21
@@ -122,6 +123,8 @@
       </button>
     {/if}
   </div>
-{:else}
+{:else if meilisearch && meilisearch.hits.length === 0}
   <NoResults {currentProviders} {currentGenres} {input} />
+{:else}
+  <Spinner />
 {/if}
