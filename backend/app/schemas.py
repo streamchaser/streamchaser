@@ -1,5 +1,3 @@
-from typing import Any
-
 from pydantic import BaseModel
 
 
@@ -9,7 +7,7 @@ class Media(BaseModel):
     original_title: str
     overview: str | None
     release_date: str | None
-    genres: Any | None  # Rapand told me to do it :'( #TODO: find a proper solution
+    genres: list[str | None]
     poster_path: str | None
     popularity: int | None
     provider_names: list[str] | None
