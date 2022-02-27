@@ -25,18 +25,6 @@ def valid_release_date(media: dict) -> str:
     return str(media.get("first_air_date"))
 
 
-def unique_id(media: dict) -> str:
-    if media.get("media_type") == "movie":
-        return f"m{media.get('id')}"
-    elif media.get("media_type") == "tv":
-        return f"t{media.get('id')}"
-    elif media.get("media_type") == "person":
-        return f"p{media.get('id')}"
-    else:
-        print(f"Failed to create unique ID for {media.get('id')}")
-        return str(media.get("id"))
-
-
 def get_providers(
     provider_type: str, providers: dict, country_code: str = "all"
 ) -> list[dict]:

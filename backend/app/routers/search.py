@@ -43,7 +43,7 @@ async def search(
                 "sort": ["popularity:desc"],
             },
         )
-    elif genres:
+    if genres:
         return client.index(f"media_{country_code}").search(
             user_input,
             {
@@ -53,7 +53,7 @@ async def search(
                 "sort": ["popularity:desc"],
             },
         )
-    elif providers:
+    if providers:
         return client.index(f"media_{country_code}").search(
             user_input,
             {
