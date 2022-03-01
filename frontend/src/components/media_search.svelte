@@ -126,5 +126,5 @@
 {:else if meilisearch && meilisearch.hits.length === 0}
   <NoResults {currentProviders} {currentGenres} {input} />
 {:else}
-  <Spinner />
+  <Spinner timeout={false} />
 {/if}
