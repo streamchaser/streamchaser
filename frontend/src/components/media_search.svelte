@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade } from "svelte/transition"
   import { mediaIdToUrlConverter } from "../utils"
   import InfiniteLoading from "svelte-infinite-loading"
   import NoResults from "../components/no_results.svelte"
@@ -29,6 +30,7 @@
 
 {#if meilisearch && meilisearch.hits.length}
   <div
+    in:fade
     class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
                     md:grid-cols-4 sm:grid-cols-3 gap-2 pt-2 pb-4"
   >
