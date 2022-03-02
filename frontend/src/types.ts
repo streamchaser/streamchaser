@@ -2,6 +2,7 @@ export interface Genre {
   label: string
   value: string
 }
+
 export interface Provider {
   display_priority: number
   logo_path: string
@@ -22,6 +23,13 @@ export interface Media {
   specific_provider_names: string[]
   specific_providers: Provider[]
   title: string
+  backdrop_path: string
+}
+
+export interface FilmOrSeries {
+  id: string
+  name?: string
+  title?: string
 }
 
 export interface Meilisearch {
@@ -65,4 +73,14 @@ export interface Cast {
   original_name: string
   popularity: number
   profile_path: string
+}
+
+export interface ViewPort {
+  width: number
+  xxl: number
+  xl: number
+  lg: number
+  md: number
+  sm: number
+  mobile: number
 }

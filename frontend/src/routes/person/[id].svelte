@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    removeContentWithMissingImagePath,
-    sortListByPopularity,
-    removeDuplicates,
-  } from "../../utils"
+  import { addMediaToID, getMostPopularBackdropPath } from "../../utils"
   import { variables } from "../../variables.js"
   import { page } from "$app/stores"
   import Error from "../../components/error.svelte"
@@ -21,14 +17,9 @@
     if (response.status == 200) {
       let jsonResponse = await response.json()
       personName = jsonResponse.name
-      removeContentWithMissingImagePath(jsonResponse.movie_credits, "poster_path")
-      removeContentWithMissingImagePath(jsonResponse.tv_credits, "poster_path")
 
-      removeDuplicates(jsonResponse.movie_credits)
-      removeDuplicates(jsonResponse.tv_credits)
-
-      sortListByPopularity(jsonResponse.movie_credits)
-      sortListByPopularity(jsonResponse.tv_credits)
+      addMediaToID(jsonResponse.movie_credits, "movie")
+      addMediaToID(jsonResponse.tv_credits, "tv")
 
       return jsonResponse
     } else {
@@ -47,20 +38,21 @@
   <Spinner />
 {:then person}
   <TopCard
-    backdropPath={person.movie_credits[0].backdrop_path}
+    backdropPath={getMostPopularBackdropPath(
+      person.movie_credits.concat(person.tv_credits)
+    )}
     posterPath={person.profile_path}
     title={person.name}
     overview={person.biography}
     genres={null}
-    providers={null}
+    freeProviders={null}
+    flatrateProviders={null}
     runtime={null}
     imdbId={null}
     releaseDate={null}
   />
 
-  <PersonMedia media={person.movie_credits} mediaType={"movie"} title={"Movies"} />
-
-  <PersonMedia media={person.tv_credits} mediaType={"tv"} title={"Series"} />
+  <PersonMedia media={person.movie_credits.concat(person.tv_credits)} />
 {:catch error}
   <Error {error} />
 {/await}

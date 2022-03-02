@@ -1,14 +1,21 @@
 <script lang="ts">
-  import { mediaIdToUrlConverter } from "../../utils"
+  import { mediaIdToUrlConverter, calculateAmountOfShownItems } from "../../utils"
   import type { Cast } from "../../types"
 
   export let cast: Cast[]
 
   const LOW_RES_IMG_URL = "https://image.tmdb.org/t/p/w500/"
-  const SHOW_BUTTON_AMOUNT = 18
-  const CAST_ITEM_START_AMOUNT = 9
 
-  let castItemAmount = 9
+  let castItemAmount = calculateAmountOfShownItems({
+    width: window.visualViewport.width,
+    xxl: 18,
+    xl: 16,
+    lg: 14,
+    md: 10,
+    sm: 12,
+    mobile: 9,
+  })
+  const castItemStartAmount = castItemAmount
 </script>
 
 {#if cast.length}
@@ -37,17 +44,9 @@
     {/each}
   </div>
   <div class="flex space-x-1 justify-center pt-5">
-    {#if castItemAmount > CAST_ITEM_START_AMOUNT}
-      <button
-        on:click={() => (castItemAmount = castItemAmount - SHOW_BUTTON_AMOUNT)}
-        class="btn"
-      >
-        Show less
-      </button>
-    {/if}
     {#if castItemAmount < cast.length}
       <button
-        on:click={() => (castItemAmount = castItemAmount + SHOW_BUTTON_AMOUNT)}
+        on:click={() => (castItemAmount += castItemStartAmount)}
         class="btn btn-primary"
       >
         Show more

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { mediaIdToUrlConverter } from "../utils"
+  import InfiniteLoading from "svelte-infinite-loading"
   import NoResults from "../components/no_results.svelte"
   import type { Meilisearch } from "../types"
 
   const SHOWN_PROVIDERS: number = 5
-  const SHOW_BUTTON_AMOUNT: number = 21
   const IMG_URL: string = "https://image.tmdb.org/t/p/original/"
   const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
 
@@ -18,16 +18,14 @@
   export let currentGenres: string[]
   export let search: Function
 
-  const changeMediaAmount = (buttonElement: string) => {
-    currentMediaAmount =
-      buttonElement === "loadmore"
-        ? currentMediaAmount + SHOW_BUTTON_AMOUNT
-        : currentMediaAmount - SHOW_BUTTON_AMOUNT
-    search()
+  const loadMoreData = async ({ detail: { loaded } }) => {
+    currentMediaAmount += mediaStartAmount
+    await search().then(() => {
+      loaded()
+    })
   }
 </script>
 
-<!-- TODO: Why is both checks needed? -->
 {#if meilisearch && meilisearch.hits.length}
   <div
     class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
@@ -98,30 +96,11 @@
       </a>
     {/each}
   </div>
-  <div class="flex space-x-1 justify-center p-1">
-    {#if currentMediaAmount > mediaStartAmount}
-      <button
-        on:click={() => {
-          changeMediaAmount("loadless")
-        }}
-        id="loadless"
-        class="btn"
-      >
-        Show less
-      </button>
-    {/if}
-    {#if currentMediaAmount < meilisearch.nbHits}
-      <button
-        on:click={() => {
-          changeMediaAmount("loadmore")
-        }}
-        id="loadmore"
-        class="btn btn-primary"
-      >
-        Show more
-      </button>
-    {/if}
-  </div>
+  {#if meilisearch.hits.length === meilisearch.limit}
+    <InfiniteLoading on:infinite={loadMoreData} />
+  {:else}
+    <p class="text-center italic">Showing {meilisearch.hits.length} results</p>
+  {/if}
 {:else}
   <NoResults {currentProviders} {currentGenres} {input} />
 {/if}
