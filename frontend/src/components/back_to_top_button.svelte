@@ -2,6 +2,7 @@
   import { fade } from "svelte/transition"
 
   export let showOnPx = 150
+
   let visible = false
 
   const goTop = () => {

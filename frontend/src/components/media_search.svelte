@@ -30,12 +30,13 @@
 
 {#if meilisearch && meilisearch.hits.length}
   <div
-    in:fade
     class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
                     md:grid-cols-4 sm:grid-cols-3 gap-2 pt-2 pb-4"
   >
     {#each meilisearch.hits as media, mediaIndex}
       <a
+        in:fade
+        out:fade={{ duration: 200 }}
         href={mediaIdToUrlConverter(media.id)}
         class="card compact w-auto bordered bg-neutral-focus m-1
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
