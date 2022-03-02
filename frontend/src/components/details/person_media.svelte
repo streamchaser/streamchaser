@@ -6,27 +6,26 @@
     removeDuplicates,
     sortListByPopularity,
     removeContentWithMissingImagePath,
+    getMediaTitle,
   } from "../../utils"
+  import type { Media } from "../../types"
 
   const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
-  export let media: []
-  let currentMediaAmount = calculateAmountOfShownItems(
-    window.visualViewport.width,
-    [32, 28, 24, 20, 16, 10]
-  )
+  export let media: Media[]
+  let currentMediaAmount = calculateAmountOfShownItems({
+    width: window.visualViewport.width,
+    xxl: 32,
+    xl: 28,
+    lg: 24,
+    md: 20,
+    sm: 16,
+    mobile: 10,
+  })
   const mediaStartAmount = currentMediaAmount
 
   const loadMoreData = async ({ detail: { loaded } }) => {
     currentMediaAmount += mediaStartAmount
     loaded()
-  }
-
-  const getMediaTitle = media => {
-    if (media.id.charAt(0) == "m") {
-      return media.title
-    } else {
-      return media.name
-    }
   }
 
   removeDuplicates(media)
@@ -35,7 +34,7 @@
 </script>
 
 {#if media.length}
-  <h1 class="text-center text-3xl pt-5">Movies & Series</h1>
+  <h1 class="text-center text-3xl pt-5">Starred in</h1>
   <div
     class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-7 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4"
   >

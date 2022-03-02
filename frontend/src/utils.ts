@@ -1,5 +1,6 @@
-// Generic Javascript Functions
+import type { ViewPort, Media, FilmOrSeries } from "./types"
 
+// Generic Javascript Functions
 export const getKeyByValue = (object: {}, value: string): string => {
   return Object.keys(object).find(key => object[key] === value)
 }
@@ -10,8 +11,9 @@ export const getFixedGenreValues = (genres: {}) => {
   })
 }
 
+// TODO: This should be 2 functions to type correctly
 export const mediaIdToUrlConverter = (
-  mediaId: number,
+  mediaId: string | number,
   mediaType: string = undefined
 ) => {
   if (["movie", "tv", "person"].indexOf(mediaType) !== -1) {
@@ -33,7 +35,7 @@ export const mediaIdToUrlConverter = (
   }
 }
 
-export const removeDuplicates = (arr: object[]) => {
+export const removeDuplicates = (arr: Media[]) => {
   let unique_ids = []
   for (let i = 0; i < arr.length; i++) {
     if (unique_ids.includes(arr[i].id)) {
@@ -55,8 +57,7 @@ export const removeContentWithMissingImagePath = (list: object[], pathName: stri
   }
 }
 
-// TODO: Replace any with Media type
-export const sortListByPopularity = (list: object[]) => {
+export const sortListByPopularity = (list: Media[]) => {
   list.sort((a, b) => b.popularity - a.popularity)
 }
 
@@ -64,27 +65,38 @@ export const uniqueArray = (list: object[], filterBy: string) => {
   return [...new Map(list.map(item => [item[filterBy], item])).values()]
 }
 
-export const calculateAmountOfShownItems = (
-  viewportWidth: number,
-  amounts: number[]
-) => {
-  if (viewportWidth >= 1536) {
-    //console.log("2xl")
-    return amounts[0]
-  } else if (viewportWidth >= 1280) {
-    //console.log("xl")
-    return amounts[1]
-  } else if (viewportWidth >= 1024) {
-    //console.log("lg")
-    return amounts[2]
-  } else if (viewportWidth >= 764) {
-    //console.log("md")
-    return amounts[3]
-  } else if (viewportWidth >= 640) {
-    //console.log("sm")
-    return amounts[4]
+export const calculateAmountOfShownItems = (viewPort: ViewPort) => {
+  if (viewPort.width >= 1536) {
+    return viewPort.xxl
+  } else if (viewPort.width >= 1280) {
+    return viewPort.xl
+  } else if (viewPort.width >= 1024) {
+    return viewPort.lg
+  } else if (viewPort.width >= 764) {
+    return viewPort.md
+  } else if (viewPort.width >= 640) {
+    return viewPort.sm
   } else {
-    //console.log("less than SM")
-    return amounts[5]
+    // Less than sm
+    return viewPort.mobile
+  }
+}
+
+export const addMediaToID = (mediaArray: Media[], mediaType: string) => {
+  for (let i = 0; i < mediaArray.length; i++) {
+    mediaArray[i].id = mediaType.charAt(0) + mediaArray[i].id
+  }
+}
+
+export const getMostPopularBackdropPath = (mediaList: Media[]) => {
+  sortListByPopularity(mediaList)
+  return mediaList[0].backdrop_path
+}
+
+export const getMediaTitle = (media: FilmOrSeries) => {
+  if (media.id.charAt(0) == "m") {
+    return media.title
+  } else {
+    return media.name
   }
 }

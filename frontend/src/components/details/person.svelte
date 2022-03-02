@@ -6,10 +6,15 @@
 
   const LOW_RES_IMG_URL = "https://image.tmdb.org/t/p/w500/"
 
-  let castItemAmount = calculateAmountOfShownItems(
-    window.visualViewport.width,
-    [27, 24, 21, 15, 12, 9]
-  )
+  let castItemAmount = calculateAmountOfShownItems({
+    width: window.visualViewport.width,
+    xxl: 18,
+    xl: 16,
+    lg: 14,
+    md: 10,
+    sm: 12,
+    mobile: 9,
+  })
   const castItemStartAmount = castItemAmount
 </script>
 

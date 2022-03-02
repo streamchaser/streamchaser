@@ -45,10 +45,15 @@
 
   const setViewportToDefault = () => {
     viewPortWidth = window.visualViewport.width
-    currentMediaAmount = calculateAmountOfShownItems(
-      viewPortWidth,
-      [35, 30, 25, 20, 15, 10]
-    )
+    currentMediaAmount = calculateAmountOfShownItems({
+      width: viewPortWidth,
+      xxl: 35,
+      xl: 30,
+      lg: 25,
+      md: 20,
+      sm: 15,
+      mobile: 10,
+    })
     mediaStartAmount = currentMediaAmount
   }
 
