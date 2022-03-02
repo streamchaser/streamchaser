@@ -6,11 +6,14 @@
   import TopCard from "../../components/details/top_card.svelte"
   import PersonMedia from "../../components/details/person_media.svelte"
   import Spinner from "../../components/loading/spinner.svelte"
+  import type { Person } from "../../types"
 
   const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`
 
   let personName: string = "Loading..."
-
+  const mediaCreditsWithoutAdult = (person: Person) => {
+    return person.movie_credits.concat(person.tv_credits).filter(m => !m.adult)
+  }
   const fetchPersonDetails = async () => {
     const response = await fetch(PERSON_DETAIL_URL)
 
@@ -52,7 +55,7 @@
     releaseDate={null}
   />
 
-  <PersonMedia media={person.movie_credits.concat(person.tv_credits)} />
+  <PersonMedia media={mediaCreditsWithoutAdult(person)} />
 {:catch error}
   <Error {error} />
 {/await}
