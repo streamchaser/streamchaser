@@ -10,7 +10,22 @@ export interface Provider {
   provider_name: string
 }
 
+export interface Person {
+  also_known_as: string[]
+  biography: string
+  birthday: string
+  deathday: string
+  gender: number
+  id: number
+  movie_credits: Media[]
+  tv_credits: Media[]
+  name: string
+  place_of_birth: string
+  profile_path: string
+}
+
 export interface Media {
+  adult?: boolean
   genres: string[]
   id: string
   original_title: string
