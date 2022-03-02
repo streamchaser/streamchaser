@@ -1,11 +1,15 @@
 <script lang="ts">
   import { onMount } from "svelte"
 
+  export let timeout = true
+
   const LONG_LOAD_TIME = 3000
   let tooLongLoad = false
 
   onMount(async () => {
-    setTimeout(() => (tooLongLoad = true), LONG_LOAD_TIME)
+    if (timeout) {
+      setTimeout(() => (tooLongLoad = true), LONG_LOAD_TIME)
+    }
   })
 </script>
 
