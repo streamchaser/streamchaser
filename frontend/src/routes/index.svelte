@@ -148,7 +148,7 @@
       id="input-field"
       type="text"
       placeholder="Search in {$currentCountry}"
-      class="input input-primary input-bordered"
+      class="input input-bordered input-primary"
       bind:value={input}
       on:input={debounceInput}
       autofocus
@@ -163,20 +163,18 @@
              --border: 1px solid {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --borderFocusColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --borderHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --itemIsActiveColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --multiItemBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --multiItemColor: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']};
              --multiItemActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-focus']};
              --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`][
-      'primary-accent'
+      'primary-content'
     ]};
-             --itemIsActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['neutral']}
-             --clearSelectHoverColor: {DT[`[data-theme=${$chosenTheme}]`][
-      'base-content'
-    ]};
+             --clearSelectHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --itemIsActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']};
+             --itemColor: {DT[`[data-theme=${$chosenTheme}]`]['text-secondary']};
              --listBackground: {DT[`[data-theme=${$chosenTheme}]`]['neutral']};
-             --itemHoverBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --inputColor: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']}
+             --itemHoverBG: {DT[`[data-theme=${$chosenTheme}]`]['neutral-focus']};
+             --inputColor: {DT[`[data-theme=${$chosenTheme}]`]['text-primary']};
               "
   >
     <div class="mb-2 sm:mb-0">

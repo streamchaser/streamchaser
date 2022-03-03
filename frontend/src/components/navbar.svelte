@@ -48,6 +48,7 @@
     { icon: "🌲", value: "forest" },
     { icon: "🎃", value: "halloween" },
     { icon: "🌆", value: "synthwave" },
+    { icon: "🧛", value: "dracula" },
   ]
 
   onMount(() => {
@@ -81,8 +82,7 @@
           >
             {#if $chosenTheme == theme.value}
               <a class="bg-primary hover:bg-primary">
-                {theme.icon}
-                {theme.value}
+                <p class="text-primary-content">{theme.icon} {theme.value}</p>
               </a>
             {:else}
               <a>{theme.icon} {theme.value}</a>
