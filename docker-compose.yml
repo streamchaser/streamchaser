@@ -61,6 +61,8 @@ services:
     image: getmeili/meilisearch:v0.25.2
     restart: always
     container_name: search
+    volumes:
+      - meili:/data.ms
     ports:
       - 7700:7700
     networks:
@@ -134,6 +136,7 @@ networks:
     external: false
 
 volumes:
+  meili:
   pgdata:
   node_modules:
   cache:
