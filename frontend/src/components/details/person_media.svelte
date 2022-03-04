@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade } from "svelte/transition"
   import InfiniteLoading from "svelte-infinite-loading"
   import {
     mediaIdToUrlConverter,
@@ -40,6 +41,7 @@
   >
     {#each media.slice(0, currentMediaAmount) as media}
       <a
+        in:fade
         href={mediaIdToUrlConverter(media.id)}
         class="card compact bordered shadow-md
                        hover:contrast-75 hover:ring-2 ring-primary"
