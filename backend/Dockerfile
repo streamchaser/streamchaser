@@ -15,7 +15,9 @@ FROM base as prod
 RUN echo "Starting backend as production" \
     && poetry export -f requirements.txt --output requirements.txt --without-hashes \
     && pip install --no-cache-dir -r requirements.txt
-CMD gunicorn app.main:app -k uvicorn.workers.UvicornWorker -b :80
+
+# '-' after --access-logfile means to log to stdout
+CMD gunicorn app.main:app --access-logfile - -k uvicorn.workers.UvicornWorker -b :80
 
 
 FROM base as dev
