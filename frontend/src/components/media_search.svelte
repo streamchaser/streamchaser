@@ -36,7 +36,7 @@
     {#each meilisearch.hits as media, mediaIndex}
       <a
         in:fade
-        out:fade={{ duration: 200 }}
+        out:fade|local={{ duration: 200 }}
         href={mediaIdToUrlConverter(media.id)}
         class="card compact w-auto bordered bg-neutral-focus m-1
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
