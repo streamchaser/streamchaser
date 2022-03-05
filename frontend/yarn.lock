@@ -1074,7 +1074,7 @@ svelte-preprocess@^4.0.0, svelte-preprocess@^4.9.8:
 
 "svelte-select@https://github.com/AndreasPB/svelte-select":
   version "4.4.7"
-  resolved "https://github.com/AndreasPB/svelte-select#1a2b9935c5eaf9e40028d12c76e2b830ff4588e9"
+  resolved "https://github.com/AndreasPB/svelte-select#b0bb0b6a66fbe2866d218a58ea18bf5afb3ece78"
 
 svelte@^3.34.0:
   version "3.46.4"

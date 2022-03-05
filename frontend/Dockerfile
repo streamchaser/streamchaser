@@ -3,6 +3,9 @@ ARG APP_ENV=dev
 ## BASE ###
 FROM node:16-alpine as base
 
+# Install git
+RUN apk add --no-cache git
+
 # Change our current working directory
 WORKDIR /usr/src/app
 
