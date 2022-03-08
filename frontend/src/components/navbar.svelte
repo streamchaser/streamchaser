@@ -45,6 +45,7 @@
   const themes = [
     { icon: "💎", value: "luxury" },
     { icon: "🌚", value: "dark" },
+    { icon: "🧛", value: "dracula" },
     { icon: "🌲", value: "forest" },
     { icon: "🎃", value: "halloween" },
     { icon: "🌆", value: "synthwave" },
@@ -80,12 +81,11 @@
             on:click={() => ($chosenTheme = theme.value)}
           >
             {#if $chosenTheme == theme.value}
-              <a class="bg-primary hover:bg-primary">
-                {theme.icon}
-                {theme.value}
+              <a class="bg-primary hover:bg-primary" href="">
+                <p class="text-primary-content">{theme.icon} {theme.value}</p>
               </a>
             {:else}
-              <a>{theme.icon} {theme.value}</a>
+              <a href="">{theme.icon} {theme.value}</a>
             {/if}
           </li>
         {/each}
