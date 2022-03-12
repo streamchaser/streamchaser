@@ -1,4 +1,7 @@
+import json
+
 from app.db.cache import Genre
+from app.db.cache import redis
 from fastapi import APIRouter
 
 
@@ -12,4 +15,4 @@ router = APIRouter(
 @router.get("/", response_model=list[Genre])
 async def read_all_genres():
     """Reads all genres, returns only name and value"""
-    return await Genre.select()
+    return json.loads(await redis.get("genres"))

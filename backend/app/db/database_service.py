@@ -1,3 +1,4 @@
+import json
 from math import ceil
 from pathlib import Path
 
@@ -7,6 +8,7 @@ from app.db import crud
 from app.db import database
 from app.db import models
 from app.db.cache import Genre
+from app.db.cache import redis
 from app.db.crud import count_all_media
 from app.db.database import engine
 from app.db.models import Media
@@ -49,13 +51,13 @@ async def insert_genres_to_cache(genres: dict) -> None:
         Genre(
             label=genre,
             value=genre.replace(" & ", "%20%26%20"),
-        )
+        ).dict()
         if " & " in genre
-        else Genre(label=genre, value=genre)
+        else Genre(label=genre, value=genre).dict()
         for genre in genres.values()
     ]
 
-    await Genre.insert(fixed_genres)
+    await redis.set("genres", json.dumps(fixed_genres))
 
 
 def init_meilisearch_indexing(chunk_size: int):

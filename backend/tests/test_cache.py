@@ -1,6 +1,6 @@
 import asyncio
+import json
 
-from app.db.cache import Genre
 from app.db.cache import redis
 from app.db.database_service import insert_genres_to_cache
 from pytest import fixture
@@ -42,13 +42,14 @@ async def test_insert_genres_to_cache():
     """
     Test that the genre cache is created and populated correctly.
     """
-    assert not await Genre.select()
+    assert not await redis.get("genres")
     await insert_genres_to_cache(test_genre_dict)
+    assert await redis.get("genres")
 
-    genres = await Genre.select()
+    genres = json.loads(await redis.get("genres"))
 
     assert genres
     assert len(genres) == 3
-    assert "&" in genres[2].label
+    assert "&" in genres[2]["label"]
     for genre in genres:
-        assert "&" not in genre.value
+        assert "&" not in genre["value"]
