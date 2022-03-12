@@ -20,7 +20,7 @@ from app.db.crud import get_media_by_id
 from app.db.crud import update_media_data_by_id
 from app.db.database import engine
 from app.db.database_service import dump_media_to_db
-from app.db.database_service import extract_unique_providers_to_txt
+from app.db.database_service import extract_unique_providers_to_cache
 from app.db.database_service import init_meilisearch_indexing
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import media_model_to_schema
@@ -158,7 +158,7 @@ async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False
         remove_non_ascii_media()
     add_data()
     index_meilisearch()
-    extract_unique_providers_to_txt()
+    await extract_unique_providers_to_cache()
     update_index()
     remove_blacklisted_from_search()
 
