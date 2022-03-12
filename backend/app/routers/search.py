@@ -39,6 +39,7 @@ async def search(
             user_input,
             limit=limit,
             sort=["popularity:desc"],
+            # This is a mix of AND and OR logic
             filter=genre_list + provider_list,
         )
     if genres:
@@ -46,6 +47,7 @@ async def search(
             user_input,
             limit=limit,
             sort=["popularity:desc"],
+            # This is using AND logic
             filter=[f'genres="{genre}"' for genre in genres],
         )
     if providers:
@@ -53,6 +55,7 @@ async def search(
             user_input,
             limit=limit,
             sort=["popularity:desc"],
+            # This is using OR logic
             filter=[[f'provider_names="{providers}"' for providers in providers]],
         )
     return await async_client.index(f"media_{country_code}").search(
