@@ -1,6 +1,5 @@
 import json
 from math import ceil
-from pathlib import Path
 
 from app import schemas
 from app.config import get_settings
@@ -109,15 +108,9 @@ def init_meilisearch_indexing(chunk_size: int):
                 pbar.update(1)
 
 
-def extract_unique_providers_to_txt():
+async def extract_unique_providers_to_cache():
     db = database.SessionLocal()
     media_list = crud.get_all_media(db=db)
-
-    flatrate_dir = "providers_txt/flatrate/"
-    free_dir = "providers_txt/free/"
-
-    Path(free_dir).mkdir(exist_ok=True, parents=True)
-    Path(flatrate_dir).mkdir(exist_ok=True, parents=True)
 
     for country_code in get_settings().supported_country_codes:
         free_provider_set = {
@@ -135,14 +128,13 @@ def extract_unique_providers_to_txt():
         ordered_free_provider_list = sorted(free_provider_set)
         ordered_flatrate_provider_list = sorted(flatrate_provider_set)
 
-        with open(f"{flatrate_dir}providers_{country_code}.txt", "w") as file:
-            for provider in ordered_flatrate_provider_list:
-                file.write(f"{provider}\n")
-
-        with open(f"{free_dir}providers_{country_code}.txt", "w") as file:
-            for provider in ordered_free_provider_list:
-                if provider not in ordered_flatrate_provider_list:
-                    file.write(f"{provider}\n")
+        await redis.set(
+            f"{country_code}_free_providers", json.dumps(ordered_free_provider_list)
+        )
+        await redis.set(
+            f"{country_code}_flatrate_providers",
+            json.dumps(ordered_flatrate_provider_list),
+        )
 
 
 def prune_non_ascii_media_from_db():

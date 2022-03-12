@@ -1,3 +1,6 @@
+import json
+
+from app.db.cache import redis
 from fastapi import APIRouter
 
 
@@ -11,15 +14,12 @@ router = APIRouter(
 @router.get("/{country_code}")
 async def read_all_providers(country_code):
     """Reads all the providers from providers.txt"""
-    # TODO: Should live in a database instead of a .txt-file
+    country_code = country_code.upper()
 
-    flatrate_provders = [
-        line.rstrip()
-        for line in open(f"providers_txt/flatrate/providers_{country_code.upper()}.txt")
-    ]
-    free_providers = [
-        line.rstrip()
-        for line in open(f"providers_txt/free/providers_{country_code.upper()}.txt")
-    ]
+    if free_providers := await redis.get(f"{country_code}_free_providers"):
+        free_providers = json.loads(free_providers)
 
-    return [*flatrate_provders, *free_providers]
+    if flatrate_providers := await redis.get(f"{country_code}_flatrate_providers"):
+        flatrate_providers = json.loads(flatrate_providers)
+
+    return [*flatrate_providers, *free_providers]
