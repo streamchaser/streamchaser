@@ -35,3 +35,4 @@ frontend/build
 frontend/.svelte-kit
 /letsencrypt
 backend/json.gz_dumps
+rust_backend/target/

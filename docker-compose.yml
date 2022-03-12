@@ -57,6 +57,31 @@ services:
       - "traefik.http.routers.backend-secured.rule=Host(`api.${HOST_NAME}`)"
       - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
+  rust_backend:
+    build:
+      context: ./rust_backend
+      target: ${APP_ENVIRONMENT}
+      args:
+        - APP_ENV=${APP_ENVIRONMENT}
+    container_name: rust_backend
+    restart: always
+    ports:
+      - 9000:9000
+    links:
+      - redis
+    networks:
+      - traefik
+      - streamchaser
+    volumes:
+      - ./rust_backend:/app
+    depends_on:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rust_backend-web.rule=Host(`api.${HOST_NAME}`)"
+      - "traefik.http.routers.rust_backend-secured.rule=Host(`api.${HOST_NAME}`)"
+      - "traefik.http.routers.rust_backend-secured.tls.certresolver=mytlschallenge"
+      - "traefik.docker.network=traefik"
   search:
     image: getmeili/meilisearch:v0.25.2
     restart: always
