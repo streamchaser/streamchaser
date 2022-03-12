@@ -1,4 +1,12 @@
 [[package]]
+name = "aiofiles"
+version = "0.8.0"
+description = "File support for asyncio."
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[[package]]
 name = "aioredis"
 version = "2.0.1"
 description = "asyncio (PEP 3156) Redis support"
@@ -70,6 +78,17 @@ dev = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", 
 docs = ["furo", "sphinx", "zope.interface", "sphinx-notfound-page"]
 tests = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "zope.interface", "cloudpickle"]
 tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>=4.3.0)", "six", "mypy", "pytest-mypy-plugins", "cloudpickle"]
+
+[[package]]
+name = "camel-converter"
+version = "1.0.3"
+description = "Converts a string from snake case to camel case or camel case to snake case"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.extras]
+pydantic = ["pydantic[pydantic] (>=1.8.2,<2.0.0)"]
 
 [[package]]
 name = "certifi"
@@ -225,6 +244,20 @@ python-versions = ">=3"
 
 [package.dependencies]
 requests = "*"
+
+[[package]]
+name = "meilisearch-python-async"
+version = "0.22.0"
+description = "A Python async client for the MeiliSearch API"
+category = "main"
+optional = false
+python-versions = ">=3.7,<4.0"
+
+[package.dependencies]
+aiofiles = ">=0.7,<0.9"
+camel-converter = ">=1.0.0,<2.0.0"
+httpx = ">=0.17,<0.23"
+pydantic = ">=1.8,<2.0"
 
 [[package]]
 name = "packaging"
@@ -505,9 +538,13 @@ standard = ["websockets (>=10.0)", "httptools (>=0.2.0,<0.4.0)", "watchgod (>=0.
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "13ab7870e5f727ef3145b9c09e44d27f7c8ecaa2375b34e858f7dfe90e4f7b06"
+content-hash = "98f67e56739d14a449595dfdd6a70dd277e5a3c44d3e5d200782afe420933480"
 
 [metadata.files]
+aiofiles = [
+    {file = "aiofiles-0.8.0-py3-none-any.whl", hash = "sha256:7a973fc22b29e9962d0897805ace5856e6a566ab1f0c8e5c91ff6c866519c937"},
+    {file = "aiofiles-0.8.0.tar.gz", hash = "sha256:8334f23235248a3b2e83b2c3a78a22674f39969b96397126cc93664d9a901e59"},
+]
 aioredis = [
     {file = "aioredis-2.0.1-py3-none-any.whl", hash = "sha256:9ac0d0b3b485d293b8ca1987e6de8658d7dafcca1cddfcd1d506cae8cdebfdd6"},
     {file = "aioredis-2.0.1.tar.gz", hash = "sha256:eaa51aaf993f2d71f54b70527c440437ba65340588afeb786cd87c55c89cd98e"},
@@ -531,6 +568,10 @@ atomicwrites = [
 attrs = [
     {file = "attrs-21.4.0-py2.py3-none-any.whl", hash = "sha256:2d27e3784d7a565d36ab851fe94887c5eccd6a463168875832a1be79c82828b4"},
     {file = "attrs-21.4.0.tar.gz", hash = "sha256:626ba8234211db98e869df76230a137c4c40a12d72445c45d5f5b716f076e2fd"},
+]
+camel-converter = [
+    {file = "camel-converter-1.0.3.tar.gz", hash = "sha256:824abe85c6fa29baf6485343a6b077a8cb64531c89d6852b68e0417e4c15c0ba"},
+    {file = "camel_converter-1.0.3-py3-none-any.whl", hash = "sha256:c51cb9c9962aea9a77b8400dd5651bf7d1c75bc988ecc8588ca3c67a342f8db3"},
 ]
 certifi = [
     {file = "certifi-2021.10.8-py2.py3-none-any.whl", hash = "sha256:d62a0163eb4c2344ac042ab2bdf75399a71a2d8c7d47eac2e2ee91b9d6339569"},
@@ -631,6 +672,10 @@ iniconfig = [
 meilisearch = [
     {file = "meilisearch-0.18.0-py3-none-any.whl", hash = "sha256:b3f327cd01d851d3128bac6949f85a0b0c1476229b0e5d711dd76346da1f0fe2"},
     {file = "meilisearch-0.18.0.tar.gz", hash = "sha256:f697a48845f693b07c63c3462312b209b8c03ba0572da9644c6777849589d18d"},
+]
+meilisearch-python-async = [
+    {file = "meilisearch-python-async-0.22.0.tar.gz", hash = "sha256:35dd0fc85eb27601624dd6a9950bab1f51531165995d2afd4965dc69ab06bcd6"},
+    {file = "meilisearch_python_async-0.22.0-py3-none-any.whl", hash = "sha256:dbbe55c3f07331b20a642052b6f8765cb3340a9d09960d29a506dc03dbde1ead"},
 ]
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},

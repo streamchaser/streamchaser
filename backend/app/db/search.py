@@ -1,12 +1,14 @@
 import meilisearch
+import meilisearch_python_async
 from app.config import get_settings
 
 client = meilisearch.Client("http://search:7700", "masterKey")
-
-supported_country_codes = get_settings().supported_country_codes
+async_client = meilisearch_python_async.Client("http://search:7700", "masterKey")
 
 
 def update_index():
+    supported_country_codes = get_settings().supported_country_codes
+
     for country_code in supported_country_codes:
         client.index(f"media_{country_code}").update_filterable_attributes(
             ["genres", "provider_names"]
