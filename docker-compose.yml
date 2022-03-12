@@ -78,9 +78,9 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.rust_backend-web.rule=Host(`api.${HOST_NAME}`)"
-      - "traefik.http.routers.rust_backend-secured.rule=Host(`api.${HOST_NAME}`)"
-      - "traefik.http.routers.rust_backend-secured.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.rust-backend-web.rule=Host(`apiv2.${HOST_NAME}`)"
+      - "traefik.http.routers.rust-backend-secured.rule=Host(`apiv2.${HOST_NAME}`)"
+      - "traefik.http.routers.rust-backend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
   search:
     image: getmeili/meilisearch:v0.25.2

@@ -5,10 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use axum::{routing::get, Json, Router};
 
-use tower_http::{
-    cors::{Any, CorsLayer},
-    trace::TraceLayer,
-};
+use tower_http::{cors::CorsLayer, trace::TraceLayer};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Genre {
@@ -22,9 +19,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_env_filter("tower=trace")
         .pretty()
         .init();
-    let cors = CorsLayer::new().allow_methods(Any).allow_origin(Any);
+    // TODO: add environment to handle origins so we dont just permit anything in production
+    let cors = CorsLayer::permissive();
     let app = Router::new()
-        .route("/genres", get(get_genres))
+        .route("/genres/", get(get_genres))
         .layer(cors)
         .layer(TraceLayer::new_for_http());
 
