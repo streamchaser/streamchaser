@@ -5,7 +5,10 @@ use serde::{Deserialize, Serialize};
 
 use axum::{routing::get, Json, Router};
 
-use tower_http::cors::{Any, CorsLayer};
+use tower_http::{
+    cors::{Any, CorsLayer},
+    trace::TraceLayer,
+};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Genre {
@@ -15,8 +18,15 @@ pub struct Genre {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    tracing_subscriber::fmt()
+        .with_env_filter("tower=trace")
+        .pretty()
+        .init();
     let cors = CorsLayer::new().allow_methods(Any).allow_origin(Any);
-    let app = Router::new().route("/genres", get(get_genres)).layer(cors);
+    let app = Router::new()
+        .route("/genres", get(get_genres))
+        .layer(cors)
+        .layer(TraceLayer::new_for_http());
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 9000));
     println!("Listening on {addr}");
