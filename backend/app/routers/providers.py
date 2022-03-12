@@ -14,6 +14,8 @@ router = APIRouter(
 @router.get("/{country_code}")
 async def read_all_providers(country_code):
     """Reads all the providers from providers.txt"""
+    country_code = country_code.upper()
+
     if free_providers := await redis.get(f"{country_code}_free_providers"):
         free_providers = json.loads(free_providers)
 

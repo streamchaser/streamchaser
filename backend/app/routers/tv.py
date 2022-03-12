@@ -16,6 +16,8 @@ router = APIRouter(
 @router.get("/{country_code}/{tv_id}")
 async def get_tv(tv_id: int, country_code: str) -> TV:
     """Specific TV page"""
+    country_code = country_code.upper()
+
     if cached_tv := (await redis.get(f"tv:{country_code}_{tv_id}")):
         return json.loads(cached_tv)
     tv = await get_tv_from_id(tv_id, country_code.upper())
