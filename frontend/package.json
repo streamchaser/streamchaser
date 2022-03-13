@@ -10,8 +10,8 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
-    "@sveltejs/adapter-node": "^1.0.0-next.67",
-    "@sveltejs/kit": "next",
+    "@sveltejs/adapter-auto": "next",
+    "@sveltejs/kit": "^1.0.0-next.295",
     "@tsconfig/svelte": "^2.0.1",
     "autoprefixer": "^10.4.2",
     "postcss": "^8.4.5",

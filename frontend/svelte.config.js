@@ -3,7 +3,7 @@ import svelte from "svelte-preprocess"
 import autoPreprocess from "svelte-preprocess"
 import sveltePreprocess from "svelte-preprocess"
 import typescript from "@rollup/plugin-typescript"
-import adapter from "@sveltejs/adapter-node"
+import adapter from "@sveltejs/adapter-auto"
 
 const config = {
   kit: {
