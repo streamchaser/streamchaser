@@ -8,7 +8,7 @@
   import Spinner from "../../components/loading/spinner.svelte"
   import type { Person } from "../../types"
 
-  const PERSON_DETAIL_URL: string = `${variables.apiPath}/person/${$page.params.id}`
+  const PERSON_DETAIL_URL: string = `${variables.pythonApi}/person/${$page.params.id}`
 
   let personName: string = "Loading..."
   const mediaCreditsWithoutAdult = (person: Person) => {
