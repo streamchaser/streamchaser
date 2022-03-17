@@ -12,9 +12,9 @@
   import DT from "daisyui/colors/themes.js"
   import type { Genre, Media, Meilisearch } from "../types"
 
-  const SEARCH_URL = `${variables.apiPath}/search/`
-  const GENRE_URL = `${variables.apiPath}/genres/`
-  const PROVIDER_URL = `${variables.apiPath}/providers/`
+  const SEARCH_URL = `${variables.pythonApi}/search/`
+  const GENRE_URL = `${variables.rustApi}/genres/`
+  const PROVIDER_URL = `${variables.pythonApi}/providers/`
   const INPUT_TIMER = 200
 
   let input = ""

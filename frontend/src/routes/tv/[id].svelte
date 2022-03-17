@@ -10,7 +10,7 @@
   import Recommendations from "../../components/details/recommendations.svelte"
   import Spinner from "../../components/loading/spinner.svelte"
 
-  const TV_DETAIL_URL = `${variables.apiPath}/tv/${$currentCountry}/${$page.params.id}`
+  const TV_DETAIL_URL = `${variables.pythonApi}/tv/${$currentCountry}/${$page.params.id}`
 
   let tvTitle = "Loading..."
 
