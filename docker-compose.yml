@@ -67,8 +67,6 @@ services:
     restart: always
     ports:
       - 9000:9000
-    links:
-      - redis
     networks:
       - traefik
       - streamchaser
@@ -76,6 +74,7 @@ services:
       - ./rust_backend:/app
     depends_on:
       - traefik
+      - redis
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.rust-backend-web.rule=Host(`apiv2.${HOST_NAME}`)"
