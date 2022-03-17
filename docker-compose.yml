@@ -85,6 +85,8 @@ services:
     image: getmeili/meilisearch:v0.26.0
     restart: always
     container_name: search
+    environment:
+      - MEILI_HTTP_PAYLOAD_SIZE_LIMIT=1048576000 # 1 gigabyte
     volumes:
       - meili:/data.ms
     ports:
