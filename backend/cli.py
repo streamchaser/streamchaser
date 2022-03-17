@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
 import typer
-from app.api import fetch_jsongz_files
+from app.api import fetch_jsongz_file
 from app.api import get_genres
 from app.api import media_converter
 from app.api import request_data
@@ -37,31 +37,56 @@ app = typer.Typer()
 
 
 @app.command()
-def fetch_jsongz():
-    fetch_jsongz_files()
+def fetch_jsongz(type: str):
+    fetch_jsongz_file(type)
 
 
 @app.command()
-def fetch_media(popularity: float = 0):
-    fetch_jsongz_files()
+def fetch_person(popularity: float = 0):
+    fetch_jsongz_file("person")
 
     directory = "../json.gz_dumps"
     data = []
 
-    for file in tqdm(os.listdir(directory), desc="Running through json.gz files"):
-        with gzip.open(os.path.join(directory, file), "r") as f:
-            for line in f:
-                if json.loads(line).get("popularity") >= popularity and not json.loads(
-                    line
-                ).get("adult"):
-                    if "movie" in file:
+    for file in os.listdir(directory):
+        if file[0:5] in ["perso"]:
+            with gzip.open(os.path.join(directory, file), "r") as f:
+                for line in tqdm(f):
+                    if json.loads(line).get(
+                        "popularity"
+                    ) >= popularity and not json.loads(line).get("adult"):
                         item = json.loads(line)
-                        item["id"] = "m" + str(item["id"])
+                        item["id"] = "p" + str(item["id"])
                         data.append(item)
-                    else:
-                        item = json.loads(line)
-                        item["id"] = "t" + str(item["id"])
-                        data.append(item)
+
+    data_length = len(data)
+
+    typer.echo(f"person elements: {data_length} with popularity >= {popularity}")
+
+
+@app.command()
+def fetch_media(popularity: float = 0):
+    fetch_jsongz_file("movie")
+    fetch_jsongz_file("tv_series")
+
+    directory = "../json.gz_dumps"
+    data = []
+
+    for file in os.listdir(directory):
+        if file[0:5] in ["movie", "tv_se"]:
+            with gzip.open(os.path.join(directory, file), "r") as f:
+                for line in tqdm(f):
+                    if json.loads(line).get(
+                        "popularity"
+                    ) >= popularity and not json.loads(line).get("adult"):
+                        if "movie" in file:
+                            item = json.loads(line)
+                            item["id"] = "m" + str(item["id"])
+                            data.append(item)
+                        else:
+                            item = json.loads(line)
+                            item["id"] = "t" + str(item["id"])
+                            data.append(item)
 
     data_length = len(data)
 

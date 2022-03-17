@@ -22,53 +22,43 @@ tmdb_url = get_settings().tmdb_url
 tmdb_key = get_settings().tmdb_key
 
 
-def fetch_jsongz_files():
+def fetch_jsongz_file(type: str):
     day = 0
     no_data = True
 
     while no_data:
         date = datetime.now() - timedelta(day)
 
-        print(f"Downloading dumps: {date.date()}")
+        print(f"Downloading {type} dumps: {date.date()}")
 
         directory = "../json.gz_dumps/"
         Path(directory).mkdir(exist_ok=True)
 
-        tv_url = (
-            f"http://files.tmdb.org/p/exports/tv_series_ids_{date.month:02d}"
-            f"_{date.day:02d}_{date.year}.json.gz"
-        )
-        movie_url = (
-            f"http://files.tmdb.org/p/exports/movie_ids_{date.month:02d}_"
-            f"{date.day:02d}_{date.year}.json.gz"
-        )
-
-        movie_path = (
-            f"{directory}movie_ids_{date.month:02d}"
-            f"_{date.day:02d}_{date.year}.json.gz"
-        )
-        tv_path = (
-            f"{directory}tv_series_ids_{date.month:02d}"
+        url = (
+            f"http://files.tmdb.org/p/exports/{type}_ids_{date.month:02d}"
             f"_{date.day:02d}_{date.year}.json.gz"
         )
 
-        movie_response = requests.get(movie_url, stream=True)
-        tv_response = requests.get(tv_url, stream=True)
+        path = (
+            f"{directory}{type}_ids_{date.month:02d}"
+            f"_{date.day:02d}_{date.year}.json.gz"
+        )
 
-        if movie_response.status_code == 200 and tv_response.status_code == 200:
-            no_data = False
-            # First we remove the old files
+        response = requests.get(url, stream=True)
+
+        if response.status_code == 200:
+            # First we remove the old file
             if os.path.isdir(directory):
                 for file in os.listdir(directory):
-                    os.remove(os.path.join(directory, file))
+                    if file.startswith(type):
+                        os.remove(os.path.join(directory, file))
 
-            with open(movie_path, "wb") as f:
-                f.write(movie_response.raw.read())
-                print(f"[{movie_path}] downloaded succesfully".replace(directory, ""))
+            with open(path, "wb") as f:
+                f.write(response.raw.read())
+                print(f"[{path}] downloaded succesfully".replace(directory, ""))
 
-            with open(tv_path, "wb") as f:
-                f.write(tv_response.raw.read())
-                print(f"[{tv_path}] downloaded succesfully".replace(directory, ""))
+            no_data = False
+
         else:
             # if we have tried to get data for more than 30 days we give up
             if day >= 30:
