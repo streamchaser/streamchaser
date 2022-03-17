@@ -18,6 +18,9 @@ RUN yarn install && yarn cache clean
 # Copy all local files into the image
 COPY . .
 
+# Weird hack to make both serverless and node work
+RUN mv node_svelte.config.js svelte.config.js
+
 # Expose port 3000 for the SvelteKit app and 24678 for Vite's HMR
 EXPOSE 3000
 EXPOSE 24678
