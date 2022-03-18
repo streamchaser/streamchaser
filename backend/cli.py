@@ -165,6 +165,12 @@ async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False
 
 
 @app.command()
+@coroutine
+async def providers_to_cache():
+    await extract_unique_providers_to_cache()
+
+
+@app.command()
 def remove_and_blacklist(media_id: str):
     try:
         db = database.SessionLocal()
