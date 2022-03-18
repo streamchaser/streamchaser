@@ -80,7 +80,7 @@ def fetch_media(popularity: float = 0):
 
 @app.command()
 def index_meilisearch():
-    init_meilisearch_indexing(chunk_size=10000)
+    init_meilisearch_indexing()
     update_index()
 
 
@@ -157,7 +157,8 @@ async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False
     if remove_non_ascii:
         remove_non_ascii_media()
     add_data()
-    index_meilisearch()
+    init_meilisearch_indexing()
+    update_index()
     await extract_unique_providers_to_cache()
     update_index()
     remove_blacklisted_from_search()
