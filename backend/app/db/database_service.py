@@ -92,8 +92,11 @@ def init_meilisearch_indexing():
     """MeiliSearch indexing from Postgres DB"""
     db = database.SessionLocal()
     media: list = get_all_media(db)
+    country_codes = get_settings().supported_country_codes
 
-    for country_code in tqdm(get_settings().supported_country_codes):
+    for country_code in tqdm(
+        country_codes, desc=f"Indexing {len(country_codes)} countries"
+    ):
         index_media(country_code, media)
 
 
