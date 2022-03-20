@@ -155,8 +155,70 @@ services:
       - "traefik.http.routers.api.rule=Host(`monitor.${HOST_NAME}`)"
       - "traefik.http.routers.api.service=api@internal"
 
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    container_name: prometheus
+    networks:
+      - prometheus
+      - traefik
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus:/prometheus
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus-web.rule=Host(`prometheus.${HOST_NAME}`)"
+      - "traefik.http.routers.prometheus-secured.rule=Host(`prometheus.${HOST_NAME}`)"
+      - "traefik.http.routers.prometheus.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.prom-api.middlewares=prometheus-auth"
+      - "traefik.http.middlewares.prometheus-auth.basicauth.users=prometheus:$$2y$$12$$KmNp57BG8MyGMTV2gR4NpOKAH08e3ZaByZ0Z1Yqk6qSqW4LFgh7Nm"
+      - "traefik.docker.network=traefik"
+
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    restart: unless-stopped
+    container_name: node_exporter
+    command:
+      - "--path.rootfs=/host"
+    networks:
+      - prometheus
+    volumes:
+      - "/:/host:ro,rslave"
+
+  cadvisor:
+    image: zcube/cadvisor
+    restart: unless-stopped
+    container_name: cadvisor
+    privileged: true
+    devices:
+      - "/dev/kmsg"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - prometheus
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    privileged: true
+    restart: unless-stopped
+    networks:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=password
+      - GF_SERVER_HTTP_PORT=4000
+    ports:
+      - 4000:4000
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
 networks:
   traefik:
+    external: true
+  prometheus:
     external: true
   streamchaser:
     external: false
@@ -167,3 +229,6 @@ volumes:
   node_modules:
   cache:
     driver: local
+  prometheus:
+  grafana:
+  grafana-storage:
