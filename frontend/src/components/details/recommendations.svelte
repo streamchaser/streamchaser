@@ -23,7 +23,7 @@
 {#if recommendations.length}
   <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
   <div class="bg-neutral rounded-lg">
-    <Swiper spaceBetween={15} {slidesPerView}>
+    <Swiper spaceBetween={15} {slidesPerView} loop={true}>
       {#each recommendations as recommendation}
         {#if recommendation.poster_path}
           <SwiperSlide>
