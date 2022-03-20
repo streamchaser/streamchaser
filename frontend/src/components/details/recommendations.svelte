@@ -2,7 +2,9 @@
   import { calculateAmountOfShownItems, mediaIdToUrlConverter } from "../../utils"
   import type { Recommendation } from "../types"
   import { Swiper, SwiperSlide } from "swiper/svelte"
+  import { Mousewheel, FreeMode } from "swiper"
   import "swiper/css"
+  import "swiper/css/free-mode"
 
   let slidesPerView = calculateAmountOfShownItems({
     width: window.visualViewport.width,
@@ -22,8 +24,16 @@
 
 {#if recommendations.length}
   <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
-  <div class="bg-neutral rounded-lg">
-    <Swiper spaceBetween={15} {slidesPerView} loop={true}>
+  <div class="bg-neutral rounded-lg swiper-container">
+    <Swiper
+      spaceBetween={15}
+      {slidesPerView}
+      loop={true}
+      freemode={true}
+      mousewheel={true}
+      modules={[FreeMode, Mousewheel]}
+      touchEventsTarget={{ touchEventsTarget: "container" }}
+    >
       {#each recommendations as recommendation}
         {#if recommendation.poster_path}
           <SwiperSlide>
