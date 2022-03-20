@@ -43,9 +43,9 @@
   ]
 
   const themes = [
-    { icon: "💎", value: "luxury" },
     { icon: "🌚", value: "dark" },
     { icon: "🧛", value: "dracula" },
+    { icon: "💎", value: "luxury" },
     { icon: "🌲", value: "forest" },
     { icon: "🎃", value: "halloween" },
     { icon: "🌆", value: "synthwave" },
