@@ -16,7 +16,7 @@
     { name: "Brazil", value: "BR", icon: "🇧🇷" },
     { name: "Canada", value: "CA", icon: "🇨🇦" },
     { name: "Croatia", value: "HR", icon: "🇭🇷" },
-    { name: "colombia", value: "CO", icon: "🇨🇴" },
+    { name: "Colombia", value: "CO", icon: "🇨🇴" },
     { name: "Czechia", value: "CZ", icon: "🇨🇿" },
     { name: "Denmark", value: "DK", icon: "🇩🇰" },
     { name: "Finland", value: "FI", icon: "🇫🇮" },
@@ -43,9 +43,9 @@
   ]
 
   const themes = [
-    { icon: "💎", value: "luxury" },
     { icon: "🌚", value: "dark" },
     { icon: "🧛", value: "dracula" },
+    { icon: "💎", value: "luxury" },
     { icon: "🌲", value: "forest" },
     { icon: "🎃", value: "halloween" },
     { icon: "🌆", value: "synthwave" },
