@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
+  import ErrorButtons from "../error_buttons.svelte"
 
   export let timeout = true
 
@@ -23,13 +24,9 @@
     </h2>
     <br />
     <div class="flex justify-center">
-      <button
-        on:click={() => (window.location.href = "/")}
-        id="goback"
-        class="btn btn-primary"
-      >
-        Back to safety
-      </button>
+      <div class="px-2">
+        <ErrorButtons />
+      </div>
     </div>
   {/if}
 </div>
