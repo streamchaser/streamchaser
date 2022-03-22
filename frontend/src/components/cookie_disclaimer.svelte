@@ -12,7 +12,7 @@
 
 {#if loadDisclaimer}
   {#if !$cookieDisclaimer}
-    <div class="flex justify-center" in:fade out:fly={{ y: 200, duration: 1000 }}>
+    <div class="flex justify-center z-50" in:fade out:fly={{ y: 200, duration: 1000 }}>
       <div class="alert shadow fixed sm:bottom-2 bottom-0 max-w-2xl">
         <div class="flex flex-col">
           <h4 class="flex justify-center pb-1">
