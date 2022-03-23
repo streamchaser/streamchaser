@@ -15,6 +15,7 @@ jobs:
           export DOCKER_BUILDKIT=1
           touch .env
           docker network create traefik
+          docker network create prometheus
           docker-compose build
       - name: Run test suite
         run: docker-compose run backend pytest -v tests
