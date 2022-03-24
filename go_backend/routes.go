@@ -22,5 +22,5 @@ func GetGenres(c *gin.Context) {
 
 	json.Unmarshal([]byte(genreJson), &genres)
 
-	c.IndentedJSON(http.StatusOK, genres)
+	c.JSON(http.StatusOK, genres)
 }

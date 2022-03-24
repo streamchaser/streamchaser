@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 )
@@ -16,6 +17,7 @@ var Rdb = redis.NewClient(&redis.Options{
 
 func main() {
 	app := gin.Default()
-	go app.GET("/genres", GetGenres)
+	app.Use(cors.Default())
+	go app.GET("/genres/", GetGenres)
 	app.Run("0.0.0.0:9001")
 }
