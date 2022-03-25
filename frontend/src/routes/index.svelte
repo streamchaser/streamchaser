@@ -13,7 +13,7 @@
   import type { Genre, Media, Meilisearch } from "../types"
 
   const SEARCH_URL = `${variables.pythonApi}/search/`
-  const GENRE_URL = `${variables.rustApi}/genres/`
+  const GENRE_URL = `${variables.goApi}/genres/`
   const PROVIDER_URL = `${variables.pythonApi}/providers/`
   const INPUT_TIMER = 200
 
