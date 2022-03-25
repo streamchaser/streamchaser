@@ -29,6 +29,7 @@ services:
       - "traefik.http.routers.frontend-secured.rule=Host(`${HOST_NAME}`)"
       - "traefik.http.routers.frontend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
+
   backend:
     build:
       context: ./backend
@@ -57,6 +58,7 @@ services:
       - "traefik.http.routers.backend-secured.rule=Host(`api.${HOST_NAME}`)"
       - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
+
   rust_backend:
     build:
       context: ./rust_backend
@@ -81,6 +83,7 @@ services:
       - "traefik.http.routers.rust-backend-secured.rule=Host(`apiv2.${HOST_NAME}`)"
       - "traefik.http.routers.rust-backend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
+
   search:
     image: getmeili/meilisearch:v0.26.0
     restart: always
@@ -93,6 +96,7 @@ services:
       - 7700:7700
     networks:
       - streamchaser
+
   db:
     image: postgres
     container_name: db
@@ -106,6 +110,7 @@ services:
       - 5432:5432
     networks:
       - streamchaser
+
   redis:
     image: redis:6.2.6
     container_name: redis
@@ -116,6 +121,7 @@ services:
       - cache:/data
     networks:
       - streamchaser
+
   traefik:
     image: traefik:v2.5
     restart: always
@@ -200,20 +206,21 @@ services:
     networks:
       - prometheus
 
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    privileged: true
-    restart: unless-stopped
-    networks:
-      - prometheus
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=password
-      - GF_SERVER_HTTP_PORT=4000
-    ports:
-      - 4000:4000
-    volumes:
-      - grafana-storage:/var/lib/grafana
+  # Uncomment if you want to use Grafana locally
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: grafana
+  #   privileged: true
+  #   restart: unless-stopped
+  #   networks:
+  #     - prometheus
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=password
+  #     - GF_SERVER_HTTP_PORT=4000
+  #   ports:
+  #     - 4000:4000
+  #   volumes:
+  #     - grafana-storage:/var/lib/grafana
 
 networks:
   traefik:
@@ -230,5 +237,4 @@ volumes:
   cache:
     driver: local
   prometheus:
-  grafana:
   grafana-storage:
