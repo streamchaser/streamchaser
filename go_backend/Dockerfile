@@ -14,12 +14,12 @@ COPY *.go ./
 
 RUN CGO_ENABLED=0 go build .
 
-FROM scratch as dev
+FROM base as dev
 
 WORKDIR /app
 
-COPY --from=base /app/go_backend /usr/bin/
-CMD ["go_backend"]
+RUN go install github.com/cosmtrek/air@latest
+CMD air
 
 FROM scratch as prod
 

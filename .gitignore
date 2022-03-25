@@ -36,3 +36,4 @@ frontend/.svelte-kit
 /letsencrypt
 backend/json.gz_dumps
 go_backend/go_backend
+go_backend/tmp
