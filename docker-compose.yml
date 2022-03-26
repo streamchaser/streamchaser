@@ -72,6 +72,8 @@ services:
     networks:
       - traefik
       - streamchaser
+    env_file:
+      - .env
     volumes:
       - ./go_backend:/app
     depends_on:
