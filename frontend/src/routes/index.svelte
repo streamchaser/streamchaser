@@ -9,7 +9,7 @@
   import { inputQuery } from "../stores/input"
   import { chosenTheme } from "../stores/theme.js"
   import { onMount } from "svelte"
-  import DT from "daisyui/colors/themes.js"
+  import DT from "daisyui/src/colors/themes.js"
   import type { Genre, Media, Meilisearch } from "../types"
 
   const SEARCH_URL = `${PYTHON_API}/search/`
@@ -165,15 +165,15 @@
              --borderHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --multiItemBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --multiItemColor: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']};
-             --multiItemActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-focus']};
+             --multiItemActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`][
       'primary-content'
     ]};
              --clearSelectHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --itemIsActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']};
-             --itemColor: {DT[`[data-theme=${$chosenTheme}]`]['text-secondary']};
+             --itemColor: {DT[`[data-theme=${$chosenTheme}]`]['text-primary']};
              --listBackground: {DT[`[data-theme=${$chosenTheme}]`]['neutral']};
-             --itemHoverBG: {DT[`[data-theme=${$chosenTheme}]`]['neutral-focus']};
+             --itemHoverBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --inputColor: {DT[`[data-theme=${$chosenTheme}]`]['text-primary']};
               "
   >
