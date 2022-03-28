@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"regexp"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -36,6 +37,17 @@ func main() {
 	}
 
 	app := gin.Default()
+	app.Use(func(c *gin.Context) {
+		originRegex, err := regexp.Compile("https://streamchaser.*.vercel.app")
+		if err != nil {
+			panic(err)
+		}
+
+		if originRegex.Match([]byte(c.Request.Host)) {
+			origins = append(origins, c.Request.Host)
+		}
+
+	})
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     origins,
 		AllowCredentials: true,
