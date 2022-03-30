@@ -52,7 +52,7 @@ else:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origin_regex=r"https:\/\/streamchaser-.*-streamchaser.vercel.app",
+    allow_origin_regex=r"https:\/\/streamchaser.*.vercel.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
