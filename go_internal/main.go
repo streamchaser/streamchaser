@@ -1,45 +1,46 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"sync"
 )
 
-func main() {
-	// A slice of sample websites
-	urls := []string{
-		"https://www.easyjet.com/",
-		"https://www.skyscanner.de/",
-		"https://www.ryanair.com",
-		"https://wizzair.com/",
-		"https://www.swiss.com/",
-	}
+type Media struct {
+	Title string `json:"title"`
+}
 
+func main() {
 	var wg sync.WaitGroup
 
-	for _, u := range urls {
+	// TODO: going to receive ids from python
+	ids := []string{"120", "122"}
+	for _, id := range ids {
 		wg.Add(1)
-
-		go func(url string) {
-			defer wg.Done()
-			checkUrl(url)
-		}(u)
+		go fetchMovies(&wg, id)
 	}
 
 	wg.Wait()
 }
 
-func doneNoget(wg sync.WaitGroup) {
-	wg.Done()
-}
-
-//checks and prints a message if a website is up or down
-func checkUrl(url string) {
-	_, err := http.Get(url)
+func fetchMovies(wg *sync.WaitGroup, id string) Media {
+	defer wg.Done()
+	res, err := http.Get(fmt.Sprintf("https://api.themoviedb.org/3/movie/%s?api_key=THE_KEY&language=en-US", id))
 	if err != nil {
-		fmt.Println(url, "is down !!!")
-		return
+		panic(err)
 	}
-	fmt.Println(url, "is up and running.")
+
+	defer res.Body.Close()
+
+	media := Media{}
+
+	errDecode := json.NewDecoder(res.Body).Decode(&media)
+	if errDecode != nil {
+		panic(err)
+	}
+
+	fmt.Println(media)
+
+	return media
 }
