@@ -1,10 +1,9 @@
 <script lang="ts">
   import { mediaIdToUrlConverter, calculateAmountOfShownItems } from "../../utils"
   import type { Cast } from "../../types"
+  import { IMG_W342 } from "../../variables"
 
   export let cast: Cast[]
-
-  const LOW_RES_IMG_URL = "https://image.tmdb.org/t/p/w500/"
 
   let castItemAmount = calculateAmountOfShownItems({
     width: window.visualViewport.width,
@@ -32,7 +31,7 @@
                             hover:contrast-75 hover:ring-2 ring-primary"
         >
           <figure>
-            <img src="{LOW_RES_IMG_URL}{person.profile_path}" alt={person.name} />
+            <img src="{IMG_W342}{person.profile_path}" alt={person.name} />
           </figure>
           <div class="card-body">
             <p class="text-neutral-content">

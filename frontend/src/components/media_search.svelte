@@ -5,10 +5,9 @@
   import NoResults from "../components/no_results.svelte"
   import type { Meilisearch } from "../types"
   import Spinner from "../components/loading/spinner.svelte"
+  import { IMG_ORIGINAL, IMG_W342 } from "../variables"
 
   const SHOWN_PROVIDERS: number = 5
-  const IMG_URL: string = "https://image.tmdb.org/t/p/original/"
-  const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
 
   export let meilisearch: Meilisearch
   export let providerAmounts: number[]
@@ -48,7 +47,7 @@
         {/if}
         {#if media.poster_path}
           <figure>
-            <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt={media.title} />
+            <img src="{IMG_W342}{media.poster_path}" alt={media.title} />
           </figure>
         {:else}
           <figure class="grid place-items-center bg-slate-100 h-5/6">
@@ -69,7 +68,7 @@
               <div class="avatar border-neutral-focus">
                 <div class="w-12 h-12">
                   <img
-                    src="{IMG_URL}{provider.logo_path}"
+                    src="{IMG_ORIGINAL}{provider.logo_path}"
                     alt={provider.provider_name}
                   />
                 </div>
@@ -82,7 +81,7 @@
               <div class="avatar border-neutral-focus">
                 <div class="w-12 h-12">
                   <img
-                    src="{IMG_URL}{provider.logo_path}"
+                    src="{IMG_ORIGINAL}{provider.logo_path}"
                     alt={provider.provider_name}
                   />
                 </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { calculateAmountOfShownItems } from "../utils"
-  import { variables } from "../variables.js"
+  import { GO_API, PYTHON_API } from "../variables.js"
   import Select from "svelte-select"
   import MediaSearch from "../components/media_search.svelte"
   import { currentCountry } from "../stores/country.js"
@@ -12,9 +12,9 @@
   import DT from "daisyui/colors/themes.js"
   import type { Genre, Media, Meilisearch } from "../types"
 
-  const SEARCH_URL = `${variables.pythonApi}/search/`
-  const GENRE_URL = `${variables.goApi}/genres/`
-  const PROVIDER_URL = `${variables.pythonApi}/providers/`
+  const SEARCH_URL = `${PYTHON_API}/search/`
+  const GENRE_URL = `${GO_API}/genres/`
+  const PROVIDER_URL = `${PYTHON_API}/providers/`
   const INPUT_TIMER = 200
 
   let input = ""

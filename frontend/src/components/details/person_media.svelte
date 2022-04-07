@@ -10,8 +10,8 @@
     getMediaTitle,
   } from "../../utils"
   import type { Media } from "../../types"
+  import { IMG_W342 } from "../../variables"
 
-  const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
   export let media: Media[]
   let currentMediaAmount = calculateAmountOfShownItems({
     width: window.visualViewport.width,
@@ -52,7 +52,7 @@
           </div>
         {/if}
         <figure>
-          <img src="{LOW_RES_IMG_URL}{media.poster_path}" alt={getMediaTitle(media)} />
+          <img src="{IMG_W342}{media.poster_path}" alt={getMediaTitle(media)} />
         </figure>
       </a>
     {/each}

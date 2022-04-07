@@ -1,12 +1,11 @@
 <script lang="ts">
   import ReadMore from "./read_more.svelte"
   import MediaQuery from "svelte-media-query"
+  import { IMG_W342, IMG_W500 } from "../../variables"
 
   export let seasons
 
   const INITIAL_OVERVIEW_LENGTH: number = 600
-
-  const LOW_RES_IMG_URL: string = "https://image.tmdb.org/t/p/w500/"
 
   let currentTab: number = 0
   let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
@@ -45,7 +44,7 @@
               {#if season.poster_path}
                 <figure>
                   <img
-                    src="{LOW_RES_IMG_URL}{season.poster_path}"
+                    src="{IMG_W500}{season.poster_path}"
                     class="object-fit rounded-lg"
                     alt={season.name}
                   />
@@ -84,7 +83,7 @@
               {#if season.poster_path}
                 <figure>
                   <img
-                    src="{LOW_RES_IMG_URL}{season.poster_path}"
+                    src="{IMG_W342}{season.poster_path}"
                     class="object-fit rounded-lg h-96"
                     alt={season.name}
                   />
