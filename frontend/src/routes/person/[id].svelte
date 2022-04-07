@@ -1,6 +1,6 @@
 <script lang="ts">
   import { addMediaToID, getMostPopularBackdropPath } from "../../utils"
-  import { variables } from "../../variables.js"
+  import { PYTHON_API } from "../../variables.js"
   import { page } from "$app/stores"
   import Error from "../../components/error.svelte"
   import TopCard from "../../components/details/top_card.svelte"
@@ -8,7 +8,7 @@
   import Spinner from "../../components/loading/spinner.svelte"
   import type { Person } from "../../types"
 
-  const PERSON_DETAIL_URL: string = `${variables.pythonApi}/person/${$page.params.id}`
+  const PERSON_DETAIL_URL: string = `${PYTHON_API}/person/${$page.params.id}`
 
   let personName: string = "Loading..."
   const mediaCreditsWithoutAdult = (person: Person) => {

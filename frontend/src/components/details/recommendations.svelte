@@ -5,6 +5,7 @@
   import { Mousewheel, FreeMode } from "swiper"
   import "swiper/css"
   import "swiper/css/free-mode"
+  import { IMG_W342 } from "../../variables"
 
   let slidesPerView = calculateAmountOfShownItems({
     width: window.visualViewport.width,
@@ -15,8 +16,6 @@
     sm: 3,
     mobile: 2,
   })
-
-  const IMG_URL = "https://image.tmdb.org/t/p/original/"
 
   export let recommendations: Recommendation[]
   export let mediaType: string
@@ -43,7 +42,7 @@
               class="p-1"
             >
               <img
-                src="{IMG_URL}{recommendation.poster_path}"
+                src="{IMG_W342}{recommendation.poster_path}"
                 class="h-80 rounded-lg hover:contrast-75 hover:ring-2 ring-primary"
                 alt={recommendation.title}
               />

@@ -4,9 +4,9 @@
   import { currentGenres } from "../../stores/genres.js"
   import { inputQuery } from "../../stores/input.js"
   import { uniqueArray } from "../../utils"
+  import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "../../variables"
 
   const INITIAL_OVERVIEW_LENGTH: number = 550
-  const IMG_URL: string = "https://image.tmdb.org/t/p/original/"
 
   export let backdropPath: string
   export let posterPath: string
@@ -40,7 +40,7 @@
 
 <div
   class="flex items-center px-4 py-10 bg-cover card bg-base-100 shadow-md"
-  style="background-image: url(&quot;{IMG_URL}{backdropPath}&quot;);e"
+  style="background-image: url(&quot;{IMG_W1280}{backdropPath}&quot;);e"
 >
   <div
     class="card sm:card-side bg-base-100 bg-opacity-90 bordered
@@ -49,7 +49,7 @@
     {#if posterPath}
       <figure class="pt-10 pr-10 pl-10 sm:p-6">
         <img
-          src="{IMG_URL}{posterPath}"
+          src="{IMG_W500}{posterPath}"
           class="object-contain sm:max-h-96 w-full rounded-lg"
           alt={title}
         />
@@ -126,7 +126,10 @@
               class="mb-2 rounded-full w-20 h-20 ring ring-neutral
                                 ring-offset-neutral ring-offset-2"
             >
-              <img src="{IMG_URL}{provider.logo_path}" alt={provider.provider_name} />
+              <img
+                src="{IMG_ORIGINAL}{provider.logo_path}"
+                alt={provider.provider_name}
+              />
             </div>
           </div>
         {/each}

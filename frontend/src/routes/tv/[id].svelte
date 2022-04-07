@@ -1,6 +1,6 @@
 <script lang="ts">
   import { removeContentWithMissingImagePath, sortListByPopularity } from "../../utils"
-  import { variables } from "../../variables.js"
+  import { PYTHON_API } from "../../variables.js"
   import { page } from "$app/stores"
   import { currentCountry } from "../../stores/country.js"
   import Seasons from "../../components/details/seasons.svelte"
@@ -10,7 +10,7 @@
   import Recommendations from "../../components/details/recommendations.svelte"
   import Spinner from "../../components/loading/spinner.svelte"
 
-  const TV_DETAIL_URL = `${variables.pythonApi}/tv/${$currentCountry}/${$page.params.id}`
+  const TV_DETAIL_URL = `${PYTHON_API}/tv/${$currentCountry}/${$page.params.id}`
 
   let tvTitle = "Loading..."
 
