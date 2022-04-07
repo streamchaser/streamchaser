@@ -191,7 +191,9 @@ services:
     networks:
       - prometheus
     volumes:
-      - "/:/host:ro,rslave"
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
 
   cadvisor:
     image: zcube/cadvisor
