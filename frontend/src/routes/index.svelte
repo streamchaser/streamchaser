@@ -9,7 +9,6 @@
   import { inputQuery } from "../stores/input"
   import { chosenTheme } from "../stores/theme.js"
   import { onMount } from "svelte"
-  import DT from "daisyui/colors/themes.js"
   import type { Genre, Media, Meilisearch } from "../types"
 
   const SEARCH_URL = `${PYTHON_API}/search/`
@@ -142,7 +141,7 @@
   <title>Streamchaser</title>
 </svelte:head>
 
-<div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-6">
+<div class="bg-neutral shadow-md sm:rounded-lg pb-6 pt-6 px-6">
   <div class="form-control">
     <input
       id="input-field"
@@ -153,66 +152,6 @@
       on:input={debounceInput}
       autofocus
     />
-  </div>
-  <div
-    class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
-    style="
-
-             --borderRadius: var(--rounded-btn, .5rem);
-             --background: {DT[`[data-theme=${$chosenTheme}]`]['base-100']};
-             --border: 1px solid {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --borderFocusColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --borderHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --multiItemBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --multiItemColor: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']};
-             --multiItemActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-focus']};
-             --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`][
-      'primary-content'
-    ]};
-             --clearSelectHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --itemIsActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']};
-             --itemColor: {DT[`[data-theme=${$chosenTheme}]`]['text-secondary']};
-             --listBackground: {DT[`[data-theme=${$chosenTheme}]`]['neutral']};
-             --itemHoverBG: {DT[`[data-theme=${$chosenTheme}]`]['neutral-focus']};
-             --inputColor: {DT[`[data-theme=${$chosenTheme}]`]['text-primary']};
-              "
-  >
-    <div class="mb-2 sm:mb-0">
-      <Select
-        on:select={e => {
-          $currentGenres = e.detail ? e.detail : []
-          setViewportToDefault()
-          search()
-        }}
-        on:clear={e => {
-          $currentGenres = e.detail
-            ? $currentGenres.splice($currentGenres.indexOf(e.detail.value))
-            : []
-        }}
-        value={$currentGenres.length ? $currentGenres : null}
-        items={genres}
-        isMulti={true}
-        placeholder="Select genres..."
-      />
-    </div>
-    <div>
-      <Select
-        on:select={e => {
-          $currentProviders = e.detail ? e.detail : []
-          setViewportToDefault()
-          search()
-        }}
-        on:clear={e => {
-          $currentProviders = e.detail
-            ? $currentProviders.splice($currentProviders.indexOf(e.detail.value))
-            : []
-        }}
-        value={$currentProviders.length ? $currentProviders : null}
-        items={activeProviders}
-        isMulti={true}
-        placeholder="Select providers..."
-      />
-    </div>
   </div>
 </div>
 <MediaSearch
