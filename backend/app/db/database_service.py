@@ -105,27 +105,43 @@ async def extract_unique_providers_to_cache():
     media_list = crud.get_all_media(db=db)
 
     for country_code in get_settings().supported_country_codes:
-        free_provider_set = {
-            provider.get(country_code).get("provider_name")
+        free_providers = [
+            {
+                "name": provider.get(country_code).get("provider_name"),
+                "logo_path": provider.get(country_code).get("logo_path"),
+                "display_priority": provider.get(country_code).get("display_priority"),
+            }
             for media in media_list
             for provider in media.free_providers
             if provider.get(country_code)
-        }
-        flatrate_provider_set = {
-            provider.get(country_code).get("provider_name")
+        ]
+        flatrate_providers = [
+            {
+                "name": provider.get(country_code).get("provider_name"),
+                "logo_path": provider.get(country_code).get("logo_path"),
+                "display_priority": provider.get(country_code).get("display_priority"),
+            }
             for media in media_list
             for provider in media.flatrate_providers
             if provider.get(country_code)
-        }
-        ordered_free_provider_list = sorted(free_provider_set)
-        ordered_flatrate_provider_list = sorted(flatrate_provider_set)
+        ]
+
+        unique_flatrate_providers = [
+            dict(s)
+            for s in set(frozenset(provider.items()) for provider in flatrate_providers)
+        ]
+        unique_free_providers = [
+            dict(s)
+            for s in set(frozenset(provider.items()) for provider in free_providers)
+        ]
 
         await redis.set(
-            f"{country_code}_free_providers", json.dumps(ordered_free_provider_list)
+            f"{country_code}_free_providers",
+            json.dumps(unique_free_providers),
         )
         await redis.set(
             f"{country_code}_flatrate_providers",
-            json.dumps(ordered_flatrate_provider_list),
+            json.dumps(unique_flatrate_providers),
         )
 
 
