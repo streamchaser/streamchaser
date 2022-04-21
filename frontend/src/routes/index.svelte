@@ -151,7 +151,6 @@
       class="input input-bordered input-primary"
       bind:value={input}
       on:input={debounceInput}
-      autofocus
     />
   </div>
   <div
