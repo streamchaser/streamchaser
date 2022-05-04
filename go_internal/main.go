@@ -101,18 +101,28 @@ func (e *Env) processIds(c *gin.Context) {
 	c.Bind(&media)
 
 	var wg sync.WaitGroup
-
+	movieCh := make(chan Movie, len(media.Ids))
+	guardCh := make(chan int, 100)
+	dbMedia := []DBMedia{}
 	for _, id := range media.Ids {
+		guardCh <- 1
 		wg.Add(1)
 		switch string([]rune(id)[0]) {
 		case "m":
-			go fetchMovies(&wg, e.db, id[1:])
+			go fetchMovies(&wg, e.db, id[1:], movieCh, guardCh)
 		case "t":
 			return
 		default:
 			panic("This is not the movie type you seek")
 		}
 	}
+
+	for i := 0; i <= len(media.Ids)-1; i++ {
+		dbMedia = append(dbMedia, *mediaConverter(<-movieCh))
+	}
+	close(movieCh)
+
+	e.db.CreateInBatches(dbMedia, 2000)
 
 	wg.Wait()
 }
@@ -132,7 +142,7 @@ func mediaConverter(movie Movie) *DBMedia {
 	return media
 }
 
-func fetchMovies(wg *sync.WaitGroup, db *gorm.DB, id string) Movie {
+func fetchMovies(wg *sync.WaitGroup, db *gorm.DB, id string, movieCh chan Movie, guardCh chan int) {
 	defer wg.Done()
 	res, err := http.Get(
 		fmt.Sprintf(
@@ -152,7 +162,6 @@ func fetchMovies(wg *sync.WaitGroup, db *gorm.DB, id string) Movie {
 		panic(errDecode)
 	}
 
-	db.Create(mediaConverter(movie))
-
-	return movie
+	movieCh <- movie
+	<-guardCh
 }
