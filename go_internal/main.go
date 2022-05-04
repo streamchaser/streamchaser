@@ -110,7 +110,10 @@ func (e *Env) processIds(c *gin.Context) {
 		wg.Add(1)
 		switch string([]rune(id)[0]) {
 		case "m":
-			go fetchMovies(&wg, e.db, id[1:], movieCh, guardCh)
+			go func(id string, movieCh chan Movie) {
+				fetchMovies(&wg, id[1:], movieCh)
+				<-guardCh
+			}(id, movieCh)
 		case "t":
 			return
 		default:
@@ -145,7 +148,7 @@ func mediaConverter(movie Movie) *DBMedia {
 	return media
 }
 
-func fetchMovies(wg *sync.WaitGroup, db *gorm.DB, id string, movieCh chan Movie, guardCh chan int) {
+func fetchMovies(wg *sync.WaitGroup, id string, movieCh chan Movie) {
 	defer wg.Done()
 	res, err := http.Get(
 		fmt.Sprintf(
@@ -166,5 +169,4 @@ func fetchMovies(wg *sync.WaitGroup, db *gorm.DB, id string, movieCh chan Movie,
 	}
 
 	movieCh <- movie
-	<-guardCh
 }
