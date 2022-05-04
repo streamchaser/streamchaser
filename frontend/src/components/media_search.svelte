@@ -63,7 +63,7 @@
             </p>
           </div>
         {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
-          <div class="-space-x-4 avatar-group">
+          <div class="avatar-group -space-x-4">
             {#each media.providers as provider}
               <div class="avatar border-neutral-focus">
                 <div class="w-12 h-12">
@@ -76,7 +76,7 @@
             {/each}
           </div>
         {:else}
-          <div class="-space-x-4 avatar-group">
+          <div class="avatar-group -space-x-4">
             {#each media.providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
               <div class="avatar border-neutral-focus">
                 <div class="w-12 h-12">
