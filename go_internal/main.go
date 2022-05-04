@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type DBMedia struct {
@@ -122,7 +123,9 @@ func (e *Env) processIds(c *gin.Context) {
 	}
 	close(movieCh)
 
-	e.db.CreateInBatches(dbMedia, 2000)
+	e.db.Clauses(clause.OnConflict{
+		UpdateAll: true,
+	}).Create(&dbMedia)
 
 	wg.Wait()
 }
