@@ -86,6 +86,33 @@ services:
       - "traefik.http.routers.go-backend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
 
+  internal:
+    build:
+      context: ./internal
+      target: ${APP_ENVIRONMENT}
+      args:
+        - APP_ENV=${APP_ENVIRONMENT}
+    container_name: internal
+    restart: always
+    ports:
+      - 8888:8888
+    networks:
+      - traefik
+      - streamchaser
+    env_file:
+      - .env
+    volumes:
+      - ./internal:/app
+    depends_on:
+      - db
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.internal-web.rule=Host(`internal.${HOST_NAME}`)"
+      - "traefik.http.routers.internal-secured.rule=Host(`internal.${HOST_NAME}`)"
+      - "traefik.http.routers.internal-secured.tls.certresolver=mytlschallenge"
+      - "traefik.docker.network=traefik"
+
   search:
     image: getmeili/meilisearch:v0.26.0
     restart: always

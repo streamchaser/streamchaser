@@ -79,7 +79,7 @@ type Env struct {
 var TMDB_KEY = os.Getenv("TMDB_KEY")
 
 func main() {
-	dsn := "host=localhost user=postgres password=postgres dbname=streamchaser port=5432 sslmode=disable"
+	dsn := "host=db user=postgres password=postgres dbname=streamchaser port=5432 sslmode=disable"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("Could not connect to DB!")
