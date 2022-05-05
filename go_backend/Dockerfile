@@ -27,5 +27,5 @@ WORKDIR /app
 
 ENV GIN_MODE=release
 
-COPY --from=base /app/go_backend /usr/bin/
+COPY --from=base /app /usr/bin/
 CMD ["go_backend"]

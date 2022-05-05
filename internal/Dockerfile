@@ -27,5 +27,5 @@ WORKDIR /app
 
 ENV GIN_MODE=release
 
-COPY --from=base /app/internal /usr/bin/
+COPY --from=base /app /usr/bin/
 CMD ["internal"]
