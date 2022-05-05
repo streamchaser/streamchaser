@@ -3,6 +3,7 @@
   import { GO_API, PYTHON_API } from "../variables.js"
   import Select from "svelte-select"
   import MediaSearch from "../components/media_search.svelte"
+  import ProvidersFilter from "../components/provider_filter.svelte"
   import { currentCountry } from "../stores/country.js"
   import { currentProviders } from "../stores/providers.js"
   import { currentGenres } from "../stores/genres"
@@ -153,6 +154,7 @@
       autofocus
     />
   </div>
+  <ProvidersFilter />
 </div>
 <MediaSearch
   {meilisearch}
