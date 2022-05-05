@@ -12,7 +12,7 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN CGO_ENABLED=0 go build .
+RUN CGO_ENABLED=0 go build -o internal .
 
 FROM base as dev
 
