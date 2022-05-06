@@ -9,6 +9,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -16,56 +17,67 @@ import (
 
 type DBMedia struct {
 	gorm.Model
-	Id            string
-	Title         string
-	OriginalTitle string
-	Overview      string
-	ReleaseDate   string
-	// 	Genres        []Genre TODO: Should just be names of the genres
-	PosterPath string
-	Popularity int
-	//	Flatrate      Results // TODO: look at the python version
-	//	Free          Results // TODO: look at the python version
-}
-
-type Provider struct {
-	DisplayPriority int    `json:"display_priority"`
-	LogoPath        string `json:"logo_path"`
-	Id              int    `json:"provider_id"`
-	Name            string `json:"provider_name"`
-}
-
-type WatchProvider struct {
-	Results
-}
-
-type Results struct {
-	Results map[string]ProviderType `json:"results"`
-}
-
-type ProviderType struct {
-	Flatrate []Provider `json:"flatrate"`
-	Free     []Provider `json:"free"`
-}
-
-type Genre struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id     string
+	Genres pq.StringArray `gorm:"type:text ARRAY"`
+	Movie
 }
 
 type Movie struct {
-	Id            int     `json:"id"`
-	Title         string  `json:"title"`
-	OriginalTitle string  `json:"original_title"`
-	Overview      string  `json:"overview"`
-	ReleaseDate   string  `json:"release_date"`
-	Genres        []Genre `json:"genres"`
+	Id            int    `json:"id"`
+	Title         string `json:"title"`
+	OriginalTitle string `json:"original_title"`
+	Overview      string `json:"overview"`
+	ReleaseDate   string `json:"release_date"`
+	Genres        []struct {
+		Name string `json:"name"`
+	} `json:"genres" gorm:"-"`
 	PosterPath    string  `json:"poster_path"`
 	Popularity    float32 `json:"popularity"`
-	WatchProvider `json:"watch/providers"`
+	WatchProvider struct {
+		Results map[string]struct {
+			Flatrate []struct {
+				DisplayPriority int    `json:"display_priority"`
+				LogoPath        string `json:"logo_path"`
+				Id              int    `json:"provider_id"`
+				Name            string `json:"provider_name"`
+			} `json:"flatrate,omitempty"`
+			Free []struct {
+				DisplayPriority int    `json:"display_priority"`
+				LogoPath        string `json:"logo_path"`
+				Id              int    `json:"provider_id"`
+				Name            string `json:"provider_name"`
+			} `json:"free,omitempty"`
+		} `json:"results" gorm:"column:providers;type:json"`
+	} `json:"watch/providers" gorm:"embedded"`
 }
 
 type TV struct {
+	Id            int    `json:"id"`
+	Name          string `json:"name"`
+	OriginalTitle string `json:"original_title"`
+	Overview      string `json:"overview"`
+	FirstAirDate  string `json:"first_air_date"`
+	Genres        []struct {
+		Name string `json:"name" gorm:"type:text"`
+	} `json:"genres" gorm:"embedded[];type:text[]"`
+	PosterPath    string  `json:"poster_path"`
+	Popularity    float32 `json:"popularity"`
+	WatchProvider struct {
+		Results map[string]struct {
+			Flatrate []struct {
+				DisplayPriority int    `json:"display_priority"`
+				LogoPath        string `json:"logo_path"`
+				Id              int    `json:"provider_id"`
+				Name            string `json:"provider_name"`
+			} `json:"flatrate"`
+			Free []struct {
+				DisplayPriority int    `json:"display_priority"`
+				LogoPath        string `json:"logo_path"`
+				Id              int    `json:"provider_id"`
+				Name            string `json:"provider_name"`
+			} `json:"free"`
+		} `json:"results" gorm:"column:providers;type:json"`
+	} `json:"watch/providers" gorm:"embedded"`
 }
 
 type MediaIds struct {
@@ -99,7 +111,12 @@ func main() {
 
 func (e *Env) processIds(c *gin.Context) {
 	media := MediaIds{}
+
 	c.Bind(&media)
+	if len(media.Ids) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"info": "Please provide id's to fetch"})
+		return
+	}
 
 	var wg sync.WaitGroup
 	movieCh := make(chan Movie, len(media.Ids))
@@ -111,7 +128,8 @@ func (e *Env) processIds(c *gin.Context) {
 		switch string([]rune(id)[0]) {
 		case "m":
 			go func(id string, movieCh chan Movie) {
-				fetchMovies(&wg, id[1:], movieCh)
+				fetchMovies(id[1:], movieCh)
+				defer wg.Done()
 				<-guardCh
 			}(id, movieCh)
 		case "t":
@@ -135,21 +153,18 @@ func (e *Env) processIds(c *gin.Context) {
 
 // TODO: make it work with TV shows as well
 func mediaConverter(movie Movie) *DBMedia {
-
-	media := &DBMedia{
-		Id:            "m" + strconv.Itoa(movie.Id),
-		Title:         movie.Title,
-		OriginalTitle: movie.OriginalTitle,
-		Overview:      movie.Overview,
-		ReleaseDate:   movie.ReleaseDate,
-		PosterPath:    movie.PosterPath,
-		Popularity:    int(movie.Popularity),
+	genres := []string{}
+	for _, genre := range movie.Genres {
+		genres = append(genres, genre.Name)
 	}
-	return media
+	return &DBMedia{
+		Id:     "m" + strconv.Itoa(movie.Id),
+		Genres: genres,
+		Movie:  movie,
+	}
 }
 
-func fetchMovies(wg *sync.WaitGroup, id string, movieCh chan Movie) {
-	defer wg.Done()
+func fetchMovies(id string, movieCh chan Movie) {
 	res, err := http.Get(
 		fmt.Sprintf(
 			"https://api.themoviedb.org/3/movie/%s?api_key=%s&append_to_response=watch/providers", id, TMDB_KEY,
