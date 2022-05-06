@@ -140,7 +140,10 @@ func (e *Env) processIds(c *gin.Context) {
 	}
 
 	for i := 0; i <= len(media.Ids)-1; i++ {
-		dbMedia = append(dbMedia, *mediaConverter(<-movieCh))
+		movie := <-movieCh
+		if movie.Popularity > 1 {
+			dbMedia = append(dbMedia, *mediaConverter(movie))
+		}
 	}
 	close(movieCh)
 
