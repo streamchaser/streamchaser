@@ -113,7 +113,6 @@ def fetch_changed_media_ids() -> Tuple[list[str], list[str]]:
     today = datetime.today().strftime("%Y-%m-%d")
     yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d")
 
-    # TODO: Wait for the internal API to be able to handle TV
     with httpx.Client() as client:
         movie_res = client.get(
             f"{tmdb_url}movie/changes?api_key={tmdb_key}&"

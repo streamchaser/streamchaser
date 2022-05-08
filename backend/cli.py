@@ -3,13 +3,13 @@ import json
 import math
 import os
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
-from datetime import timedelta
 from typing import Optional
 
 import httpx
 import typer
+from app.api import fetch_changed_media_ids
 from app.api import fetch_jsongz_files
+from app.api import fetch_media_ids
 from app.api import get_genres
 from app.api import media_converter
 from app.api import request_data
@@ -31,6 +31,7 @@ from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.models import Media
 from app.db.search import client
 from app.db.search import update_index
+from app.util import chunkify
 from app.util import coroutine
 from tqdm import tqdm
 
@@ -94,49 +95,25 @@ def update_ids(ids: list[str]):
 
 
 @app.command()
-def update_media(chunk_amount: int = 10):
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-    today = datetime.today().strftime("%Y-%m-%d")
-    yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+def update_media(
+    chunk_size: int = 1000, first_time: bool = False, popularity: float = 0
+):
+    """Sends media ids to our internal update-media endpoint in chunks"""
+    movie_ids, tv_ids = (
+        fetch_media_ids(popularity) if first_time else fetch_changed_media_ids()
+    )
 
-    # TODO: Wait for the internal API to be able to handle TV
-    with httpx.Client() as client:
-        movie_res = client.get(
-            f"{tmdb_url}movie/changes?api_key={tmdb_key}&"
-            f"end_date={today}&start_date={yesterday}&page=1"
-        )
-        # tv_res = client.get(
-        #     f"{tmdb_url}tv/changes?api_key={tmdb_key}&"
-        #     f"end_date={today}&start_date={yesterday}&page=1"
-        # )
+    print(f"\nAbout to update {len(movie_ids)} movies and {len(tv_ids)} TV shows")
 
-    changed_movie_ids = [f"m{x['id']}" for x in movie_res.json()["results"]]
-    # changed_tv_ids = [f"t{x['id']}" for x in tv_res.json()["results"]]
-
-    def chunkify(lst, n):
-        return (
-            lst[i::n] for i in range(n)
-        )  # Will create empty sublists if len(lsi) < 10
-
-    with httpx.Client() as client:
-        for id_chunk in tqdm(
-            chunkify(changed_movie_ids, chunk_amount),
-            total=chunk_amount,
-            desc="Updating movies",
-        ):
-            if id_chunk:  # Handles cases where chunkify creates an empty sublist
+    with httpx.Client(timeout=30) as client:
+        for media in zip(["movies", "tv shows"], [movie_ids, tv_ids]):
+            id_chunks, total_chunks = chunkify(media[1], chunk_size)
+            for id_chunk in tqdm(
+                id_chunks,
+                total=total_chunks,
+                desc=f"Updating {media[0]}",
+            ):
                 client.post("http://internal:8888/update-media", json={"ids": id_chunk})
-
-        # TODO: Not implemented in Go yet
-        # for id_chunk in tqdm(
-        #     chunkify(changed_tv_ids, chunk_amount),
-        #     total=chunk_amount,
-        #     desc="Updating tv shows",
-        # ):
-        #     if id_chunk:  # Handles cases where chunkify creates an empty sublist
-        #         client.post("http://internal:8888/update-media",
-        #                     json={"ids": id_chunk})
 
 
 @app.command()
