@@ -160,7 +160,6 @@ async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False
     init_meilisearch_indexing()
     update_index()
     await extract_unique_providers_to_cache()
-    update_index()
     remove_blacklisted_from_search()
 
 
