@@ -16,6 +16,19 @@ def get_all_media(db: Session, skip: int = 0, limit: int = 0) -> list[models.Med
     return db.query(models.Media).offset(skip).limit(limit).all()
 
 
+def get_new_media_by_id(db: Session, media_id: str):
+    """Gets a single Media-type by the id"""
+    return db.query(models.NewMedia).filter(models.NewMedia.id == media_id).first()
+
+
+def get_all_new_media(db: Session, skip: int = 0, limit: int = 0):
+    """Gets all Media-types limited by 'limit'"""
+    if not limit:
+        return db.query(models.NewMedia).all()
+
+    return db.query(models.NewMedia).offset(skip).limit(limit).all()
+
+
 def get_all_media_iter(db: Session):
     return db.query(models.Media)
 
