@@ -62,12 +62,12 @@ func (movie *Movie) toMedia() *DBMedia {
 }
 
 type TV struct {
-	Id            int    `json:"id"`
-	Name          string `json:"name"`
-	OriginalTitle string `json:"original_title"`
-	Overview      string `json:"overview"`
-	FirstAirDate  string `json:"first_air_date"`
-	Genres        []struct {
+	Id           int    `json:"id"`
+	Name         string `json:"name"`
+	OriginalName string `json:"original_name"`
+	Overview     string `json:"overview"`
+	FirstAirDate string `json:"first_air_date"`
+	Genres       []struct {
 		Name string `json:"name" gorm:"type:text"`
 	} `json:"genres" gorm:"-"`
 	PosterPath string   `json:"poster_path"`
@@ -83,7 +83,7 @@ func (tv *TV) toMedia() *DBMedia {
 	return &DBMedia{
 		Id:            "t" + strconv.Itoa(tv.Id),
 		Title:         tv.Name,
-		OriginalTitle: tv.OriginalTitle,
+		OriginalTitle: tv.OriginalName,
 		Overview:      tv.Overview,
 		ReleaseDate:   tv.FirstAirDate,
 		Genres:        genres,
@@ -107,7 +107,7 @@ type Provider struct {
 			Id              int    `json:"provider_id"`
 			Name            string `json:"provider_name"`
 		} `json:"free,omitempty"`
-	} `json:"results" gorm:"type:json"`
+	} `json:"results" gorm:"column:providers;type:json"`
 }
 
 type MediaIds struct {
