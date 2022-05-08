@@ -8,6 +8,7 @@ from app.db import models
 from app.db.cache import Genre
 from app.db.cache import redis
 from app.db.crud import get_all_media
+from app.db.crud import get_all_new_media
 from app.db.search import client
 from app.util import unique_list
 from sqlalchemy.exc import IntegrityError
@@ -88,6 +89,39 @@ def index_media(country_code: str, media: list):
             for media in media
         ]
     )
+
+
+def new_index_media(country_code: str):
+    db = database.SessionLocal()
+    db_media = get_all_new_media(db)
+
+    medias = []
+    for media in db_media:
+        combined_provider_names = []
+        combined_providers = []
+        if media.results.get(country_code):
+            for provider_type in ["flatrate", "free"]:
+                if providers := media.results.get(country_code).get(provider_type):
+                    for provider in providers:
+                        combined_provider_names.append(provider.get("provider_name"))
+                        combined_providers.append(provider)
+
+        medias.append(
+            schemas.Media(
+                id=media.id,
+                title=media.title,
+                original_title=media.original_title,
+                overview=media.overview,
+                release_date=media.release_date,
+                genres=media.genres,
+                poster_path=media.poster_path,
+                popularity=media.popularity,
+                provider_names=combined_provider_names,
+                providers=combined_providers,
+            ).dict()
+        )
+
+    client.index(f"new_media_{country_code}").add_documents(medias)
 
 
 def init_meilisearch_indexing():
