@@ -99,6 +99,9 @@ def update_media(
     chunk_size: int = 1000, first_time: bool = False, popularity: float = 0
 ):
     """Sends media ids to our internal update-media endpoint in chunks"""
+    if not first_time and popularity:
+        echo_warning("Using [--popularity] without [--first-time] has no effect!")
+
     movie_ids, tv_ids = (
         fetch_media_ids(popularity) if first_time else fetch_changed_media_ids()
     )
@@ -236,6 +239,16 @@ def remove_and_blacklist(media_id: str):
         typer.echo(f"An error occoured. {e}")
     finally:
         db.close()
+
+
+def echo_warning(msg: str):
+    typer.echo(
+        typer.style(
+            msg,
+            fg=typer.colors.RED,
+            bold=True,
+        )
+    )
 
 
 if __name__ == "__main__":
