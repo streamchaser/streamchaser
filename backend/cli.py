@@ -28,6 +28,7 @@ from app.db.database_service import extract_unique_providers_to_cache
 from app.db.database_service import init_meilisearch_indexing
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import media_model_to_schema
+from app.db.database_service import new_index_media
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.models import Media
 from app.db.search import client
@@ -102,6 +103,16 @@ def update_ids(ids: list[str]):
     with httpx.Client() as client:
         res = client.post("http://internal:8888/update-media", json={"ids": ids})
         echo_success(res.json()["info"])
+
+
+@app.command()
+def new_index_meilisearch():
+    country_codes = get_settings().supported_country_codes
+
+    for country_code in tqdm(
+        country_codes, desc=f"Indexing {len(country_codes)} countries"
+    ):
+        new_index_media(country_code)
 
 
 @app.command()
