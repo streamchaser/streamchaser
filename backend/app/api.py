@@ -1,8 +1,11 @@
+import gzip
+import json
 import os
 from datetime import datetime
 from datetime import timedelta
 from pathlib import Path
 from typing import Generator
+from typing import Tuple
 
 import httpx
 import requests
@@ -16,6 +19,7 @@ from app.schemas import Media
 from app.schemas import Movie
 from app.schemas import Person
 from app.schemas import TV
+from tqdm import tqdm
 
 
 tmdb_url = get_settings().tmdb_url
@@ -77,6 +81,53 @@ def fetch_jsongz_files():
 
             print("Downloads failed - trying 1 day earlier")
             day += 1
+
+
+def fetch_media_ids(popularity: float = 0) -> Tuple[list[str], list[str]]:
+    """Fetches jsongz file from TMDB with all the relevant tv/movies"""
+    fetch_jsongz_files()
+
+    directory = "../json.gz_dumps"
+    movie_ids = []
+    tv_ids = []
+
+    for file in tqdm(os.listdir(directory), desc="Running through json.gz files"):
+        with gzip.open(os.path.join(directory, file), "r") as f:
+            for line in f:
+                if json.loads(line).get("popularity") >= popularity and not json.loads(
+                    line
+                ).get("adult"):
+                    if "movie" in file:
+                        item = json.loads(line)
+                        movie_ids.append("m" + str(item["id"]))
+                    else:
+                        item = json.loads(line)
+                        tv_ids.append("t" + str(item["id"]))
+
+    return movie_ids, tv_ids
+
+
+def fetch_changed_media_ids() -> Tuple[list[str], list[str]]:
+    tmdb_url = get_settings().tmdb_url
+    tmdb_key = get_settings().tmdb_key
+    today = datetime.today().strftime("%Y-%m-%d")
+    yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+
+    # TODO: Wait for the internal API to be able to handle TV
+    with httpx.Client() as client:
+        movie_res = client.get(
+            f"{tmdb_url}movie/changes?api_key={tmdb_key}&"
+            f"end_date={today}&start_date={yesterday}&page=1"
+        )
+        tv_res = client.get(
+            f"{tmdb_url}tv/changes?api_key={tmdb_key}&"
+            f"end_date={today}&start_date={yesterday}&page=1"
+        )
+
+    movie_ids = [f"m{movie['id']}" for movie in movie_res.json()["results"]]
+    tv_ids = [f"t{tv['id']}" for tv in tv_res.json()["results"]]
+
+    return movie_ids, tv_ids
 
 
 def fetch_trending_movies(page: int) -> dict:
