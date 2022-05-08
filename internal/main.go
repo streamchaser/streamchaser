@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -17,9 +18,15 @@ import (
 
 type DBMedia struct {
 	gorm.Model
-	Id     string
-	Genres pq.StringArray `gorm:"type:text ARRAY"`
-	Movie
+	Id            string
+	Title         string
+	OriginalTitle string
+	Overview      string
+	ReleaseDate   string
+	Genres        pq.StringArray `gorm:"type:text ARRAY"`
+	PosterPath    string
+	Popularity    float32
+	Providers     Provider `gorm:"embedded"`
 }
 
 type Movie struct {
@@ -30,25 +37,28 @@ type Movie struct {
 	ReleaseDate   string `json:"release_date"`
 	Genres        []struct {
 		Name string `json:"name"`
-	} `json:"genres" gorm:"-"`
-	PosterPath    string  `json:"poster_path"`
-	Popularity    float32 `json:"popularity"`
-	WatchProvider struct {
-		Results map[string]struct {
-			Flatrate []struct {
-				DisplayPriority int    `json:"display_priority"`
-				LogoPath        string `json:"logo_path"`
-				Id              int    `json:"provider_id"`
-				Name            string `json:"provider_name"`
-			} `json:"flatrate,omitempty"`
-			Free []struct {
-				DisplayPriority int    `json:"display_priority"`
-				LogoPath        string `json:"logo_path"`
-				Id              int    `json:"provider_id"`
-				Name            string `json:"provider_name"`
-			} `json:"free,omitempty"`
-		} `json:"results" gorm:"column:providers;type:json"`
-	} `json:"watch/providers" gorm:"embedded"`
+	} `json:"genres"`
+	PosterPath string   `json:"poster_path"`
+	Popularity float32  `json:"popularity"`
+	Providers  Provider `json:"watch/providers"`
+}
+
+func (movie *Movie) toMedia() *DBMedia {
+	genres := []string{}
+	for _, genre := range movie.Genres {
+		genres = append(genres, genre.Name)
+	}
+	return &DBMedia{
+		Id:            "m" + strconv.Itoa(movie.Id),
+		Title:         movie.Title,
+		OriginalTitle: movie.OriginalTitle,
+		Overview:      movie.Overview,
+		ReleaseDate:   movie.ReleaseDate,
+		Genres:        genres,
+		PosterPath:    movie.PosterPath,
+		Popularity:    movie.Popularity,
+		Providers:     movie.Providers,
+	}
 }
 
 type TV struct {
@@ -59,25 +69,45 @@ type TV struct {
 	FirstAirDate  string `json:"first_air_date"`
 	Genres        []struct {
 		Name string `json:"name" gorm:"type:text"`
-	} `json:"genres" gorm:"embedded[];type:text[]"`
-	PosterPath    string  `json:"poster_path"`
-	Popularity    float32 `json:"popularity"`
-	WatchProvider struct {
-		Results map[string]struct {
-			Flatrate []struct {
-				DisplayPriority int    `json:"display_priority"`
-				LogoPath        string `json:"logo_path"`
-				Id              int    `json:"provider_id"`
-				Name            string `json:"provider_name"`
-			} `json:"flatrate"`
-			Free []struct {
-				DisplayPriority int    `json:"display_priority"`
-				LogoPath        string `json:"logo_path"`
-				Id              int    `json:"provider_id"`
-				Name            string `json:"provider_name"`
-			} `json:"free"`
-		} `json:"results" gorm:"column:providers;type:json"`
-	} `json:"watch/providers" gorm:"embedded"`
+	} `json:"genres" gorm:"-"`
+	PosterPath string   `json:"poster_path"`
+	Popularity float32  `json:"popularity"`
+	Providers  Provider `json:"watch/providers"`
+}
+
+func (tv *TV) toMedia() *DBMedia {
+	genres := []string{}
+	for _, genre := range tv.Genres {
+		genres = append(genres, genre.Name)
+	}
+	return &DBMedia{
+		Id:            "t" + strconv.Itoa(tv.Id),
+		Title:         tv.Name,
+		OriginalTitle: tv.OriginalTitle,
+		Overview:      tv.Overview,
+		ReleaseDate:   tv.FirstAirDate,
+		Genres:        genres,
+		PosterPath:    tv.PosterPath,
+		Popularity:    tv.Popularity,
+		Providers:     tv.Providers,
+	}
+}
+
+type Provider struct {
+	Results map[string]struct {
+		Flatrate []struct {
+			DisplayPriority int    `json:"display_priority"`
+			LogoPath        string `json:"logo_path"`
+			Id              int    `json:"provider_id"`
+			Name            string `json:"provider_name"`
+		} `json:"flatrate,omitempty"`
+		Free []struct {
+			DisplayPriority int    `json:"display_priority"`
+			LogoPath        string `json:"logo_path"`
+			Id              int    `json:"provider_id"`
+			Name            string `json:"provider_name"`
+		} `json:"free,omitempty"`
+	} `json:"results" gorm:"type:json"`
 }
 
 type MediaIds struct {
@@ -120,6 +150,7 @@ func (e *Env) processIds(c *gin.Context) {
 
 	var wg sync.WaitGroup
 	movieCh := make(chan Movie, len(media.Ids))
+	tvCh := make(chan TV, len(media.Ids))
 	guardCh := make(chan int, 100)
 	dbMedia := []DBMedia{}
 	for _, id := range media.Ids {
@@ -128,63 +159,82 @@ func (e *Env) processIds(c *gin.Context) {
 		switch string([]rune(id)[0]) {
 		case "m":
 			go func(id string, movieCh chan Movie) {
-				fetchMovies(id[1:], movieCh)
 				defer wg.Done()
+				fetchMovie(id[1:], movieCh)
 				<-guardCh
 			}(id, movieCh)
 		case "t":
-			return
+			go func(id string, TVCh chan TV) {
+				defer wg.Done()
+				fetchTV(id[1:], TVCh)
+				<-guardCh
+			}(id, tvCh)
 		default:
-			panic("This is not the movie type you seek")
+			log.Fatal("This is not the movie type you seek")
 		}
 	}
-
-	for i := 0; i <= len(media.Ids)-1; i++ {
-		movie := <-movieCh
-		if movie.Popularity > 1 {
-			dbMedia = append(dbMedia, *mediaConverter(movie))
-		}
-	}
+	wg.Wait()
 	close(movieCh)
+	close(tvCh)
+
+	// TODO: make popularity an optional query parameter and default to 0
+	for tv := range tvCh {
+		if tv.Popularity > 1 {
+			dbMedia = append(dbMedia, *tv.toMedia())
+		}
+	}
+	// TODO: make popularity an optional query parameter and default to 0
+	for movie := range movieCh {
+		if movie.Popularity > 1 {
+			dbMedia = append(dbMedia, *movie.toMedia())
+		}
+	}
 
 	e.db.Clauses(clause.OnConflict{
 		UpdateAll: true,
 	}).Create(&dbMedia)
 
-	wg.Wait()
+	c.JSON(http.StatusOK, gin.H{"info": fmt.Sprintf("Fetched and inserted %d media", len(dbMedia))})
 }
 
-// TODO: make it work with TV shows as well
-func mediaConverter(movie Movie) *DBMedia {
-	genres := []string{}
-	for _, genre := range movie.Genres {
-		genres = append(genres, genre.Name)
-	}
-	return &DBMedia{
-		Id:     "m" + strconv.Itoa(movie.Id),
-		Genres: genres,
-		Movie:  movie,
-	}
-}
-
-func fetchMovies(id string, movieCh chan Movie) {
+func fetchMovie(id string, movieCh chan Movie) {
 	res, err := http.Get(
 		fmt.Sprintf(
 			"https://api.themoviedb.org/3/movie/%s?api_key=%s&append_to_response=watch/providers", id, TMDB_KEY,
 		),
 	)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	defer res.Body.Close()
 
 	movie := Movie{}
-
 	errDecode := json.NewDecoder(res.Body).Decode(&movie)
 	if errDecode != nil {
-		panic(errDecode)
+		log.Fatal(errDecode)
 	}
 
 	movieCh <- movie
+}
+
+func fetchTV(id string, TVCh chan TV) {
+	res, err := http.Get(
+		fmt.Sprintf(
+			"https://api.themoviedb.org/3/tv/%s?api_key=%s&append_to_response=watch/providers", id, TMDB_KEY,
+		),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer res.Body.Close()
+
+	tv := TV{}
+	errDecode := json.NewDecoder(res.Body).Decode(&tv)
+	if errDecode != nil {
+		log.Fatal(errDecode)
+	}
+
+	TVCh <- tv
 }
