@@ -99,9 +99,9 @@ def new_index_media(country_code: str):
     for media in db_media:
         combined_provider_names = []
         combined_providers = []
-        if media.results.get(country_code):
+        if media.providers.get(country_code):
             for provider_type in ["flatrate", "free"]:
-                if providers := media.results.get(country_code).get(provider_type):
+                if providers := media.providers.get(country_code).get(provider_type):
                     for provider in providers:
                         combined_provider_names.append(provider.get("provider_name"))
                         combined_providers.append(provider)
