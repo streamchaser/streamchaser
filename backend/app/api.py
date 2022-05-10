@@ -93,16 +93,17 @@ def fetch_media_ids(popularity: float = 0) -> Tuple[list[str], list[str]]:
 
     for file in tqdm(os.listdir(directory), desc="Running through json.gz files"):
         with gzip.open(os.path.join(directory, file), "r") as f:
-            for line in f:
-                if json.loads(line).get("popularity") >= popularity and not json.loads(
-                    line
-                ).get("adult"):
-                    if "movie" in file:
-                        item = json.loads(line)
-                        movie_ids.append("m" + str(item["id"]))
-                    else:
-                        item = json.loads(line)
-                        tv_ids.append("t" + str(item["id"]))
+            decoded = map(json.loads, f)
+            filtered = filter(
+                lambda x: popularity < x["popularity"] and not x.get("adult"), decoded
+            )
+
+            if "movie" in file:
+                movie_ids = list(map(lambda x: f"m{x['id']}", filtered))
+            elif "tv" in file:
+                tv_ids = list(map(lambda x: f"t{x['id']}", filtered))
+            else:
+                print('Filename doesn\'t start with "movie" or "tv"')
 
     return movie_ids, tv_ids
 
@@ -123,8 +124,12 @@ def fetch_changed_media_ids() -> Tuple[list[str], list[str]]:
             f"end_date={today}&start_date={yesterday}&page=1"
         )
 
-    movie_ids = [f"m{movie['id']}" for movie in movie_res.json()["results"]]
-    tv_ids = [f"t{tv['id']}" for tv in tv_res.json()["results"]]
+    movie_ids = [
+        f"m{movie['id']}"
+        for movie in movie_res.json()["results"]
+        if not movie.get("adult")
+    ]
+    tv_ids = [f"t{tv['id']}" for tv in tv_res.json()["results"] if not tv.get("adult")]
 
     return movie_ids, tv_ids
 
