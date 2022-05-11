@@ -1,8 +1,11 @@
+import gzip
+import json
 import os
 from datetime import datetime
 from datetime import timedelta
 from pathlib import Path
 from typing import Generator
+from typing import Tuple
 
 import httpx
 import requests
@@ -16,6 +19,7 @@ from app.schemas import Media
 from app.schemas import Movie
 from app.schemas import Person
 from app.schemas import TV
+from tqdm import tqdm
 
 
 tmdb_url = get_settings().tmdb_url
@@ -77,6 +81,57 @@ def fetch_jsongz_files():
 
             print("Downloads failed - trying 1 day earlier")
             day += 1
+
+
+def fetch_media_ids(popularity: float = 0) -> Tuple[list[str], list[str]]:
+    """Fetches jsongz file from TMDB with all the relevant tv/movies"""
+    fetch_jsongz_files()
+
+    directory = "../json.gz_dumps"
+    movie_ids = []
+    tv_ids = []
+
+    for file in tqdm(os.listdir(directory), desc="Running through json.gz files"):
+        with gzip.open(os.path.join(directory, file), "r") as f:
+            decoded = map(json.loads, f)
+            filtered = filter(
+                lambda x: popularity < x["popularity"] and not x.get("adult"), decoded
+            )
+
+            if "movie" in file:
+                movie_ids = list(map(lambda x: f"m{x['id']}", filtered))
+            elif "tv" in file:
+                tv_ids = list(map(lambda x: f"t{x['id']}", filtered))
+            else:
+                print('Filename doesn\'t start with "movie" or "tv"')
+
+    return movie_ids, tv_ids
+
+
+def fetch_changed_media_ids() -> Tuple[list[str], list[str]]:
+    tmdb_url = get_settings().tmdb_url
+    tmdb_key = get_settings().tmdb_key
+    today = datetime.today().strftime("%Y-%m-%d")
+    yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+
+    with httpx.Client() as client:
+        movie_res = client.get(
+            f"{tmdb_url}movie/changes?api_key={tmdb_key}&"
+            f"end_date={today}&start_date={yesterday}&page=1"
+        )
+        tv_res = client.get(
+            f"{tmdb_url}tv/changes?api_key={tmdb_key}&"
+            f"end_date={today}&start_date={yesterday}&page=1"
+        )
+
+    movie_ids = [
+        f"m{movie['id']}"
+        for movie in movie_res.json()["results"]
+        if not movie.get("adult")
+    ]
+    tv_ids = [f"t{tv['id']}" for tv in tv_res.json()["results"] if not tv.get("adult")]
+
+    return movie_ids, tv_ids
 
 
 def fetch_trending_movies(page: int) -> dict:

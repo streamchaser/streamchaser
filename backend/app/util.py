@@ -1,10 +1,16 @@
 import asyncio
 from functools import wraps
+from typing import Generator
+from typing import Tuple
 
 
-def chunk_list(arr: list, arr_len, chunk_size: int):
-    for i in range(0, arr_len, chunk_size):
-        yield arr[i : i + chunk_size]
+def chunkify(lst: list, size: int) -> Tuple[Generator[list, None, None], int]:
+    """Chunks lst into unique subsets of length chunk_size"""
+    chunks = 0
+    for i in range(len(lst)):
+        if not (i % size):
+            chunks += 1
+    return (lst[i::chunks] for i in range(chunks)), chunks
 
 
 def coroutine(f):

@@ -5,8 +5,11 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
 
+import httpx
 import typer
+from app.api import fetch_changed_media_ids
 from app.api import fetch_jsongz_files
+from app.api import fetch_media_ids
 from app.api import get_genres
 from app.api import media_converter
 from app.api import request_data
@@ -28,6 +31,7 @@ from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.models import Media
 from app.db.search import client
 from app.db.search import update_index
+from app.util import chunkify
 from app.util import coroutine
 from tqdm import tqdm
 
@@ -82,6 +86,49 @@ def fetch_media(popularity: float = 0):
 def index_meilisearch():
     init_meilisearch_indexing()
     update_index()
+
+
+@app.command()
+def update_ids(ids: list[str]):
+    if wrong_ids := [
+        id for id in ids if id[0] not in ["m", "t"] or not id[1:].isnumeric()
+    ]:
+        echo_warning(
+            f"One or more of the ids are not formatted correctly: {wrong_ids}\n"
+            "The ids will not be sent"
+        )
+        return
+    with httpx.Client() as client:
+        res = client.post("http://internal:8888/update-media", json={"ids": ids})
+        echo_success(res.json()["info"])
+
+
+@app.command()
+def update_media(
+    chunk_size: int = 1000, first_time: bool = False, popularity: float = 0
+):
+    """Sends media ids to our internal update-media endpoint in chunks"""
+    if chunk_size > 2500:
+        typer.confirm("Chunk size can be unstable if too high, continue?", abort=True)
+
+    if not first_time and popularity:
+        echo_warning("Using [--popularity] without [--first-time] has no effect!")
+
+    movie_ids, tv_ids = (
+        fetch_media_ids(popularity) if first_time else fetch_changed_media_ids()
+    )
+
+    print(f"\nAbout to update {len(movie_ids)} movies and {len(tv_ids)} TV shows")
+
+    with httpx.Client(timeout=30) as client:
+        for media in zip(["movies", "tv shows"], [movie_ids, tv_ids]):
+            id_chunks, total_chunks = chunkify(media[1], chunk_size)
+            for id_chunk in tqdm(
+                id_chunks,
+                total=total_chunks,
+                desc=f"Updating {media[0]}",
+            ):
+                client.post("http://internal:8888/update-media", json={"ids": id_chunk})
 
 
 @app.command()
@@ -204,6 +251,26 @@ def remove_and_blacklist(media_id: str):
         typer.echo(f"An error occoured. {e}")
     finally:
         db.close()
+
+
+def echo_success(msg: str):
+    typer.echo(
+        typer.style(
+            msg,
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+    )
+
+
+def echo_warning(msg: str):
+    typer.echo(
+        typer.style(
+            msg,
+            fg=typer.colors.RED,
+            bold=True,
+        )
+    )
 
 
 if __name__ == "__main__":
