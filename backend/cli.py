@@ -90,8 +90,17 @@ def index_meilisearch():
 
 @app.command()
 def update_ids(ids: list[str]):
+    if wrong_ids := [
+        id for id in ids if id[0] not in ["m", "t"] or not id[1:].isnumeric()
+    ]:
+        echo_warning(
+            f"One or more of the ids are not formatted correctly: {wrong_ids}\n"
+            "The ids will not be sent"
+        )
+        return
     with httpx.Client() as client:
-        client.post("http://internal:8888/update-media", json={"ids": ids})
+        res = client.post("http://internal:8888/update-media", json={"ids": ids})
+        echo_success(res.json()["info"])
 
 
 @app.command()
@@ -99,6 +108,9 @@ def update_media(
     chunk_size: int = 1000, first_time: bool = False, popularity: float = 0
 ):
     """Sends media ids to our internal update-media endpoint in chunks"""
+    if chunk_size > 2500:
+        typer.confirm("Chunk size can be unstable if too high, continue?", abort=True)
+
     if not first_time and popularity:
         echo_warning("Using [--popularity] without [--first-time] has no effect!")
 
@@ -239,6 +251,16 @@ def remove_and_blacklist(media_id: str):
         typer.echo(f"An error occoured. {e}")
     finally:
         db.close()
+
+
+def echo_success(msg: str):
+    typer.echo(
+        typer.style(
+            msg,
+            fg=typer.colors.GREEN,
+            bold=True,
+        )
+    )
 
 
 def echo_warning(msg: str):
