@@ -4,7 +4,7 @@ FROM golang:alpine as base
 
 WORKDIR /app
 
-EXPOSE 9001
+EXPOSE 8888
 
 COPY go.mod ./
 COPY go.sum ./
@@ -12,7 +12,7 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN CGO_ENABLED=0 go build -o go_backend .
+RUN CGO_ENABLED=0 go build -o internal .
 
 FROM base as dev
 
@@ -28,4 +28,4 @@ WORKDIR /app
 ENV GIN_MODE=release
 
 COPY --from=base /app /usr/bin/
-CMD ["go_backend"]
+CMD ["internal"]
