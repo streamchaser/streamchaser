@@ -10,6 +10,7 @@ from app.api import fetch_jsongz_files
 from app.api import get_genres
 from app.api import media_converter
 from app.api import request_data
+from app.config import Environment
 from app.config import get_settings
 from app.db import database
 from app.db.cache import redis
@@ -157,8 +158,10 @@ async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False
     if remove_non_ascii:
         remove_non_ascii_media()
     add_data()
+    if get_settings().app_environment == Environment.DEVELOPMENT:
+        # Is ran at startup in production
+        update_index()
     init_meilisearch_indexing()
-    update_index()
     await extract_unique_providers_to_cache()
     remove_blacklisted_from_search()
 

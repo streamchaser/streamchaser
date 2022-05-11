@@ -5,6 +5,7 @@ from app.config import get_settings
 from app.db import models
 from app.db.cache import redis
 from app.db.database import engine
+from app.db.search import update_index
 from app.routers import genres
 from app.routers import media
 from app.routers import movie
@@ -22,6 +23,9 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def init_db():
+    if get_settings().app_environment == Environment.PRODUCTION:
+        # Only done in production because of development reloading
+        update_index()
     try:
         models.Base.metadata.create_all(bind=engine)
     except Exception as e:
