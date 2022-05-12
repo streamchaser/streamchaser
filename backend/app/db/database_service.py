@@ -53,6 +53,8 @@ async def insert_genres_to_cache(genres: dict) -> None:
         for genre in genres.values()
     ]
 
+    fixed_genres.sort(key=lambda genre: genre["label"])
+
     await redis.set("genres", json.dumps(fixed_genres))
 
 
