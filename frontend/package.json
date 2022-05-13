@@ -13,7 +13,7 @@
     "@rollup/plugin-typescript": "^8.3.0",
     "@sveltejs/adapter-auto": "next",
     "@sveltejs/adapter-node": "next",
-    "@sveltejs/kit": "^1.0.0-next.299",
+    "@sveltejs/kit": "^1.0.0-next.329",
     "@tsconfig/svelte": "^2.0.1",
     "autoprefixer": "^10.4.2",
     "postcss": "^8.4.5",
