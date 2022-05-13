@@ -1,18 +1,11 @@
-// playwright.config.ts
 import type { PlaywrightTestConfig } from "@playwright/test"
-import { devices } from "@playwright/test"
 
 const config: PlaywrightTestConfig = {
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  use: {
-    trace: "on-first-retry",
+  webServer: {
+    command: "yarn build && yarn preview",
+    port: 3000,
   },
-  projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
-  ],
+  timeout: 5 * 1000,
 }
+
 export default config
