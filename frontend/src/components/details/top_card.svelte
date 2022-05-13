@@ -21,8 +21,9 @@
 
   let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
 
-  const changeGenreAndRedirectHome = genre => {
-    $currentGenres = [genre]
+  const changeGenreAndRedirectHome = (genre: string) => {
+    // Needs to replace the &'s for the multiselects to find it
+    $currentGenres = [genre.replace(" & ", "%20%26%20")]
     $inputQuery = ""
     window.location.href = "/"
   }
