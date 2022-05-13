@@ -1,0 +1,18 @@
+name: E2E
+
+# Events that trigger the workflow
+on: push
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+      - name: Run build
+        run: |
+          cd frontend/
+          touch .env
+          echo -e "VITE_API_PATH=http://api.localhost\nVITE_GO_API_PATH=http://apiv2.localhost" > .env
+          yarn install
+          yarn test
