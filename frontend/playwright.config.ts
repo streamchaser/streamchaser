@@ -5,7 +5,7 @@ const config: PlaywrightTestConfig = {
     command: "yarn build && yarn preview",
     port: 3000,
   },
-  timeout: 5 * 1000,
+  timeout: 5000 * 1000,
 }
 
 export default config
