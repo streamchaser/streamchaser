@@ -1,0 +1,137 @@
+{
+  "hits": [
+    {
+      "original_title": "Harry Potter and the Philosopher's Stone",
+      "title": "Harry Potter and the Philosopher's Stone",
+      "id": "m671",
+      "overview": null,
+      "release_date": "None",
+      "genres": ["Adventure", "Fantasy"],
+      "poster_path": "/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+      "popularity": 214,
+      "provider_names": ["HBO Max", "HBO"],
+      "providers": [
+        {
+          "display_priority": 8,
+          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
+          "provider_id": 384,
+          "provider_name": "HBO Max"
+        },
+        {
+          "display_priority": 36,
+          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
+          "provider_id": 118,
+          "provider_name": "HBO"
+        }
+      ]
+    },
+    {
+      "original_title": "Harry Potter and the Chamber of Secrets",
+      "title": "Harry Potter and the Chamber of Secrets",
+      "id": "m672",
+      "overview": null,
+      "release_date": "None",
+      "genres": ["Adventure", "Fantasy"],
+      "poster_path": "/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg",
+      "popularity": 190,
+      "provider_names": ["HBO Max", "HBO"],
+      "providers": [
+        {
+          "display_priority": 8,
+          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
+          "provider_id": 384,
+          "provider_name": "HBO Max"
+        },
+        {
+          "display_priority": 36,
+          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
+          "provider_id": 118,
+          "provider_name": "HBO"
+        }
+      ]
+    },
+    {
+      "original_title": "Harry Potter and the Half-Blood Prince",
+      "title": "Harry Potter and the Half-Blood Prince",
+      "id": "m767",
+      "overview": null,
+      "release_date": "None",
+      "genres": ["Adventure", "Fantasy"],
+      "poster_path": "/z7uo9zmQdQwU5ZJHFpv2Upl30i1.jpg",
+      "popularity": 188,
+      "provider_names": ["HBO Max", "HBO"],
+      "providers": [
+        {
+          "display_priority": 8,
+          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
+          "provider_id": 384,
+          "provider_name": "HBO Max"
+        },
+        {
+          "display_priority": 36,
+          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
+          "provider_id": 118,
+          "provider_name": "HBO"
+        }
+      ]
+    },
+    {
+      "original_title": "Harry Potter and the Goblet of Fire",
+      "title": "Harry Potter and the Goblet of Fire",
+      "id": "m674",
+      "overview": null,
+      "release_date": "None",
+      "genres": ["Adventure", "Fantasy", "Family"],
+      "poster_path": "/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
+      "popularity": 182,
+      "provider_names": ["HBO Max", "HBO"],
+      "providers": [
+        {
+          "display_priority": 8,
+          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
+          "provider_id": 384,
+          "provider_name": "HBO Max"
+        },
+        {
+          "display_priority": 36,
+          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
+          "provider_id": 118,
+          "provider_name": "HBO"
+        }
+      ]
+    },
+    {
+      "original_title": "Harry Potter and the Prisoner of Azkaban",
+      "title": "Harry Potter and the Prisoner of Azkaban",
+      "id": "m673",
+      "overview": null,
+      "release_date": "None",
+      "genres": ["Adventure", "Fantasy"],
+      "poster_path": "/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg",
+      "popularity": 178,
+      "provider_names": ["HBO Max", "HBO"],
+      "providers": [
+        {
+          "display_priority": 8,
+          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
+          "provider_id": 384,
+          "provider_name": "HBO Max"
+        },
+        {
+          "display_priority": 36,
+          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
+          "provider_id": 118,
+          "provider_name": "HBO"
+        }
+      ]
+    }
+  ],
+  "offset": 0,
+  "limit": 5,
+  "nbHits": 386,
+  "exhaustiveNbHits": false,
+  "facetsDistribution": null,
+  "exhaustiveFacetsCount": null,
+  "processingTimeMs": 29,
+  "query": "harry p"
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "label": "Action",
+    "value": "Action"
+  },
+  {
+    "label": "Adventure",
+    "value": "Adventure"
+  },
+  {
+    "label": "Animation",
+    "value": "Animation"
+  },
+  {
+    "label": "Comedy",
+    "value": "Comedy"
+  },
+  {
+    "label": "Crime",
+    "value": "Crime"
+  },
+  {
+    "label": "Documentary",
+    "value": "Documentary"
+  },
+  {
+    "label": "Drama",
+    "value": "Drama"
+  },
+  {
+    "label": "Family",
+    "value": "Family"
+  },
+  {
+    "label": "Fantasy",
+    "value": "Fantasy"
+  },
+  {
+    "label": "History",
+    "value": "History"
+  },
+  {
+    "label": "Horror",
+    "value": "Horror"
+  },
+  {
+    "label": "Music",
+    "value": "Music"
+  },
+  {
+    "label": "Mystery",
+    "value": "Mystery"
+  },
+  {
+    "label": "Romance",
+    "value": "Romance"
+  },
+  {
+    "label": "Science Fiction",
+    "value": "Science Fiction"
+  },
+  {
+    "label": "TV Movie",
+    "value": "TV Movie"
+  },
+  {
+    "label": "Thriller",
+    "value": "Thriller"
+  },
+  {
+    "label": "War",
+    "value": "War"
+  },
+  {
+    "label": "Western",
+    "value": "Western"
+  },
+  {
+    "label": "Action & Adventure",
+    "value": "Action%20%26%20Adventure"
+  },
+  {
+    "label": "Kids",
+    "value": "Kids"
+  },
+  {
+    "label": "News",
+    "value": "News"
+  },
+  {
+    "label": "Reality",
+    "value": "Reality"
+  },
+  {
+    "label": "Sci-Fi & Fantasy",
+    "value": "Sci-Fi%20%26%20Fantasy"
+  },
+  {
+    "label": "Soap",
+    "value": "Soap"
+  },
+  {
+    "label": "Talk",
+    "value": "Talk"
+  },
+  {
+    "label": "War & Politics",
+    "value": "War%20%26%20Politics"
+  }
+]
