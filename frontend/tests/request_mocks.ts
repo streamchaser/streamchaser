@@ -1,4 +1,6 @@
-export const mockIndex = async page => {
+import type { Page } from "@playwright/test"
+
+export const mockIndex = async (page: Page) => {
   await page.route("http://api.localhost/search/*?c=DK&limit=30", route =>
     route.fulfill({
       status: 200,
@@ -11,7 +13,7 @@ export const mockIndex = async page => {
       path: "tests/test_data/providers.json",
     })
   )
-  await page.route("http://apiv2.localhost/genres/ ", route =>
+  await page.route("http://apiv2.localhost/genres/", route =>
     route.fulfill({
       status: 200,
       path: "tests/test_data/genres.json",

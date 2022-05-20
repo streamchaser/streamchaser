@@ -13,6 +13,8 @@ jobs:
         run: |
           cd frontend/
           touch .env
-          echo -e "VITE_API_PATH=http://api.localhost\nVITE_GO_API_PATH=http://apiv2.localhost" > .env
+          variables="VITE_API_PATH=http://api.localhost
+          VITE_GO_API_PATH=http://apiv2.localhost"
+          echo "$variables" > .env
           yarn install
           yarn test
