@@ -16,10 +16,5 @@ async def read_all_providers(country_code):
     """Reads all the providers from providers.txt"""
     country_code = country_code.upper()
 
-    if free_providers := await redis.get(f"{country_code}_free_providers"):
-        free_providers = json.loads(free_providers)
-
-    if flatrate_providers := await redis.get(f"{country_code}_flatrate_providers"):
-        flatrate_providers = json.loads(flatrate_providers)
-
-    return [*flatrate_providers, *free_providers]
+    if providers := await redis.get(f"{country_code}_providers"):
+        return json.loads(providers)

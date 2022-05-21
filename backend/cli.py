@@ -28,6 +28,7 @@ from app.db.database_service import extract_unique_providers_to_cache
 from app.db.database_service import init_meilisearch_indexing
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import media_model_to_schema
+from app.db.database_service import new_extract_unique_providers_to_cache
 from app.db.database_service import new_index_media
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.models import Media
@@ -207,6 +208,18 @@ async def flush_cache():
 @coroutine
 async def genres_to_cache():
     await insert_genres_to_cache(get_genres())
+
+
+@app.command()
+@coroutine
+async def new_full_setup(first_time: bool = False, popularity: float = 1):
+    await insert_genres_to_cache(get_genres())
+    update_media(chunk_size=1000, first_time=first_time, popularity=popularity)
+    await new_extract_unique_providers_to_cache()
+    if get_settings().app_environment == Environment.DEVELOPMENT:
+        # Is ran at startup in production
+        update_index()
+    new_index_meilisearch()
 
 
 @app.command()
