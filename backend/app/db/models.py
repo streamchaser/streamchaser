@@ -7,8 +7,8 @@ from sqlalchemy.sql.sqltypes import Date
 from sqlalchemy.sql.sqltypes import Float
 
 
-class NewMedia(Base):
-    __tablename__ = "db_media"
+class Media(Base):
+    __tablename__ = "media"
 
     id = Column(String, primary_key=True)
     created_at = Column(Date, nullable=False)

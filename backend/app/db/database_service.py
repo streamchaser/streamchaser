@@ -4,27 +4,11 @@ from app import schemas
 from app.config import get_settings
 from app.db import crud
 from app.db import database
-from app.db import models
 from app.db.cache import Genre
 from app.db.cache import redis
-from app.db.crud import get_all_new_media
+from app.db.crud import get_all_media
 from app.db.search import client
 from tqdm import tqdm
-
-
-def media_model_to_schema(media: models.Media) -> schemas.Media:
-    """Turns Media-model into a Media-schemas, and adds to Media table"""
-
-    return schemas.Media(
-        id=media.get("id"),
-        title=media.get("title"),
-        original_title=media.get("original_title"),
-        overview=media.get("overview"),
-        release_date=media.get("release_date"),
-        genres=media.get("genres"),
-        poster_path=media.get("poster_path"),
-        popularity=media.get("popularity"),
-    )
 
 
 async def insert_genres_to_cache(genres: dict) -> None:
@@ -48,7 +32,7 @@ async def insert_genres_to_cache(genres: dict) -> None:
 # TODO: Only index the recently updated media(updated_at)
 def index_media(country_code: str):
     db = database.SessionLocal()
-    db_media = get_all_new_media(db)
+    db_media = get_all_media(db)
 
     medias = []
     for media in db_media:
@@ -81,7 +65,7 @@ def index_media(country_code: str):
 
 async def extract_unique_providers_to_cache():
     db = database.SessionLocal()
-    db_media = get_all_new_media(db)
+    db_media = get_all_media(db)
 
     supported_countries = {x: set() for x in get_settings().supported_country_codes}
 

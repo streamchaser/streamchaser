@@ -25,7 +25,7 @@ func main() {
 	if err != nil {
 		panic("Could not connect to DB!")
 	}
-	db.AutoMigrate(&DBMedia{})
+	db.AutoMigrate(&Media{})
 
 	if TMDB_KEY == "" {
 		panic("No TMDB key provided")
@@ -51,7 +51,7 @@ func (e *Env) processIds(c *gin.Context) {
 	movieCh := make(chan Movie, len(media.Ids))
 	tvCh := make(chan TV, len(media.Ids))
 	guardCh := make(chan int, 100)
-	dbMedia := []DBMedia{}
+	dbMedia := []Media{}
 	for _, id := range media.Ids {
 		guardCh <- 1
 		wg.Add(1)

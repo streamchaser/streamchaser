@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type DBMedia struct {
+type Media struct {
 	gorm.Model
 	Id            string
 	Title         string
@@ -34,12 +34,12 @@ type Movie struct {
 	Providers  Provider `json:"watch/providers"`
 }
 
-func (movie *Movie) toMedia() *DBMedia {
+func (movie *Movie) toMedia() *Media {
 	genres := []string{}
 	for _, genre := range movie.Genres {
 		genres = append(genres, genre.Name)
 	}
-	return &DBMedia{
+	return &Media{
 		Id:            "m" + strconv.Itoa(movie.Id),
 		Title:         movie.Title,
 		OriginalTitle: movie.OriginalTitle,
@@ -66,12 +66,12 @@ type TV struct {
 	Providers  Provider `json:"watch/providers"`
 }
 
-func (tv *TV) toMedia() *DBMedia {
+func (tv *TV) toMedia() *Media {
 	genres := []string{}
 	for _, genre := range tv.Genres {
 		genres = append(genres, genre.Name)
 	}
-	return &DBMedia{
+	return &Media{
 		Id:            "t" + strconv.Itoa(tv.Id),
 		Title:         tv.Name,
 		OriginalTitle: tv.OriginalName,
