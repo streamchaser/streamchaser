@@ -1,3 +1,5 @@
+from typing import Optional
+
 import httpx
 import typer
 from app.api import fetch_changed_media_ids
@@ -58,7 +60,7 @@ def index_meilisearch():
 
 @app.command()
 def update_media(
-    chunk_size: int = 1000, first_time: bool = False, popularity: float = 0
+    chunk_size: int = 1000, first_time: bool = False, popularity: Optional[float] = 1
 ):
     """Sends media ids to our internal update-media endpoint in chunks"""
     if chunk_size > 2500:
@@ -122,7 +124,7 @@ async def genres_to_cache():
 
 @app.command()
 @coroutine
-async def full_setup(first_time: bool = False, popularity: float = 1):
+async def full_setup(popularity: Optional[float], first_time: bool = False):
     await insert_genres_to_cache(get_genres())
     update_media(chunk_size=1000, first_time=first_time, popularity=popularity)
     await extract_unique_providers_to_cache()
