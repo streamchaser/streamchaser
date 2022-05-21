@@ -27,5 +27,6 @@ WORKDIR /app
 
 ENV GIN_MODE=release
 
+COPY --from=base /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=base /app /usr/bin/
 CMD ["internal"]
