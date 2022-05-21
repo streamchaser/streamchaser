@@ -7,11 +7,8 @@ from app.db import database
 from app.db import models
 from app.db.cache import Genre
 from app.db.cache import redis
-from app.db.crud import get_all_media
 from app.db.crud import get_all_new_media
 from app.db.search import client
-from app.util import unique_list
-from sqlalchemy.exc import IntegrityError
 from tqdm import tqdm
 
 
@@ -28,17 +25,6 @@ def media_model_to_schema(media: models.Media) -> schemas.Media:
         poster_path=media.get("poster_path"),
         popularity=media.get("popularity"),
     )
-
-
-def dump_media_to_db(db: database.SessionLocal, media: models.Media) -> None:
-    try:
-        db_media = crud.get_media_by_id(db=db, media_id=media.id)
-        if not db_media:
-            crud.create_media(db=db, media=media)
-    except IntegrityError:  # Still a bit unsure why this only happens sometimes
-        pass
-    finally:
-        db.close()
 
 
 async def insert_genres_to_cache(genres: dict) -> None:
@@ -59,40 +45,8 @@ async def insert_genres_to_cache(genres: dict) -> None:
     await redis.set("genres", json.dumps(fixed_genres))
 
 
-def index_media(country_code: str, media: list):
-    client.index(f"media_{country_code}").add_documents(
-        [
-            schemas.Media(
-                id=media.id,
-                title=media.title,
-                original_title=media.original_title,
-                overview=media.overview,
-                release_date=media.release_date,
-                genres=media.genres,
-                poster_path=media.poster_path,
-                popularity=media.popularity,
-                provider_names=[
-                    provider.get(country_code).get("provider_name")
-                    for provider in unique_list(
-                        media.flatrate_providers, media.free_providers
-                    )
-                    if provider.get(country_code)
-                ],
-                providers=[
-                    provider.get(country_code)
-                    for provider in unique_list(
-                        media.flatrate_providers, media.free_providers
-                    )
-                    if provider.get(country_code)
-                ],
-            ).dict()
-            for media in media
-        ]
-    )
-
-
 # TODO: Only index the recently updated media(updated_at)
-def new_index_media(country_code: str):
+def index_media(country_code: str):
     db = database.SessionLocal()
     db_media = get_all_new_media(db)
 
@@ -125,19 +79,7 @@ def new_index_media(country_code: str):
     client.index(f"media_{country_code}").add_documents(medias)
 
 
-def init_meilisearch_indexing():
-    """MeiliSearch indexing from Postgres DB"""
-    db = database.SessionLocal()
-    media: list = get_all_media(db)
-    country_codes = get_settings().supported_country_codes
-
-    for country_code in tqdm(
-        country_codes, desc=f"Indexing {len(country_codes)} countries"
-    ):
-        index_media(country_code, media)
-
-
-async def new_extract_unique_providers_to_cache():
+async def extract_unique_providers_to_cache():
     db = database.SessionLocal()
     db_media = get_all_new_media(db)
 
@@ -167,35 +109,6 @@ async def new_extract_unique_providers_to_cache():
         await redis.set(
             f"{country_code}_providers",
             json.dumps(ordered_providers),
-        )
-
-
-async def extract_unique_providers_to_cache():
-    db = database.SessionLocal()
-    media_list = crud.get_all_media(db=db)
-
-    for country_code in get_settings().supported_country_codes:
-        free_provider_set = {
-            provider.get(country_code).get("provider_name")
-            for media in media_list
-            for provider in media.free_providers
-            if provider.get(country_code)
-        }
-        flatrate_provider_set = {
-            provider.get(country_code).get("provider_name")
-            for media in media_list
-            for provider in media.flatrate_providers
-            if provider.get(country_code)
-        }
-        ordered_free_provider_list = sorted(free_provider_set)
-        ordered_flatrate_provider_list = sorted(flatrate_provider_set)
-
-        await redis.set(
-            f"{country_code}_free_providers", json.dumps(ordered_free_provider_list)
-        )
-        await redis.set(
-            f"{country_code}_flatrate_providers",
-            json.dumps(ordered_flatrate_provider_list),
         )
 
 

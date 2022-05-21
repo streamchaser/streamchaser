@@ -1,37 +1,20 @@
-import gzip
-import json
-import math
-import os
-from concurrent.futures import ThreadPoolExecutor
-from typing import Optional
-
 import httpx
 import typer
 from app.api import fetch_changed_media_ids
 from app.api import fetch_jsongz_files
 from app.api import fetch_media_ids
 from app.api import get_genres
-from app.api import media_converter
-from app.api import request_data
 from app.config import Environment
 from app.config import get_settings
 from app.db import database
 from app.db.cache import redis
-from app.db.crud import count_all_media
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
 from app.db.crud import get_media_by_id
-from app.db.crud import update_media_data_by_id
-from app.db.database import engine
-from app.db.database_service import dump_media_to_db
 from app.db.database_service import extract_unique_providers_to_cache
-from app.db.database_service import init_meilisearch_indexing
+from app.db.database_service import index_media
 from app.db.database_service import insert_genres_to_cache
-from app.db.database_service import media_model_to_schema
-from app.db.database_service import new_extract_unique_providers_to_cache
-from app.db.database_service import new_index_media
 from app.db.database_service import prune_non_ascii_media_from_db
-from app.db.models import Media
 from app.db.search import client
 from app.db.search import update_index
 from app.util import chunkify
@@ -46,49 +29,6 @@ app = typer.Typer()
 @app.command()
 def fetch_jsongz():
     fetch_jsongz_files()
-
-
-@app.command()
-def fetch_media(popularity: float = 0):
-    fetch_jsongz_files()
-
-    directory = "../json.gz_dumps"
-    data = []
-
-    for file in tqdm(os.listdir(directory), desc="Running through json.gz files"):
-        with gzip.open(os.path.join(directory, file), "r") as f:
-            for line in f:
-                if json.loads(line).get("popularity") >= popularity and not json.loads(
-                    line
-                ).get("adult"):
-                    if "movie" in file:
-                        item = json.loads(line)
-                        item["id"] = "m" + str(item["id"])
-                        data.append(item)
-                    else:
-                        item = json.loads(line)
-                        item["id"] = "t" + str(item["id"])
-                        data.append(item)
-
-    data_length = len(data)
-
-    typer.echo(f"media elements: {data_length} with popularity >= {popularity}")
-
-    media = media_converter(data)
-
-    media_schema_iter = map(media_model_to_schema, media)
-
-    db = database.SessionLocal()
-    for media in tqdm(
-        media_schema_iter, total=data_length, desc="Dumping media to database"
-    ):
-        dump_media_to_db(db=db, media=media)
-
-
-@app.command()
-def index_meilisearch():
-    init_meilisearch_indexing()
-    update_index()
 
 
 @app.command()
@@ -107,13 +47,13 @@ def update_ids(ids: list[str]):
 
 
 @app.command()
-def new_index_meilisearch():
+def index_meilisearch():
     country_codes = get_settings().supported_country_codes
 
     for country_code in tqdm(
         country_codes, desc=f"Indexing {len(country_codes)} countries"
     ):
-        new_index_media(country_code)
+        index_media(country_code)
 
 
 @app.command()
@@ -169,36 +109,6 @@ def remove_all_media():
 
 
 @app.command()
-def add_data():
-    db = database.SessionLocal()
-    chunk_size = 1000
-    all_media_length = count_all_media(db)
-    chunk_loops = math.ceil(all_media_length / chunk_size)  # Will always round up
-
-    with engine.connect() as conn:
-        media_stream = conn.execution_options(stream_results=True).execute(
-            Media.__table__.select()
-        )
-
-        typer.echo(f"Processing {all_media_length} media in {chunk_loops} chunks")
-        with tqdm(
-            total=chunk_loops, desc="Updating media and dumping to DB"
-        ) as progress_bar:
-            while chunk := media_stream.fetchmany(chunk_size):
-                with ThreadPoolExecutor() as executor:
-                    media_data = executor.map(request_data, chunk)
-
-                for data in media_data:
-                    if data:
-                        update_media_data_by_id(
-                            db=db, media_id=data.get("media_id"), data=data
-                        )
-
-                progress_bar.update(1)
-    db.close()
-
-
-@app.command()
 @coroutine
 async def flush_cache():
     await redis.flushdb()
@@ -212,30 +122,14 @@ async def genres_to_cache():
 
 @app.command()
 @coroutine
-async def new_full_setup(first_time: bool = False, popularity: float = 1):
+async def full_setup(first_time: bool = False, popularity: float = 1):
     await insert_genres_to_cache(get_genres())
     update_media(chunk_size=1000, first_time=first_time, popularity=popularity)
-    await new_extract_unique_providers_to_cache()
-    if get_settings().app_environment == Environment.DEVELOPMENT:
-        # Is ran at startup in production
-        update_index()
-    new_index_meilisearch()
-
-
-@app.command()
-@coroutine
-async def full_setup(popularity: Optional[float], remove_non_ascii: bool = False):
-    await insert_genres_to_cache(get_genres())
-    fetch_media(popularity if popularity else 0)
-    if remove_non_ascii:
-        remove_non_ascii_media()
-    add_data()
-    if get_settings().app_environment == Environment.DEVELOPMENT:
-        # Is ran at startup in production
-        update_index()
-    init_meilisearch_indexing()
     await extract_unique_providers_to_cache()
-    remove_blacklisted_from_search()
+    if get_settings().app_environment == Environment.DEVELOPMENT:
+        # Is ran at startup in production
+        update_index()
+    index_meilisearch()
 
 
 @app.command()
