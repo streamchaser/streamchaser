@@ -177,9 +177,10 @@ def add_data():
                     media_data = executor.map(request_data, chunk)
 
                 for data in media_data:
-                    update_media_data_by_id(
-                        db=db, media_id=data.get("media_id"), data=data
-                    )
+                    if data:
+                        update_media_data_by_id(
+                            db=db, media_id=data.get("media_id"), data=data
+                        )
 
                 progress_bar.update(1)
     db.close()
