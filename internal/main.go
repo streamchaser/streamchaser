@@ -12,13 +12,16 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
+	"gorm.io/gorm/logger"
 )
 
 var TMDB_KEY = os.Getenv("TMDB_KEY")
 
 func main() {
 	dsn := "host=db user=postgres password=postgres dbname=streamchaser port=5432 sslmode=disable"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		panic("Could not connect to DB!")
 	}
@@ -73,14 +76,23 @@ func (e *Env) processIds(c *gin.Context) {
 	close(movieCh)
 	close(tvCh)
 
+	failedMedia := 0
 	// TODO: make popularity an optional query parameter and default to 0
 	for tv := range tvCh {
+		if tv.Id == -1 {
+			failedMedia++
+			continue
+		}
 		if tv.Popularity > 1 {
 			dbMedia = append(dbMedia, *tv.toMedia())
 		}
 	}
 	// TODO: make popularity an optional query parameter and default to 0
 	for movie := range movieCh {
+		if movie.Id == -1 {
+			failedMedia++
+			continue
+		}
 		if movie.Popularity > 1 {
 			dbMedia = append(dbMedia, *movie.toMedia())
 		}
@@ -90,7 +102,7 @@ func (e *Env) processIds(c *gin.Context) {
 		UpdateAll: true,
 	}).Create(&dbMedia)
 
-	c.JSON(http.StatusOK, gin.H{"info": fmt.Sprintf("Fetched and inserted %d media", len(dbMedia))})
+	c.JSON(http.StatusOK, gin.H{"info": fmt.Sprintf("Fetched and inserted %d media and skipped %d", len(dbMedia), failedMedia)})
 }
 
 func fetchMovie(id string, movieCh chan Movie) {
@@ -100,7 +112,7 @@ func fetchMovie(id string, movieCh chan Movie) {
 		),
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Ran into an issue while fetching the movie: ", id, err)
 	}
 
 	defer res.Body.Close()
@@ -108,7 +120,10 @@ func fetchMovie(id string, movieCh chan Movie) {
 	movie := Movie{}
 	errDecode := json.NewDecoder(res.Body).Decode(&movie)
 	if errDecode != nil {
-		log.Fatal(errDecode)
+		fmt.Println("Failed to decode movie:", id, errDecode)
+		// Adds a dummy movie that will be filtered out when exhasting the channel
+		movieCh <- Movie{Id: -1}
+		return
 	}
 
 	movieCh <- movie
@@ -121,7 +136,7 @@ func fetchTV(id string, TVCh chan TV) {
 		),
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Ran into an issue while fetching the tv-series: ", id, err)
 	}
 
 	defer res.Body.Close()
@@ -129,7 +144,10 @@ func fetchTV(id string, TVCh chan TV) {
 	tv := TV{}
 	errDecode := json.NewDecoder(res.Body).Decode(&tv)
 	if errDecode != nil {
-		log.Fatal(errDecode)
+		fmt.Println("Failed to decode tv-series: ", id, errDecode)
+		// Adds a dummy tv that will be filtered out when exhasting the channel
+		TVCh <- TV{Id: -1}
+		return
 	}
 
 	TVCh <- tv
