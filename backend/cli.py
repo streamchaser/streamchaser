@@ -1,5 +1,3 @@
-from typing import Optional
-
 import httpx
 import typer
 from app.api import fetch_changed_media_ids
@@ -50,6 +48,10 @@ def update_ids(ids: list[str]):
 
 @app.command()
 def index_meilisearch():
+    if get_settings().app_environment == Environment.DEVELOPMENT:
+        # Is ran at startup in production
+        update_index()
+
     country_codes = get_settings().supported_country_codes
 
     for country_code in tqdm(
@@ -60,14 +62,11 @@ def index_meilisearch():
 
 @app.command()
 def update_media(
-    chunk_size: int = 1000, first_time: bool = False, popularity: Optional[float] = 1
+    chunk_size: int = 1000, first_time: bool = False, popularity: float = 1
 ):
     """Sends media ids to our internal update-media endpoint in chunks"""
     if chunk_size > 2500:
         typer.confirm("Chunk size can be unstable if too high, continue?", abort=True)
-
-    if not first_time and popularity:
-        echo_warning("Using [--popularity] without [--first-time] has no effect!")
 
     movie_ids, tv_ids = (
         fetch_media_ids(popularity) if first_time else fetch_changed_media_ids()
@@ -84,6 +83,18 @@ def update_media(
                 desc=f"Updating {media[0]}",
             ):
                 client.post("http://internal:8888/update-media", json={"ids": id_chunk})
+
+
+@app.command()
+def remove_blacklisted_from_postgres():
+    """Deletes all the ids from blacklist.txt from Postgres, but not MeiliSearch"""
+    blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
+    db = database.SessionLocal()
+
+    for id in blacklisted_media:
+        delete_media_by_id(db, id)
+
+    db.close()
 
 
 @app.command()
@@ -124,13 +135,12 @@ async def genres_to_cache():
 
 @app.command()
 @coroutine
-async def full_setup(popularity: Optional[float], first_time: bool = False):
+async def full_setup(popularity: float = 1, first_time: bool = False):
     await insert_genres_to_cache(get_genres())
     update_media(chunk_size=1000, first_time=first_time, popularity=popularity)
+    # Removes before indexing MeiliSearch
+    remove_blacklisted_from_postgres()
     await extract_unique_providers_to_cache()
-    if get_settings().app_environment == Environment.DEVELOPMENT:
-        # Is ran at startup in production
-        update_index()
     index_meilisearch()
 
 
