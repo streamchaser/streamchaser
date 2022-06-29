@@ -10,7 +10,9 @@ from app.db import database
 from app.db.cache import redis
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
+from app.db.crud import get_all_media
 from app.db.crud import get_media_by_id
+from app.db.crud import get_recently_updated_media
 from app.db.database_service import extract_unique_providers_to_cache
 from app.db.database_service import index_media
 from app.db.database_service import insert_genres_to_cache
@@ -47,17 +49,24 @@ def update_ids(ids: list[str]):
 
 
 @app.command()
-def index_meilisearch():
+def index_meilisearch(first_time: bool = False):
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
         update_index()
+
+    db = database.SessionLocal()
+
+    if first_time:
+        db_media = get_all_media(db)
+    else:
+        db_media = get_recently_updated_media(db, hours=1)
 
     country_codes = get_settings().supported_country_codes
 
     for country_code in tqdm(
         country_codes, desc=f"Indexing {len(country_codes)} countries"
     ):
-        index_media(country_code)
+        index_media(country_code, db_media=db_media)
 
 
 @app.command()
@@ -91,7 +100,7 @@ def remove_blacklisted_from_postgres():
     blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
     db = database.SessionLocal()
 
-    for id in blacklisted_media:
+    for id in tqdm(blacklisted_media, desc="Deleting blacklisted media from psql"):
         delete_media_by_id(db, id)
 
     db.close()
@@ -161,7 +170,7 @@ async def full_setup(popularity: float = 1, first_time: bool = False):
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_postgres()
     await extract_unique_providers_to_cache()
-    index_meilisearch()
+    index_meilisearch(first_time=first_time)
 
 
 @app.command()
