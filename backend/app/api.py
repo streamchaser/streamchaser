@@ -83,7 +83,7 @@ def fetch_jsongz_files():
             day += 1
 
 
-def fetch_media_ids(popularity: float = 0) -> Tuple[list[str], list[str]]:
+def fetch_media_ids(popularity: float | None = 1) -> Tuple[list[str], list[str]]:
     """Fetches jsongz file from TMDB with all the relevant tv/movies"""
     fetch_jsongz_files()
 

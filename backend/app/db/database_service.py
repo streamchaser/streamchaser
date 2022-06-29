@@ -4,40 +4,11 @@ from app import schemas
 from app.config import get_settings
 from app.db import crud
 from app.db import database
-from app.db import models
 from app.db.cache import Genre
 from app.db.cache import redis
 from app.db.crud import get_all_media
 from app.db.search import client
-from app.util import unique_list
-from sqlalchemy.exc import IntegrityError
 from tqdm import tqdm
-
-
-def media_model_to_schema(media: models.Media) -> schemas.Media:
-    """Turns Media-model into a Media-schemas, and adds to Media table"""
-
-    return schemas.Media(
-        id=media.get("id"),
-        title=media.get("title"),
-        original_title=media.get("original_title"),
-        overview=media.get("overview"),
-        release_date=media.get("release_date"),
-        genres=media.get("genres"),
-        poster_path=media.get("poster_path"),
-        popularity=media.get("popularity"),
-    )
-
-
-def dump_media_to_db(db: database.SessionLocal, media: models.Media) -> None:
-    try:
-        db_media = crud.get_media_by_id(db=db, media_id=media.id)
-        if not db_media:
-            crud.create_media(db=db, media=media)
-    except IntegrityError:  # Still a bit unsure why this only happens sometimes
-        pass
-    finally:
-        db.close()
 
 
 async def insert_genres_to_cache(genres: dict) -> None:
@@ -58,9 +29,28 @@ async def insert_genres_to_cache(genres: dict) -> None:
     await redis.set("genres", json.dumps(fixed_genres))
 
 
-def index_media(country_code: str, media: list):
-    client.index(f"media_{country_code}").add_documents(
-        [
+# TODO: Only index the recently updated media(updated_at)
+def index_media(country_code: str):
+    db = database.SessionLocal()
+    db_media = get_all_media(db)
+
+    medias = []
+    for media in db_media:
+        combined_provider_names = []
+        combined_providers = []
+        if media.providers:
+            if media.providers.get(country_code):
+                for provider_type in ["flatrate", "free"]:
+                    if providers := media.providers.get(country_code).get(
+                        provider_type
+                    ):
+                        for provider in providers:
+                            combined_provider_names.append(
+                                provider.get("provider_name")
+                            )
+                            combined_providers.append(provider)
+
+        medias.append(
             schemas.Media(
                 id=media.id,
                 title=media.title,
@@ -70,64 +60,44 @@ def index_media(country_code: str, media: list):
                 genres=media.genres,
                 poster_path=media.poster_path,
                 popularity=media.popularity,
-                provider_names=[
-                    provider.get(country_code).get("provider_name")
-                    for provider in unique_list(
-                        media.flatrate_providers, media.free_providers
-                    )
-                    if provider.get(country_code)
-                ],
-                providers=[
-                    provider.get(country_code)
-                    for provider in unique_list(
-                        media.flatrate_providers, media.free_providers
-                    )
-                    if provider.get(country_code)
-                ],
+                provider_names=combined_provider_names,
+                providers=combined_providers,
             ).dict()
-            for media in media
-        ]
-    )
+        )
 
-
-def init_meilisearch_indexing():
-    """MeiliSearch indexing from Postgres DB"""
-    db = database.SessionLocal()
-    media: list = get_all_media(db)
-    country_codes = get_settings().supported_country_codes
-
-    for country_code in tqdm(
-        country_codes, desc=f"Indexing {len(country_codes)} countries"
-    ):
-        index_media(country_code, media)
+    client.index(f"media_{country_code}").add_documents(medias)
 
 
 async def extract_unique_providers_to_cache():
     db = database.SessionLocal()
-    media_list = crud.get_all_media(db=db)
+    db_media = get_all_media(db)
+
+    supported_countries = {x: set() for x in get_settings().supported_country_codes}
+
+    for media in db_media:
+        if media.providers:
+            filtered_countries = [
+                country
+                for country in list(media.providers.keys())
+                if country in supported_countries
+            ]
+            for country_code in filtered_countries:
+                for provider_type in ["flatrate", "free"]:
+                    if providers := media.providers.get(country_code).get(
+                        provider_type
+                    ):
+                        for provider in providers:
+                            supported_countries[country_code].add(
+                                provider["provider_name"]
+                            )
 
     for country_code in get_settings().supported_country_codes:
-        free_provider_set = {
-            provider.get(country_code).get("provider_name")
-            for media in media_list
-            for provider in media.free_providers
-            if provider.get(country_code)
-        }
-        flatrate_provider_set = {
-            provider.get(country_code).get("provider_name")
-            for media in media_list
-            for provider in media.flatrate_providers
-            if provider.get(country_code)
-        }
-        ordered_free_provider_list = sorted(free_provider_set)
-        ordered_flatrate_provider_list = sorted(flatrate_provider_set)
+        providers: set = supported_countries[country_code]
+        ordered_providers: list = sorted(providers)
 
         await redis.set(
-            f"{country_code}_free_providers", json.dumps(ordered_free_provider_list)
-        )
-        await redis.set(
-            f"{country_code}_flatrate_providers",
-            json.dumps(ordered_flatrate_provider_list),
+            f"{country_code}_providers",
+            json.dumps(ordered_providers),
         )
 
 
