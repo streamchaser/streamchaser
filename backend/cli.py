@@ -151,23 +151,25 @@ async def providers_to_cache():
 
 
 @app.command()
-def remove_and_blacklist(media_id: str):
-    try:
-        db = database.SessionLocal()
-        media = get_media_by_id(db=db, media_id=media_id)
-        if not media:
-            typer.echo(f"Cannot find media: {media_id}")
-            raise typer.Abort()
+def remove_media(media_id: str, blacklist: bool = True):
+    db = database.SessionLocal()
+    media = get_media_by_id(db=db, media_id=media_id)
+    if not media:
+        typer.echo(f"Cannot find media in db: {media_id}")
+        typer.confirm("Are you sure you want to continue?", abort=True)
 
+    else:
         typer.confirm(
             f"Are you sure you want to remove & blacklist [{media.title}]?", abort=True
         )
 
+    if media:
         typer.echo(f"Removing and blacklisting: {media_id}")
         delete_media_by_id(db=db, media_id=media_id)
         typer.echo("Removed from database ✓")
 
-        with open("../blacklist.txt", "a+") as file:
+    if blacklist:
+        with open("..t/blacklist.txt", "a+") as file:
             file.seek(0)
             if media_id in file.read().splitlines():
                 typer.echo(f"{media_id} already in blacklist")
@@ -175,16 +177,13 @@ def remove_and_blacklist(media_id: str):
                 file.write(f"{media_id}\n")
                 typer.echo("Added to blacklist ✓")
 
-        for country_code in supported_country_codes:
-            client.index(f"media_{country_code}").delete_document(media_id)
+    for country_code in supported_country_codes:
+        client.index(f"media_{country_code}").delete_document(media_id)
 
-        typer.echo("Meilisearch updated ✓")
-        typer.echo(f"{media_id} has succesfully been removed & blacklisted")
+    typer.echo("Meilisearch updated ✓")
+    typer.echo(f"{media_id} has succesfully been removed & blacklisted")
 
-    except Exception as e:
-        typer.echo(f"An error occoured. {e}")
-    finally:
-        db.close()
+    db.close()
 
 
 def echo_success(msg: str):
