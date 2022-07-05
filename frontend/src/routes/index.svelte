@@ -142,7 +142,7 @@
   <title>Streamchaser</title>
 </svelte:head>
 
-<div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-6">
+<div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-2 sm:px-6">
   <div class="form-control">
     <input
       id="input-field"
