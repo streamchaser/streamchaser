@@ -16,6 +16,16 @@
       <a class="btn btn-ghost btn-sm rounded-btn" href="/about"> About </a>
       <a class="btn btn-ghost btn-sm rounded-btn" href="/faq"> FAQ </a>
     </div>
+    <div class="dropdown dropdown-end">
+      <a
+        href="https://github.com/streamchaser/streamchaser"
+        class="btn btn-ghost btn-circle avatar"
+      >
+        <div class="w-8 rounded-full">
+          <img src="../../GitHub-Mark-Light-120px-plus.png" />
+        </div>
+      </a>
+    </div>
     <ThemeSelector />
   </div>
   <div class="sm:pl-4">
