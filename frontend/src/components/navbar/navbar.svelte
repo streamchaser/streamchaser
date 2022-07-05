@@ -2,9 +2,9 @@
 <script lang="ts">
   import { themeChange } from "theme-change"
   import { onMount } from "svelte"
-  import { currentCountry } from "../stores/country.js"
-  import { chosenTheme } from "../stores/theme.js"
-  import { COUNTRIES, THEMES } from "../variables.js"
+  import { currentCountry } from "../../stores/country.js"
+  import { chosenTheme } from "../../stores/theme.js"
+  import { COUNTRIES, THEMES } from "../../variables.js"
 
   let selectedCountry = $currentCountry
 
@@ -13,10 +13,10 @@
   })
 </script>
 
-<div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
+<div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16">
   <div class="flex-none sm:px-2 sm:mx-2">
     <a href="/">
-      <span class="text-lg font-bold"> streamchaser </span>
+      <img src="../../navbar_logo_with_image.png" class="w-48" />
     </a>
   </div>
   <div class="flex-1 px-2 mx-2" />
