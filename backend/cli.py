@@ -169,7 +169,7 @@ def remove_media(media_id: str, blacklist: bool = True):
         typer.echo("Removed from database ✓")
 
     if blacklist:
-        with open("..t/blacklist.txt", "a+") as file:
+        with open("../blacklist.txt", "a+") as file:
             file.seek(0)
             if media_id in file.read().splitlines():
                 typer.echo(f"{media_id} already in blacklist")
@@ -181,7 +181,6 @@ def remove_media(media_id: str, blacklist: bool = True):
         client.index(f"media_{country_code}").delete_document(media_id)
 
     typer.echo("Meilisearch updated ✓")
-    typer.echo(f"{media_id} has succesfully been removed & blacklisted")
 
     db.close()
 
