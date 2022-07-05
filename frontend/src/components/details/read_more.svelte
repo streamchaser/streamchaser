@@ -8,7 +8,6 @@
   <p>
     {mediaDescription.slice(0, currentDescriptionLength)}
     <a
-      href=""
       class="cursor-pointer text-blue-500"
       on:click={() => (currentDescriptionLength = mediaDescription.length)}
     >
