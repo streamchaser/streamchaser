@@ -6,8 +6,6 @@
   import { chosenTheme } from "../../stores/theme.js"
   import { COUNTRIES, THEMES } from "../../variables.js"
 
-  let selectedCountry = $currentCountry
-
   onMount(() => {
     themeChange(false)
   })
@@ -51,8 +49,7 @@
   </div>
   <div class="sm:pl-4">
     <select
-      bind:value={selectedCountry}
-      on:change={currentCountry.set(selectedCountry)}
+      bind:value={$currentCountry}
       class="select select-primary select-bordered max-sm"
     >
       <option disabled={true}>Choose country</option>
