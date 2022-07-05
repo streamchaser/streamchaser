@@ -8,7 +8,7 @@
   export let input: string
 </script>
 
-<div in:fade={{ duration: 200 }} class="flex flex-col mt-20">
+<div in:fade={{ duration: 500 }} class="flex flex-col mt-20">
   <div class="m-auto text-center max-w-md">
     <p>No results for:</p>
     <p><b><i>{input ? input : "<No input>"}</i></b></p>
