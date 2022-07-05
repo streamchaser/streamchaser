@@ -40,7 +40,7 @@
 </script>
 
 <div
-  class="flex items-center px-4 py-10 bg-cover card bg-base-100 shadow-md"
+  class="flex items-center px-4 py-10 bg-cover card bg-base-100 rounded-none sm:rounded-lg shadow-md"
   style="background-image: url(&quot;{IMG_W1280}{backdropPath}&quot;);e"
 >
   <div
