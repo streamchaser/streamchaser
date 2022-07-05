@@ -16,16 +16,6 @@
       <a class="btn btn-ghost btn-sm rounded-btn" href="/about"> About </a>
       <a class="btn btn-ghost btn-sm rounded-btn" href="/faq"> FAQ </a>
     </div>
-    <div class="dropdown dropdown-end">
-      <a
-        href="https://github.com/streamchaser/streamchaser"
-        class="btn btn-ghost btn-circle avatar"
-      >
-        <div class="w-8 rounded-full">
-          <img src="../../GitHub-Mark-Light-120px-plus.png" />
-        </div>
-      </a>
-    </div>
     <ThemeSelector />
     <div class="dropdown dropdown-end">
       <label tabindex="0" class="btn btn-ghost btn-sm rounded-btn text-xl">
@@ -52,6 +42,15 @@
         </li>
         <li><a href="/faq">FAQ</a></li>
         <li><a href="/about">About</a></li>
+        <li>
+          <a href="https://github.com/streamchaser/streamchaser">
+            <img
+              class="w-6"
+              src="../../GitHub-Mark-Light-120px-plus.png"
+              alt="GitHub link"
+            />
+          </a>
+        </li>
       </ul>
     </div>
   </div>

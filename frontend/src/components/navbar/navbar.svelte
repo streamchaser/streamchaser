@@ -22,7 +22,7 @@
         class="btn btn-ghost btn-circle avatar"
       >
         <div class="w-8 rounded-full">
-          <img src="../../GitHub-Mark-Light-120px-plus.png" />
+          <img src="../../GitHub-Mark-Light-120px-plus.png" alt="GitHub link" />
         </div>
       </a>
     </div>

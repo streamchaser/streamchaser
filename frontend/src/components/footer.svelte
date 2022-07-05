@@ -38,8 +38,8 @@
             src="https://www.justwatch.com/appassets/img/logo/JustWatch-logo-large.webp"
             alt="JustWatch logo"
           />
-        </a> &nbsp Streamchaser gets provider data from JustWatch but is not endored or certified
-        by JustWatch
+        </a> &nbsp Streamchaser gets provider data from JustWatch but is not endorsed or
+        certified by JustWatch
       </p>
     </div>
   </div>
