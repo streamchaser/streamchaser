@@ -1,14 +1,7 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
-  import { themeChange } from "theme-change"
-  import { onMount } from "svelte"
-  import { currentCountry } from "../../stores/country.js"
-  import { chosenTheme } from "../../stores/theme.js"
-  import { COUNTRIES, THEMES } from "../../variables.js"
-
-  onMount(() => {
-    themeChange(false)
-  })
+  import CountrySelector from "../country_selector.svelte"
+  import ThemeSelector from "../theme_selector.svelte"
 </script>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16">
@@ -23,29 +16,7 @@
       <a class="btn btn-ghost btn-sm rounded-btn" href="/about"> About </a>
       <a class="btn btn-ghost btn-sm rounded-btn" href="/faq"> FAQ </a>
     </div>
-    <div class="dropdown dropdown-end">
-      <div tabindex="0" class="btn btn-ghost btn-sm rounded-btn text-xl">🎨</div>
-      <ul
-        tabindex="0"
-        class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
-      >
-        {#each THEMES as theme}
-          <li
-            data-set-theme={theme.value}
-            data-act-class="ACTIVECLASS"
-            on:click={() => ($chosenTheme = theme.value)}
-          >
-            {#if $chosenTheme == theme.value}
-              <a class="bg-primary hover:bg-primary" href="">
-                <p class="text-primary-content">{theme.icon} {theme.value}</p>
-              </a>
-            {:else}
-              <a href="">{theme.icon} {theme.value}</a>
-            {/if}
-          </li>
-        {/each}
-      </ul>
-    </div>
+    <ThemeSelector />
     <div class="dropdown dropdown-end">
       <label tabindex="0" class="btn btn-ghost btn-sm rounded-btn text-xl">
         <svg
@@ -67,15 +38,7 @@
         class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
       >
         <li>
-          <select
-            bind:value={$currentCountry}
-            class="select select-primary select-bordered max-sm"
-          >
-            <option disabled={true}>Choose country</option>
-            {#each COUNTRIES as country}
-              <option value={country.value}>{country.icon} {country.name}</option>
-            {/each}
-          </select>
+          <CountrySelector />
         </li>
         <li><a href="/faq">FAQ</a></li>
         <li><a href="/about">About</a></li>
