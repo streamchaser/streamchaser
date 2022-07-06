@@ -151,7 +151,7 @@
       class="input input-bordered input-primary"
       bind:value={input}
       on:input={debounceInput}
-      autofocus
+      autofocus={viewPortWidth <= 640 ? false : true}
     />
   </div>
   <div

@@ -23,14 +23,12 @@
 
 {#if recommendations.length}
   <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
-  <div class="bg-neutral rounded-lg swiper-container">
+  <div class="bg-neutral sm:rounded-lg swiper-container">
     <Swiper
       spaceBetween={15}
       {slidesPerView}
       loop={true}
       freemode={true}
-      mousewheel={true}
-      modules={[FreeMode, Mousewheel]}
       touchEventsTarget={{ touchEventsTarget: "container" }}
     >
       {#each recommendations as recommendation}
@@ -43,7 +41,7 @@
             >
               <img
                 src="{IMG_W342}{recommendation.poster_path}"
-                class="h-80 rounded-lg hover:contrast-75 hover:ring-2 ring-primary"
+                class="h-72 w-full rounded-lg hover:contrast-75 hover:ring-2 ring-primary"
                 alt={recommendation.title}
               />
             </a>

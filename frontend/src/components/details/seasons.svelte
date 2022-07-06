@@ -17,16 +17,16 @@
 
 <div class="container px-2">
   <div class="text-3xl p-4 flex justify-center">Seasons</div>
-  <div class="tabs md:flex sm:justify-center m-mx">
+  <div class="tabs flex justify-center">
     {#each seasons as season, index}
       {#if index === currentTab}
-        <div class="tab tab-bordered tab-lg tab-active">
+        <div class="tab tab-bordered tab-active">
           {season.name === "Specials"
             ? "S"
             : season.name.substr(season.name.indexOf(" ") + 1)}
         </div>
       {:else}
-        <div on:click={() => changeActiveTab(index)} class="tab tab-lg tab-bordered">
+        <div on:click={() => changeActiveTab(index)} class="tab tab-bordered">
           {season.name === "Specials"
             ? "S"
             : season.name.substr(season.name.indexOf(" ") + 1)}
@@ -45,15 +45,15 @@
                 <figure>
                   <img
                     src="{IMG_W500}{season.poster_path}"
-                    class="object-fit rounded-lg"
+                    class="object-fit h-96"
                     alt={season.name}
                   />
                 </figure>
               {:else}
                 <figure>
                   <img
-                    src="../static/no_image_available.jpg"
-                    class="object-fit rounded-lg"
+                    src="../../no_image_available.jpg"
+                    class="object-fit h-72"
                     alt="No poster available"
                   />
                 </figure>
@@ -84,25 +84,25 @@
                 <figure>
                   <img
                     src="{IMG_W342}{season.poster_path}"
-                    class="object-fit rounded-lg h-96"
+                    class="object-fit h-96"
                     alt={season.name}
                   />
                 </figure>
               {:else}
                 <figure>
                   <img
-                    src="../static/no_image_available.jpg"
-                    class="object-fit rounded-lg h-86"
+                    src="../../no_image_available.jpg"
+                    class="object-fit h-72"
                     alt="No poster available"
                   />
                 </figure>
               {/if}
               <div class="mx-4 my-2">
+                <div class="card-title">{season.name}</div>
                 <div class="text-xl text-netural-content">
                   {season.air_date ? season.air_date.split("-")[0] : "No air date"}
                   | {season.episode_count} episodes
                 </div>
-                &nbsp
                 <div class="text-lg text-netural-content">
                   {season.air_date ? `Premiered on ${season.air_date}` : "Hasn't aired"}
                 </div>
