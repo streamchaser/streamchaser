@@ -45,7 +45,7 @@
                 <figure>
                   <img
                     src="{IMG_W500}{season.poster_path}"
-                    class="object-fit"
+                    class="object-fit h-96"
                     alt={season.name}
                   />
                 </figure>
@@ -53,7 +53,7 @@
                 <figure>
                   <img
                     src="../../no_image_available.jpg"
-                    class="object-fit rounded-lg"
+                    class="object-fit h-72"
                     alt="No poster available"
                   />
                 </figure>
@@ -92,7 +92,7 @@
                 <figure>
                   <img
                     src="../../no_image_available.jpg"
-                    class="object-fit rounded-lg h-86"
+                    class="object-fit h-72"
                     alt="No poster available"
                   />
                 </figure>
