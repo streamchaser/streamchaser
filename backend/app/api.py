@@ -168,7 +168,7 @@ async def get_person_from_id(person_id: int):
     # Here we make 3 api calls into 1 using the append_to_response header
     url = (
         f"{tmdb_url}person/{person_id}?api_key={tmdb_key}"
-        "&append_to_response=movie_credits,tv_credits"
+        "&append_to_response=movie_credits,tv_credits,external_ids"
     )
 
     async with httpx.AsyncClient() as client:
@@ -188,6 +188,7 @@ async def get_person_from_id(person_id: int):
             gender=person.get("gender"),
             movie_credits=person.get("movie_credits").get("cast"),
             tv_credits=person.get("tv_credits").get("cast"),
+            imdb_id=person.get("external_ids").get("imdb_id"),
         )
 
 
@@ -231,7 +232,7 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
     # Here we make 3 api calls into 1 using the append_to_response header
     url = (
         f"{tmdb_url}tv/{tv_id}?api_key={tmdb_key}"
-        "&append_to_response=watch/providers,recommendations,credits"
+        "&append_to_response=watch/providers,recommendations,credits,external_ids"
     )
 
     async with httpx.AsyncClient() as client:
@@ -259,6 +260,7 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
             seasons=tv.get("seasons"),
             backdrop_path=tv.get("backdrop_path"),
             cast=tv.get("credits").get("cast"),
+            imdb_id=tv.get("external_ids").get("imdb_id"),
         )
 
 

@@ -40,6 +40,7 @@ class TV(BaseModel):
     name: str
     first_air_date: str | None
     overview: str
+    imdb_id: str | None
     genres: list[str] | None
     episode_run_time: list[int]
     flatrate_providers: list[dict] | None
@@ -56,6 +57,7 @@ class TV(BaseModel):
 class Person(BaseModel):
     id: int
     name: str
+    imdb_id: str | None
     birthdate: str | None
     deathday: str | None
     biography: str
