@@ -160,7 +160,9 @@
 
              --borderRadius: var(--rounded-btn, .5rem);
              --background: {DT[`[data-theme=${$chosenTheme}]`]['base-100']};
-             --border: 1px solid {DT[`[data-theme=${$chosenTheme}]`]['primary']};
+             --border: 1px solid {DT[`[data-theme=${$chosenTheme}]`][
+      `${viewPortWidth <= 640 ? '' : 'primary'}`
+    ]};
              --borderFocusColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --borderHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
              --multiItemBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
