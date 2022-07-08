@@ -87,7 +87,7 @@ def update_media(
 
 @app.command()
 def remove_blacklisted_from_postgres():
-    """Deletes all the ids from blacklist.txt from Postgres, but not MeiliSearch"""
+    """Deletes all the ids from blacklist.txt from Postgres"""
     blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
     db = database.SessionLocal()
 
@@ -99,6 +99,7 @@ def remove_blacklisted_from_postgres():
 
 @app.command()
 def remove_blacklisted_from_search():
+    """Deletes all the ids from blacklist.txt from MeiliSearch"""
     blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
     for country_code in supported_country_codes:
         client.index(f"media_{country_code}").delete_documents(blacklisted_media)
@@ -116,6 +117,7 @@ def remove_non_ascii_media():
 
 @app.command()
 def remove_all_media():
+    """Deletes all media from Postgres"""
     db = database.SessionLocal()
     delete_all_media(db=db)
     typer.echo("All media has been deleted")
@@ -152,6 +154,7 @@ async def providers_to_cache():
 
 @app.command()
 def remove_media(media_id: str, blacklist: bool = True):
+    """Deletes a media from Postgres and MeiliSearch and adds it to the blacklist"""
     db = database.SessionLocal()
     media = get_media_by_id(db=db, media_id=media_id)
     if not media:
