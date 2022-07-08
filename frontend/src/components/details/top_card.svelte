@@ -71,7 +71,11 @@
       <div class="flex justify-between">
         <h2 class="card-title">{title}</h2>
         {#if imdbId}
-          <a href="https://www.imdb.com/title/{imdbId}">
+          <a
+            href="https://www.imdb.com/{imdbId.startsWith('tt')
+              ? 'title'
+              : 'name'}/{imdbId}"
+          >
             <div
               class="badge badge-secondary mx-2 transform
                                 hover:contrast-75"

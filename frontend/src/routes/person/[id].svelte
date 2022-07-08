@@ -51,7 +51,7 @@
     freeProviders={null}
     flatrateProviders={null}
     runtime={null}
-    imdbId={null}
+    imdbId={person.imdb_id}
     releaseDate={null}
   />
 
