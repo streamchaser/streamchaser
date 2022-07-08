@@ -87,7 +87,7 @@ def update_media(
 
 @app.command()
 def remove_blacklisted_from_postgres():
-    """Deletes all the ids from blacklist.txt from Postgres, but not MeiliSearch"""
+    """Deletes all the ids from blacklist.txt from Postgres"""
     blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
     db = database.SessionLocal()
 
@@ -99,6 +99,7 @@ def remove_blacklisted_from_postgres():
 
 @app.command()
 def remove_blacklisted_from_search():
+    """Deletes all the ids from blacklist.txt from MeiliSearch"""
     blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
     for country_code in supported_country_codes:
         client.index(f"media_{country_code}").delete_documents(blacklisted_media)
@@ -116,6 +117,7 @@ def remove_non_ascii_media():
 
 @app.command()
 def remove_all_media():
+    """Deletes all media from Postgres"""
     db = database.SessionLocal()
     delete_all_media(db=db)
     typer.echo("All media has been deleted")
@@ -169,22 +171,25 @@ async def providers_to_cache():
 
 
 @app.command()
-def remove_and_blacklist(media_id: str):
-    try:
-        db = database.SessionLocal()
-        media = get_media_by_id(db=db, media_id=media_id)
-        if not media:
-            typer.echo(f"Cannot find media: {media_id}")
-            raise typer.Abort()
+def remove_media(media_id: str, blacklist: bool = True):
+    """Deletes a media from Postgres and MeiliSearch and adds it to the blacklist"""
+    db = database.SessionLocal()
+    media = get_media_by_id(db=db, media_id=media_id)
+    if not media:
+        typer.echo(f"Cannot find media in db: {media_id}")
+        typer.confirm("Are you sure you want to continue?", abort=True)
 
+    else:
         typer.confirm(
             f"Are you sure you want to remove & blacklist [{media.title}]?", abort=True
         )
 
+    if media:
         typer.echo(f"Removing and blacklisting: {media_id}")
         delete_media_by_id(db=db, media_id=media_id)
         typer.echo("Removed from database ✓")
 
+    if blacklist:
         with open("../blacklist.txt", "a+") as file:
             file.seek(0)
             if media_id in file.read().splitlines():
@@ -193,16 +198,12 @@ def remove_and_blacklist(media_id: str):
                 file.write(f"{media_id}\n")
                 typer.echo("Added to blacklist ✓")
 
-        for country_code in supported_country_codes:
-            client.index(f"media_{country_code}").delete_document(media_id)
+    for country_code in supported_country_codes:
+        client.index(f"media_{country_code}").delete_document(media_id)
 
-        typer.echo("Meilisearch updated ✓")
-        typer.echo(f"{media_id} has succesfully been removed & blacklisted")
+    typer.echo("Meilisearch updated ✓")
 
-    except Exception as e:
-        typer.echo(f"An error occoured. {e}")
-    finally:
-        db.close()
+    db.close()
 
 
 def echo_success(msg: str):
