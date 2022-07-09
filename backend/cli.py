@@ -123,7 +123,25 @@ def remove_all_media():
 
 @app.command()
 @coroutine
+async def fill_redis():
+    """Adds genres and providers to Redis"""
+    await insert_genres_to_cache(get_genres())
+    await extract_unique_providers_to_cache()
+
+
+@app.command()
+@coroutine
+async def refresh_redis():
+    """Flushes everything then adds genres and providers to Redis"""
+    await redis.flushdb()
+    await insert_genres_to_cache(get_genres())
+    await extract_unique_providers_to_cache()
+
+
+@app.command()
+@coroutine
 async def flush_cache():
+    """Flushes everything from Redis"""
     await redis.flushdb()
 
 
