@@ -2,6 +2,7 @@ from app.config import Environment
 from app.config import get_settings
 from app.db.cache import redis
 from app.db.search import update_index
+from app.routers import country
 from app.routers import genres
 from app.routers import media
 from app.routers import movie
@@ -59,6 +60,7 @@ app.include_router(tv.router)
 app.include_router(movie.router)
 app.include_router(search.router)
 app.include_router(person.router)
+app.include_router(country.router)
 
 
 @app.get("/")
