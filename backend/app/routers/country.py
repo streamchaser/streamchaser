@@ -22,10 +22,10 @@ async def lookup_country(request: Request):
     async with httpx.AsyncClient(timeout=10) as client:
         match get_settings().app_environment:
             case Environment.DEVELOPMENT:
-                print("dev")
+                print("dev")  # TODO: Remove
                 res = await client.get(f"https://api.ipregistry.co/?key={key}")
             case Environment.PRODUCTION:
-                print("prod")
+                print("prod")  # TODO: Remove
                 res = await client.get(f"https://api.ipregistry.co/{ip}?key={key}")
             case Environment.TESTING:
                 raise NotImplementedError("Testing environment havn't been implemented")
