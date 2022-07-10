@@ -5,7 +5,7 @@ description = "Streamchaser's API"
 authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 SQLAlchemy = "^1.4.31"
 requests = "^2.27.1"
 meilisearch = "^0.18.0"
