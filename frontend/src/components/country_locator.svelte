@@ -1,10 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { patron } from "../stores/patron"
-  import { currentCountry } from "../stores/country"
+  import { currentCountry, confirmedCountry } from "../stores/country"
   import { PYTHON_API } from "../variables"
 
-  let hasError: boolean = false
+  let hasError = false
   let errorMsg: string
 
   const lookupCountry = async () => {
@@ -19,7 +18,7 @@
         }
 
         // Marks client as a regular user
-        $patron = true
+        $confirmedCountry = true
         $currentCountry = data
       })
       .catch(error => {
@@ -30,7 +29,7 @@
 
   onMount(async () => {
     // Will only look for the country of new users
-    if (!$patron) {
+    if (!$confirmedCountry) {
       await lookupCountry()
     }
   })
@@ -60,7 +59,7 @@
       </span>
     </div>
     <div class="flex-none">
-      <button on:click={() => (error = false)} class="btn btn-sm btn-primary"
+      <button on:click={() => (hasError = false)} class="btn btn-sm btn-primary"
         >Close</button
       >
     </div>
