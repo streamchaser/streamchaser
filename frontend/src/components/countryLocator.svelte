@@ -4,7 +4,8 @@
   import { currentCountry } from "../stores/country"
   import { PYTHON_API } from "../variables"
 
-  let error: boolean = true // TODO: Should default to false when done
+  let hasError: boolean = false
+  let errorMsg: string
 
   const lookupCountry = async () => {
     await fetch(`${PYTHON_API}/country`)
@@ -12,6 +13,7 @@
         const data = await response.json()
 
         if (!response.ok) {
+          hasError = true
           const error = (data && data.message) || response.status
           return Promise.reject(error)
         }
@@ -21,12 +23,8 @@
         $currentCountry = data
       })
       .catch(error => {
-        console.error(
-          "Error looking up country:",
-          error,
-          "defaulting to:",
-          $currentCountry
-        )
+        errorMsg = error
+        console.error(errorMsg)
       })
   }
 
@@ -38,7 +36,7 @@
   })
 </script>
 
-{#if error}
+{#if hasError}
   <div class="alert shadow-lg">
     <div>
       <svg
@@ -54,9 +52,12 @@
         /></svg
       >
       <span>
-        We were unable to locate your country and chose {$currentCountry}. You can
-        change the country manually in the top right menu.</span
-      >
+        {#if errorMsg}
+          {errorMsg}
+        {/if}
+        We have chosen {$currentCountry} for you. You can change it at any time in the top
+        right menu."
+      </span>
     </div>
     <div class="flex-none">
       <button on:click={() => (error = false)} class="btn btn-sm btn-primary"
@@ -66,10 +67,3 @@
   </div>
   <br />
 {/if}
-
-<!-- TODO: Remove when done debugging -->
-
-<button class="btn" on:click={lookupCountry}>Lookup country</button>
-
-<h1>Patron: {$patron}</h1>
-<h1>Current country: {$currentCountry}</h1>
