@@ -4,6 +4,9 @@
 
 # 🎬 streamchaser 🎬
 
+![Streamchaser logo with slogan]("./static/logo-slogan-verti.png)
+
+logo-slogan-verti.png
 Streamchaser seeks to simplify movie, series and documentary search located on streaming services by curating all of the content through a centralized entertainment technology platform.
 Streamchaser seeks to solve the issue where it appears, i.e. in front of the TV.
 Lastly, Streamchaser is founded on the basis of convenience, which means that no feature,
@@ -39,11 +42,11 @@ Here's how to get the application up and running for development
 - Got **Docker** installed
 
 1. Clone the repo `git clone https://github.com/streamchaser/streamchaser.git`
-2. Add `.env` in root, backend and frontend
-   - Backend: `TMDB_KEY`
-   - Frontend: `VITE_API_PATH`(path of the backend), `VITE_IPINFO_KEY`
+2. Add `.env` in root and frontend
+   - Root: `TMDB_KEY`
+   - Frontend: `VITE_API_PATH`(path of the backend)
 3. Build the container `docker-compose up --build -d`
-4. Run `docker-compose exec backend python3 cli.py full-setup <popularity>`
+4. Run `docker-compose exec backend python3 cli.py full-setup --first-time --popularity <1-1000>`(the more the less amount of media)
 5. Go to http://localhost/ and search
 
 ## CLI
