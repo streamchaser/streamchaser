@@ -31,12 +31,16 @@ func main() {
 
 	if environment == PRODUCTION {
 		origins = []string{fmt.Sprintf("http://%s", streamchaserUrl),
-			fmt.Sprintf("https://%s", streamchaserUrl)}
+			fmt.Sprintf("https://%s", streamchaserUrl),
+			fmt.Sprintf("https://streamchaser.vercel.app")}
 	} else {
 		origins = []string{"*"}
 	}
 
 	app := gin.Default()
+
+	// FIXME: The regex isn't working
+	// The streamchaser-xxx-vercel.app path isn't being let through
 	app.Use(func(c *gin.Context) {
 		originRegex, err := regexp.Compile("https://streamchaser.*.vercel.app")
 		if err != nil {
