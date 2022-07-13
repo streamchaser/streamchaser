@@ -10,6 +10,23 @@ router = APIRouter(
 )
 
 
+def filter_from_queries(
+    providers: list | None = None, genres: list | None = None, types: list | None = None
+) -> list:
+    filter = []
+
+    if providers:
+        filter.append([f'provider_names="{provider}"' for provider in providers])
+
+    if genres:
+        filter = filter + [f'genres="{genre}"' for genre in genres]
+
+    if types:
+        filter.append([f'type="{type}"' for type in types])
+
+    return filter
+
+
 @router.get("/{user_input}")
 async def search(
     user_input: str,
@@ -17,6 +34,7 @@ async def search(
     c: str = "DK",
     g: list[str] | None = Query(None),
     p: list[str] | None = Query(None),
+    t: list[str] | None = Query(None),
 ):
     """
     # Our endpoint for the MeiliSearch API
@@ -25,39 +43,15 @@ async def search(
     * **c**: Country code(defaulting to Denmark)
     * **g**: Optional genre query
     * **p**: Optional provider query
+    * **t**: Optional type query
     """
-    genres = g
-    providers = p
     country_code = c.upper()
 
-    if genres and providers:
-        genre_list: list[str] = [f'genres="{genre}"' for genre in genres]
-        provider_list: list[list[str]] = [
-            [f'provider_names="{providers}"' for providers in providers]
-        ]
-        return await async_client.index(f"media_{country_code}").search(
-            user_input,
-            limit=limit,
-            sort=["popularity:desc"],
-            # This is a mix of AND and OR logic
-            filter=genre_list + provider_list,
-        )
-    if genres:
-        return await async_client.index(f"media_{country_code}").search(
-            user_input,
-            limit=limit,
-            sort=["popularity:desc"],
-            # This is using AND logic
-            filter=[f'genres="{genre}"' for genre in genres],
-        )
-    if providers:
-        return await async_client.index(f"media_{country_code}").search(
-            user_input,
-            limit=limit,
-            sort=["popularity:desc"],
-            # This is using OR logic
-            filter=[[f'provider_names="{providers}"' for providers in providers]],
-        )
+    filter = filter_from_queries(providers=p, genres=g, types=t)
+
     return await async_client.index(f"media_{country_code}").search(
-        user_input, limit=limit, sort=["popularity:desc"]
+        user_input,
+        limit=limit,
+        sort=["popularity:desc"],
+        filter=filter,
     )
