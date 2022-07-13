@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 class Media(BaseModel):
     id: str
+    type: str
     title: str | None
     original_title: str
     overview: str | None

@@ -53,6 +53,7 @@ def index_media(country_code: str):
         medias.append(
             schemas.Media(
                 id=media.id,
+                type="movie" if media.id[0] == "m" else "tv",
                 title=media.title,
                 original_title=media.original_title,
                 overview=media.overview,
