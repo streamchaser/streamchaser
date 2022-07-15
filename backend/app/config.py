@@ -55,6 +55,7 @@ class Settings(BaseSettings):
         "CH",
         "GB",
         "US",
+        "TEST",  # Used for testing
     ]
 
     # Postgres setting
