@@ -2,6 +2,7 @@
   import { onMount } from "svelte"
   import { fade } from "svelte/transition"
   import type { Genre } from "../types"
+  import { filters } from "../stores/filters.js"
 
   export let currentProviders: string[]
   export let currentGenres: Genre[]
@@ -26,6 +27,17 @@
       {/each}
       <p class="text-xs pt-1">
         <i>Consider adding more providers or removing all</i>
+      </p>
+    {/if}
+    {#if !$filters.tvChecked || !$filters.movieChecked}
+      <p class="pt-2">With filter:</p>
+      {#if !$filters.movieChecked}
+        <div class="badge mx-1">No Movies</div>
+      {:else}
+        <div class="badge mx-1">No TV Shows</div>
+      {/if}
+      <p class="text-xs pt-1">
+        <i>Consider removing the filter</i>
       </p>
     {/if}
   </div>

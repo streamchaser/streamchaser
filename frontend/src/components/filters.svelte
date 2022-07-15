@@ -2,6 +2,14 @@
   export let movieChecked = true
   export let tvChecked = true
   export let search
+
+  // If the cookie should break and set both to false
+  $: {
+    if (!movieChecked && !tvChecked) {
+      movieChecked = true
+      tvChecked = true
+    }
+  }
 </script>
 
 <div class="dropdown dropdown-end">
@@ -59,7 +67,7 @@
           />
         </label>
         <label class="label cursor-pointer">
-          <span class="label-text">TV shows</span>
+          <span class="label-text">TV Shows</span>
           <input
             type="checkbox"
             class="checkbox"
