@@ -2,27 +2,14 @@
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/streamchaser/streamchaser/master.svg)](https://results.pre-commit.ci/latest/github/streamchaser/streamchaser/master)
 [![CodeFactor status](https://www.codefactor.io/repository/github/streamchaser/streamchaser/badge)](https://www.codefactor.io/repository/github/streamchaser/streamchaser)
 
-# 🎬 streamchaser 🎬
+![Streamchaser logo with slogan](static/logo-slogan-hori-w.svg)
 
 Streamchaser seeks to simplify movie, series and documentary search located on streaming services by curating all of the content through a centralized entertainment technology platform.
 Streamchaser seeks to solve the issue where it appears, i.e. in front of the TV.
 Lastly, Streamchaser is founded on the basis of convenience, which means that no feature,
 no profit margin and no personal gains should ever compromise the convenience and ease of use for the customer.
 
-## Credits
-
-Built using:
-
-- [FastAPI](https://github.com/tiangolo/fastapi)
-- [MeiliSearch](https://github.com/meilisearch/MeiliSearch)
-- [Svelte](https://github.com/sveltejs/svelte)
-- [Svelte-kit](https://kit.svelte.dev)
-- [PostgreSQL](https://github.com/postgres/postgres)
-- [Docker](https://github.com/docker)
-- [Tailwind CSS](https://tailwindcss.com)
-- [DaisyUI](https://daisyui.com)
-
-Authors 👷:
+## Core contributers 👷
 
 - [AndreasPB](https://github.com/AndreasPB)
 - [Pankai222](https://github.com/Pankai222)
@@ -39,88 +26,99 @@ Here's how to get the application up and running for development
 - Got **Docker** installed
 
 1. Clone the repo `git clone https://github.com/streamchaser/streamchaser.git`
-2. Add `.env` in root, backend and frontend
-   - Backend: `TMDB_KEY`
-   - Frontend: `VITE_API_PATH`(path of the backend), `VITE_IPINFO_KEY`
-3. Build the container `docker-compose up --build -d`
-4. Run `docker-compose exec backend python3 cli.py full-setup <popularity>`
-5. Go to http://localhost/ and search
+2. Add `.env` in root and frontend/
 
-## CLI
+- Root:
+  - `HOST_NAME=localhost`
+  - `APP_ENVIRONMENT=dev`
+  - `TMDB_KEY=<get one from https://www.themoviedb.org/signup>`
+- Frontend:
+  - `VITE_API_PATH=http://api.localhost`
+  - `VITE_GO_API_PATH=http://apiv2.localhost`
+
+3. Build the container `docker-compose up --build -d`
+4. Run `docker-compose exec backend python3 cli.py full-setup --first-time --popularity <1-1000>`(the more the less amount of media)
+5. Go to http://localhost/ and search
+6. Optional: `docker-compose stop frontend && cd frontend && yarn dev` and go to http://localhost:3000 - Our workaround for hot-reloading
+
+# CLI
 
 To use the cronjob use the following in the terminal:
 `docker-compose exec backend python3 cli.py <command> <parameter>`
 
-List of commands:
+## The most used commands:
 
-- `fetch-jsongz` Downloads the files that contains all media we iterate over
-- `add-data` - Adds/updates the data on the existing media from the DB
-- `cleanup-genres` - Fixes genres with spaces for the frontend
-- `fetch-media` - Runs `fetch-jsongz` and fetches media from TMDB and adds to the DB
-- `full-setup` - The complete setup
-- `index-meilisearch` - Forces meilisearch to re-index
-- `remove-all-media` - Empties postgres for media
-- `remove-and-blacklist` - Removes an element from the databases and blacklists it
-- `remove-blacklisted-from-search` - Removes all blacklisted IDs
-- `remove-non-ascii-media` - Removes all non-ascii titles
+### `full-setup`
 
-So as an example to update the media list with all media with a popularity over 5:
-`docker-compose exec backend python3 cli.py add-data 5`
+> The full setup with everything. Grabs the newest zipped file and populates PostgreSQL, then indexes MeiliSearch and redis with all the data used by the frontend.
 
-After updating the database you need to index MeiliSearch:
-`docker-compose exec backend python3 cli.py index-meilisearch`
+Options:
 
-_To do a full setup use the following command:_
-`docker-compose exec backend python3 cli.py full-setup <popularity>`
-Optional: Add `--remove-ascii` to the end if you want to prune non-ascii titles.
+- `--popularity FLOAT` [default: 1]
+- `--first-time / --no-first-time` [default: no-first-time]
 
-This will fetch media within the popularity limit, and index MeiliSearch.
-Popularity defaults to 0, and will fetch all media if that is the case.
+### `update-ids`
 
-To drop the media database:
-`docker-compose exec backend python3 cli.py remove-all-media`
+> Takes IDs in the format of m123 and t123 for movies and tv-series respectively. Is able to take multiple IDs seperated by spaces.
 
-To get help with the commands type:
-`docker-compose exec backend python3 cli.py --help`
-or
-`docker-compose exec backend python3 cli.py <command> --help`
+Arguments:
 
-## Postgres CLI
+- IDS... [required]
 
-### How to drop a table
+### `update-media`
 
-Make sure the db container is running and enter PSQL
+> Sends media ids to our internal update-media endpoint in chunks. --first-time uses ids from a zipped file, --no-first-time uses recently changed media.
 
-- `docker ps`
-- `docker-compose exec db psql -U postgres`
+Options:
 
-Then from PSQL
+- `--chunk-size INTEGER` [default: 1000]
+- `--first-time / --no-first-time` [default: no-first-time]
+- `--popularity FLOAT` [default: 1]
 
-- `\c streamchaser`
-- `drop table media;`
+### `index-meilisearch`
 
-### Extra commands
+> Makes MeiliSearch index all of the media in PostgreSQL
 
-- `\l` lists all databases
-- `\dt` lists all data tables
+Takes no arguments
 
-## Tips & tricks
+## Use --help
 
-Some things that might make life easier
+To get the full list of commands type:
 
-### Git
+- `docker-compose exec backend python3 cli.py --help`
 
-- Make a pushf alias for `git push --force-with-lease`, since writing it all out gets annoying
-  `git config --global alias.pushf "push --force-with-lease"`
+or to get help with a command:
 
-### Docker
+- `docker-compose exec backend python3 cli.py <command> --help`
 
-- You only have to add `--build` the first time, or when you make changes to the docker setup
-- Add `-d` to `docker-compose up -d` to detach the logs from the terminal
+# Our tech stack
 
-### How to run tests
+![Streamchaser Tech Stack](static/streamchaser-tech-stack.png)
 
-To run tests locally:
+# Credits
 
-- `docker-compose run backend python -m pytest -v ../`
-- `docker-compose exec backend python -m pytest -v ../`
+**Thanks to all the great frameworks and tools!**
+
+Frontend:
+
+- [Svelte](https://github.com/sveltejs/svelte)
+- [Svelte-kit](https://kit.svelte.dev)
+- [Tailwind CSS](https://tailwindcss.com)
+- [DaisyUI](https://daisyui.com)
+
+Backend:
+
+- [FastAPI](https://github.com/tiangolo/fastapi)
+- [SQLAlchemy](https://www.sqlalchemy.org)
+- [Gin Gonic](https://gin-gonic.com)
+- [GORM](https://gorm.io)
+
+Databases:
+
+- [MeiliSearch](https://github.com/meilisearch/MeiliSearch)
+- [PostgreSQL](https://github.com/postgres/postgres)
+- [Redis](https://redis.com)
+
+DevOps:
+
+- [Docker](https://github.com/docker)
