@@ -91,7 +91,11 @@ or to get help with a command:
 
 - `docker-compose exec backend python3 cli.py <command> --help`
 
-## Credits
+# Our tech stack
+
+![Streamchaser Tech Stack](static/streamchaser-tech-stack.png)
+
+# Credits
 
 **Thanks to all the great frameworks and tools!**
 
