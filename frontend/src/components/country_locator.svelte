@@ -7,7 +7,7 @@
   let errorMsg: string
 
   const lookupCountry = async () => {
-    await fetch(`${PYTHON_API}/country`)
+    await fetch(`${PYTHON_API}/country/`)
       .then(async (response: Response) => {
         const data = await response.json()
 
@@ -55,7 +55,7 @@
           {errorMsg}
         {/if}
         We have chosen {$currentCountry} for you. You can change it at any time in the top
-        right menu."
+        right menu.
       </span>
     </div>
     <div class="flex-none">

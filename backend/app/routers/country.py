@@ -2,9 +2,8 @@ import httpx
 from app.config import Environment
 from app.config import get_settings
 from fastapi import APIRouter
-from fastapi import Request
 from fastapi.responses import JSONResponse
-
+from starlette_context import context
 
 router = APIRouter(
     prefix="/country",
@@ -14,10 +13,10 @@ router = APIRouter(
 
 
 @router.get("/")
-async def lookup_country(request: Request):
+async def lookup_country():
     """Uses the client's ip-address to return their country code"""
-    ip = request.client.host
     key = get_settings().ipregistry_key
+    ip = context.data["X-Forwarded-For"]
 
     async with httpx.AsyncClient(timeout=10) as client:
         match get_settings().app_environment:
