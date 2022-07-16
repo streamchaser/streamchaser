@@ -1,3 +1,5 @@
+from enum import Enum
+
 from app.db.search import async_client
 from fastapi import APIRouter
 from fastapi import Path
@@ -9,6 +11,29 @@ router = APIRouter(
     tags=["search"],
     responses={404: {"description": "Not found"}},
 )
+
+
+class Order(Enum):
+    ASCENDING = "asc"
+    DESCENDING = "desc"
+
+
+def sort_from_queries(release_date: Order | None, popularity: Order | None) -> list:
+    sort = []
+
+    match release_date:
+        case Order.ASCENDING:
+            sort.append("release_date:asc")
+        case Order.DESCENDING:
+            sort.append("release_date:desc")
+
+    match popularity:
+        case Order.ASCENDING:
+            sort.append("popularity:asc")
+        case Order.DESCENDING:
+            sort.append("popularity:desc")
+
+    return sort
 
 
 def filter_from_queries(
@@ -45,17 +70,17 @@ async def search(
     g: list[str] | None = Query(None, description="Genres"),
     p: list[str] | None = Query(None, description="Providers"),
     t: list[str] | None = Query(None, description="Content type"),
+    release_date: Order | None = Query(None, description="Release date sorting"),
+    popularity: Order | None = Query(None, description="Popularity sorting"),
 ):
     """
     # Our endpoint for the MeiliSearch API
-    * **user_input**: Input to lookup media
-    * **limit**: Amount of results to return
-    * **c**: Country code(defaulting to Denmark)
-    * **g**: Optional genre query
-    * **p**: Optional provider query
-    * **t**: Optional type query
+    This the main driver of the index page
     """
+
     country_code = c.upper()
+
+    sort = sort_from_queries(release_date=release_date, popularity=popularity)
 
     filter = filter_from_queries(
         providers=p, genres=g, types=t, only_providers=only_providers
@@ -64,6 +89,6 @@ async def search(
     return await async_client.index(f"media_{country_code}").search(
         user_input,
         limit=limit,
-        sort=["popularity:desc"],
+        sort=sort,
         filter=filter,
     )
