@@ -4,7 +4,7 @@ name: CI
 on: push
 
 jobs:
-  build-and-test:
+  backend-build-and-test:
     runs-on: ubuntu-latest
     steps:
       # https://github.com/actions/checkout
