@@ -1,5 +1,6 @@
 from app.db.search import async_client
 from fastapi import APIRouter
+from fastapi import Path
 from fastapi import Query
 
 
@@ -11,12 +12,18 @@ router = APIRouter(
 
 
 def filter_from_queries(
-    providers: list | None = None, genres: list | None = None, types: list | None = None
+    providers: list | None = None,
+    genres: list | None = None,
+    types: list | None = None,
+    only_providers: bool = False,
 ) -> list:
     filter = []
 
     if providers:
         filter.append([f'provider_names="{provider}"' for provider in providers])
+    else:
+        if only_providers:
+            filter.append(['provider_names!=""'])
 
     if genres:
         filter = filter + [f'genres="{genre}"' for genre in genres]
@@ -29,12 +36,15 @@ def filter_from_queries(
 
 @router.get("/{user_input}")
 async def search(
-    user_input: str,
-    limit: int = 20,
-    c: str = "DK",
-    g: list[str] | None = Query(None),
-    p: list[str] | None = Query(None),
-    t: list[str] | None = Query(None),
+    user_input: str = Path("*", description="The main query string"),
+    limit: int = Query(
+        20, description="Control the maximum amount of shown search results"
+    ),
+    c: str = Query("DK", description="Country code"),
+    only_providers: bool = Query(False, description="Only media with providers"),
+    g: list[str] | None = Query(None, description="Genres"),
+    p: list[str] | None = Query(None, description="Providers"),
+    t: list[str] | None = Query(None, description="Content type"),
 ):
     """
     # Our endpoint for the MeiliSearch API
@@ -47,7 +57,9 @@ async def search(
     """
     country_code = c.upper()
 
-    filter = filter_from_queries(providers=p, genres=g, types=t)
+    filter = filter_from_queries(
+        providers=p, genres=g, types=t, only_providers=only_providers
+    )
 
     return await async_client.index(f"media_{country_code}").search(
         user_input,
