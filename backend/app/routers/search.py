@@ -1,5 +1,6 @@
 from app.db.search import async_client
 from fastapi import APIRouter
+from fastapi import Path
 from fastapi import Query
 
 
@@ -35,9 +36,11 @@ def filter_from_queries(
 
 @router.get("/{user_input}")
 async def search(
-    user_input: str,
-    limit: int = 20,
-    c: str = "DK",
+    user_input: str = Path("*", description="The main query string"),
+    limit: int = Query(
+        20, description="Control the maximum amount of shown search results"
+    ),
+    c: str = Query("DK", description="Country code"),
     only_providers: bool = Query(False, description="Only media with providers"),
     g: list[str] | None = Query(None, description="Genres"),
     p: list[str] | None = Query(None, description="Providers"),
