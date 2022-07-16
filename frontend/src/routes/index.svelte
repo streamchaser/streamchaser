@@ -3,11 +3,13 @@
   import { GO_API, PYTHON_API } from "../variables.js"
   import Select from "svelte-select"
   import MediaSearch from "../components/media_search.svelte"
+  import Filters from "../components/filters.svelte"
   import { currentCountry } from "../stores/country.js"
   import { currentProviders } from "../stores/providers.js"
   import { currentGenres } from "../stores/genres"
   import { inputQuery } from "../stores/input"
   import { chosenTheme } from "../stores/theme.js"
+  import { filters } from "../stores/filters.js"
   import { onMount } from "svelte"
   import DT from "daisyui/colors/themes.js"
   import type { Genre, Media, Meilisearch } from "../types"
@@ -73,6 +75,12 @@
       query += `&p=${$currentProviders[i].value}`
     }
 
+    if ($filters.tvChecked && $filters.movieChecked) {
+    } else if ($filters.movieChecked) {
+      query += `&t=movie`
+    } else {
+      query += `&t=tv`
+    }
     // Searches for all(*) if empty input
     const res =
       input !== ""
@@ -143,15 +151,20 @@
 </svelte:head>
 
 <div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-2 sm:px-6">
-  <div class="form-control">
+  <div class="form-control flex flex-row">
     <input
       id="input-field"
       type="text"
       placeholder="Search in {$currentCountry}"
-      class="input input-bordered input-primary"
+      class="input input-bordered input-primary grow"
       bind:value={input}
       on:input={debounceInput}
       autofocus={viewPortWidth <= 640 ? false : true}
+    />
+    <Filters
+      bind:movieChecked={$filters.movieChecked}
+      bind:tvChecked={$filters.tvChecked}
+      {search}
     />
   </div>
   <div
