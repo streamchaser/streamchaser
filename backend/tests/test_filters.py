@@ -12,6 +12,28 @@ class TestFilters:
         assert search_results["nbHits"] == len(test_data)
 
 
+class TestProviderFilter:
+    def test_filter_only_providers(self):
+        """Should only consist of hits with providers"""
+
+        search_results = client.index("media_TEST").search(
+            "*", {"filter": [['provider_names != ""']]}
+        )
+
+        for provider_name in [hit["provider_names"] for hit in search_results["hits"]]:
+            assert provider_name != ""
+
+    def test_filter_no_providers(self):
+        """Should only consist of hits without providers"""
+
+        search_results = client.index("media_TEST").search(
+            "*", {"filter": [['provider_names = ""']]}
+        )
+
+        for provider_name in [hit["provider_names"] for hit in search_results["hits"]]:
+            assert provider_name == ""
+
+
 class TestTypeFilter:
     def test_type_movie(self):
         search_results = client.index("media_TEST").search(
