@@ -103,29 +103,16 @@
         </label>
       </div>
       <div class="divider" />
-      <h3 class="text-neutral-content"><b> No Providers</b></h3>
+      <h3 class="text-neutral-content"><b>No providers</b></h3>
       <div class="form-control">
         <label class="label cursor-pointer">
-          <span class="label-text">Show</span>
+          <span class="label-text"
+            >{$filters.showNoProviders ? "Showing" : "Hiding"}</span
+          >
           <input
-            type="radio"
-            name="radio-6"
-            class="radio checked:bg-primary"
-            bind:group={$filters.showNoProviders}
-            value={true}
-            on:change={() => search()}
-          />
-        </label>
-      </div>
-      <div class="form-control">
-        <label class="label cursor-pointer">
-          <span class="label-text">Hide</span>
-          <input
-            type="radio"
-            name="radio-6"
-            class="radio checked:bg-primary"
-            bind:group={$filters.showNoProviders}
-            value={false}
+            type="checkbox"
+            class="toggle"
+            bind:checked={$filters.showNoProviders}
             on:change={() => search()}
           />
         </label>
