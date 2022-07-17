@@ -13,14 +13,6 @@
       return
     isDropdownOpen = false
   }
-
-  // If the cookie should break and set both to false
-  $: {
-    if (!$filters.movieChecked && !$filters.tvChecked) {
-      $filters.movieChecked = true
-      $filters.tvChecked = true
-    }
-  }
 </script>
 
 <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
@@ -85,20 +77,28 @@
           <span class="label-text">Movies</span>
           <input
             type="checkbox"
-            class="checkbox"
+            class="toggle"
             bind:checked={$filters.movieChecked}
-            disabled={!$filters.tvChecked}
-            on:change={() => search()}
+            on:change={() => {
+              if (!$filters.movieChecked) {
+                $filters.tvChecked = true
+              }
+              search()
+            }}
           />
         </label>
         <label class="label cursor-pointer">
           <span class="label-text">TV Shows</span>
           <input
             type="checkbox"
-            class="checkbox"
+            class="toggle"
             bind:checked={$filters.tvChecked}
-            disabled={!$filters.movieChecked}
-            on:change={() => search()}
+            on:change={() => {
+              if (!$filters.tvChecked) {
+                $filters.movieChecked = true
+              }
+              search()
+            }}
           />
         </label>
       </div>

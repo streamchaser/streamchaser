@@ -29,7 +29,7 @@
         <i>Consider adding more providers or removing all</i>
       </p>
     {/if}
-    {#if !$filters.tvChecked || !$filters.movieChecked || !$filters.showNoProviders}
+    {#if Object.values($filters).includes(false)}
       <p class="pt-2">With filter(s):</p>
       {#if !$filters.movieChecked}
         <div class="badge mx-1">No Movies</div>
