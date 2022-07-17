@@ -3,7 +3,7 @@
 
   export let search: () => void
   let isDropdownOpen = false
-  $: filterAmount = Object.values($filters).filter(item => item === false).length
+  $: filterAmount = Object.values($filters).filter(v => v === false).length
 
   const handleDropdownClick = () => {
     isDropdownOpen = !isDropdownOpen
@@ -126,7 +126,7 @@
         <button
           class="btn btn-xs btn-primary"
           on:click={() => {
-            Object.keys($filters).forEach(v => ($filters[v] = true))
+            Object.keys($filters).forEach(k => ($filters[k] = true))
             search()
           }}>Clear</button
         >
