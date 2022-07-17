@@ -18,7 +18,10 @@
 
 <div class="indicator">
   {#if filterAmount}
-    <span class="indicator-item badge badge-secondary">{filterAmount}</span>
+    <span
+      class="indicator-item indicator-top sm:indicator-end indicator-center badge badge-secondary"
+      >{filterAmount}</span
+    >
   {/if}
   <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
     <label tabindex="0" class="btn btn-primary ml-2" on:click={handleDropdownClick}>
