@@ -1,7 +1,7 @@
 <script lang="ts">
   import { filters } from "../stores/filters.js"
 
-  export let search
+  export let search: () => void
   let isDropdownOpen = false
 
   const handleDropdownClick = () => {
