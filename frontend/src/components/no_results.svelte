@@ -29,15 +29,19 @@
         <i>Consider adding more providers or removing all</i>
       </p>
     {/if}
-    {#if !$filters.tvChecked || !$filters.movieChecked}
-      <p class="pt-2">With filter:</p>
+    {#if !$filters.tvChecked || !$filters.movieChecked || !$filters.showNoProviders}
+      <p class="pt-2">With filter(s):</p>
       {#if !$filters.movieChecked}
         <div class="badge mx-1">No Movies</div>
-      {:else}
+      {/if}
+      {#if !$filters.tvChecked}
         <div class="badge mx-1">No TV Shows</div>
       {/if}
+      {#if !$filters.showNoProviders}
+        <div class="badge mx-1">Hide no providers</div>
+      {/if}
       <p class="text-xs pt-1">
-        <i>Consider removing the filter</i>
+        <i>Consider removing the filter(s)</i>
       </p>
     {/if}
   </div>
