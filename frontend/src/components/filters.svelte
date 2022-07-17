@@ -122,6 +122,14 @@
             />
           </label>
         </div>
+        <br />
+        <button
+          class="btn btn-xs btn-primary"
+          on:click={() => {
+            Object.keys($filters).forEach(v => ($filters[v] = true))
+            search()
+          }}>Clear</button
+        >
       </div>
     </div>
   </div>
