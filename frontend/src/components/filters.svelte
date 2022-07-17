@@ -1,8 +1,7 @@
 <script lang="ts">
-  export let movieChecked = true
-  export let tvChecked = true
-  export let search
+  import { filters } from "../stores/filters.js"
 
+  export let search
   let isDropdownOpen = false
 
   const handleDropdownClick = () => {
@@ -17,9 +16,9 @@
 
   // If the cookie should break and set both to false
   $: {
-    if (!movieChecked && !tvChecked) {
-      movieChecked = true
-      tvChecked = true
+    if (!$filters.movieChecked && !$filters.tvChecked) {
+      $filters.movieChecked = true
+      $filters.tvChecked = true
     }
   }
 </script>
@@ -87,8 +86,8 @@
           <input
             type="checkbox"
             class="checkbox"
-            bind:checked={movieChecked}
-            disabled={!tvChecked}
+            bind:checked={$filters.movieChecked}
+            disabled={!$filters.tvChecked}
             on:change={() => search()}
           />
         </label>
@@ -97,8 +96,36 @@
           <input
             type="checkbox"
             class="checkbox"
-            bind:checked={tvChecked}
-            disabled={!movieChecked}
+            bind:checked={$filters.tvChecked}
+            disabled={!$filters.movieChecked}
+            on:change={() => search()}
+          />
+        </label>
+      </div>
+      <div class="divider" />
+      <h3 class="text-neutral-content"><b> No Providers</b></h3>
+      <div class="form-control">
+        <label class="label cursor-pointer">
+          <span class="label-text">Show</span>
+          <input
+            type="radio"
+            name="radio-6"
+            class="radio checked:bg-primary"
+            bind:group={$filters.showNoProviders}
+            value={true}
+            on:change={() => search()}
+          />
+        </label>
+      </div>
+      <div class="form-control">
+        <label class="label cursor-pointer">
+          <span class="label-text">Hide</span>
+          <input
+            type="radio"
+            name="radio-6"
+            class="radio checked:bg-primary"
+            bind:group={$filters.showNoProviders}
+            value={false}
             on:change={() => search()}
           />
         </label>
