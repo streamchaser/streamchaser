@@ -84,8 +84,6 @@
 
     if (!$filters.showNoProviders) {
       query += `&only_providers=true`
-    } else {
-      query += `&only_providers=false`
     }
     // Searches for all(*) if empty input
     const res =
