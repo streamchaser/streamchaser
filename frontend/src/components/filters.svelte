@@ -1,8 +1,7 @@
 <script lang="ts">
-  export let movieChecked = true
-  export let tvChecked = true
-  export let search
+  import { filters } from "../stores/filters.js"
 
+  export let search: () => void
   let isDropdownOpen = false
 
   const handleDropdownClick = () => {
@@ -13,14 +12,6 @@
     if (relatedTarget instanceof HTMLElement && currentTarget.contains(relatedTarget))
       return
     isDropdownOpen = false
-  }
-
-  // If the cookie should break and set both to false
-  $: {
-    if (!movieChecked && !tvChecked) {
-      movieChecked = true
-      tvChecked = true
-    }
   }
 </script>
 
@@ -86,19 +77,42 @@
           <span class="label-text">Movies</span>
           <input
             type="checkbox"
-            class="checkbox"
-            bind:checked={movieChecked}
-            disabled={!tvChecked}
-            on:change={() => search()}
+            class="toggle"
+            bind:checked={$filters.movieChecked}
+            on:change={() => {
+              if (!$filters.movieChecked) {
+                $filters.tvChecked = true
+              }
+              search()
+            }}
           />
         </label>
         <label class="label cursor-pointer">
           <span class="label-text">TV Shows</span>
           <input
             type="checkbox"
-            class="checkbox"
-            bind:checked={tvChecked}
-            disabled={!movieChecked}
+            class="toggle"
+            bind:checked={$filters.tvChecked}
+            on:change={() => {
+              if (!$filters.tvChecked) {
+                $filters.movieChecked = true
+              }
+              search()
+            }}
+          />
+        </label>
+      </div>
+      <div class="divider" />
+      <h3 class="text-neutral-content"><b>No providers</b></h3>
+      <div class="form-control">
+        <label class="label cursor-pointer">
+          <span class="label-text"
+            >{$filters.showNoProviders ? "Showing" : "Hiding"}</span
+          >
+          <input
+            type="checkbox"
+            class="toggle"
+            bind:checked={$filters.showNoProviders}
             on:change={() => search()}
           />
         </label>

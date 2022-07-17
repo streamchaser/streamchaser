@@ -81,6 +81,10 @@
     } else {
       query += `&t=tv`
     }
+
+    if (!$filters.showNoProviders) {
+      query += `&only_providers=true`
+    }
     // Searches for all(*) if empty input
     const res =
       input !== ""
@@ -161,11 +165,7 @@
       on:input={debounceInput}
       autofocus={viewPortWidth <= 640 ? false : true}
     />
-    <Filters
-      bind:movieChecked={$filters.movieChecked}
-      bind:tvChecked={$filters.tvChecked}
-      {search}
-    />
+    <Filters {search} />
   </div>
   <div
     class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
