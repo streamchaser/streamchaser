@@ -1,9 +1,27 @@
 <script lang="ts">
   import { filters } from "../stores/filters.js"
+  import { currentProviders } from "../stores/providers.js"
 
   export let search: () => void
   let isDropdownOpen = false
+  let providerLabelText: string
+
   $: filterAmount = Object.values($filters).filter(v => v === false).length
+
+  $: {
+    if ($currentProviders.length) {
+      $filters.showNoProviders = true
+      if ($currentProviders.length > 1) {
+        providerLabelText = "Providers selected"
+      } else {
+        providerLabelText = "Provider selected"
+      }
+    } else if ($filters.showNoProviders) {
+      providerLabelText = "Showing"
+    } else {
+      providerLabelText = "Hiding"
+    }
+  }
 
   const handleDropdownClick = () => {
     isDropdownOpen = !isDropdownOpen
@@ -79,7 +97,7 @@
       <div class="card-body">
         <h3 class="card-title text-neutral-content">Filters</h3>
         <div class="divider" />
-        <h3 class="text-neutral-content"><b>Content types</b></h3>
+        <h3 class="text-neutral-content"><b>Media types</b></h3>
         <div class="form-control">
           <label class="label cursor-pointer">
             <span class="label-text">Movies</span>
@@ -114,13 +132,12 @@
         <h3 class="text-neutral-content"><b>No providers</b></h3>
         <div class="form-control">
           <label class="label cursor-pointer">
-            <span class="label-text"
-              >{$filters.showNoProviders ? "Showing" : "Hiding"}</span
-            >
+            <span class="label-text">{providerLabelText}</span>
             <input
               type="checkbox"
               class="toggle"
               bind:checked={$filters.showNoProviders}
+              disabled={$currentProviders.length ? true : false}
               on:change={() => search()}
             />
           </label>
@@ -131,7 +148,7 @@
           on:click={() => {
             Object.keys($filters).forEach(k => ($filters[k] = true))
             search()
-          }}>Clear</button
+          }}>{filterAmount ? "Clear filters" : "No filters chosen"}</button
         >
       </div>
     </div>
