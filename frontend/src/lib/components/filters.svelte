@@ -1,5 +1,6 @@
 <script lang="ts">
   import { filters } from "../stores/filters.js"
+  import { sorting } from "../stores/sorting.js"
   import { currentProviders } from "../stores/providers.js"
 
   const contentTypes = ["Filters", "Sorting"]
@@ -98,12 +99,12 @@
       style:visibility={isDropdownOpen ? "visible" : "hidden"}
     >
       <div class="card-body">
-        <div class="tabs tabs-boxed flex justify-center">
+        <div class="tabs flex justify-center">
           {#each contentTypes as contentType, index}
             {#if index === currentTab}
-              <a class="tab tab-boxed tab-active">{contentType}</a>
+              <a class="tab tab-bordered tab-active">{contentType}</a>
             {:else}
-              <a class="tab tab-boxed" on:click={() => (currentTab = index)}
+              <a class="tab tab-bordered" on:click={() => (currentTab = index)}
                 >{contentType}</a
               >
             {/if}
@@ -146,13 +147,12 @@
           <h3 class="text-neutral-content"><b>No providers</b></h3>
           <div class="form-control">
             <label class="label cursor-pointer">
-              <span class="label-text"
-                >{$filters.showNoProviders ? "Showing" : "Hiding"}</span
-              >
+              <span class="label-text">{providerLabelText}</span>
               <input
                 type="checkbox"
                 class="toggle"
                 bind:checked={$filters.showNoProviders}
+                disabled={$currentProviders.length ? true : false}
                 on:change={() => search()}
               />
             </label>
@@ -163,9 +163,101 @@
             on:click={() => {
               Object.keys($filters).forEach(k => ($filters[k] = true))
               search()
-            }}>Clear</button
+            }}>{filterAmount ? "Clear filters" : "No filters chosen"}</button
           >
-        {:else}{/if}
+        {:else}
+          <h3 class="text-neutral-content"><b>Sort by</b></h3>
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <span class="label-text">Popularity</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$sorting.byPopularity.active}
+                on:change={() => {
+                  if (!$sorting.byReleaseDate.active) {
+                    $sorting.byReleaseDate.active = true
+                  } else if ($sorting.byReleaseDate.active) {
+                    $sorting.byReleaseDate.active = false
+                  }
+                  search()
+                }}
+              />
+            </label>
+            {#if $sorting.byPopularity.active}
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text"> &emsp; Descending</span>
+                  <input
+                    type="radio"
+                    name="radio-6"
+                    class="radio"
+                    value={false}
+                    bind:group={$sorting.byPopularity.asc}
+                    on:change={() => search()}
+                  />
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text"> &emsp; Ascending</span>
+                  <input
+                    type="radio"
+                    name="radio-6"
+                    class="radio"
+                    value={true}
+                    bind:group={$sorting.byPopularity.asc}
+                    on:change={() => search()}
+                  />
+                </label>
+              </div>
+            {/if}
+            <label class="label cursor-pointer">
+              <span class="label-text">Release date</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$sorting.byReleaseDate.active}
+                on:change={() => {
+                  if (!$sorting.byPopularity.active) {
+                    $sorting.byPopularity.active = true
+                  } else if ($sorting.byPopularity.active) {
+                    $sorting.byPopularity.active = false
+                  }
+                  search()
+                }}
+              />
+            </label>
+            {#if $sorting.byReleaseDate.active}
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text"> &emsp; Descending</span>
+                  <input
+                    type="radio"
+                    name="radio-6"
+                    class="radio"
+                    value={false}
+                    bind:group={$sorting.byReleaseDate.asc}
+                    on:change={() => search()}
+                  />
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                  <span class="label-text"> &emsp; Ascending</span>
+                  <input
+                    type="radio"
+                    name="radio-6"
+                    class="radio"
+                    value={true}
+                    bind:group={$sorting.byReleaseDate.asc}
+                    on:change={() => search()}
+                  />
+                </label>
+              </div>
+            {/if}
+          </div>
+        {/if}
       </div>
     </div>
   </div>
