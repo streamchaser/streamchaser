@@ -6,6 +6,7 @@
   import BackToTopButton from "../components/back_to_top_button.svelte"
   import CookieDisclaimer from "../components/cookie_disclaimer.svelte"
   import MediaQuery from "svelte-media-query"
+  import CountryLocator from "../components/country_locator.svelte"
 </script>
 
 <div class="flex flex-col h-screen">
@@ -18,6 +19,7 @@
     {/if}
   </MediaQuery>
   <div class="container mb-auto mx-auto">
+    <CountryLocator />
     <slot />
   </div>
   <BackToTopButton />

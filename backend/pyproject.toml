@@ -19,6 +19,7 @@ httpx = "^0.22.0"
 aioredis = "^2.0.1"
 pytest-asyncio = "^0.18.1"
 meilisearch-python-async = "^0.22.0"
+starlette-context = "^0.3.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.0.0"
