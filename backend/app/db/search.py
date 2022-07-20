@@ -16,7 +16,9 @@ def search_client_config(country_code: str):
         ["original_title", "title"]
     )
 
-    client.index(f"media_{country_code}").update_sortable_attributes(["popularity"])
+    client.index(f"media_{country_code}").update_sortable_attributes(
+        ["popularity", "release_date"]
+    )
 
     # Sort is moved higher than default
     client.index(f"media_{country_code}").update_ranking_rules(

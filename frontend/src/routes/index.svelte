@@ -10,6 +10,7 @@
   import { inputQuery } from "../stores/input"
   import { chosenTheme } from "../stores/theme.js"
   import { filters } from "../stores/filters.js"
+  import { sorting } from "../stores/sorting.js"
   import { onMount } from "svelte"
   import DT from "daisyui/colors/themes.js"
   import type { Genre, Media, Meilisearch } from "../types"
@@ -84,6 +85,14 @@
 
     if (!$filters.showNoProviders) {
       query += `&only_providers=true`
+    }
+
+    if (!input) {
+      if ($sorting.byPopularity) {
+        query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
+      } else if ($sorting.byReleaseDate) {
+        query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
+      }
     }
     // Searches for all(*) if empty input
     const res =

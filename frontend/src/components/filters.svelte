@@ -1,12 +1,29 @@
 <script lang="ts">
   import { filters } from "../stores/filters.js"
+  import { sorting } from "../stores/sorting.js"
   import { currentProviders } from "../stores/providers.js"
 
+  const contentTypes = ["Filters", "Sorting"]
+
   export let search: () => void
+
+  let currentTab = 0
   let isDropdownOpen = false
   let providerLabelText: string
+  let descLabelText: string
+  let ascLabelText: string
 
   $: filterAmount = Object.values($filters).filter(v => v === false).length
+
+  $: {
+    if ($sorting.byPopularity) {
+      descLabelText = "Highest"
+      ascLabelText = "Lowest"
+    } else {
+      descLabelText = "Newest"
+      ascLabelText = "Oldest"
+    }
+  }
 
   $: {
     if ($currentProviders.length) {
@@ -95,61 +112,136 @@
       style:visibility={isDropdownOpen ? "visible" : "hidden"}
     >
       <div class="card-body">
-        <h3 class="card-title text-neutral-content">Filters</h3>
-        <div class="divider" />
-        <h3 class="text-neutral-content"><b>Media types</b></h3>
-        <div class="form-control">
-          <label class="label cursor-pointer">
-            <span class="label-text">Movies</span>
-            <input
-              type="checkbox"
-              class="toggle"
-              bind:checked={$filters.movieChecked}
-              on:change={() => {
-                if (!$filters.movieChecked) {
-                  $filters.tvChecked = true
-                }
-                search()
-              }}
-            />
-          </label>
-          <label class="label cursor-pointer">
-            <span class="label-text">TV Shows</span>
-            <input
-              type="checkbox"
-              class="toggle"
-              bind:checked={$filters.tvChecked}
-              on:change={() => {
-                if (!$filters.tvChecked) {
-                  $filters.movieChecked = true
-                }
-                search()
-              }}
-            />
-          </label>
-        </div>
-        <div class="divider" />
-        <h3 class="text-neutral-content"><b>No providers</b></h3>
-        <div class="form-control">
-          <label class="label cursor-pointer">
-            <span class="label-text">{providerLabelText}</span>
-            <input
-              type="checkbox"
-              class="toggle"
-              bind:checked={$filters.showNoProviders}
-              disabled={$currentProviders.length ? true : false}
-              on:change={() => search()}
-            />
-          </label>
+        <div class="tabs flex justify-center">
+          {#each contentTypes as contentType, index}
+            {#if index === currentTab}
+              <a class="tab tab-bordered tab-active">{contentType}</a>
+            {:else}
+              <a class="tab tab-bordered" on:click={() => (currentTab = index)}
+                >{contentType}</a
+              >
+            {/if}
+          {/each}
         </div>
         <br />
-        <button
-          class="btn btn-xs btn-primary"
-          on:click={() => {
-            Object.keys($filters).forEach(k => ($filters[k] = true))
-            search()
-          }}>{filterAmount ? "Clear filters" : "No filters chosen"}</button
-        >
+        {#if contentTypes[currentTab] === "Filters"}
+          <h3 class="text-neutral-content"><b>Media types</b></h3>
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <span class="label-text">Movies</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$filters.movieChecked}
+                on:change={() => {
+                  if (!$filters.movieChecked) {
+                    $filters.tvChecked = true
+                  }
+                  search()
+                }}
+              />
+            </label>
+            <label class="label cursor-pointer">
+              <span class="label-text">TV Shows</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$filters.tvChecked}
+                on:change={() => {
+                  if (!$filters.tvChecked) {
+                    $filters.movieChecked = true
+                  }
+                  search()
+                }}
+              />
+            </label>
+          </div>
+          <div class="divider" />
+          <h3 class="text-neutral-content"><b>No providers</b></h3>
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <span class="label-text">{providerLabelText}</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$filters.showNoProviders}
+                disabled={$currentProviders.length ? true : false}
+                on:change={() => search()}
+              />
+            </label>
+          </div>
+          <br />
+          <button
+            class="btn btn-xs btn-primary"
+            on:click={() => {
+              Object.keys($filters).forEach(k => ($filters[k] = true))
+              search()
+            }}>{filterAmount ? "Clear filters" : "No filters chosen"}</button
+          >
+        {:else}
+          <h3 class="text-neutral-content"><b>Sort by</b></h3>
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <span class="label-text">Popularity</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$sorting.byPopularity}
+                on:change={() => {
+                  if (!$sorting.byReleaseDate) {
+                    $sorting.byReleaseDate = true
+                  } else if ($sorting.byReleaseDate) {
+                    $sorting.byReleaseDate = false
+                  }
+                  search()
+                }}
+              />
+            </label>
+            <label class="label cursor-pointer">
+              <span class="label-text">Release date</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$sorting.byReleaseDate}
+                on:change={() => {
+                  if (!$sorting.byPopularity) {
+                    $sorting.byPopularity = true
+                  } else if ($sorting.byPopularity) {
+                    $sorting.byPopularity = false
+                  }
+                  search()
+                }}
+              />
+            </label>
+            <div class="divider" />
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">{descLabelText}</span>
+                <input
+                  type="radio"
+                  name="radio-6"
+                  class="radio"
+                  value={false}
+                  bind:group={$sorting.asc}
+                  on:change={() => search()}
+                />
+              </label>
+            </div>
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">{ascLabelText}</span>
+                <input
+                  type="radio"
+                  name="radio-6"
+                  class="radio"
+                  value={true}
+                  bind:group={$sorting.asc}
+                  on:change={() => search()}
+                />
+              </label>
+            </div>
+          </div>
+        {/if}
       </div>
     </div>
   </div>
