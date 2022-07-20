@@ -2,15 +2,15 @@
   import { calculateAmountOfShownItems } from "$lib/utils"
   import { PYTHON_API } from "$lib/variables.js"
   import Select from "svelte-select"
-  import MediaSearch from "../components/media_search.svelte"
-  import Filters from "../components/filters.svelte"
-  import { currentCountry } from "../stores/country.js"
-  import { currentProviders } from "../stores/providers.js"
-  import { currentGenres } from "../stores/genres"
-  import { inputQuery } from "../stores/input"
-  import { chosenTheme } from "../stores/theme.js"
-  import { filters } from "../stores/filters.js"
-  import { sorting } from "../stores/sorting.js"
+  import MediaSearch from "$lib/components/media_search.svelte"
+  import Filters from "$lib/components/filters.svelte"
+  import { currentCountry } from "$lib/stores/country.js"
+  import { currentProviders } from "$lib/stores/providers.js"
+  import { currentGenres } from "$lib/stores/genres"
+  import { inputQuery } from "$lib/stores/input"
+  import { chosenTheme } from "$lib/stores/theme.js"
+  import { filters } from "$lib/stores/filters.js"
+  import { sorting } from "$lib/stores/sorting.js"
   import { onMount } from "svelte"
   import type { Media, Meilisearch } from "$lib/types"
   import type { PageData } from "./$types"
@@ -87,10 +87,12 @@
       query += "&only_providers=true"
     }
 
-    if ($sorting.byPopularity) {
-      query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
-    } else if ($sorting.byReleaseDate) {
-      query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
+    if (!input) {
+      if ($sorting.byPopularity) {
+        query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
+      } else if ($sorting.byReleaseDate) {
+        query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
+      }
     }
     // Searches for all(*) if empty input
     // Empty input will only return media with providers

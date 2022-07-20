@@ -1,4 +1,4 @@
-import { persist, sessionStorage } from "@macfja/svelte-persistent-store"
+import { persist, createLocalStorage } from "@macfja/svelte-persistent-store"
 import { writable } from "svelte/store"
 
 export const sorting = persist(
@@ -7,6 +7,6 @@ export const sorting = persist(
     byReleaseDate: false,
     asc: false,
   }),
-  sessionStorage(),
+  createLocalStorage(),
   "sorting"
 )
