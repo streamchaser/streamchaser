@@ -4,6 +4,7 @@ from app import schemas
 from app.config import get_settings
 from app.db import crud
 from app.db import database
+from app.db import models
 from app.db.cache import Genre
 from app.db.cache import redis
 from app.db.crud import get_all_media
@@ -29,11 +30,7 @@ async def insert_genres_to_cache(genres: dict) -> None:
     await redis.set("genres", json.dumps(fixed_genres))
 
 
-# TODO: Only index the recently updated media(updated_at)
-def index_media(country_code: str):
-    db = database.SessionLocal()
-    db_media = get_all_media(db)
-
+def index_media(country_code: str, db_media: list[models.Media]):
     medias = []
     for media in db_media:
         combined_provider_names = []

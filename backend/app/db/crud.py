@@ -1,3 +1,6 @@
+from datetime import datetime
+from datetime import timedelta
+
 from app import schemas
 from app.db import models
 from sqlalchemy.orm import Session
@@ -6,6 +9,17 @@ from sqlalchemy.orm import Session
 def get_media_by_id(db: Session, media_id: str):
     """Gets a single Media-type by the id"""
     return db.query(models.Media).filter(models.Media.id == media_id).first()
+
+
+def get_recently_updated_media(db: Session, hours: int):
+    current_time = datetime.today()
+    target_time = current_time - timedelta(hours=hours)
+
+    return (
+        db.query(models.Media)
+        .filter(models.Media.updated_at.between(target_time, current_time))
+        .all()
+    )
 
 
 def get_all_media(db: Session, skip: int = 0, limit: int = 0) -> list[models.Media]:
