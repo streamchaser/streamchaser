@@ -98,6 +98,18 @@ type Provider struct {
 			Id              int    `json:"provider_id"`
 			Name            string `json:"provider_name"`
 		} `json:"free,omitempty"`
+		Rent []struct {
+			DisplayPriority int    `json:"display_priority"`
+			LogoPath        string `json:"logo_path"`
+			Id              int    `json:"provider_id"`
+			Name            string `json:"provider_name"`
+		} `json:"rent,omitempty"`
+		Buy []struct {
+			DisplayPriority int    `json:"display_priority"`
+			LogoPath        string `json:"logo_path"`
+			Id              int    `json:"provider_id"`
+			Name            string `json:"provider_name"`
+		} `json:"buy,omitempty"`
 	} `json:"results" gorm:"column:providers;type:json"`
 }
 

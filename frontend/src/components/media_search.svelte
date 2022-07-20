@@ -57,9 +57,13 @@
           </figure>
         {/if}
         {#if providerAmounts[mediaIndex] === 0}
-          <div class="card-body">
+          <div class="card-body px-0">
             <p class="text-center text-neutral-content">
-              <strong>No providers in {currentCountry}</strong>
+              {#if media.other_providers.length > 0}
+                <strong>Only available to rent or purchase</strong>
+              {:else}
+                <strong>No providers in {currentCountry}</strong>
+              {/if}
             </p>
           </div>
         {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}

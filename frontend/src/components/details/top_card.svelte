@@ -15,6 +15,8 @@
   export let genres: []
   export let freeProviders: []
   export let flatrateProviders: []
+  export let rentProviders: []
+  export let buyProviders: []
   export let runtime: number
   export let imdbId: string
   export let releaseDate: string
@@ -116,10 +118,36 @@
   </div>
 
   {#if freeProviders || flatrateProviders}
-    {#if !freeProviders.length && !flatrateProviders.length}
+    {#if !freeProviders.length && !flatrateProviders.length && !rentProviders.length && !buyProviders.length}
       <div class="pt-5">
         <div class="badge badge-lg shadow-2xl">
           No providers in {$currentCountry}
+        </div>
+      </div>
+    {:else if (!freeProviders.length && !flatrateProviders.length && rentProviders.length) || (!freeProviders.length && !flatrateProviders.length && buyProviders.length)}
+      <div class="pt-5">
+        <div class="flex badge py-6 px-4 sm:p-2 badge-lg shadow-2xl">
+          Not available for streaming in {$currentCountry}. Rent or purchase from the
+          provider(s) below
+        </div>
+        <div class="pt-2">
+          {#each uniqueArray(rentProviders.concat(buyProviders), "provider_id") as provider}
+            <div
+              class="avatar tooltip border-neutral"
+              data-tip={provider.provider_name}
+            >
+              <div
+                data-tip={provider.provider_name}
+                class="mb-2 rounded-full w-20 h-20 ring ring-neutral
+                                ring-offset-neutral ring-offset-2"
+              >
+                <img
+                  src="{IMG_ORIGINAL}{provider.logo_path}"
+                  alt={provider.provider_name}
+                />
+              </div>
+            </div>
+          {/each}
         </div>
       </div>
     {:else}
@@ -139,6 +167,30 @@
           </div>
         {/each}
       </div>
+      {#if rentProviders.length || buyProviders.length}
+        <div class="dropdown pt-5">
+          <label tabindex="0" class="btn ml-2">Rent | Purchase</label>
+          <div class="dropdown-content sm:flex sm:justify-center grid grid-cols-4 pt-2">
+            {#each uniqueArray(rentProviders.concat(buyProviders), "provider_id") as provider}
+              <div
+                class="avatar tooltip border-neutral"
+                data-tip={provider.provider_name}
+              >
+                <div
+                  data-tip={provider.provider_name}
+                  class="mb-2 rounded-full w-20 h-20 ring ring-neutral
+                                      ring-offset-neutral ring-offset-2"
+                >
+                  <img
+                    src="{IMG_ORIGINAL}{provider.logo_path}"
+                    alt={provider.provider_name}
+                  />
+                </div>
+              </div>
+            {/each}
+          </div>
+        </div>
+      {/if}
     {/if}
   {/if}
 </div>

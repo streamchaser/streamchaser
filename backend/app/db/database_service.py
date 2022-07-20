@@ -1,4 +1,5 @@
 import json
+from enum import Enum
 
 from app import schemas
 from app.config import get_settings
@@ -9,6 +10,13 @@ from app.db.cache import redis
 from app.db.crud import get_all_media
 from app.db.search import client
 from tqdm import tqdm
+
+
+class Provider(Enum):
+    FLATRATE = "flatrate"
+    FREE = "free"
+    RENT = "rent"
+    BUY = "buy"
 
 
 async def insert_genres_to_cache(genres: dict) -> None:
@@ -38,17 +46,22 @@ def index_media(country_code: str):
     for media in db_media:
         combined_provider_names = []
         combined_providers = []
-        if media.providers:
-            if media.providers.get(country_code):
-                for provider_type in ["flatrate", "free"]:
-                    if providers := media.providers.get(country_code).get(
-                        provider_type
-                    ):
-                        for provider in providers:
+        combined_other_provider_names = []
+        combined_other_providers = []
+        if media.providers and media.providers.get(country_code):
+            for provider_type in ["flatrate", "free", "rent", "buy"]:
+                if providers := media.providers.get(country_code).get(provider_type):
+                    for provider in providers:
+                        if provider_type in ["flatrate", "free"]:
                             combined_provider_names.append(
                                 provider.get("provider_name")
                             )
                             combined_providers.append(provider)
+                        else:
+                            combined_other_provider_names.append(
+                                provider.get("provider_name")
+                            )
+                            combined_other_providers.append(provider)
 
         medias.append(
             schemas.Media(
@@ -63,6 +76,8 @@ def index_media(country_code: str):
                 popularity=media.popularity,
                 provider_names=combined_provider_names,
                 providers=combined_providers,
+                other_provider_names=combined_other_provider_names,
+                other_providers=combined_other_providers,
             ).dict()
         )
 
@@ -83,7 +98,7 @@ async def extract_unique_providers_to_cache():
                 if country in supported_countries
             ]
             for country_code in filtered_countries:
-                for provider_type in ["flatrate", "free"]:
+                for provider_type in ["flatrate", "free", "rent", "buy"]:
                     if providers := media.providers.get(country_code).get(
                         provider_type
                     ):

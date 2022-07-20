@@ -48,6 +48,8 @@ def update_media_data_by_id(db: Session, media_id: str, data: dict):
             "genres": data.get("genres"),
             "flatrate_providers": data.get("flatrate_providers"),
             "free_providers": data.get("free_providers"),
+            "rent_providers": data.get("rent_providers"),
+            "buy_providers": data.get("buy_providers"),
             "title": data.get("title"),
             "poster_path": data.get("poster_path"),
             "popularity": data.get("popularity"),
