@@ -9,7 +9,7 @@ class TestFilters:
 
         search_results = client.index("media_TEST").search("*")
 
-        assert search_results["nbHits"] == len(test_data)
+        assert search_results["estimatedTotalHits"] == len(test_data)
 
 
 class TestProviderFilter:
@@ -68,7 +68,7 @@ class TestFilterFromQueries:
         filter = filter_from_queries()
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == len(test_data)
+        assert search_results["estimatedTotalHits"] == len(test_data)
 
     def test_filter_from_queries_providers(self):
         """Proves only 1 provider needs to match something"""
@@ -76,13 +76,13 @@ class TestFilterFromQueries:
         filter = filter_from_queries(providers=["Disney Plus"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == 1
+        assert search_results["estimatedTotalHits"] == 1
         assert "Disney Plus" in search_results["hits"][0]["provider_names"]
 
         filter = filter_from_queries(providers=["Disney Plus", "HBO Max"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == 2
+        assert search_results["estimatedTotalHits"] == 2
         assert ["Disney Plus"] and ["HBO Max"] in [
             hit["provider_names"] for hit in search_results["hits"]
         ]
@@ -93,13 +93,13 @@ class TestFilterFromQueries:
         filter = filter_from_queries(genres=["Family"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == 1
+        assert search_results["estimatedTotalHits"] == 1
         assert "Family" in search_results["hits"][0]["genres"]
 
         filter = filter_from_queries(genres=["Family", "Not a real genre"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == 0
+        assert search_results["estimatedTotalHits"] == 0
 
     def test_filter_from_queries_types(self):
         """Proves only 1 type needs to match something"""
@@ -107,7 +107,7 @@ class TestFilterFromQueries:
         filter = filter_from_queries(types=["movie", "tv"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == len(test_data)
+        assert search_results["estimatedTotalHits"] == len(test_data)
         assert "movie" and "tv" in [media["type"] for media in search_results["hits"]]
 
         filter = filter_from_queries(types=["movie"])
@@ -124,7 +124,7 @@ class TestFilterFromQueries:
         )
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == 1
+        assert search_results["estimatedTotalHits"] == 1
         assert "HBO Max" in search_results["hits"][0]["provider_names"]
         assert "Action" and "Horror" in search_results["hits"][0]["genres"]
 
@@ -133,11 +133,11 @@ class TestFilterFromQueries:
         )
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == 0
+        assert search_results["estimatedTotalHits"] == 0
 
         filter = filter_from_queries(
             providers=["A provider that isnt there"], genres=["Action"]
         )
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["nbHits"] == 0
+        assert search_results["estimatedTotalHits"] == 0
