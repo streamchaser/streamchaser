@@ -87,10 +87,12 @@
       query += `&only_providers=true`
     }
 
-    if ($sorting.byPopularity) {
-      query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
-    } else if ($sorting.byReleaseDate) {
-      query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
+    if (!input) {
+      if ($sorting.byPopularity) {
+        query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
+      } else if ($sorting.byReleaseDate) {
+        query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
+      }
     }
     // Searches for all(*) if empty input
     const res =
