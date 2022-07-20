@@ -3,8 +3,9 @@ import { writable } from "svelte/store"
 
 export const sorting = persist(
   writable({
-    byPopularity: { active: true, asc: false },
-    byReleaseDate: { active: false, asc: false },
+    byPopularity: true,
+    byReleaseDate: false,
+    asc: false,
   }),
   sessionStorage(),
   "sorting"

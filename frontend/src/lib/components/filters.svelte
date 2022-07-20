@@ -4,13 +4,26 @@
   import { currentProviders } from "../stores/providers.js"
 
   const contentTypes = ["Filters", "Sorting"]
-  let currentTab = 0
 
   export let search: () => void
+
+  let currentTab = 0
   let isDropdownOpen = false
   let providerLabelText: string
+  let descLabelText: string
+  let ascLabelText: string
 
   $: filterAmount = Object.values($filters).filter(v => v === false).length
+
+  $: {
+    if ($sorting.byPopularity) {
+      descLabelText = "Highest"
+      ascLabelText = "Lowest"
+    } else {
+      descLabelText = "Newest"
+      ascLabelText = "Oldest"
+    }
+  }
 
   $: {
     if ($currentProviders.length) {
@@ -173,89 +186,60 @@
               <input
                 type="checkbox"
                 class="toggle"
-                bind:checked={$sorting.byPopularity.active}
+                bind:checked={$sorting.byPopularity}
                 on:change={() => {
-                  if (!$sorting.byReleaseDate.active) {
-                    $sorting.byReleaseDate.active = true
-                  } else if ($sorting.byReleaseDate.active) {
-                    $sorting.byReleaseDate.active = false
+                  if (!$sorting.byReleaseDate) {
+                    $sorting.byReleaseDate = true
+                  } else if ($sorting.byReleaseDate) {
+                    $sorting.byReleaseDate = false
                   }
                   search()
                 }}
               />
             </label>
-            {#if $sorting.byPopularity.active}
-              <div class="form-control">
-                <label class="label cursor-pointer">
-                  <span class="label-text"> &emsp; Descending</span>
-                  <input
-                    type="radio"
-                    name="radio-6"
-                    class="radio"
-                    value={false}
-                    bind:group={$sorting.byPopularity.asc}
-                    on:change={() => search()}
-                  />
-                </label>
-              </div>
-              <div class="form-control">
-                <label class="label cursor-pointer">
-                  <span class="label-text"> &emsp; Ascending</span>
-                  <input
-                    type="radio"
-                    name="radio-6"
-                    class="radio"
-                    value={true}
-                    bind:group={$sorting.byPopularity.asc}
-                    on:change={() => search()}
-                  />
-                </label>
-              </div>
-            {/if}
             <label class="label cursor-pointer">
               <span class="label-text">Release date</span>
               <input
                 type="checkbox"
                 class="toggle"
-                bind:checked={$sorting.byReleaseDate.active}
+                bind:checked={$sorting.byReleaseDate}
                 on:change={() => {
-                  if (!$sorting.byPopularity.active) {
-                    $sorting.byPopularity.active = true
-                  } else if ($sorting.byPopularity.active) {
-                    $sorting.byPopularity.active = false
+                  if (!$sorting.byPopularity) {
+                    $sorting.byPopularity = true
+                  } else if ($sorting.byPopularity) {
+                    $sorting.byPopularity = false
                   }
                   search()
                 }}
               />
             </label>
-            {#if $sorting.byReleaseDate.active}
-              <div class="form-control">
-                <label class="label cursor-pointer">
-                  <span class="label-text"> &emsp; Descending</span>
-                  <input
-                    type="radio"
-                    name="radio-6"
-                    class="radio"
-                    value={false}
-                    bind:group={$sorting.byReleaseDate.asc}
-                    on:change={() => search()}
-                  />
-                </label>
-              </div>
-              <div class="form-control">
-                <label class="label cursor-pointer">
-                  <span class="label-text"> &emsp; Ascending</span>
-                  <input
-                    type="radio"
-                    name="radio-6"
-                    class="radio"
-                    value={true}
-                    bind:group={$sorting.byReleaseDate.asc}
-                    on:change={() => search()}
-                  />
-                </label>
-              </div>
-            {/if}
+            <div class="divider" />
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">{descLabelText}</span>
+                <input
+                  type="radio"
+                  name="radio-6"
+                  class="radio"
+                  value={false}
+                  bind:group={$sorting.asc}
+                  on:change={() => search()}
+                />
+              </label>
+            </div>
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">{ascLabelText}</span>
+                <input
+                  type="radio"
+                  name="radio-6"
+                  class="radio"
+                  value={true}
+                  bind:group={$sorting.asc}
+                  on:change={() => search()}
+                />
+              </label>
+            </div>
           </div>
         {/if}
       </div>
