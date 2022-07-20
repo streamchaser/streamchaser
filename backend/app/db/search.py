@@ -8,7 +8,7 @@ async_client = meilisearch_python_async.Client("http://search:7700", "masterKey"
 
 def search_client_config(country_code: str):
     client.index(f"media_{country_code}").update_filterable_attributes(
-        ["genres", "provider_names", "type"]
+        ["genres", "provider_names", "type", "id"]
     )
 
     # Isolated the important

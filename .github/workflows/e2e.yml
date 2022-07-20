@@ -4,7 +4,7 @@ name: E2E
 on: push
 
 jobs:
-  build-and-test:
+  frontend-build-and-test:
     runs-on: ubuntu-latest
     steps:
       # https://github.com/actions/checkout
