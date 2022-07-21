@@ -13,6 +13,8 @@ class Media(BaseModel):
     popularity: int | None
     provider_names: list[str] | None
     providers: list[dict] | None
+    other_provider_names: list[str] | None
+    other_providers: list[dict] | None
 
     class Config:
         # Makes use of database syntax "media.id" instead of "media['id']
@@ -29,6 +31,8 @@ class Movie(BaseModel):
     runtime: str | None
     flatrate_providers: list[dict] | None
     free_providers: list[dict] | None
+    rent_providers: list[dict] | None
+    buy_providers: list[dict] | None
     recommendations: list[dict]
     poster_path: str | None
     popularity: int
@@ -46,6 +50,8 @@ class TV(BaseModel):
     episode_run_time: list[int]
     flatrate_providers: list[dict] | None
     free_providers: list[dict] | None
+    rent_providers: list[dict] | None
+    buy_providers: list[dict] | None
     recommendations: list[dict] | None
     poster_path: str | None
     popularity: int

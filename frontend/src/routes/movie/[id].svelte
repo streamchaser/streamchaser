@@ -55,6 +55,8 @@
     genres={movie.genres}
     freeProviders={movie.free_providers}
     flatrateProviders={movie.flatrate_providers}
+    rentProviders={movie.rent_providers}
+    buyProviders={movie.buy_providers}
     runtime={movie.runtime}
     imdbId={movie.imdb_id}
     releaseDate={movie.release_date}

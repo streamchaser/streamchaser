@@ -219,6 +219,12 @@ async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
             free_providers=get_providers(
                 "free", movie.get("watch/providers"), country_code
             ),
+            rent_providers=get_providers(
+                "rent", movie.get("watch/providers"), country_code
+            ),
+            buy_providers=get_providers(
+                "buy", movie.get("watch/providers"), country_code
+            ),
             recommendations=get_recommendations(movie.get("recommendations")),
             poster_path=movie.get("poster_path"),
             cast=movie.get("credits").get("cast"),
@@ -253,6 +259,10 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
             free_providers=get_providers(
                 "free", tv.get("watch/providers"), country_code
             ),
+            rent_providers=get_providers(
+                "rent", tv.get("watch/providers"), country_code
+            ),
+            buy_providers=get_providers("buy", tv.get("watch/providers"), country_code),
             recommendations=get_recommendations(tv.get("recommendations")),
             poster_path=tv.get("poster_path"),
             popularity=tv.get("popularity"),
@@ -308,6 +318,8 @@ def request_data(media: models.Media):
                 "flatrate", data.get("watch/providers")
             ),
             "free_providers": get_providers("free", data.get("watch/providers")),
+            "rent_providers": get_providers("rent", data.get("watch/providers")),
+            "buy_providers": get_providers("buy", data.get("watch/providers")),
             "genres": [genre.get("name") for genre in data.get("genres")]
             if data.get("genres")
             else ["Unknown"],
