@@ -7,6 +7,7 @@
   import CookieDisclaimer from "../components/cookie_disclaimer.svelte"
   import MediaQuery from "svelte-media-query"
   import CountryLocator from "../components/country_locator.svelte"
+  import WarningPopup from "../components/warning_popup.svelte"
 </script>
 
 <div class="flex flex-col h-screen">
@@ -25,4 +26,5 @@
   <BackToTopButton />
   <Footer />
   <CookieDisclaimer />
+  <WarningPopup />
 </div>
