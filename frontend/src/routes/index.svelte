@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { calculateAmountOfShownItems } from "../utils"
   import { GO_API, PYTHON_API } from "../variables.js"
   import Select from "svelte-select"
   import MediaSearch from "../components/media_search.svelte"
-  import Filters from "../components/filters.svelte"
   import { currentCountry } from "../stores/country.js"
   import { currentProviders } from "../stores/providers.js"
   import { currentGenres } from "../stores/genres"
@@ -26,14 +24,15 @@
   let genres: Genre[]
   let activeProviders = [""]
   let viewPortWidth: number
-  let currentMediaAmount: number
-  let mediaStartAmount: number
+  let currentMediaAmount = 20
+  let mediaStartAmount = 20
+
+  $: filterAmount = Object.values($filters).filter(v => v === false).length
 
   // run search if we haven't received input in the last 200ms
   const debounceInput = () => {
     clearTimeout(timer)
     timer = setTimeout(() => {
-      setViewportToDefault()
       search()
     }, INPUT_TIMER)
   }
@@ -45,26 +44,11 @@
     })
   }
 
-  const setViewportToDefault = () => {
-    viewPortWidth = window.visualViewport.width
-    currentMediaAmount = calculateAmountOfShownItems({
-      width: viewPortWidth,
-      xxl: 35,
-      xl: 30,
-      lg: 25,
-      md: 20,
-      sm: 15,
-      mobile: 10,
-    })
-    mediaStartAmount = currentMediaAmount
-  }
-
   const search = async () => {
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
 
     if (!currentMediaAmount) {
-      setViewportToDefault()
     }
 
     let query = ""
@@ -124,16 +108,13 @@
   }
 
   //TODO: This should be done prettier
-  let firstLoadCompleted = false
   $: if ($currentCountry) {
-    if (firstLoadCompleted) {
-      resetProviders()
-      fetchProviders()
-      setViewportToDefault()
-      search()
-    }
-    firstLoadCompleted = true
+    resetProviders()
+    fetchProviders()
+    search()
   }
+
+  $: $filters, search()
 
   onMount(async () => {
     const inputField = document.getElementById("input-field") as HTMLInputElement
@@ -155,7 +136,7 @@
 </svelte:head>
 
 <div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-2 sm:px-6">
-  <div class="form-control flex flex-row">
+  <div class="form-control flex flex-row gap-2">
     <input
       id="input-field"
       type="text"
@@ -165,7 +146,40 @@
       on:input={debounceInput}
       autofocus={viewPortWidth <= 640 ? false : true}
     />
-    <Filters {search} />
+    <label for="my-drawer" class="btn btn-primary drawer-button">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><line x1="4" y1="21" x2="4" y2="14" /><line
+          x1="4"
+          y1="10"
+          x2="4"
+          y2="3"
+        /><line x1="12" y1="21" x2="12" y2="12" /><line
+          x1="12"
+          y1="8"
+          x2="12"
+          y2="3"
+        /><line x1="20" y1="21" x2="20" y2="16" /><line
+          x1="20"
+          y1="12"
+          x2="20"
+          y2="3"
+        /><line x1="1" y1="14" x2="7" y2="14" /><line
+          x1="9"
+          y1="8"
+          x2="15"
+          y2="8"
+        /><line x1="17" y1="16" x2="23" y2="16" /></svg
+      >
+    </label>
   </div>
   <div
     class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
@@ -194,7 +208,6 @@
       <Select
         on:select={e => {
           $currentGenres = e.detail ? e.detail : []
-          setViewportToDefault()
           search()
         }}
         on:clear={e => {
@@ -212,7 +225,6 @@
       <Select
         on:select={e => {
           $currentProviders = e.detail ? e.detail : []
-          setViewportToDefault()
           search()
         }}
         on:clear={e => {
