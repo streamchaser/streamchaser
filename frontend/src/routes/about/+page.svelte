@@ -1,6 +1,6 @@
 <script>
-  import Collapse from "../components/collapse.svelte"
-  import Avatar from "../components/avatar.svelte"
+  import Collapse from "../../components/collapse.svelte"
+  import Avatar from "../../components/avatar.svelte"
 </script>
 
 <svelte:head>

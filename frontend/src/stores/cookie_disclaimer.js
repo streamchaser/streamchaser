@@ -1,8 +1,8 @@
-import { persist, localStorage } from "@macfja/svelte-persistent-store"
+import { persist, createLocalStorage } from "@macfja/svelte-persistent-store"
 import { writable } from "svelte/store"
 
 export const cookieDisclaimer = persist(
   writable(false),
-  localStorage(),
+  createLocalStorage(),
   "cookieDisclaimer"
 )

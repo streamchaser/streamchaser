@@ -1,4 +1,8 @@
-import { persist, localStorage } from "@macfja/svelte-persistent-store"
+import { persist, createLocalStorage } from "@macfja/svelte-persistent-store"
 import { writable } from "svelte/store"
 
-export const chosenTheme = persist(writable("dark"), localStorage(), "chosenTheme")
+export const chosenTheme = persist(
+  writable("dark"),
+  createLocalStorage(),
+  "chosenTheme"
+)
