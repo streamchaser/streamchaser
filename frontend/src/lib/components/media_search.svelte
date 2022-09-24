@@ -2,9 +2,9 @@
   import { fade } from "svelte/transition"
   import { mediaIdToUrlConverter } from "../utils"
   import InfiniteLoading from "svelte-infinite-loading"
-  import NoResults from "../components/no_results.svelte"
+  import NoResults from "$lib/components/no_results.svelte"
   import type { Meilisearch } from "../types"
-  import Spinner from "../components/loading/spinner.svelte"
+  import Spinner from "$lib/components/loading/spinner.svelte"
   import { IMG_ORIGINAL, IMG_W342 } from "../variables"
 
   const SHOWN_PROVIDERS: number = 5

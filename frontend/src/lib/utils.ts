@@ -36,7 +36,7 @@ export const mediaIdToUrlConverter = (
 }
 
 export const removeDuplicates = (arr: Media[]) => {
-  let unique_ids = []
+  const unique_ids = []
   for (let i = 0; i < arr.length; i++) {
     if (unique_ids.includes(arr[i].id)) {
       arr.splice(i, 1)

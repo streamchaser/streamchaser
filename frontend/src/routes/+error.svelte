@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Error from "../components/error.svelte"
+  import Error from "$lib/components/error.svelte"
   import { onMount } from "svelte"
 
   // This is a temp fix for the firefox dyanmic import bug
