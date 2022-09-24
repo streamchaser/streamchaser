@@ -19,7 +19,6 @@ httpx = "^0.22.0"
 pytest-asyncio = "^0.18.1"
 meilisearch-python-async = "^0.22.0"
 starlette-context = "^0.3.4"
-fastapi-cache2 = { extras = ["redis"], version = "^0.1.9" }
 redis = "^4.3.4"
 
 [tool.poetry.dev-dependencies]
