@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { addMediaToID, getMostPopularBackdropPath } from "../../../utils"
-  import { PYTHON_API } from "../../../variables.js"
+  import { addMediaToID, getMostPopularBackdropPath } from "$lib/utils"
+  import { PYTHON_API } from "$lib/variables.js"
   import { page } from "$app/stores"
-  import Error from "../../../components/error.svelte"
-  import TopCard from "../../../components/details/top_card.svelte"
-  import PersonMedia from "../../../components/details/person_media.svelte"
-  import Spinner from "../../../components/loading/spinner.svelte"
-  import type { Person } from "../../../types"
+  import Error from "$lib/components/error.svelte"
+  import TopCard from "$lib/components/details/top_card.svelte"
+  import PersonMedia from "$lib/components/details/person_media.svelte"
+  import Spinner from "$lib/components/loading/spinner.svelte"
+  import type { Person } from "$lib/types"
 
   const PERSON_DETAIL_URL: string = `${PYTHON_API}/person/${$page.params.id}`
 

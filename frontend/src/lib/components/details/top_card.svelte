@@ -1,10 +1,10 @@
 <script lang="ts">
   import ReadMore from "./read_more.svelte"
-  import { currentCountry } from "../../stores/country.js"
-  import { currentGenres } from "../../stores/genres.js"
-  import { inputQuery } from "../../stores/input.js"
-  import { uniqueArray } from "../../utils"
-  import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "../../variables"
+  import { currentCountry } from "$lib/stores/country.js"
+  import { currentGenres } from "$lib/stores/genres.js"
+  import { inputQuery } from "$lib/stores/input.js"
+  import { uniqueArray } from "$lib/utils"
+  import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "$lib/variables"
 
   const INITIAL_OVERVIEW_LENGTH: number = 550
 
