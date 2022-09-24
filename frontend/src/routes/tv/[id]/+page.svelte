@@ -1,14 +1,17 @@
 <script lang="ts">
-  import { removeContentWithMissingImagePath, sortListByPopularity } from "../../utils"
-  import { PYTHON_API } from "../../variables.js"
+  import {
+    removeContentWithMissingImagePath,
+    sortListByPopularity,
+  } from "../../../utils"
+  import { PYTHON_API } from "../../../variables.js"
   import { page } from "$app/stores"
-  import { currentCountry } from "../../stores/country.js"
-  import Seasons from "../../components/details/seasons.svelte"
-  import Error from "../../components/error.svelte"
-  import Person from "../../components/details/person.svelte"
-  import TopCard from "../../components/details/top_card.svelte"
-  import Recommendations from "../../components/details/recommendations.svelte"
-  import Spinner from "../../components/loading/spinner.svelte"
+  import { currentCountry } from "../../../stores/country.js"
+  import Seasons from "../../../components/details/seasons.svelte"
+  import Error from "../../../components/error.svelte"
+  import Person from "../../../components/details/person.svelte"
+  import TopCard from "../../../components/details/top_card.svelte"
+  import Recommendations from "../../../components/details/recommendations.svelte"
+  import Spinner from "../../../components/loading/spinner.svelte"
 
   const TV_DETAIL_URL = `${PYTHON_API}/tv/${$currentCountry}/${$page.params.id}`
 

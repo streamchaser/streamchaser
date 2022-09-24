@@ -1,5 +1,5 @@
 <script>
-  import Collapse from "../components/collapse.svelte"
+  import Collapse from "../../components/collapse.svelte"
 </script>
 
 <svelte:head>
