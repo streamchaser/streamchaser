@@ -1,4 +1,4 @@
-from aioredis import from_url
+import redis.asyncio as aioredis
 from pydantic import BaseModel
 
 
@@ -8,4 +8,4 @@ class Genre(BaseModel):
 
 
 # For having all the complex Redis operations
-redis = from_url("redis://redis")
+redis = aioredis.from_url("redis://redis")
