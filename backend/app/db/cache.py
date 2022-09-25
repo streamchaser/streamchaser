@@ -1,5 +1,5 @@
-from aioredis import from_url
 from pydantic import BaseModel
+from redis.asyncio import from_url
 
 
 class Genre(BaseModel):
