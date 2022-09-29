@@ -5,7 +5,7 @@ export const IMG_W185 = "https://image.tmdb.org/t/p/w185/"
 export const IMG_W342 = `${PYTHON_API}/image?size=w342&path=`
 export const IMG_W500 = "https://image.tmdb.org/t/p/w500/"
 export const IMG_W1280 = "https://image.tmdb.org/t/p/w1280/"
-export const IMG_ORIGINAL = "https://image.tmdb.org/t/p/original/"
+export const IMG_ORIGINAL = `${PYTHON_API}/image?size=original&path=`
 
 export const COUNTRIES = [
   { name: "Argentina", value: "AR", icon: "🇦🇷" },
