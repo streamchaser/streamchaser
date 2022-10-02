@@ -1,34 +1,10 @@
 <script lang="ts">
-  import { removeContentWithMissingImagePath, sortListByPopularity } from "$lib/utils"
-  import { PYTHON_API } from "$lib/variables.js"
-  import { page } from "$app/stores"
   import { currentCountry } from "$lib/stores/country.js"
-  import Error from "$lib/components/error.svelte"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
-  import Spinner from "$lib/components/loading/spinner.svelte"
 
-  const MOVIE_DETAIL_URL: string = `${PYTHON_API}/movie/${$currentCountry}/${$page.params.id}`
-
-  let movieTitle: string = "Loading..."
-
-  const fetchMovieDetails = async () => {
-    const response = await fetch(MOVIE_DETAIL_URL)
-
-    if (response.status == 200) {
-      let jsonResponse = await response.json()
-      movieTitle = jsonResponse.title
-
-      removeContentWithMissingImagePath(jsonResponse.cast, "profile_path")
-      sortListByPopularity(jsonResponse.cast)
-      return jsonResponse
-    } else {
-      console.error(response.statusText)
-      movieTitle = "Error loading movie"
-      throw new Error(response.statusText)
-    }
-  }
+  export let data
 
   let firstLoadCompleted = false
 
@@ -41,28 +17,22 @@
 </script>
 
 <svelte:head>
-  <title>{movieTitle} - Streamchaser</title>
+  <title>{data.title} - Streamchaser</title>
 </svelte:head>
 
-{#await fetchMovieDetails()}
-  <Spinner />
-{:then movie}
-  <TopCard
-    backdropPath={movie.backdrop_path}
-    posterPath={movie.poster_path}
-    title={movie.title}
-    overview={movie.overview}
-    genres={movie.genres}
-    freeProviders={movie.free_providers}
-    flatrateProviders={movie.flatrate_providers}
-    runtime={movie.runtime}
-    imdbId={movie.imdb_id}
-    releaseDate={movie.release_date}
-  />
+<TopCard
+  backdropPath={data.backdrop_path}
+  posterPath={data.poster_path}
+  title={data.title}
+  overview={data.overview}
+  genres={data.genres}
+  freeProviders={data.free_providers}
+  flatrateProviders={data.flatrate_providers}
+  runtime={data.runtime}
+  imdbId={data.imdb_id}
+  releaseDate={data.release_date}
+/>
 
-  <Person cast={movie.cast} />
+<Person cast={data.cast} />
 
-  <Recommendations recommendations={movie.recommendations} mediaType={"movie"} />
-{:catch error}
-  <Error {error} />
-{/await}
+<Recommendations recommendations={data.recommendations} mediaType={"movie"} />
