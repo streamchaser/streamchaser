@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{person_id}")
+@router.get("/{person_id}", response_model=Person)
 async def get_person(person_id: int) -> Person:
     """Specific TV page"""
     if cached_person := (await redis.get(f"person:{person_id}")):
