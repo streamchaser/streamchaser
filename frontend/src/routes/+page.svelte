@@ -158,22 +158,20 @@
     style="
 
              --borderRadius: var(--rounded-btn, .5rem);
-             --background: {DT[`[data-theme=${$chosenTheme}]`]['base-100']};
-             --border: 1px solid {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --borderFocusColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --borderHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --multiItemBG: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --multiItemColor: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']};
-             --multiItemActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-focus']};
-             --multiItemActiveColor: {DT[`[data-theme=${$chosenTheme}]`][
-      'primary-content'
-    ]};
-             --clearSelectHoverColor: {DT[`[data-theme=${$chosenTheme}]`]['primary']};
-             --itemIsActiveBG: {DT[`[data-theme=${$chosenTheme}]`]['primary-content']};
-             --itemColor: {DT[`[data-theme=${$chosenTheme}]`]['text-secondary']};
-             --listBackground: {DT[`[data-theme=${$chosenTheme}]`]['neutral']};
-             --itemHoverBG: {DT[`[data-theme=${$chosenTheme}]`]['neutral-focus']};
-             --inputColor: {DT[`[data-theme=${$chosenTheme}]`]['text-primary']};
+             --background: hsl(var(--b1));
+             --border: 1px solid hsl(var(--p));
+             --borderFocusColor: hsl(var(--p));
+             --borderHoverColor: hsl(var(--p));
+             --multiItemBG: hsl(var(--p));
+             --multiItemColor: hsl(var(--pc))
+             --multiItemActiveBG: hsl(var(--pf))
+             --multiItemActiveColor: hsl(var(--pc));
+             --clearSelectHoverColor: hsl(var(--p));
+             --itemIsActiveBG: hsl(var(--pc))
+             --itemColor: hsl(var(--sc));
+             --listBackground: hsl(var(--n));
+             --itemHoverBG: hsl(var(--nf));
+             --inputColor: hsl(var(--pc));
               "
   >
     <div class="mb-2 sm:mb-0">
