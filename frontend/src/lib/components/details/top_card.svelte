@@ -125,7 +125,11 @@
     {:else}
       <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
         {#each uniqueArray(freeProviders.concat(flatrateProviders), "provider_id") as provider}
-          <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
+          <a
+            class="avatar tooltip border-neutral"
+            data-tip={provider.provider_name}
+            href={`https://${provider.provider_name.replaceAll(" ", "")}.com`}
+          >
             <div
               data-tip={provider.provider_name}
               class="mb-2 rounded-full w-20 h-20 ring ring-neutral
@@ -136,7 +140,7 @@
                 alt={provider.provider_name}
               />
             </div>
-          </div>
+          </a>
         {/each}
       </div>
     {/if}
