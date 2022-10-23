@@ -209,6 +209,11 @@
     "@rollup/plugin-node-resolve" "^14.1.0"
     rollup "^2.78.1"
 
+"@sveltejs/adapter-static@^1.0.0-next.46":
+  version "1.0.0-next.46"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-static/-/adapter-static-1.0.0-next.46.tgz#49f779df4e1f1f8862a229de51d28778917a5495"
+  integrity sha512-8BlgwD3fjAbtUUgvREjrq5okZSXMTU/Qla99RhTqGaFo+uOrUzguKrXvjeaD4GzxQZdQUNyTX9hKT0V7tX6TMw==
+
 "@sveltejs/adapter-vercel@1.0.0-next.77":
   version "1.0.0-next.77"
   resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-1.0.0-next.77.tgz#be9bfa2b46fd63723893d37ecdacbb1d735515c3"
