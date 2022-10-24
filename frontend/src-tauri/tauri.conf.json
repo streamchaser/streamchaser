@@ -50,10 +50,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 900,
         "resizable": true,
         "title": "streamchaser",
-        "width": 800
+        "width": 1200
       }
     ]
   }
