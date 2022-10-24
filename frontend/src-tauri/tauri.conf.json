@@ -22,7 +22,7 @@
         "depends": []
       },
       "externalBin": [],
-      "icon": ["icons/icon.png", "icons/icon.ico"],
+      "icon": ["icons/icon.png", "icons/icon.ico", "icons/icon.icns"],
       "identifier": "streamchaser.tv",
       "longDescription": "",
       "macOS": {
