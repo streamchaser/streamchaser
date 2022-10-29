@@ -146,7 +146,7 @@
       id="input-field"
       type="text"
       placeholder="Search in {$currentCountry}"
-      class="input input-bordered input-primary grow min-w-0"
+      class="input input-bordered input-primary grow min-w-0 hover:border-primary-focus"
       bind:value={input}
       on:input={debounceInput}
       autofocus={viewPortWidth <= 640 ? false : true}
@@ -161,17 +161,18 @@
              --background: hsl(var(--b1));
              --border: 1px solid hsl(var(--p));
              --borderFocusColor: hsl(var(--p));
-             --borderHoverColor: hsl(var(--p));
+             --borderHoverColor: hsl(var(--pf));
              --multiItemBG: hsl(var(--p));
-             --multiItemColor: hsl(var(--pc))
-             --multiItemActiveBG: hsl(var(--pf))
-             --multiItemActiveColor: hsl(var(--pc));
-             --clearSelectHoverColor: hsl(var(--p));
+             --multiItemColor: hsl(var(--bc));
+             --multiItemActiveBG: hsl(var(--pf));
+             --multiItemActiveColor: hsl(var(--bc));
+             --clearSelectHoverColor: hsl(var(--pf));
              --itemIsActiveBG: hsl(var(--pc))
              --itemColor: hsl(var(--sc));
              --listBackground: hsl(var(--n));
              --itemHoverBG: hsl(var(--nf));
-             --inputColor: hsl(var(--pc));
+             --itemHoverColor: hsl(var(--bc));
+             --inputColor: hsl(var(--bc));
               "
   >
     <div class="mb-2 sm:mb-0">
