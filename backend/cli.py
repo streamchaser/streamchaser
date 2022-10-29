@@ -41,7 +41,7 @@ def update_ids(ids: list[str]):
             "The ids will not be sent"
         )
         return
-    with httpx.Client() as client:
+    with httpx.Client(http2=True) as client:
         res = client.post("http://internal:8888/update-media", json={"ids": ids})
         echo_success(res.json()["info"])
 
@@ -74,7 +74,7 @@ def update_media(
 
     print(f"\nAbout to update {len(movie_ids)} movies and {len(tv_ids)} TV shows")
 
-    with httpx.Client(timeout=30) as client:
+    with httpx.Client(http2=True, timeout=30) as client:
         for media in zip(["movies", "tv shows"], [movie_ids, tv_ids]):
             id_chunks, total_chunks = chunkify(media[1], chunk_size)
             for id_chunk in tqdm(
