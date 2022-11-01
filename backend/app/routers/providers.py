@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{country_code}")
+@router.get("/{country_code}", response_model=list[str])
 async def read_all_providers(country_code):
     """Reads all the providers from providers.txt"""
     country_code = country_code.upper()

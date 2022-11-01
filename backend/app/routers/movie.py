@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{country_code}/{movie_id}")
+@router.get("/{country_code}/{movie_id}", response_model=Movie)
 async def get_movie(movie_id: int, country_code: str) -> Movie:
     """Specific Movie page"""
     country_code = country_code.upper()

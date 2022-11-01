@@ -1,4 +1,5 @@
 from app.db.search import async_client
+from app.schemas import Media
 from fastapi import APIRouter
 from fastapi.param_functions import Query
 
@@ -10,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get("")
+@router.get("", response_model=list[Media])
 async def lookup_ids(
     c: str = Query("DK", description="A country code"),
     ids: list[str] = Query(

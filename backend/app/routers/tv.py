@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{country_code}/{tv_id}")
+@router.get("/{country_code}/{tv_id}", response_model=TV)
 async def get_tv(tv_id: int, country_code: str) -> TV:
     """Specific TV page"""
     country_code = country_code.upper()
