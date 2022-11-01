@@ -114,7 +114,7 @@ def fetch_changed_media_ids() -> Tuple[list[str], list[str]]:
     today = datetime.today().strftime("%Y-%m-%d")
     yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d")
 
-    with httpx.Client() as client:
+    with httpx.Client(http2=True) as client:
         movie_res = client.get(
             f"{tmdb_url}movie/changes?api_key={tmdb_key}&"
             f"end_date={today}&start_date={yesterday}&page=1"
@@ -171,7 +171,7 @@ async def get_person_from_id(person_id: int):
         "&append_to_response=movie_credits,tv_credits,external_ids"
     )
 
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(http2=True) as client:
         response = await client.get(url)
         person = response.json()
 
@@ -200,7 +200,7 @@ async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
         "&append_to_response=watch/providers,recommendations,credits"
     )
 
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(http2=True) as client:
         response = await client.get(url)
         movie = response.json()
 
@@ -235,7 +235,7 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
         "&append_to_response=watch/providers,recommendations,credits,external_ids"
     )
 
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(http2=True) as client:
         response = await client.get(url)
         tv = response.json()
 

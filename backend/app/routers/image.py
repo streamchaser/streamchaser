@@ -9,7 +9,7 @@ router = APIRouter(
     tags=["image, poster"],
 )
 
-client = httpx.AsyncClient(base_url="https://image.tmdb.org/t/p/")
+client = httpx.AsyncClient(http2=True, base_url="https://image.tmdb.org/t/p/")
 
 
 @router.get("/")

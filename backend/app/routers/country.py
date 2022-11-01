@@ -18,7 +18,7 @@ async def lookup_country():
     key = get_settings().ipregistry_key
     ip = context.data["X-Forwarded-For"]
 
-    async with httpx.AsyncClient(timeout=10) as client:
+    async with httpx.AsyncClient(http2=True, timeout=10) as client:
         match get_settings().app_environment:
             case Environment.DEVELOPMENT:
                 res = await client.get(f"https://api.ipregistry.co/?key={key}")

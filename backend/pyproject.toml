@@ -15,7 +15,7 @@ tqdm = "^4.62.3"
 uvicorn = "^0.17.4"
 fastapi = "^0.73.0"
 gunicorn = "^20.1.0"
-httpx = "^0.22.0"
+httpx = { version = "^0.22.0", extras = ["http2"] }
 pytest-asyncio = "^0.18.1"
 meilisearch-python-async = "^0.22.0"
 starlette-context = "^0.3.4"
