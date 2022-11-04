@@ -9,7 +9,7 @@ export type Movie = {
   overview: string
   genres?: Array<string>
   imdb_id?: string
-  runtime?: string
+  runtime?: number
   flatrate_providers?: Array<any>
   free_providers?: Array<any>
   recommendations: Array<any>

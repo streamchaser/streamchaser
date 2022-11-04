@@ -1,61 +1,34 @@
 <script lang="ts">
-  import { addMediaToID, getMostPopularBackdropPath } from "$lib/utils"
-  import { PYTHON_API } from "$lib/variables.js"
-  import { page } from "$app/stores"
-  import Error from "$lib/components/error.svelte"
+  import { getMostPopularBackdropPath } from "$lib/utils"
   import TopCard from "$lib/components/details/top_card.svelte"
   import PersonMedia from "$lib/components/details/person_media.svelte"
-  import Spinner from "$lib/components/loading/spinner.svelte"
-  import type { Person } from "$lib/types"
+  import type { Person } from "$lib/generated"
+  import type { PageData } from "./$types"
 
-  const PERSON_DETAIL_URL: string = `${PYTHON_API}/person/${$page.params.id}`
+  export let data: PageData
 
-  let personName: string = "Loading..."
   const mediaCreditsWithoutAdult = (person: Person) => {
     return person.movie_credits.concat(person.tv_credits).filter(m => !m.adult)
-  }
-  const fetchPersonDetails = async () => {
-    const response = await fetch(PERSON_DETAIL_URL)
-
-    if (response.status == 200) {
-      let jsonResponse = await response.json()
-      personName = jsonResponse.name
-
-      addMediaToID(jsonResponse.movie_credits, "movie")
-      addMediaToID(jsonResponse.tv_credits, "tv")
-
-      return jsonResponse
-    } else {
-      console.error(response.statusText)
-      personName = "Error loading person"
-      throw new Error(response.statusText)
-    }
   }
 </script>
 
 <svelte:head>
-  <title>{personName} - Streamchaser</title>
+  <title>{data.person.name} - Streamchaser</title>
 </svelte:head>
 
-{#await fetchPersonDetails()}
-  <Spinner />
-{:then person}
-  <TopCard
-    backdropPath={getMostPopularBackdropPath(
-      person.movie_credits.concat(person.tv_credits)
-    )}
-    posterPath={person.profile_path}
-    title={person.name}
-    overview={person.biography}
-    genres={null}
-    freeProviders={null}
-    flatrateProviders={null}
-    runtime={null}
-    imdbId={person.imdb_id}
-    releaseDate={null}
-  />
+<TopCard
+  backdropPath={getMostPopularBackdropPath(
+    data.person.movie_credits.concat(data.person.tv_credits)
+  )}
+  posterPath={data.person.profile_path}
+  title={data.person.name}
+  overview={data.person.biography}
+  genres={null}
+  freeProviders={null}
+  flatrateProviders={null}
+  runtime={null}
+  imdbId={data.person.imdb_id}
+  releaseDate={null}
+/>
 
-  <PersonMedia media={mediaCreditsWithoutAdult(person)} />
-{:catch error}
-  <Error {error} />
-{/await}
+<PersonMedia media={mediaCreditsWithoutAdult(data.person)} />

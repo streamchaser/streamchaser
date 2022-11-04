@@ -10,19 +10,29 @@
     getMediaTitle,
   } from "../../utils"
   import type { Media } from "../../types"
-  import { IMG_W342 } from "../../variables"
+  import { IMG_W342 } from "$lib/variables"
+  import { onMount } from "svelte"
 
   export let media: Media[]
-  let currentMediaAmount = calculateAmountOfShownItems({
-    width: window.visualViewport.width,
-    xxl: 32,
-    xl: 28,
-    lg: 24,
-    md: 20,
-    sm: 16,
-    mobile: 10,
+
+  let currentMediaAmount: number
+  let mediaStartAmount: number
+  let loadedPage: boolean // TODO: Kill wih fire
+
+  // TODO: Kill with fire
+  onMount(() => {
+    currentMediaAmount = calculateAmountOfShownItems({
+      width: window.visualViewport.width,
+      xxl: 32,
+      xl: 28,
+      lg: 24,
+      md: 20,
+      sm: 16,
+      mobile: 10,
+    })
+    mediaStartAmount = currentMediaAmount
+    loadedPage = true
   })
-  const mediaStartAmount = currentMediaAmount
 
   const loadMoreData = async ({ detail: { loaded } }) => {
     currentMediaAmount += mediaStartAmount
@@ -34,7 +44,7 @@
   sortListByPopularity(media)
 </script>
 
-{#if media.length}
+{#if media.length && loadedPage}
   <h1 class="text-center text-3xl pt-5">Starred in</h1>
   <div
     class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-7 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4"

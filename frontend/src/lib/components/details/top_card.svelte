@@ -12,9 +12,9 @@
   export let posterPath: string
   export let title: string
   export let overview: string
-  export let genres: []
-  export let freeProviders: []
-  export let flatrateProviders: []
+  export let genres: string[]
+  export let freeProviders: string[]
+  export let flatrateProviders: string[]
   export let runtime: number
   export let imdbId: string
   export let releaseDate: string
