@@ -2,19 +2,26 @@
   import { mediaIdToUrlConverter, calculateAmountOfShownItems } from "../../utils"
   import type { Cast } from "../../types"
   import { IMG_W342 } from "../../variables"
+  import { onMount } from "svelte"
 
   export let cast: Cast[]
 
-  let castItemAmount = calculateAmountOfShownItems({
-    width: window.visualViewport.width,
-    xxl: 18,
-    xl: 16,
-    lg: 14,
-    md: 10,
-    sm: 12,
-    mobile: 9,
+  let castItemAmount: number
+  let castItemStartAmount: number
+
+  // TODO: Make this happen in a less insane way
+  onMount(() => {
+    castItemAmount = calculateAmountOfShownItems({
+      width: window.visualViewport.width,
+      xxl: 18,
+      xl: 16,
+      lg: 14,
+      md: 10,
+      sm: 12,
+      mobile: 9,
+    })
+    castItemStartAmount = castItemAmount
   })
-  const castItemStartAmount = castItemAmount
 </script>
 
 {#if cast.length}

@@ -10,19 +10,27 @@
     getMediaTitle,
   } from "../../utils"
   import type { Media } from "../../types"
-  import { IMG_W342 } from "../../variables"
+  import { IMG_W342 } from "$lib/variables"
+  import { onMount } from "svelte"
 
   export let media: Media[]
-  let currentMediaAmount = calculateAmountOfShownItems({
-    width: window.visualViewport.width,
-    xxl: 32,
-    xl: 28,
-    lg: 24,
-    md: 20,
-    sm: 16,
-    mobile: 10,
+
+  let currentMediaAmount: number
+  let mediaStartAmount: number
+
+  // TODO: Kill with fire
+  onMount(() => {
+    currentMediaAmount = calculateAmountOfShownItems({
+      width: window.visualViewport.width,
+      xxl: 32,
+      xl: 28,
+      lg: 24,
+      md: 20,
+      sm: 16,
+      mobile: 10,
+    })
+    mediaStartAmount = currentMediaAmount
   })
-  const mediaStartAmount = currentMediaAmount
 
   const loadMoreData = async ({ detail: { loaded } }) => {
     currentMediaAmount += mediaStartAmount

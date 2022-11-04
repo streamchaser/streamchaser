@@ -26,7 +26,7 @@ class Movie(BaseModel):
     overview: str
     genres: list[str] | None
     imdb_id: str | None
-    runtime: str | None
+    runtime: int | None
     flatrate_providers: list[dict] | None
     free_providers: list[dict] | None
     recommendations: list[dict]

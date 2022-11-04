@@ -1,36 +1,13 @@
 <script lang="ts">
-  import { removeContentWithMissingImagePath, sortListByPopularity } from "$lib/utils"
-  import { PYTHON_API } from "$lib/variables.js"
-  import { page } from "$app/stores"
   import { currentCountry } from "$lib/stores/country.js"
   import Seasons from "$lib/components/details/seasons.svelte"
-  import Error from "$lib/components/error.svelte"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
-  import Spinner from "$lib/components/loading/spinner.svelte"
+  import type { PageData } from "./$types"
 
-  const TV_DETAIL_URL = `${PYTHON_API}/tv/${$currentCountry}/${$page.params.id}`
-
-  let tvTitle = "Loading..."
-
-  const fetchTVDetails = async () => {
-    const response = await fetch(TV_DETAIL_URL)
-
-    if (response.status == 200) {
-      let jsonResponse = await response.json()
-      tvTitle = jsonResponse.name
-
-      removeContentWithMissingImagePath(jsonResponse.cast, "profile_path")
-      sortListByPopularity(jsonResponse.cast)
-
-      return jsonResponse
-    } else {
-      console.error(response.statusText)
-      tvTitle = "Error loading tv"
-      throw new Error(response.statusText)
-    }
-  }
+  export let data: PageData
+  const { tv } = data
 
   let firstLoadCompleted = false
 
@@ -43,30 +20,24 @@
 </script>
 
 <svelte:head>
-  <title>{tvTitle} - Streamchaser</title>
+  <title>{tv.name} - Streamchaser</title>
 </svelte:head>
 
-{#await fetchTVDetails()}
-  <Spinner />
-{:then tv}
-  <TopCard
-    backdropPath={tv.backdrop_path}
-    posterPath={tv.poster_path}
-    title={tv.name}
-    overview={tv.overview}
-    genres={tv.genres}
-    freeProviders={tv.free_providers}
-    flatrateProviders={tv.flatrate_providers}
-    runtime={tv.episode_run_time[0]}
-    imdbId={tv.imdb_id}
-    releaseDate={tv.first_air_date}
-  />
+<TopCard
+  backdropPath={tv.backdrop_path}
+  posterPath={tv.poster_path}
+  title={tv.name}
+  overview={tv.overview}
+  genres={tv.genres}
+  freeProviders={tv.free_providers}
+  flatrateProviders={tv.flatrate_providers}
+  runtime={tv.episode_run_time[0]}
+  imdbId={tv.imdb_id}
+  releaseDate={tv.first_air_date}
+/>
 
-  <Seasons seasons={tv.seasons} />
+<Seasons seasons={tv.seasons} />
 
-  <Person cast={tv.cast} />
+<Person cast={tv.cast} />
 
-  <Recommendations recommendations={tv.recommendations} mediaType={"tv"} />
-{:catch error}
-  <Error {error} />
-{/await}
+<Recommendations recommendations={tv.recommendations} mediaType={"tv"} />
