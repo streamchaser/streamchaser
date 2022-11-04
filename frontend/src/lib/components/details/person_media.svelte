@@ -17,7 +17,6 @@
 
   let currentMediaAmount: number
   let mediaStartAmount: number
-  let loadedPage: boolean // TODO: Kill wih fire
 
   // TODO: Kill with fire
   onMount(() => {
@@ -31,7 +30,6 @@
       mobile: 10,
     })
     mediaStartAmount = currentMediaAmount
-    loadedPage = true
   })
 
   const loadMoreData = async ({ detail: { loaded } }) => {
@@ -44,7 +42,7 @@
   sortListByPopularity(media)
 </script>
 
-{#if media.length && loadedPage}
+{#if media.length}
   <h1 class="text-center text-3xl pt-5">Starred in</h1>
   <div
     class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-7 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4"

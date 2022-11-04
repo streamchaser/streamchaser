@@ -1,9 +1,9 @@
 import { addMediaToID } from "$lib/utils"
 import { PYTHON_API } from "$lib/variables.js"
-import type { PageServerLoad } from "./$types"
+import type { PageLoad } from "./$types"
 import type { Person } from "$lib/generated"
 
-export const load: PageServerLoad = async event => {
+export const load: PageLoad = async event => {
   const PERSON_DETAIL_URL: string = `${PYTHON_API}/person/${event.params.id}`
 
   const response = await fetch(PERSON_DETAIL_URL)

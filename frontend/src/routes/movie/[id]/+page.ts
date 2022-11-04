@@ -1,10 +1,10 @@
 import { removeContentWithMissingImagePath, sortListByPopularity } from "$lib/utils"
 import { PYTHON_API } from "$lib/variables.js"
 import { currentCountry } from "$lib/stores/country.js"
-import type { PageServerLoad } from "./$types"
+import type { PageLoad } from "./$types"
 import type { Movie } from "$lib/generated"
 
-export const load: PageServerLoad = async event => {
+export const load: PageLoad = async event => {
   let country: string
   currentCountry.subscribe(v => (country = v))
 
