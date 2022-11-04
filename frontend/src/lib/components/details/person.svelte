@@ -9,6 +9,7 @@
   let castItemAmount: number
   let castItemStartAmount: number
 
+  // TODO: Make this happen in a less insane way
   onMount(() => {
     castItemAmount = calculateAmountOfShownItems({
       width: window.visualViewport.width,

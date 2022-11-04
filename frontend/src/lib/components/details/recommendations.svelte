@@ -13,6 +13,7 @@
   let loadedPage: boolean
   let slidesPerView: number
 
+  // TODO: Make this happen in a less insane way
   onMount(() => {
     slidesPerView = calculateAmountOfShownItems({
       width: window.visualViewport.width,
