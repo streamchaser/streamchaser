@@ -34,6 +34,7 @@
       {#if person.profile_path}
         <a
           href={mediaIdToUrlConverter(person.id, "person")}
+          data-sveltekit-prefetch
           class="card compact bordered shadow-md bg-neutral-focus
                             hover:contrast-75 hover:ring-2 ring-primary"
         >

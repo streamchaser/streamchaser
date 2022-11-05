@@ -37,6 +37,7 @@
         in:fade
         out:fade|local={{ duration: 200 }}
         href={mediaIdToUrlConverter(media.id)}
+        data-sveltekit-prefetch
         class="card compact w-auto bordered bg-neutral-focus m-1
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
       >

@@ -45,6 +45,7 @@
               href={mediaIdToUrlConverter(recommendation.id, mediaType)}
               target="_self"
               class="p-1"
+              data-sveltekit-prefetch
             >
               <img
                 src="{IMG_W342}{recommendation.poster_path}"
