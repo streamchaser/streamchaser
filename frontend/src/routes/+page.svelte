@@ -77,15 +77,16 @@
 
     if ($filters.tvChecked && $filters.movieChecked) {
     } else if ($filters.movieChecked) {
-      query += `&t=movie`
+      query += "&t=movie"
     } else {
-      query += `&t=tv`
+      query += "&t=tv"
     }
 
     if (!$filters.showNoProviders) {
-      query += `&only_providers=true`
+      query += "&only_providers=true"
     }
     // Searches for all(*) if empty input
+    // Empty input will only return media with providers
     const res =
       input !== ""
         ? await fetch(
@@ -102,7 +103,8 @@
               "?c=" +
               $currentCountry +
               query +
-              `&limit=${currentMediaAmount}`
+              `&limit=${currentMediaAmount}` +
+              "&only_providers=true"
           )
     $inputQuery = input
     meilisearch = await res.json()
