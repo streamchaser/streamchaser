@@ -25,8 +25,12 @@
   <div class="flex-1 px-2 mx-2" />
   <div class="flex-none">
     <div class="items-stretch hidden sm:flex">
-      <a class="btn btn-ghost btn-sm rounded-btn" href="/about" data-sveltekit-prefetch> About </a>
-      <a class="btn btn-ghost btn-sm rounded-btn" href="/faq" data-sveltekit-prefetch> FAQ </a>
+      <a class="btn btn-ghost btn-sm rounded-btn" href="/about" data-sveltekit-prefetch>
+        About
+      </a>
+      <a class="btn btn-ghost btn-sm rounded-btn" href="/faq" data-sveltekit-prefetch>
+        FAQ
+      </a>
     </div>
     <ThemeSelector />
     <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
