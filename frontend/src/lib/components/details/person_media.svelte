@@ -51,6 +51,7 @@
       <a
         in:fade
         href={mediaIdToUrlConverter(media.id)}
+        data-sveltekit-prefetch
         class="card compact bordered shadow-md
                        hover:contrast-75 hover:ring-2 ring-primary"
       >
