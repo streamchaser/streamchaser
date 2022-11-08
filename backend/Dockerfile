@@ -1,7 +1,7 @@
 ARG APP_ENVIRONMENT=dev
 
 
-FROM --platform=linux/amd64 python:3.10-slim as base
+FROM --platform=linux/amd64 python:3.11-slim as base
 
 WORKDIR /app
 
@@ -22,6 +22,6 @@ CMD gunicorn app.main:app --access-logfile - -k uvicorn.workers.UvicornWorker -b
 
 FROM base as dev
 RUN echo "Starting backend as development" \
-    && poetry export --dev -f requirements.txt --output requirements.txt --without-hashes \
+    && poetry export --with dev -f requirements.txt --output requirements.txt --without-hashes \
     && pip install --no-cache-dir -r requirements.txt
 CMD uvicorn app.main:app --host 0.0.0.0 --port 80 --reload
