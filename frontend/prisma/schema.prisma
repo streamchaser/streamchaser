@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model media {
+  id             String    @id
+  created_at     DateTime? @db.Timestamptz(6)
+  updated_at     DateTime? @db.Timestamptz(6)
+  deleted_at     DateTime? @db.Timestamptz(6)
+  title          String?
+  original_title String?
+  overview       String?
+  release_date   String?
+  genres         String[]
+  poster_path    String?
+  popularity     Decimal?  @db.Decimal
+  providers      Json?     @db.Json
+
+  @@index([deleted_at], map: "idx_media_deleted_at")
+}

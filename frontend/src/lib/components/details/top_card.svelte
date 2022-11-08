@@ -5,6 +5,7 @@
   import { inputQuery } from "$lib/stores/input.js"
   import { uniqueArray } from "$lib/utils"
   import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "$lib/variables"
+  import type { Provider } from "$lib/types"
 
   const INITIAL_OVERVIEW_LENGTH: number = 550
 
@@ -13,8 +14,8 @@
   export let title: string
   export let overview: string
   export let genres: string[]
-  export let freeProviders: string[]
-  export let flatrateProviders: string[]
+  export let freeProviders: Provider[]
+  export let flatrateProviders: Provider[]
   export let runtime: number
   export let imdbId: string
   export let releaseDate: string

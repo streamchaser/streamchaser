@@ -6,7 +6,7 @@
   import type { PageData } from "./$types"
 
   export let data: PageData
-  const { movie } = data
+  const { movie, newMovie, providers } = data
 
   let firstLoadCompleted = false // TODO: Kill with fire
 
@@ -20,20 +20,20 @@
 </script>
 
 <svelte:head>
-  <title>{movie.title} - Streamchaser</title>
+  <title>{newMovie.title} - Streamchaser</title>
 </svelte:head>
 
 <TopCard
   backdropPath={movie.backdrop_path}
-  posterPath={movie.poster_path}
-  title={movie.title}
-  overview={movie.overview}
-  genres={movie.genres}
-  freeProviders={movie.free_providers}
-  flatrateProviders={movie.flatrate_providers}
+  posterPath={newMovie.poster_path}
+  title={newMovie.title}
+  overview={newMovie.overview}
+  genres={newMovie.genres}
+  freeProviders={providers.free}
+  flatrateProviders={providers.flatrate}
   runtime={movie.runtime}
   imdbId={movie.imdb_id}
-  releaseDate={movie.release_date}
+  releaseDate={newMovie.release_date}
 />
 
 <Person cast={movie.cast} />
