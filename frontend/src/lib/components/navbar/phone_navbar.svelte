@@ -19,7 +19,11 @@
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16">
   <div class="flex-none sm:px-2 sm:mx-2">
     <a href="/">
-      <img src="../../navbar_logo_with_image.png" class="w-48" />
+      <img
+        src="../../navbar_logo_with_image.png"
+        alt="streamchaser logo"
+        class="w-48"
+      />
     </a>
   </div>
   <div class="flex-1 px-2 mx-2" />
