@@ -139,7 +139,7 @@
   <title>Streamchaser</title>
 </svelte:head>
 
-<div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-2 sm:px-6">
+<div class="bg-neutral shadow-md card pb-2 pt-6 px-2 sm:px-6">
   <div class="flex justify-between">
     <input
       id="input-field"
@@ -162,16 +162,17 @@
              --borderFocusColor: hsl(var(--p));
              --borderHoverColor: hsl(var(--pf));
              --multiItemBG: hsl(var(--p));
-             --multiItemColor: hsl(var(--bc));
+             --multiItemColor: hsl(var(--pc));
              --multiItemActiveBG: hsl(var(--pf));
              --multiItemActiveColor: hsl(var(--bc));
              --clearSelectHoverColor: hsl(var(--pf));
              --itemIsActiveBG: hsl(var(--pc))
              --itemColor: hsl(var(--sc));
              --listBackground: hsl(var(--n));
-             --itemHoverBG: hsl(var(--nf));
-             --itemHoverColor: hsl(var(--bc));
+             --itemHoverBG: hsl(var(--p));
+             --itemHoverColor: hsl(var(--pc));
              --inputColor: hsl(var(--bc));
+             --clearSelectFocusColor: hsl(var(--p));
               "
   >
     <div class="mb-2 sm:mb-0">

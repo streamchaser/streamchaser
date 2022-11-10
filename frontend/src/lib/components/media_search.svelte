@@ -38,8 +38,8 @@
         out:fade|local={{ duration: 200 }}
         href={mediaIdToUrlConverter(media.id)}
         data-sveltekit-prefetch
-        class="card compact w-auto bordered bg-neutral-focus m-1
-                           shadow-md hover:contrast-75 hover:ring-2 ring-primary"
+        class="card compact w-auto bordered bg-neutral m-1
+                           shadow-md hover:contrast-75 hover:ring-2 ring-primary aspect-[19/33]"
       >
         {#if media.poster_path}
           <figure>
@@ -66,7 +66,7 @@
         {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
           <div class="-space-x-4 avatar-group">
             {#each media.providers as provider}
-              <div class="avatar border-neutral-focus">
+              <div class="avatar border-neutral">
                 <div class="w-12 h-12">
                   <img
                     src="{IMG_ORIGINAL}{provider.logo_path}"
@@ -79,7 +79,7 @@
         {:else}
           <div class="-space-x-4 avatar-group">
             {#each media.providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
-              <div class="avatar border-neutral-focus">
+              <div class="avatar border-neutral">
                 <div class="w-12 h-12">
                   <img
                     src="{IMG_ORIGINAL}{provider.logo_path}"
@@ -88,7 +88,7 @@
                 </div>
               </div>
             {/each}
-            <div class="avatar placeholder border-neutral-focus">
+            <div class="avatar placeholder border-neutral">
               <div class="w-12 h-12 rounded-full bg-neutral text-neutral-content">
                 <span>
                   +{providerAmounts[mediaIndex] - SHOWN_PROVIDERS + 1}
