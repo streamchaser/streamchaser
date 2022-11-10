@@ -13,10 +13,14 @@
   let descLabelText: string
   let ascLabelText: string
 
+  $: sortingAmount =
+    Object.values($sorting.by).filter(v => v === true).length + ($sorting.asc ? 1 : 0)
   $: filterAmount = Object.values($filters).filter(v => v === false).length
 
+  $: totalAmount = sortingAmount + filterAmount
+
   $: {
-    if ($sorting.byPopularity) {
+    if ($sorting.by.popularity) {
       descLabelText = "Highest"
       ascLabelText = "Lowest"
     } else {
@@ -52,14 +56,19 @@
 </script>
 
 <div class="indicator">
-  {#if filterAmount}
+  {#if totalAmount}
     <span
       class="indicator-item indicator-top sm:indicator-end indicator-center badge badge-secondary"
-      >{filterAmount}</span
+      >{totalAmount}</span
     >
   {/if}
   <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
-    <label tabindex="0" class="btn btn-primary ml-2" on:click={handleDropdownClick}>
+    <label
+      tabindex="0"
+      for=""
+      class="btn btn-primary ml-2"
+      on:click={handleDropdownClick}
+    >
       {#if isDropdownOpen}
         <svg
           class="swap-on fill-current"
@@ -115,11 +124,11 @@
         <div class="tabs flex justify-center">
           {#each contentTypes as contentType, index}
             {#if index === currentTab}
-              <a class="tab tab-bordered tab-active">{contentType}</a>
+              <div class="tab tab-bordered tab-active">{contentType}</div>
             {:else}
-              <a class="tab tab-bordered" on:click={() => (currentTab = index)}
-                >{contentType}</a
-              >
+              <div class="tab tab-bordered" on:click={() => (currentTab = index)}>
+                {contentType}
+              </div>
             {/if}
           {/each}
         </div>
@@ -156,23 +165,9 @@
               />
             </label>
           </div>
-          <div class="divider" />
-          <h3 class="text-neutral-content"><b>No providers</b></h3>
-          <div class="form-control">
-            <label class="label cursor-pointer">
-              <span class="label-text">{providerLabelText}</span>
-              <input
-                type="checkbox"
-                class="toggle"
-                bind:checked={$filters.showNoProviders}
-                disabled={$currentProviders.length ? true : false}
-                on:change={() => search()}
-              />
-            </label>
-          </div>
           <br />
           <button
-            class="btn btn-xs btn-primary"
+            class="btn btn-xs {filterAmount ? 'btn-primary' : 'btn-disabled'}"
             on:click={() => {
               Object.keys($filters).forEach(k => ($filters[k] = true))
               search()
@@ -186,13 +181,19 @@
               <input
                 type="checkbox"
                 class="toggle"
-                bind:checked={$sorting.byPopularity}
+                bind:checked={$sorting.by.popularity}
                 on:change={() => {
-                  if (!$sorting.byReleaseDate) {
-                    $sorting.byReleaseDate = true
-                  } else if ($sorting.byReleaseDate) {
-                    $sorting.byReleaseDate = false
+                  if (!$sorting.by.popularity) {
+                    //When disabled
+                    $sorting.by.popularity = false
+                  } else if ($sorting.by.popularity) {
+                    //When enabled
+                    for (const key in $sorting.by) {
+                      $sorting.by[key] = false
+                    }
+                    $sorting.by.popularity = true
                   }
+
                   search()
                 }}
               />
@@ -202,13 +203,19 @@
               <input
                 type="checkbox"
                 class="toggle"
-                bind:checked={$sorting.byReleaseDate}
+                bind:checked={$sorting.by.releaseDate}
                 on:change={() => {
-                  if (!$sorting.byPopularity) {
-                    $sorting.byPopularity = true
-                  } else if ($sorting.byPopularity) {
-                    $sorting.byPopularity = false
+                  if (!$sorting.by.releaseDate) {
+                    //When disabled
+                    $sorting.by.releaseDate = false
+                  } else if ($sorting.by.releaseDate) {
+                    //When enabled
+                    for (const key in $sorting.by) {
+                      $sorting.by[key] = false
+                    }
+                    $sorting.by.releaseDate = true
                   }
+
                   search()
                 }}
               />
@@ -241,6 +248,17 @@
               </label>
             </div>
           </div>
+          <br />
+          <button
+            class="btn btn-xs {sortingAmount ? 'btn-primary' : 'btn-disabled'}"
+            on:click={() => {
+              for (const key in $sorting.by) {
+                $sorting.by[key] = false
+              }
+              $sorting.asc = false
+              search()
+            }}>{sortingAmount ? "Clear sorting" : "No sorting chosen"}</button
+          >
         {/if}
       </div>
     </div>

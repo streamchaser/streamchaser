@@ -87,12 +87,10 @@
       query += "&only_providers=true"
     }
 
-    if (!input) {
-      if ($sorting.byPopularity) {
-        query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
-      } else if ($sorting.byReleaseDate) {
-        query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
-      }
+    if ($sorting.by.popularity) {
+      query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
+    } else if ($sorting.by.releaseDate) {
+      query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
     }
     // Searches for all(*) if empty input
     // Empty input will only return media with providers

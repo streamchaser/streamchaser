@@ -3,8 +3,10 @@ import { writable } from "svelte/store"
 
 export const sorting = persist(
   writable({
-    byPopularity: true,
-    byReleaseDate: false,
+    by: {
+      popularity: false,
+      releaseDate: false,
+    },
     asc: false,
   }),
   createLocalStorage(),
