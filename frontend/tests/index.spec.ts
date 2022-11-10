@@ -1,7 +1,11 @@
 // TODO: Broken after moving data to load()
-// import { test, expect } from "@playwright/test"
+import { test, expect } from "@playwright/test"
 // import { mockIndex } from "./request_mocks.js"
 
+test("page loads", async ({ page }) => {
+  await page.goto("/")
+  await expect(page.locator('[alt="streamchaser logo"]')).toBeVisible()
+})
 // test("test go to movie", async ({ page }) => {
 //   await mockIndex(page)
 //   await page.route(/http:\/\/api.localhost\/search\/Harry%20p\?c=DK&limit=.*/, route =>
