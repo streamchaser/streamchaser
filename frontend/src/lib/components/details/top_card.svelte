@@ -44,7 +44,7 @@
   style="background-image: url(&quot;{IMG_W1280}{backdropPath}&quot;);e"
 >
   <div
-    class="card sm:card-side bg-base-100 bg-opacity-90 bordered
+    class="card sm:card-side bg-neutral bg-opacity-90 bordered
                 text-neutral-content shadow-md"
   >
     {#if posterPath}

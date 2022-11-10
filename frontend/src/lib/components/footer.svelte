@@ -1,5 +1,5 @@
 <!-- https://daisyui.com/components/footer -->
-<footer class="p-4 pb-1 mt-2 footer bg-base-200 text-base-content footer-center">
+<footer class="p-4 pb-1 mt-2 footer bg-neutral text-base-content footer-center">
   <div>
     <div class="grid grid-flow-col gap-4">
       <a class="link link-hover" href="/">Home</a>
