@@ -11,7 +11,6 @@
   import { chosenTheme } from "$lib/stores/theme.js"
   import { filters } from "$lib/stores/filters.js"
   import { onMount } from "svelte"
-  import DT from "daisyui/colors/themes.js"
   import type { Media, Meilisearch } from "$lib/types"
   import type { PageData } from "./$types"
   import { invalidateAll } from "$app/navigation"

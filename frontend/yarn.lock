@@ -232,9 +232,9 @@
     esbuild "^0.15.12"
 
 "@sveltejs/kit@^1.0.0-next.492":
-  version "1.0.0-next.535"
-  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.535.tgz#e95fa5a5e09f82c170360fe11493f69b44103373"
-  integrity sha512-sbVFeidRGYKqahVWATuvl9PVnIDA/DvXUuq3LAV7eLXf9LWsdMt+9OhXmz8Ltxv8ov3+Ph6gcVSBvisF4BEvBQ==
+  version "1.0.0-next.539"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.0.0-next.539.tgz#6c663cd3ef9ee17a13bce06ca949aa7275766afd"
+  integrity sha512-BCD9lMiNoz1S5k1R+4s0pkyMwiqtut5kAXgC7qo3WaJnzXxBJziJfkyJZT0fM6mrEHlcdJ/o5hBkswyVHsxqtA==
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^1.1.0"
     "@types/cookie" "^0.5.1"
@@ -505,9 +505,9 @@ camelcase@^6.3.0:
   integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-lite@^1.0.30001400, caniuse-lite@^1.0.30001426:
-  version "1.0.30001430"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001430.tgz#638a8ae00b5a8a97e66ff43733b2701f81b101fa"
-  integrity sha512-IB1BXTZKPDVPM7cnV4iaKaHxckvdr/3xtctB3f7Hmenx3qYBhGtTZ//7EllK66aKXW98Lx0+7Yr0kxBtIt3tzg==
+  version "1.0.30001431"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001431.tgz#e7c59bd1bc518fae03a4656be442ce6c4887a795"
+  integrity sha512-zBUoFU0ZcxpvSt9IU66dXVT/3ctO1cy4y9cscs1szkPlcWb6pasYM144GqrUygUbT+k7cmUCW61cvskjcv0enQ==
 
 chokidar@^3.4.1, chokidar@^3.5.3:
   version "3.5.3"
@@ -601,9 +601,9 @@ cssesc@^3.0.0:
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
 
 daisyui@^2.38.1:
-  version "2.38.1"
-  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-2.38.1.tgz#28a3303a1832f41e9804d76ec769335ac1248372"
-  integrity sha512-fHAVi+bT3H9QCNM7LNEH1EMPT0IwqufuW2RNhTJZorX3TftB1bWW437BVmSt70AZH72Xvp0mVxwVS3ChSKSj0w==
+  version "2.39.0"
+  resolved "https://registry.yarnpkg.com/daisyui/-/daisyui-2.39.0.tgz#06c765c4633a71d0a5fe3e5e7d439c096597fef0"
+  integrity sha512-r3vbDI+pafB//QFfKJMkMxLlKGjdk21O/NieG+zY+LXH4hinyAA1/2/jE1+fNR+qQbuBL8USnN4wR3grG78nHQ==
   dependencies:
     color "^4.2"
     css-selector-tokenizer "^0.8.0"
@@ -1718,9 +1718,9 @@ svelte-preprocess@^4.0.0, svelte-preprocess@^4.9.8:
   resolved "https://github.com/AndreasPB/svelte-select#b0bb0b6a66fbe2866d218a58ea18bf5afb3ece78"
 
 svelte@^3.34.0:
-  version "3.52.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.52.0.tgz#08259eff20904c63882b66a5d409a55e8c6743b8"
-  integrity sha512-FxcnEUOAVfr10vDU5dVgJN19IvqeHQCS1zfe8vayTfis9A2t5Fhx+JDe5uv/C3j//bB1umpLJ6quhgs9xyUbCQ==
+  version "3.53.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.53.0.tgz#e07cdd458f89ec47508ffac20c97a778516026a3"
+  integrity sha512-QwR6zwpcdpz5OqybIHlghM+qP2qKbzsKQuU9npgAmnI6zoTDIcjbcseUZA0AJGbotorltpQ0f413euKK4w+Piw==
 
 swiper@^8.0.7:
   version "8.4.4"
@@ -1731,9 +1731,9 @@ swiper@^8.0.7:
     ssr-window "^4.0.2"
 
 tailwindcss@^3, tailwindcss@^3.0.17:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.2.2.tgz#705f78cec8f4de2feb52abdb7a8a056e67f2d736"
-  integrity sha512-c2GtSdqg+harR4QeoTmex0Ngfg8IIHNeLQH5yr2B9uZbZR1Xt1rYbjWOWTcj3YLTZhrmZnPowoQDbSRFyZHQ5Q==
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-3.2.3.tgz#c5ee3cb95dae7a80592d43a460d277915c7b2938"
+  integrity sha512-Xt9D4PK4zuuQCEB8bwK9JUCKmTgUwyac/6b0/42Vqhgl6YJkep+Wf5wq+5uXYfmrupdAD0YY2NY1hyZp1HjRrg==
   dependencies:
     arg "^5.0.2"
     chokidar "^3.5.3"
@@ -1837,9 +1837,9 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2:
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
 
 vite@^3.0.0, vite@^3.1.3:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-3.2.2.tgz#280762bfaf47bcea1d12698427331c0009ac7c1f"
-  integrity sha512-pLrhatFFOWO9kS19bQ658CnRYzv0WLbsPih6R+iFeEEhDOuYgYCX2rztUViMz/uy/V8cLCJvLFeiOK7RJEzHcw==
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-3.2.3.tgz#7a68d9ef73eff7ee6dc0718ad3507adfc86944a7"
+  integrity sha512-h8jl1TZ76eGs3o2dIBSsvXDLb1m/Ec1iej8ZMdz+PsaFUsftZeWe2CZOI3qogEsMNaywc17gu0q6cQDzh/weCQ==
   dependencies:
     esbuild "^0.15.9"
     postcss "^8.4.18"
