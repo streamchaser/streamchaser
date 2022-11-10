@@ -1,6 +1,6 @@
 <script lang="ts">
   import { calculateAmountOfShownItems } from "$lib/utils"
-  import { GO_API, PYTHON_API } from "$lib/variables.js"
+  import { PYTHON_API } from "$lib/variables.js"
   import Select from "svelte-select"
   import MediaSearch from "$lib/components/media_search.svelte"
   import Filters from "$lib/components/filters.svelte"
@@ -12,19 +12,20 @@
   import { filters } from "$lib/stores/filters.js"
   import { onMount } from "svelte"
   import DT from "daisyui/colors/themes.js"
-  import type { Genre, Media, Meilisearch } from "$lib/types"
+  import type { Media, Meilisearch } from "$lib/types"
+  import type { PageData } from "./$types"
+  import { invalidateAll } from "$app/navigation"
+  import { browser } from "$app/environment"
+
+  export let data: PageData
 
   const SEARCH_URL = `${PYTHON_API}/search/`
-  const GENRE_URL = `${GO_API}/genres/`
-  const PROVIDER_URL = `${PYTHON_API}/providers/`
   const INPUT_TIMER = 200
 
   let input = ""
   let timer: NodeJS.Timeout
   let meilisearch: Meilisearch
   let providerAmounts: number[] = []
-  let genres: Genre[]
-  let activeProviders = [""]
   let viewPortWidth: number
   let currentMediaAmount: number
   let mediaStartAmount: number
@@ -111,44 +112,27 @@
     hitProviderAmounts(meilisearch.hits)
   }
 
-  const fetchProviders = async () => {
-    const res = await fetch(PROVIDER_URL + $currentCountry)
-    activeProviders = await res.json()
-  }
-
-  const fetchGenres = async () => {
-    const res = await fetch(GENRE_URL)
-    genres = await res.json()
-  }
-
-  const resetProviders = () => {
+  // Invalidates data(refetched) when the country changes
+  // The browser check is becuase of the messy viewport logic
+  $: if ($currentCountry && browser) {
     $currentProviders = []
-  }
-
-  //TODO: This should be done prettier
-  let firstLoadCompleted = false
-  $: if ($currentCountry) {
-    if (firstLoadCompleted) {
-      resetProviders()
-      fetchProviders()
-      setViewportToDefault()
-      search()
-    }
-    firstLoadCompleted = true
+    setViewportToDefault() // TODO: There must be a nicer way
+    invalidateAll()
+    search()
   }
 
   onMount(async () => {
     const inputField = document.getElementById("input-field") as HTMLInputElement
 
-    setTimeout(function () {
+    setTimeout(() => {
       inputField.select()
     }, 20)
 
-    if ($inputQuery !== "") {
+    if ($inputQuery) {
       input = $inputQuery
     }
 
-    await Promise.all([fetchGenres(), fetchProviders(), search()])
+    await search()
   })
 </script>
 
@@ -205,7 +189,7 @@
             : []
         }}
         value={$currentGenres.length ? $currentGenres : null}
-        items={genres}
+        items={data.genres}
         isMulti={true}
         placeholder="Select genres..."
       />
@@ -223,7 +207,7 @@
             : []
         }}
         value={$currentProviders.length ? $currentProviders : null}
-        items={activeProviders}
+        items={data.providers}
         isMulti={true}
         placeholder="Select providers..."
       />
