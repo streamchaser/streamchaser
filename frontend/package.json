@@ -16,6 +16,7 @@
     "@sveltejs/adapter-auto": "^1.0.0-next.50",
     "@sveltejs/adapter-node": "^1.0.0-next.78",
     "@sveltejs/kit": "^1.0.0-next.492",
+    "@tauri-apps/cli": "^1.1.1",
     "@tsconfig/svelte": "^2.0.1",
     "autoprefixer": "^10.4.2",
     "postcss": "^8.4.5",
@@ -30,6 +31,7 @@
   "dependencies": {
     "@macfja/svelte-persistent-store": "^2.1.0",
     "@playwright/experimental-ct-svelte": "^1.22.0",
+    "@sveltejs/adapter-static": "^1.0.0-next.46",
     "daisyui": "^1.25.3",
     "openapi-typescript-codegen": "^0.23.0",
     "playwright": "^1.22.0",
