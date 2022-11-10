@@ -141,12 +141,12 @@
 </svelte:head>
 
 <div class="bg-neutral shadow-md sm:rounded-lg pb-2 pt-6 px-2 sm:px-6">
-  <div class="form-control flex flex-row">
+  <div class="flex justify-between">
     <input
       id="input-field"
       type="text"
       placeholder="Search in {$currentCountry}"
-      class="input input-bordered input-primary grow"
+      class="input input-bordered input-primary grow min-w-0"
       bind:value={input}
       on:input={debounceInput}
       autofocus={viewPortWidth <= 640 ? false : true}
