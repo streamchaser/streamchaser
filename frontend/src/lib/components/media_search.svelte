@@ -39,7 +39,7 @@
         href={mediaIdToUrlConverter(media.id)}
         data-sveltekit-prefetch
         class="card compact w-auto bordered bg-neutral m-1
-                           shadow-md hover:contrast-75 hover:ring-2 ring-primary"
+                           shadow-md hover:contrast-75 hover:ring-2 ring-primary aspect-[19/33]"
       >
         {#if media.poster_path}
           <figure>
