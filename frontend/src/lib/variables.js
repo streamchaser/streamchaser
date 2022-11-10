@@ -46,7 +46,7 @@ export const THEMES = [
   { icon: "🌚", value: "dark" },
   { icon: "🧛", value: "dracula" },
   { icon: "💎", value: "luxury" },
-  { icon: "🌲", value: "forest" },
+  { icon: "⚫", value: "black" },
   { icon: "☕", value: "coffee" },
   { icon: "🌜", value: "night" },
   { icon: "👔", value: "business" },

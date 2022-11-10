@@ -30,7 +30,7 @@
 
 {#if recommendations.length && loadedPage}
   <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
-  <div class="bg-neutral sm:rounded-lg swiper-container">
+  <div class="bg-neutral rounded-box swiper-container">
     <Swiper
       spaceBetween={15}
       {slidesPerView}
@@ -49,7 +49,7 @@
             >
               <img
                 src="{IMG_W342}{recommendation.poster_path}"
-                class="h-72 w-full rounded-lg hover:contrast-75 hover:ring-2 ring-primary"
+                class="h-72 w-full rounded-box hover:contrast-75 hover:ring-2 ring-primary"
                 alt={recommendation.title}
               />
             </a>

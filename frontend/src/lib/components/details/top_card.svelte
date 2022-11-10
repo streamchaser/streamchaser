@@ -40,7 +40,7 @@
 </script>
 
 <div
-  class="flex items-center px-4 py-10 bg-cover card bg-base-100 rounded-none sm:rounded-lg shadow-md"
+  class="flex items-center px-4 py-10 bg-cover card bg-base-100 rounded-box shadow-md"
   style="background-image: url(&quot;{IMG_W1280}{backdropPath}&quot;);e"
 >
   <div
@@ -51,14 +51,14 @@
       <figure class="pt-10 pr-10 pl-10 sm:p-6">
         <img
           src="{IMG_W500}{posterPath}"
-          class="object-contain sm:max-h-96 w-full rounded-lg"
+          class="object-contain sm:max-h-96 w-full rounded-box"
           alt={title}
         />
       </figure>
     {:else}
       <figure class="pt-10 pr-10 pl-10 sm:p-6">
         <div
-          class="h-96 bg-slate-100 object-contain sm:max-h-96 rounded-lg
+          class="h-96 bg-slate-100 object-contain sm:max-h-96 rounded-box
                 grid place-items-center"
         >
           <h2 class="w-64 text-center text-gray-900 text-lg">
