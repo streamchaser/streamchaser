@@ -46,7 +46,7 @@ def psql_to_meili():
     client.create_index("a_test_index")
     task = client.index("a_test_index").add_documents(new_meili_media_list)
     client.wait_for_task(
-        task["taskUid"]
+        task.task_uid
     )  # Makes sure the database is ready for the tests
 
 
