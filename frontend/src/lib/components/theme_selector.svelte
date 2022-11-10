@@ -63,11 +63,11 @@
         on:click={() => ($chosenTheme = theme.value)}
       >
         {#if $chosenTheme == theme.value}
-          <a class="bg-primary hover:bg-primary" href="">
+          <div class="bg-primary hover:bg-primary">
             <p class="text-primary-content">{theme.icon} {theme.value}</p>
-          </a>
+          </div>
         {:else}
-          <a href="">{theme.icon} {theme.value}</a>
+          <div>{theme.icon} {theme.value}</div>
         {/if}
       </li>
     {/each}
