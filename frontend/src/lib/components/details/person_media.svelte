@@ -45,7 +45,7 @@
 {#if media.length}
   <h1 class="text-center text-3xl pt-5">Starred in</h1>
   <div
-    class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-7 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4"
+    class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-7 lg:grid-cols-6 md:grid-cols-5 md:grid-cols-4 gap-3 p-2 pt-4"
   >
     {#each media.slice(0, currentMediaAmount) as media}
       <a
