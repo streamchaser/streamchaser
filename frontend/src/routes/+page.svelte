@@ -83,10 +83,6 @@
       query += "&t=tv"
     }
 
-    if (!$filters.showNoProviders) {
-      query += "&only_providers=true"
-    }
-
     if ($sorting.by.popularity) {
       query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
     } else if ($sorting.by.releaseDate) {

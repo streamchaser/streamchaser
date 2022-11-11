@@ -80,7 +80,14 @@ async def search(
 
     country_code = c.upper()
 
-    sort = sort_from_queries(release_date=release_date, popularity=popularity)
+    # Default sorting if no user_input
+    if user_input == "*":
+        sort = sort_from_queries(release_date=None, popularity=Order.DESCENDING)
+    else:
+        sort = sort_from_queries(release_date=None, popularity=None)
+
+    if release_date or popularity:
+        sort = sort_from_queries(release_date=release_date, popularity=popularity)
 
     filter = filter_from_queries(
         providers=p, genres=g, types=t, only_providers=only_providers

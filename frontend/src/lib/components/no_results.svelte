@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { onMount } from "svelte"
   import { fade } from "svelte/transition"
   import type { Genre } from "../types"
   import { filters } from "../stores/filters.js"
 
-  export let currentProviders: string[]
+  export let currentProviders: { index: number; label: string; value: string }[]
   export let currentGenres: Genre[]
   export let input: string
 </script>
@@ -21,7 +20,7 @@
       <p class="text-xs pt-1"><i>Consider using less genres</i></p>
     {/if}
     {#if currentProviders.length > 0}
-      <p class="pt-2">Providers:</p>
+      <p class="pt-2">Provider(s):</p>
       {#each currentProviders as provider}
         <div class="badge mx-1">{provider.label}</div>
       {/each}
@@ -36,9 +35,6 @@
       {/if}
       {#if !$filters.tvChecked}
         <div class="badge mx-1">No TV Shows</div>
-      {/if}
-      {#if !$filters.showNoProviders}
-        <div class="badge mx-1">Hide no providers</div>
       {/if}
       <p class="text-xs pt-1">
         <i>Consider removing the filter(s)</i>

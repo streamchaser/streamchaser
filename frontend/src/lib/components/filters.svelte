@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { filters } from "../stores/filters.js"
-  import { sorting } from "../stores/sorting.js"
-  import { currentProviders } from "../stores/providers.js"
+  import { filters } from "$lib/stores/filters"
+  import { sorting } from "$lib/stores/sorting"
 
   const contentTypes = ["Filters", "Sorting"]
 
@@ -9,40 +8,15 @@
 
   let currentTab = 0
   let isDropdownOpen = false
-  let providerLabelText: string
-  let descLabelText: string
-  let ascLabelText: string
+  let descLabelText = "Highest"
+  let ascLabelText = "Lowest"
 
-  $: sortingAmount =
-    Object.values($sorting.by).filter(v => v === true).length + ($sorting.asc ? 1 : 0)
+  $: sortingAmount = Object.values($sorting.by).filter(v => v === true).length
+
   $: filterAmount = Object.values($filters).filter(v => v === false).length
 
-  $: totalAmount = sortingAmount + filterAmount
-
-  $: {
-    if ($sorting.by.popularity) {
-      descLabelText = "Highest"
-      ascLabelText = "Lowest"
-    } else {
-      descLabelText = "Newest"
-      ascLabelText = "Oldest"
-    }
-  }
-
-  $: {
-    if ($currentProviders.length) {
-      $filters.showNoProviders = true
-      if ($currentProviders.length > 1) {
-        providerLabelText = "Providers selected"
-      } else {
-        providerLabelText = "Provider selected"
-      }
-    } else if ($filters.showNoProviders) {
-      providerLabelText = "Showing"
-    } else {
-      providerLabelText = "Hiding"
-    }
-  }
+  $: totalAmount =
+    sortingAmount + filterAmount + (sortingAmount ? ($sorting.asc ? 1 : 0) : 0)
 
   const handleDropdownClick = () => {
     isDropdownOpen = !isDropdownOpen
@@ -64,10 +38,11 @@
   {/if}
   <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
     <label
-      tabindex="0"
+      tabindex="-1"
       for=""
       class="btn btn-primary ml-2"
       on:click={handleDropdownClick}
+      on:keypress={handleDropdownClick}
     >
       {#if isDropdownOpen}
         <svg
@@ -116,7 +91,7 @@
       {/if}
     </label>
     <div
-      tabindex="0"
+      tabindex="-1"
       class="dropdown-content card card-compact w-64 p-2 shadow bg-base-100 text-primary-content mt-1"
       style:visibility={isDropdownOpen ? "visible" : "hidden"}
     >
@@ -126,7 +101,11 @@
             {#if index === currentTab}
               <div class="tab tab-bordered tab-active">{contentType}</div>
             {:else}
-              <div class="tab tab-bordered" on:click={() => (currentTab = index)}>
+              <div
+                class="tab tab-bordered"
+                on:click={() => (currentTab = index)}
+                on:keypress={() => (currentTab = index)}
+              >
                 {contentType}
               </div>
             {/if}
@@ -192,6 +171,8 @@
                       $sorting.by[key] = false
                     }
                     $sorting.by.popularity = true
+                    descLabelText = "Highest"
+                    ascLabelText = "Lowest"
                   }
 
                   search()
@@ -214,6 +195,8 @@
                       $sorting.by[key] = false
                     }
                     $sorting.by.releaseDate = true
+                    descLabelText = "Newest"
+                    ascLabelText = "Oldest"
                   }
 
                   search()
@@ -225,6 +208,7 @@
               <label class="label cursor-pointer">
                 <span class="label-text">{descLabelText}</span>
                 <input
+                  disabled={sortingAmount ? false : true}
                   type="radio"
                   name="radio-6"
                   class="radio"
@@ -238,6 +222,7 @@
               <label class="label cursor-pointer">
                 <span class="label-text">{ascLabelText}</span>
                 <input
+                  disabled={sortingAmount ? false : true}
                   type="radio"
                   name="radio-6"
                   class="radio"
@@ -255,7 +240,6 @@
               for (const key in $sorting.by) {
                 $sorting.by[key] = false
               }
-              $sorting.asc = false
               search()
             }}>{sortingAmount ? "Clear sorting" : "No sorting chosen"}</button
           >

@@ -6,17 +6,18 @@
   import type { Meilisearch } from "../types"
   import Spinner from "$lib/components/loading/spinner.svelte"
   import { IMG_ORIGINAL, IMG_W342 } from "../variables"
+  import type { Genre } from "$lib/generated"
 
   const SHOWN_PROVIDERS: number = 5
 
   export let meilisearch: Meilisearch
   export let providerAmounts: number[]
   export let currentCountry: string
-  export let currentProviders: string[]
+  export let currentProviders: { index: number; label: string; value: string }[]
   export let mediaStartAmount: number
   export let currentMediaAmount: number
   export let input: string
-  export let currentGenres: string[]
+  export let currentGenres: Genre[]
   export let search: Function
 
   const loadMoreData = async ({ detail: { loaded } }) => {
