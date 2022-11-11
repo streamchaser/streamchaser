@@ -8,8 +8,6 @@
   import "swiper/css/navigation"
 
   export let seasons
-
-  const INITIAL_OVERVIEW_LENGTH: number = window.visualViewport.width > 640 ? 170 : 100
 </script>
 
 <div class="container p-2">
@@ -69,9 +67,9 @@
               <div class="pt-2 text-neutral-content">
                 {#if season.overview}
                   <ReadMore
-                    currentDescriptionLength={INITIAL_OVERVIEW_LENGTH}
+                    currentDescriptionLength={150}
                     mediaDescription={season.overview}
-                    initialDescriptionLength={INITIAL_OVERVIEW_LENGTH}
+                    initialDescriptionLength={150}
                   />
                 {:else}
                   No season overview available.
