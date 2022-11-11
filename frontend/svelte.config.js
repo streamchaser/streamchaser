@@ -6,9 +6,7 @@ import typescript from "@rollup/plugin-typescript"
 import autoAdapter from "@sveltejs/adapter-auto"
 import nodeAdapter from "@sveltejs/adapter-node"
 
-console.log("is Vercel?", process.env.IS_VERCEL)
-
-const config = {
+export default {
   kit: {
     adapter: process.env.IS_VERCEL ? autoAdapter() : nodeAdapter(),
   },
@@ -20,5 +18,3 @@ const config = {
   ],
   preprocess: sveltePreprocess(),
 }
-
-export default config
