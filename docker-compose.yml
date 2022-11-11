@@ -13,7 +13,7 @@ services:
       - 3000:3000
       - 24678:24678
     volumes:
-      - ./frontend:/app
+      - ./frontend/src:/app/src
       - /app/node_modules
     depends_on:
       - traefik
