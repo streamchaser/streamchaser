@@ -35,18 +35,6 @@ async def close_db():
 
 streamchaser_url = get_settings().streamchaser_url
 
-
-if get_settings().app_environment == Environment.PRODUCTION:
-    origins = [
-        f"http://{streamchaser_url}",
-        f"http://{streamchaser_url}:3000",
-        f"https://{streamchaser_url}",
-    ]
-else:
-    print("Running CORS origins in development mode")
-    origins = ["*"]
-
-
 app.add_middleware(
     middleware.ContextMiddleware,
     plugins=(plugins.ForwardedForPlugin(),),
@@ -54,8 +42,7 @@ app.add_middleware(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_origin_regex=r"https:\/\/streamchaser.*.vercel.app",
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

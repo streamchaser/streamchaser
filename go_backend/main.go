@@ -2,9 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"os"
-	"regexp"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -24,36 +21,13 @@ const (
 )
 
 func main() {
-	environment := os.Getenv("APP_ENVIRONMENT")
-	streamchaserUrl := os.Getenv("HOST_NAME")
-
-	var origins []string
-
-	if environment == PRODUCTION {
-		origins = []string{fmt.Sprintf("http://%s", streamchaserUrl),
-			fmt.Sprintf("https://%s", streamchaserUrl),
-			fmt.Sprintf("https://streamchaser.vercel.app")}
-	} else {
-		origins = []string{"*"}
-	}
-
 	app := gin.Default()
 
 	// FIXME: The regex isn't working
 	// The streamchaser-xxx-vercel.app path isn't being let through
-	app.Use(func(c *gin.Context) {
-		originRegex, err := regexp.Compile("https://streamchaser.*.vercel.app")
-		if err != nil {
-			panic(err)
-		}
-
-		if originRegex.Match([]byte(c.Request.Host)) {
-			origins = append(origins, c.Request.Host)
-		}
-
-	})
+	app.Use(func(c *gin.Context) {})
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     origins,
+		AllowOrigins:     []string{"*"},
 		AllowCredentials: true,
 		AllowMethods:     []string{"*"},
 		AllowHeaders:     []string{"*"},
