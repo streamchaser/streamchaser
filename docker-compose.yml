@@ -14,6 +14,11 @@ services:
       - 24678:24678
     volumes:
       - ./frontend/src:/app/src
+      - ./frontend/static:/app/static
+      - ./frontend/tests:/app/tests
+      - ./frontend/playwright.config.ts:/app/playwright.config.ts
+      - ./frontend/tailwind.config.cjs:/app/tailwind.config.cjs
+      - ./frontend/postcss.config.cjs:/app/postcss.config.cjs
       - /app/node_modules
     depends_on:
       - traefik
