@@ -1,27 +1,22 @@
 <script lang="ts">
-  import { filters } from "../stores/filters.js"
-  import { currentProviders } from "../stores/providers.js"
+  import { filters } from "$lib/stores/filters"
+  import { sorting } from "$lib/stores/sorting"
+
+  const contentTypes = ["Filters", "Sorting"]
 
   export let search: () => void
+
+  let currentTab = 0
   let isDropdownOpen = false
-  let providerLabelText: string
+  let descLabelText = "Highest"
+  let ascLabelText = "Lowest"
+
+  $: sortingAmount = Object.values($sorting.by).filter(v => v === true).length
 
   $: filterAmount = Object.values($filters).filter(v => v === false).length
 
-  $: {
-    if ($currentProviders.length) {
-      $filters.showNoProviders = true
-      if ($currentProviders.length > 1) {
-        providerLabelText = "Providers selected"
-      } else {
-        providerLabelText = "Provider selected"
-      }
-    } else if ($filters.showNoProviders) {
-      providerLabelText = "Showing"
-    } else {
-      providerLabelText = "Hiding"
-    }
-  }
+  $: totalAmount =
+    sortingAmount + filterAmount + (sortingAmount ? ($sorting.asc ? 1 : 0) : 0)
 
   const handleDropdownClick = () => {
     isDropdownOpen = !isDropdownOpen
@@ -35,14 +30,20 @@
 </script>
 
 <div class="indicator">
-  {#if filterAmount}
+  {#if totalAmount}
     <span
       class="indicator-item indicator-top sm:indicator-end indicator-center badge badge-secondary"
-      >{filterAmount}</span
+      >{totalAmount}</span
     >
   {/if}
   <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
-    <label tabindex="0" class="btn btn-primary ml-2" on:click={handleDropdownClick}>
+    <label
+      tabindex="-1"
+      for=""
+      class="btn btn-primary ml-2"
+      on:click={handleDropdownClick}
+      on:keypress={handleDropdownClick}
+    >
       {#if isDropdownOpen}
         <svg
           class="swap-on fill-current"
@@ -90,66 +91,159 @@
       {/if}
     </label>
     <div
-      tabindex="0"
+      tabindex="-1"
       class="dropdown-content card card-compact w-64 p-2 shadow bg-base-100 text-primary-content mt-1"
       style:visibility={isDropdownOpen ? "visible" : "hidden"}
     >
       <div class="card-body">
-        <h3 class="card-title text-neutral-content">Filters</h3>
-        <div class="divider" />
-        <h3 class="text-neutral-content"><b>Media types</b></h3>
-        <div class="form-control">
-          <label class="label cursor-pointer">
-            <span class="label-text">Movies</span>
-            <input
-              type="checkbox"
-              class="toggle"
-              bind:checked={$filters.movieChecked}
-              on:change={() => {
-                if (!$filters.movieChecked) {
-                  $filters.tvChecked = true
-                }
-                search()
-              }}
-            />
-          </label>
-          <label class="label cursor-pointer">
-            <span class="label-text">TV Shows</span>
-            <input
-              type="checkbox"
-              class="toggle"
-              bind:checked={$filters.tvChecked}
-              on:change={() => {
-                if (!$filters.tvChecked) {
-                  $filters.movieChecked = true
-                }
-                search()
-              }}
-            />
-          </label>
-        </div>
-        <div class="divider" />
-        <h3 class="text-neutral-content"><b>No providers</b></h3>
-        <div class="form-control">
-          <label class="label cursor-pointer">
-            <span class="label-text">{providerLabelText}</span>
-            <input
-              type="checkbox"
-              class="toggle"
-              bind:checked={$filters.showNoProviders}
-              disabled={$currentProviders.length ? true : false}
-              on:change={() => search()}
-            />
-          </label>
+        <div class="tabs flex justify-center">
+          {#each contentTypes as contentType, index}
+            {#if index === currentTab}
+              <div class="tab tab-bordered tab-active">{contentType}</div>
+            {:else}
+              <div
+                class="tab tab-bordered"
+                on:click={() => (currentTab = index)}
+                on:keypress={() => (currentTab = index)}
+              >
+                {contentType}
+              </div>
+            {/if}
+          {/each}
         </div>
         <br />
-        <button
-          class="btn btn-xs btn-primary"
-          on:click={() => {
-            Object.keys($filters).forEach(k => ($filters[k] = true))
-            search()
-          }}>{filterAmount ? "Clear filters" : "No filters chosen"}</button
-        >
+        {#if contentTypes[currentTab] === "Filters"}
+          <h3 class="text-neutral-content"><b>Media types</b></h3>
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <span class="label-text">Movies</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$filters.movieChecked}
+                on:change={() => {
+                  if (!$filters.movieChecked) {
+                    $filters.tvChecked = true
+                  }
+                  search()
+                }}
+              />
+            </label>
+            <label class="label cursor-pointer">
+              <span class="label-text">TV Shows</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$filters.tvChecked}
+                on:change={() => {
+                  if (!$filters.tvChecked) {
+                    $filters.movieChecked = true
+                  }
+                  search()
+                }}
+              />
+            </label>
+          </div>
+          <br />
+          <button
+            class="btn btn-xs {filterAmount ? 'btn-primary' : 'btn-disabled'}"
+            on:click={() => {
+              Object.keys($filters).forEach(k => ($filters[k] = true))
+              search()
+            }}>{filterAmount ? "Clear filters" : "No filters chosen"}</button
+          >
+        {:else}
+          <h3 class="text-neutral-content"><b>Sort by</b></h3>
+          <div class="form-control">
+            <label class="label cursor-pointer">
+              <span class="label-text">Popularity</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$sorting.by.popularity}
+                on:change={() => {
+                  if (!$sorting.by.popularity) {
+                    //When disabled
+                    $sorting.by.popularity = false
+                  } else if ($sorting.by.popularity) {
+                    //When enabled
+                    for (const key in $sorting.by) {
+                      $sorting.by[key] = false
+                    }
+                    $sorting.by.popularity = true
+                    descLabelText = "Highest"
+                    ascLabelText = "Lowest"
+                  }
+
+                  search()
+                }}
+              />
+            </label>
+            <label class="label cursor-pointer">
+              <span class="label-text">Release date</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$sorting.by.releaseDate}
+                on:change={() => {
+                  if (!$sorting.by.releaseDate) {
+                    //When disabled
+                    $sorting.by.releaseDate = false
+                  } else if ($sorting.by.releaseDate) {
+                    //When enabled
+                    for (const key in $sorting.by) {
+                      $sorting.by[key] = false
+                    }
+                    $sorting.by.releaseDate = true
+                    descLabelText = "Newest"
+                    ascLabelText = "Oldest"
+                  }
+
+                  search()
+                }}
+              />
+            </label>
+            <div class="divider" />
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">{descLabelText}</span>
+                <input
+                  disabled={sortingAmount ? false : true}
+                  type="radio"
+                  name="radio-6"
+                  class="radio"
+                  value={false}
+                  bind:group={$sorting.asc}
+                  on:change={() => search()}
+                />
+              </label>
+            </div>
+            <div class="form-control">
+              <label class="label cursor-pointer">
+                <span class="label-text">{ascLabelText}</span>
+                <input
+                  disabled={sortingAmount ? false : true}
+                  type="radio"
+                  name="radio-6"
+                  class="radio"
+                  value={true}
+                  bind:group={$sorting.asc}
+                  on:change={() => search()}
+                />
+              </label>
+            </div>
+          </div>
+          <br />
+          <button
+            class="btn btn-xs {sortingAmount ? 'btn-primary' : 'btn-disabled'}"
+            on:click={() => {
+              for (const key in $sorting.by) {
+                $sorting.by[key] = false
+              }
+              search()
+            }}>{sortingAmount ? "Clear sorting" : "No sorting chosen"}</button
+          >
+        {/if}
       </div>
     </div>
   </div>

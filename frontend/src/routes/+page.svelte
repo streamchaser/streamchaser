@@ -10,6 +10,7 @@
   import { inputQuery } from "$lib/stores/input"
   import { chosenTheme } from "$lib/stores/theme.js"
   import { filters } from "$lib/stores/filters.js"
+  import { sorting } from "$lib/stores/sorting.js"
   import { onMount } from "svelte"
   import type { Media, Meilisearch } from "$lib/types"
   import type { PageData } from "./$types"
@@ -82,8 +83,10 @@
       query += "&t=tv"
     }
 
-    if (!$filters.showNoProviders) {
-      query += "&only_providers=true"
+    if ($sorting.by.popularity) {
+      query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
+    } else if ($sorting.by.releaseDate) {
+      query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
     }
     // Searches for all(*) if empty input
     // Empty input will only return media with providers
