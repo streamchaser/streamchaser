@@ -5,8 +5,6 @@ services:
     build:
       context: ./frontend
       target: ${APP_ENVIRONMENT} # Specify which stage of the dockerfile to use
-      args:
-        - APP_ENV=${APP_ENVIRONMENT}
     restart: always
     container_name: frontend
     env_file:
@@ -15,7 +13,12 @@ services:
       - 3000:3000
       - 24678:24678
     volumes:
-      - ./frontend:/app
+      - ./frontend/src:/app/src
+      - ./frontend/static:/app/static
+      - ./frontend/tests:/app/tests
+      - ./frontend/playwright.config.ts:/app/playwright.config.ts
+      - ./frontend/tailwind.config.cjs:/app/tailwind.config.cjs
+      - ./frontend/postcss.config.cjs:/app/postcss.config.cjs
       - /app/node_modules
     depends_on:
       - traefik
@@ -34,8 +37,6 @@ services:
     build:
       context: ./backend
       target: ${APP_ENVIRONMENT} # Which stage to build
-      args:
-        - APP_ENV=${APP_ENVIRONMENT}
     restart: always
     container_name: backend
     env_file:
