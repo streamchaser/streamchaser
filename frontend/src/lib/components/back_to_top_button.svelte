@@ -20,7 +20,7 @@
 />
 
 {#if visible}
-  <div transition:fade class="fixed top-0 left-0 p-5 transition-all opacity-80">
+  <div transition:fade class="fixed z-50 top-0 left-0 p-5 transition-all opacity-80">
     <button class="btn btn-primary shadow-md" on:click={goTop}>▲</button>
   </div>
 {/if}

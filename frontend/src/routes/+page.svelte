@@ -151,14 +151,13 @@
       class="input input-bordered input-primary grow min-w-0 hover:border-primary-focus"
       bind:value={input}
       on:input={debounceInput}
-      autofocus={viewPortWidth <= 640 ? false : true}
+      autofocus={viewPortWidth > 640}
     />
     <Filters {search} />
   </div>
   <div
     class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
     style="
-
              --borderRadius: var(--rounded-btn, .5rem);
              --background: hsl(var(--b1));
              --border: 1px solid hsl(var(--p));
@@ -169,7 +168,7 @@
              --multiItemActiveBG: hsl(var(--pf));
              --multiItemActiveColor: hsl(var(--bc));
              --clearSelectHoverColor: hsl(var(--pf));
-             --itemIsActiveBG: hsl(var(--pc))
+             --itemIsActiveBG: hsl(var(--pc));
              --itemColor: hsl(var(--sc));
              --listBackground: hsl(var(--n));
              --itemHoverBG: hsl(var(--p));

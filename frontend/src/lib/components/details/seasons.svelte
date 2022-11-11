@@ -1,124 +1,86 @@
 <script lang="ts">
   import ReadMore from "./read_more.svelte"
-  import MediaQuery from "svelte-media-query"
-  import { IMG_W342, IMG_W500 } from "../../variables"
+  import { Swiper, SwiperSlide } from "swiper/svelte"
+  import { Navigation, Lazy } from "swiper"
+  import { IMG_W342 } from "$lib/variables"
+  import "swiper/css"
+  import "swiper/css/free-mode"
+  import "swiper/css/navigation"
 
   export let seasons
 
-  const INITIAL_OVERVIEW_LENGTH: number = 600
-
-  let currentTab: number = 0
-  let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
-
-  const changeActiveTab = index => {
-    currentTab = index
-  }
+  const INITIAL_OVERVIEW_LENGTH: number = window.visualViewport.width > 640 ? 170 : 100
 </script>
 
-<div class="container px-2">
+<div class="container p-2">
   <div class="text-3xl p-4 flex justify-center">Seasons</div>
-  <div class="tabs flex justify-center">
-    {#each seasons as season, index}
-      {#if index === currentTab}
-        <div class="tab tab-bordered tab-active">
-          {season.name === "Specials"
-            ? "S"
-            : season.name.substr(season.name.indexOf(" ") + 1)}
-        </div>
-      {:else}
-        <div on:click={() => changeActiveTab(index)} class="tab tab-bordered">
-          {season.name === "Specials"
-            ? "S"
-            : season.name.substr(season.name.indexOf(" ") + 1)}
-        </div>
-      {/if}
-    {/each}
-  </div>
-
-  <div class="my-4 flex justify-center">
-    {#each seasons as season, index}
-      <MediaQuery query="(max-width: 1024px)" let:matches>
-        {#if matches}
-          {#if index === currentTab}
-            <div class="card shadow-lg image-full w-auto sm:w-4/6 md:w-3/5 ">
-              {#if season.poster_path}
-                <figure>
-                  <img
-                    src="{IMG_W500}{season.poster_path}"
-                    class="object-fit h-96"
-                    alt={season.name}
-                  />
-                </figure>
-              {:else}
-                <figure>
-                  <img
-                    src="../../no_image_available.jpg"
-                    class="object-fit h-72"
-                    alt="No poster available"
-                  />
-                </figure>
-              {/if}
-              <div class="card-body">
-                <div class="card-title">{season.name}</div>
-                <div class="text-xl text-netural-content">
-                  {season.air_date ? season.air_date.split("-")[0] : "No air date"}
-                  | {season.episode_count} episodes
-                </div>
-                <div class="text-lg text-netural-content">
-                  {season.air_date ? `Premiered on ${season.air_date}` : "Hasn't aired"}
-                </div>
-                &nbsp
-                <div class="text-netural-content">
-                  {season.overview ? season.overview : "No season overview available."}
-                </div>
-              </div>
-            </div>
-          {/if}
-        {/if}
-      </MediaQuery>
-      <MediaQuery query="(min-width: 1025px)" let:matches>
-        {#if matches}
-          {#if index === currentTab}
-            <div class="card card-side bg-neutral bordered lg:w-5/6 xl:w-3/5">
-              {#if season.poster_path}
-                <figure>
-                  <img
-                    src="{IMG_W342}{season.poster_path}"
-                    class="object-fit h-96"
-                    alt={season.name}
-                  />
-                </figure>
-              {:else}
-                <figure>
-                  <img
-                    src="../../no_image_available.jpg"
-                    class="object-fit h-72"
-                    alt="No poster available"
-                  />
-                </figure>
-              {/if}
-              <div class="mx-4 my-2">
-                <div class="card-title">{season.name}</div>
-                <div class="text-xl text-netural-content">
-                  {season.air_date ? season.air_date.split("-")[0] : "No air date"}
-                  | {season.episode_count} episodes
-                </div>
-                <div class="text-lg text-netural-content">
-                  {season.air_date ? `Premiered on ${season.air_date}` : "Hasn't aired"}
-                </div>
-                &nbsp
-                <ReadMore
-                  currentDescriptionLength={currentOverviewLength}
-                  mediaDescription={season.overview
-                    ? season.overview
-                    : "No season overview available."}
-                  initialDescriptionLength={INITIAL_OVERVIEW_LENGTH}
+  <div class="swiper-container cursor-pointer">
+    <Swiper
+      preloadImages={false}
+      lazy={{
+        enabled: true,
+        checkInView: true,
+        loadPrevNext: true,
+      }}
+      watchSlidesProgress={true}
+      style="
+              --swiper-navigation-color: text-blue-500;
+              --swiper-navigation-size: 25px;
+            "
+      breakpoints={{
+        0: { slidesPerView: 1.5 },
+        400: { slidesPerView: 1.6 },
+        650: { slidesPerView: 2.5 },
+        768: { slidesPerView: 3 },
+        992: { slidesPerView: 4 },
+        1280: { slidesPerView: 5 },
+        1535: { slidesPerView: 6 },
+      }}
+      navigation={true}
+      modules={[Navigation, Lazy]}
+      initialSlide={seasons[0].name === "Specials" ? 1 : 0}
+    >
+      {#each seasons as season, index}
+        <SwiperSlide>
+          <div
+            class="card h-[350px] aspect-[342/513] bg-base-100 image-full swiper-lazy"
+          >
+            {#if season.poster_path}
+              <figure>
+                <img
+                  data-src="{IMG_W342}{season.poster_path}"
+                  class="swiper-lazy"
+                  alt={season.name}
                 />
+                <div class="swiper-lazy-preloader-white" />
+              </figure>
+            {:else}
+              <figure class="bg-base-100" />
+            {/if}
+            <div class="card-body overflow-auto p-4">
+              <div class="card-title">{season.name}</div>
+              <div class="text-xl text-neutral-content">
+                {season.air_date ? season.air_date.split("-")[0] : "No air date"}
+                | {season.episode_count} episodes
+              </div>
+              <div class="text-lg text-neutral-content">
+                {season.air_date ? `Premiered ${season.air_date}` : "Hasn't aired"}
+              </div>
+              <div class="pt-2 text-neutral-content">
+                {#if season.overview}
+                  <ReadMore
+                    currentDescriptionLength={INITIAL_OVERVIEW_LENGTH}
+                    mediaDescription={season.overview}
+                    initialDescriptionLength={INITIAL_OVERVIEW_LENGTH}
+                  />
+                {:else}
+                  No season overview available.
+                {/if}
               </div>
             </div>
-          {/if}
-        {/if}
-      </MediaQuery>
-    {/each}
+          </div>
+        </SwiperSlide>
+      {/each}
+    </Swiper>
   </div>
 </div>

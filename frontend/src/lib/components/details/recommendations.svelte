@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { calculateAmountOfShownItems, mediaIdToUrlConverter } from "../../utils"
+  import { calculateAmountOfShownItems, mediaIdToUrlConverter } from "$lib/utils"
   import type { Recommendation } from "../types"
   import { Swiper, SwiperSlide } from "swiper/svelte"
   import "swiper/css"
@@ -30,7 +30,7 @@
 
 {#if recommendations.length && loadedPage}
   <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
-  <div class="bg-neutral rounded-box swiper-container">
+  <div class="bg-neutral rounded-box swiper-container px-2">
     <Swiper
       spaceBetween={15}
       {slidesPerView}
