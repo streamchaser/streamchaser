@@ -12,9 +12,6 @@ RUN yarn install --frozen-lockfile && yarn cache clean
 
 COPY . .
 
-# Weird hack to make both serverless and node work
-RUN mv node_svelte.config.js svelte.config.js
-
 ### DEV ###
 FROM base as dev
 

@@ -3,11 +3,14 @@ import svelte from "svelte-preprocess"
 import autoPreprocess from "svelte-preprocess"
 import sveltePreprocess from "svelte-preprocess"
 import typescript from "@rollup/plugin-typescript"
-import adapter from "@sveltejs/adapter-auto"
+import autoAdapter from "@sveltejs/adapter-auto"
+import nodeAdapter from "@sveltejs/adapter-node"
+
+console.log("is Vercel?", process.env.IS_VERCEL)
 
 const config = {
   kit: {
-    adapter: adapter(),
+    adapter: process.env.IS_VERCEL ? autoAdapter() : nodeAdapter(),
   },
   plugins: [
     svelte({
