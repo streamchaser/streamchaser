@@ -12,8 +12,11 @@
 
 <div class="container p-2">
   <div class="text-3xl p-4 flex justify-center">Seasons</div>
-  <div class="swiper-container cursor-pointer">
+  <div class="swiper-container">
     <Swiper
+      grabCursor={true}
+      resistance={false}
+      freeMode={true}
       preloadImages={false}
       lazy={{
         enabled: true,
@@ -25,14 +28,16 @@
               --swiper-navigation-color: text-blue-500;
               --swiper-navigation-size: 25px;
             "
+      spaceBetween={10}
       breakpoints={{
-        0: { slidesPerView: 1.5 },
-        400: { slidesPerView: 1.6 },
-        650: { slidesPerView: 2.5 },
+        320: { slidesPerView: 1.3 },
+        360: { slidesPerView: 1.5 },
+        480: { slidesPerView: 2 },
+        640: { slidesPerView: 2.5 },
         768: { slidesPerView: 3 },
-        992: { slidesPerView: 4 },
+        1024: { slidesPerView: 4 },
         1280: { slidesPerView: 5 },
-        1535: { slidesPerView: 6 },
+        1536: { slidesPerView: 6 },
       }}
       navigation={true}
       modules={[Navigation, Lazy]}

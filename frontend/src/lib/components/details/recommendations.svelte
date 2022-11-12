@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { calculateAmountOfShownItems, mediaIdToUrlConverter } from "$lib/utils"
+  import { mediaIdToUrlConverter } from "$lib/utils"
   import type { Recommendation } from "../types"
   import { Swiper, SwiperSlide } from "swiper/svelte"
+  import { Navigation, Lazy } from "swiper"
   import "swiper/css"
   import "swiper/css/free-mode"
   import { IMG_W342 } from "../../variables"
@@ -11,31 +12,43 @@
   export let mediaType: string
 
   let loadedPage: boolean
-  let slidesPerView: number
 
-  // TODO: Make this happen in a less insane way
   onMount(() => {
-    slidesPerView = calculateAmountOfShownItems({
-      width: window.visualViewport.width,
-      xxl: 7,
-      xl: 6,
-      lg: 5,
-      md: 4,
-      sm: 3,
-      mobile: 2,
-    })
     loadedPage = true
   })
 </script>
 
 {#if recommendations.length && loadedPage}
   <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
-  <div class="bg-neutral rounded-box swiper-container px-2">
+  <div class="bg-neutral rounded-box swiper-container px-2 mx-2">
     <Swiper
+      style="
+        --swiper-navigation-color: text-blue-500;
+        --swiper-navigation-size: 25px;
+      "
+      grabCursor={true}
+      resistance={false}
+      preloadImages={false}
+      lazy={{
+        enabled: true,
+        checkInView: true,
+        loadPrevNext: true,
+      }}
       spaceBetween={15}
-      {slidesPerView}
+      watchSlidesProgress={true}
+      breakpoints={{
+        0: { slidesPerView: 2 },
+        576: { slidesPerView: 3 },
+        640: { slidesPerView: 3.3 },
+        768: { slidesPerView: 4 },
+        1024: { slidesPerView: 5 },
+        1280: { slidesPerView: 6 },
+        1536: { slidesPerView: 7 },
+      }}
+      modules={[Navigation, Lazy]}
       loop={true}
-      freemode={true}
+      navigation={true}
+      freeMode={true}
       touchEventsTarget={{ touchEventsTarget: "container" }}
     >
       {#each recommendations as recommendation}
@@ -44,12 +57,12 @@
             <a
               href={mediaIdToUrlConverter(recommendation.id, mediaType)}
               target="_self"
-              class="p-1"
+              class="p-1 swiper-lazy aspect-[342/513]"
               data-sveltekit-prefetch
             >
               <img
-                src="{IMG_W342}{recommendation.poster_path}"
-                class="h-72 w-full rounded-box hover:contrast-75 hover:ring-2 ring-primary"
+                data-src="{IMG_W342}{recommendation.poster_path}"
+                class="h-72 w-full rounded-box hover:contrast-75 hover:ring-2 ring-primary swiper-lazy"
                 alt={recommendation.title}
               />
             </a>
