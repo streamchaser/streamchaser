@@ -71,21 +71,29 @@ def filter_from_queries_v2(
     # search_results = client.index("a_test_index").search("*",
     # {'filter': ['providers.NL.flatrate.provider_name = KPN']})
     if providers:
-        filter.append(
-            [
-                f'providers.{country_code}.flatrate.provider_name ="{provider}"'
-                for provider in providers
-            ]
-        )
+        flatrate = [
+            f'providers.{country_code}.flatrate.provider_name ="{provider}"'
+            for provider in providers
+        ]
+        free = [
+            f'providers.{country_code}.free.provider_name ="{provider}"'
+            for provider in providers
+        ]
+        filter = [flatrate + free]
     else:
         if only_providers:
-            filter.append([f'providers.{country_code}.flatrate.provider_name != ""'])
+            # filter.append(f'providers.{country_code}.flatrate != ""')
+            # filter.append(f'providers.{country_code} !=""')
+            filter.append(f'providers.{country_code}.flatrate.provider_name !=""')
+            # filter.append(f'providers !=""')
 
     if genres:
         filter = filter + [f'genres="{genre}"' for genre in genres]
 
     if types:
         filter.append([f'type="{type}"' for type in types])
+
+    print(f"FILTERSSS!: {filter}")
 
     return filter
 
@@ -143,6 +151,8 @@ async def search_v2(
     g: list[str] | None = Query(None, description="Genres"),
     p: list[str] | None = Query(None, description="Providers"),
     t: list[str] | None = Query(None, description="Content type"),
+    release_date: Order | None = Query(None, description="Release date sorting"),
+    popularity: Order | None = Query(None, description="Popularity sorting"),
 ):
     """
     # Our endpoint for the MeiliSearch API
@@ -155,6 +165,15 @@ async def search_v2(
     """
     country_code = c.upper()
 
+    # Default sorting if no user_input
+    if user_input == "*":
+        sort = sort_from_queries(release_date=None, popularity=Order.DESCENDING)
+    else:
+        sort = sort_from_queries(release_date=None, popularity=None)
+
+    if release_date or popularity:
+        sort = sort_from_queries(release_date=release_date, popularity=popularity)
+
     filter = filter_from_queries_v2(
         country_code=country_code,
         providers=p,
@@ -166,7 +185,7 @@ async def search_v2(
     return await async_client.index("a_test_index").search(
         user_input,
         limit=limit,
-        sort=["popularity:desc"],
+        sort=sort,
         filter=filter,
         attributes_to_retrieve=[
             f"providers.{country_code}",

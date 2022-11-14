@@ -64,8 +64,23 @@ class TestIndexing:
         """
         psql_to_meili()
 
-        client.index("a_test_index").update_filterable_attributes(["providers"])
-        client.index("a_test_index").update_sortable_attributes(["popularity"])
+        client.index("a_test_index").update_filterable_attributes(
+            ["genres", "providers", "type", "id"]
+        )
+
+        # Isolated the important
+        client.index("a_test_index").update_searchable_attributes(
+            ["original_title", "title"]
+        )
+
+        client.index("a_test_index").update_sortable_attributes(
+            ["popularity", "release_date"]
+        )
+
+        # Sort is moved higher than default
+        client.index("a_test_index").update_ranking_rules(
+            ["words", "sort", "typo", "proximity", "attribute", "exactness"]
+        )
 
         search_results = client.index("a_test_index").search(
             "*", {"filter": ["providers.NL.flatrate.provider_name = KPN"]}

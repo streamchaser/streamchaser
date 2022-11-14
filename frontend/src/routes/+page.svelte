@@ -42,8 +42,19 @@
   const hitProviderAmounts = (searchHits: Media[]) => {
     providerAmounts = []
     searchHits.forEach(hit => {
-      providerAmounts.push(hit.providers[$currentCountry].flatrate.length)
+      console.log("HIT: " + JSON.stringify(hit))
+      let combinedAmount = 0
+      if (hit.providers) {
+        if ("flatrate" in hit.providers[$currentCountry]) {
+          combinedAmount += hit.providers[$currentCountry]["flatrate"].length
+        }
+        if ("free" in hit.providers[$currentCountry]) {
+          combinedAmount += hit.providers[$currentCountry]["free"].length
+        }
+      }
+      providerAmounts.push(combinedAmount)
     })
+    console.log(providerAmounts)
   }
 
   const setViewportToDefault = () => {
@@ -111,7 +122,6 @@
           )
     $inputQuery = input
     meilisearch = await res.json()
-    console.log("MEILISEARCH: " + JSON.stringify(meilisearch))
     hitProviderAmounts(meilisearch.hits)
   }
 
@@ -219,7 +229,6 @@
 <MediaSearch
   {meilisearch}
   {providerAmounts}
-  currentCountry={$currentCountry}
   currentProviders={$currentProviders}
   bind:currentMediaAmount
   {input}

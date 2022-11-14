@@ -10,6 +10,8 @@ export const ssr = env.PUBLIC_ENV && env.PUBLIC_ENV === "prod"
 const GENRE_URL = `${GO_API}/genres/`
 const PROVIDER_URL = `${PYTHON_API}/providers/`
 
+console.log("I WAS HERE CLICK ME!!!!")
+
 export const load: PageLoad = async ({ fetch }) => {
   const fetchProviders = async (): Promise<string[]> => {
     let country: string

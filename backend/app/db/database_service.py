@@ -69,6 +69,30 @@ def index_media(country_code: str):
     client.index(f"media_{country_code}").add_documents(medias)
 
 
+def index_media_v2():
+    db = database.SessionLocal()
+    db_media = get_all_media(db)
+
+    medias = []
+    for media in db_media:
+        medias.append(
+            schemas.Media(
+                id=media.id,
+                type="movie" if media.id[0] == "m" else "tv",
+                title=media.title,
+                original_title=media.original_title,
+                overview=media.overview,
+                release_date=media.release_date,
+                genres=media.genres,
+                poster_path=media.poster_path,
+                popularity=media.popularity,
+                providers=media.providers,
+            ).dict()
+        )
+
+    client.index("a_test_index").add_documents(medias)
+
+
 async def extract_unique_providers_to_cache():
     db = database.SessionLocal()
     db_media = get_all_media(db)
