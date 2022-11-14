@@ -65,11 +65,15 @@ class TestIndexing:
         psql_to_meili()
 
         client.index("a_test_index").update_filterable_attributes(["providers"])
+        client.index("a_test_index").update_sortable_attributes(["popularity"])
 
-        search_results = client.index("a_test_index").search("*")
+        search_results = client.index("a_test_index").search(
+            "*", {"filter": ["providers.NL.flatrate.provider_name = KPN"]}
+        )
         print(search_results["estimatedTotalHits"]),
 
         search_results = client.index("a_test_index").search("*")
         print(search_results["estimatedTotalHits"]),
 
         print([m["providers"] for m in search_results["hits"]][0])
+        assert False

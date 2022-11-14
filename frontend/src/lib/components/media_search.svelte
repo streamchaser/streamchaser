@@ -66,7 +66,7 @@
           </div>
         {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
           <div class="-space-x-4 avatar-group">
-            {#each media.providers as provider}
+            {#each media.providers[currentCountry].flatrate as provider}
               <div class="avatar border-neutral">
                 <div class="w-12 h-12">
                   <img
@@ -79,7 +79,7 @@
           </div>
         {:else}
           <div class="-space-x-4 avatar-group">
-            {#each media.providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
+            {#each media.providers[currentCountry].flatrate.slice(0, SHOWN_PROVIDERS - 1) as provider}
               <div class="avatar border-neutral">
                 <div class="w-12 h-12">
                   <img

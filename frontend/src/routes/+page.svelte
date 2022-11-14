@@ -19,7 +19,7 @@
 
   export let data: PageData
 
-  const SEARCH_URL = `${PYTHON_API}/search/`
+  const SEARCH_URL = `${PYTHON_API}/search/v2/`
   const INPUT_TIMER = 200
 
   let input = ""
@@ -42,7 +42,7 @@
   const hitProviderAmounts = (searchHits: Media[]) => {
     providerAmounts = []
     searchHits.forEach(hit => {
-      providerAmounts.push(hit.providers.length)
+      providerAmounts.push(hit.providers[$currentCountry].flatrate.length)
     })
   }
 
@@ -111,6 +111,7 @@
           )
     $inputQuery = input
     meilisearch = await res.json()
+    console.log("MEILISEARCH: " + JSON.stringify(meilisearch))
     hitProviderAmounts(meilisearch.hits)
   }
 

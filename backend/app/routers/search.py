@@ -48,7 +48,38 @@ def filter_from_queries(
         filter.append([f'provider_names="{provider}"' for provider in providers])
     else:
         if only_providers:
-            filter.append(['provider_names!=""'])
+            filter.append(['provider_names !=""'])
+
+    if genres:
+        filter = filter + [f'genres="{genre}"' for genre in genres]
+
+    if types:
+        filter.append([f'type="{type}"' for type in types])
+
+    return filter
+
+
+def filter_from_queries_v2(
+    country_code: str,
+    providers: list | None = None,
+    genres: list | None = None,
+    types: list | None = None,
+    only_providers: bool = False,
+) -> list:
+    filter = []
+
+    # search_results = client.index("a_test_index").search("*",
+    # {'filter': ['providers.NL.flatrate.provider_name = KPN']})
+    if providers:
+        filter.append(
+            [
+                f'providers.{country_code}.flatrate.provider_name ="{provider}"'
+                for provider in providers
+            ]
+        )
+    else:
+        if only_providers:
+            filter.append([f'providers.{country_code}.flatrate.provider_name != ""'])
 
     if genres:
         filter = filter + [f'genres="{genre}"' for genre in genres]
@@ -98,4 +129,49 @@ async def search(
         limit=limit,
         sort=sort,
         filter=filter,
+    )
+
+
+@router.get("/v2/{user_input}")
+async def search_v2(
+    user_input: str = Path("*", description="The main query string"),
+    limit: int = Query(
+        20, description="Control the maximum amount of shown search results"
+    ),
+    c: str = Query("DK", description="Country code"),
+    only_providers: bool = Query(False, description="Only media with providers"),
+    g: list[str] | None = Query(None, description="Genres"),
+    p: list[str] | None = Query(None, description="Providers"),
+    t: list[str] | None = Query(None, description="Content type"),
+):
+    """
+    # Our endpoint for the MeiliSearch API
+    * **user_input**: Input to lookup media
+    * **limit**: Amount of results to return
+    * **c**: Country code(defaulting to Denmark)
+    * **g**: Optional genre query
+    * **p**: Optional provider query
+    * **t**: Optional type query
+    """
+    country_code = c.upper()
+
+    filter = filter_from_queries_v2(
+        country_code=country_code,
+        providers=p,
+        genres=g,
+        types=t,
+        only_providers=only_providers,
+    )
+
+    return await async_client.index("a_test_index").search(
+        user_input,
+        limit=limit,
+        sort=["popularity:desc"],
+        filter=filter,
+        attributes_to_retrieve=[
+            f"providers.{country_code}",
+            "title",
+            "poster_path",
+            "id",
+        ],
     )
