@@ -6,7 +6,7 @@
   import type { Meilisearch } from "../types"
   import Spinner from "$lib/components/loading/spinner.svelte"
   import { IMG_ORIGINAL, IMG_W342 } from "../variables"
-  import type { Genre } from "$lib/generated"
+  import type { Genre, Media } from "$lib/generated"
   import { currentCountry } from "$lib/stores/country"
 
   const SHOWN_PROVIDERS: number = 5
@@ -20,20 +20,18 @@
   export let currentGenres: Genre[]
   export let search: Function
 
-  // const combineProviders = () => {
-  //   const providers = []
-  //   for (const hit of meilisearch.hits) {
-  //     if (hit.providers) {
-  //       if ("flatrate" in hit.providers[$currentCountry]) {
-  //         providers.push(hit.providers[$currentCountry]["flatrate"])
-  //       }
-  //       if ("free" in hit.providers[$currentCountry]) {
-  //         providers.push(hit.providers[$currentCountry]["free"])
-  //       }
-  //     }
-  // }
-  //   return providers
-  // }
+  const combineProviders = (media: Media) => {
+    const providers = []
+    if (media.providers) {
+      if ("flatrate" in media.providers[$currentCountry]) {
+        providers.push(...media.providers[$currentCountry]["flatrate"])
+      }
+      if ("free" in media.providers[$currentCountry]) {
+        providers.push(...media.providers[$currentCountry]["free"])
+      }
+    }
+    return providers
+  }
 
   const loadMoreData = async ({ detail: { loaded } }) => {
     currentMediaAmount += mediaStartAmount
@@ -57,7 +55,6 @@
         class="card compact w-auto bordered bg-neutral m-1
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary aspect-[19/33]"
       >
-        <p>{providerAmounts[mediaIndex]}</p>
         {#if media.poster_path}
           <figure>
             <img src="{IMG_W342}{media.poster_path}" alt={media.title} />
@@ -82,8 +79,7 @@
           </div>
         {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
           <div class="-space-x-4 avatar-group">
-            <p>ost</p>
-            {#each media.providers[$currentCountry].flatrate as provider}
+            {#each combineProviders(media) as provider}
               <div class="avatar border-neutral">
                 <div class="w-12 h-12">
                   <img
@@ -97,18 +93,16 @@
         {:else}
           <p>{providerAmounts[mediaIndex]}</p>
           <div class="-space-x-4 avatar-group">
-            {#if "flatrate" in media.providers[$currentCountry]}
-              {#each media.providers[$currentCountry].flatrate.slice(0, SHOWN_PROVIDERS - 1) as provider}
-                <div class="avatar border-neutral">
-                  <div class="w-12 h-12">
-                    <img
-                      src="{IMG_ORIGINAL}{provider.logo_path}"
-                      alt={provider.provider_name}
-                    />
-                  </div>
+            {#each combineProviders(media).slice(0, SHOWN_PROVIDERS - 1) as provider}
+              <div class="avatar border-neutral">
+                <div class="w-12 h-12">
+                  <img
+                    src="{IMG_ORIGINAL}{provider.logo_path}"
+                    alt={provider.provider_name}
+                  />
                 </div>
-              {/each}
-            {/if}
+              </div>
+            {/each}
             <div class="avatar placeholder border-neutral">
               <div class="w-12 h-12 rounded-full bg-neutral text-neutral-content">
                 <span>

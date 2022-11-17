@@ -19,7 +19,7 @@
 
   export let data: PageData
 
-  const SEARCH_URL = `${PYTHON_API}/search/v2/`
+  const SEARCH_URL = `${PYTHON_API}/search/`
   const INPUT_TIMER = 200
 
   let input = ""
@@ -42,7 +42,6 @@
   const hitProviderAmounts = (searchHits: Media[]) => {
     providerAmounts = []
     searchHits.forEach(hit => {
-      console.log("HIT: " + JSON.stringify(hit))
       let combinedAmount = 0
       if (hit.providers) {
         if ("flatrate" in hit.providers[$currentCountry]) {
@@ -54,7 +53,6 @@
       }
       providerAmounts.push(combinedAmount)
     })
-    console.log(providerAmounts)
   }
 
   const setViewportToDefault = () => {
