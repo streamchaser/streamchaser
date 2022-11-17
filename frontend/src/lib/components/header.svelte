@@ -4,7 +4,7 @@
 
   export let title: string
   export let description: string
-  export let images: string[] = [`${PYTHON_STATIC}/main_logo_dark.png`]
+  export let images: string[] = [`${PYTHON_STATIC}/main_logo_light_bg.png`]
   export let type = "video.other"
   console.log(images[0])
 </script>
