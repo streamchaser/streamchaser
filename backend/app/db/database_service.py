@@ -68,7 +68,7 @@ def index_media():
             ).dict()
         )
 
-    client.index("a_test_index").add_documents(medias)
+    client.index("media").add_documents(medias)
 
     print("len medias", len(medias))
 

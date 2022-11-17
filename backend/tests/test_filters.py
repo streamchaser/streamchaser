@@ -17,21 +17,12 @@ class TestProviderFilter:
         """Should only consist of hits with providers"""
 
         search_results = client.index("media_TEST").search(
-            "*", {"filter": [['provider_names != ""']]}
+            "*", {"filter": [['supported_provider_countries = "DK"']]}
         )
 
-        for provider_name in [hit["provider_names"] for hit in search_results["hits"]]:
-            assert provider_name != ""
-
-    def test_filter_no_providers(self):
-        """Should only consist of hits without providers"""
-
-        search_results = client.index("media_TEST").search(
-            "*", {"filter": [['provider_names = ""']]}
-        )
-
-        for provider_name in [hit["provider_names"] for hit in search_results["hits"]]:
-            assert provider_name == ""
+        for hit in search_results["hits"]:
+            assert len(hit["supported_provider_countries"]) > 0
+            assert "DK" in hit["supported_provider_countries"]
 
 
 class TestTypeFilter:
@@ -65,7 +56,7 @@ class TestFilterFromQueries:
     def test_filter_from_queries_empty(self):
         """Empty list that shouldn't lead to any filtering"""
 
-        filter = filter_from_queries()
+        filter = filter_from_queries("DK")
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
         assert search_results["estimatedTotalHits"] == len(test_data)
@@ -73,30 +64,36 @@ class TestFilterFromQueries:
     def test_filter_from_queries_providers(self):
         """Proves only 1 provider needs to match something"""
 
-        filter = filter_from_queries(providers=["Disney Plus"])
+        filter = filter_from_queries("DK", providers=["Netflix"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
         assert search_results["estimatedTotalHits"] == 1
-        assert "Disney Plus" in search_results["hits"][0]["provider_names"]
+        assert "Netflix" in [
+            provider["provider_name"]
+            for hits in search_results["hits"]
+            for provider in hits["providers"]["DK"]["flatrate"]
+        ]
 
-        filter = filter_from_queries(providers=["Disney Plus", "HBO Max"])
+        filter = filter_from_queries("DK", providers=["Netflix", "HBO Max"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
-        assert search_results["estimatedTotalHits"] == 2
-        assert ["Disney Plus"] and ["HBO Max"] in [
-            hit["provider_names"] for hit in search_results["hits"]
+        assert search_results["estimatedTotalHits"] == 3
+        assert "Netflix" and "HBO Max" in [
+            provider["provider_name"]
+            for hits in search_results["hits"]
+            for provider in hits["providers"]["DK"]["flatrate"]
         ]
 
     def test_filter_from_queries_genres(self):
         """Proves all genres needs to match something"""
 
-        filter = filter_from_queries(genres=["Family"])
+        filter = filter_from_queries("DK", genres=["Family"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
         assert search_results["estimatedTotalHits"] == 1
         assert "Family" in search_results["hits"][0]["genres"]
 
-        filter = filter_from_queries(genres=["Family", "Not a real genre"])
+        filter = filter_from_queries("DK", genres=["Family", "Not a real genre"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
         assert search_results["estimatedTotalHits"] == 0
@@ -104,13 +101,13 @@ class TestFilterFromQueries:
     def test_filter_from_queries_types(self):
         """Proves only 1 type needs to match something"""
 
-        filter = filter_from_queries(types=["movie", "tv"])
+        filter = filter_from_queries("DK", types=["movie", "tv"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
         assert search_results["estimatedTotalHits"] == len(test_data)
         assert "movie" and "tv" in [media["type"] for media in search_results["hits"]]
 
-        filter = filter_from_queries(types=["movie"])
+        filter = filter_from_queries("DK", types=["movie"])
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
         assert "movie" in [media["type"] for media in search_results["hits"]]
@@ -120,23 +117,30 @@ class TestFilterFromQueries:
         """Tests for unexpected behavior when applying multiple filters"""
 
         filter = filter_from_queries(
-            providers=["HBO Max"], genres=["Action", "Horror"], types=["movie", "tv"]
+            "DK",
+            providers=["HBO Max"],
+            genres=["Action", "Horror"],
+            types=["movie", "tv"],
         )
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
         assert search_results["estimatedTotalHits"] == 1
-        assert "HBO Max" in search_results["hits"][0]["provider_names"]
+        assert "HBO Max" in [
+            provider["provider_name"]
+            for hits in search_results["hits"]
+            for provider in hits["providers"]["DK"]["flatrate"]
+        ]
         assert "Action" and "Horror" in search_results["hits"][0]["genres"]
 
         filter = filter_from_queries(
-            providers=["HBO Max"], genres=["A genre that isnt there"]
+            "DK", providers=["HBO Max"], genres=["A genre that isnt there"]
         )
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 
         assert search_results["estimatedTotalHits"] == 0
 
         filter = filter_from_queries(
-            providers=["A provider that isnt there"], genres=["Action"]
+            "DK", providers=["A provider that isnt there"], genres=["Action"]
         )
         search_results = client.index("media_TEST").search("*", {"filter": filter})
 

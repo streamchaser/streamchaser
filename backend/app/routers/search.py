@@ -65,6 +65,7 @@ def filter_from_queries(
     if types:
         filter.append([f'type="{type}"' for type in types])
 
+    print("filter", filter)
     return filter
 
 

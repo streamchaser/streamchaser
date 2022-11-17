@@ -13,15 +13,19 @@ test_data = [
         "genres": ["Horror", "Science Fiction", "Mystery", "Action"],
         "poster_path": "/xZNw9xxtwbEf25NYoz52KdbXHPM.jpg",
         "popularity": 89,
-        "provider_names": ["HBO Max"],
-        "providers": [
-            {
-                "display_priority": 8,
-                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg",
-                "provider_id": 384,
-                "provider_name": "HBO Max",
+        "supported_provider_countries": ["DK"],
+        "providers": {
+            "DK": {
+                "flatrate": [
+                    {
+                        "display_priority": 8,
+                        "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg",
+                        "provider_id": 384,
+                        "provider_name": "HBO Max",
+                    }
+                ],
             }
-        ],
+        },
     },
     {
         "id": "m283700",
@@ -33,8 +37,19 @@ test_data = [
         "genres": ["History", "Drama"],
         "poster_path": "/fTtlV5ZRKkncPzr7tQyadYKZGcP.jpg",
         "popularity": 8,
-        "provider_names": [],
-        "providers": [],
+        "supported_provider_countries": ["DK"],
+        "providers": {
+            "DK": {
+                "flatrate": [
+                    {
+                        "display_priority": 0,
+                        "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
+                        "provider_id": 8,
+                        "provider_name": "Netflix",
+                    }
+                ]
+            }
+        },
     },
     {
         "id": "t205051",
@@ -46,8 +61,8 @@ test_data = [
         "genres": ["Documentary"],
         "poster_path": "/cZwGewRof3bLIlKLfAaBeGCnahC.jpg",
         "popularity": 3,
-        "provider_names": [],
-        "providers": [],
+        "supported_provider_countries": [],
+        "providers": {},
     },
     {
         "id": "t1877",
@@ -59,15 +74,19 @@ test_data = [
         "genres": ["Animation", "Comedy", "Family", "Sci-Fi & Fantasy"],
         "poster_path": "/5M1KD34oDBjnmVQhdvoVNYgMugc.jpg",
         "popularity": 64,
-        "provider_names": ["Disney Plus"],
-        "providers": [
-            {
-                "display_priority": 30,
-                "logo_path": "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
-                "provider_id": 337,
-                "provider_name": "Disney Plus",
+        "provider_names": ["DK"],
+        "providers": {
+            "DK": {
+                "flatrate": [
+                    {
+                        "display_priority": 8,
+                        "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg",
+                        "provider_id": 384,
+                        "provider_name": "HBO Max",
+                    }
+                ],
             }
-        ],
+        },
     },
 ]
 
@@ -76,7 +95,7 @@ test_data = [
 def setup_meilisearch():
     """Session scoped fixture that prepares the MeiliSearch test index"""
 
-    search_client_config("TEST")
+    search_client_config("media_TEST")
     client.index("media_TEST").delete_all_documents()
     task = client.index("media_TEST").add_documents(test_data)
     print("task", task)
