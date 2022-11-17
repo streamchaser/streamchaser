@@ -29,51 +29,11 @@ async def insert_genres_to_cache(genres: dict) -> None:
     await redis.set("genres", json.dumps(fixed_genres))
 
 
-# TODO: Only index the recently updated media(updated_at)
-def index_media(country_code: str):
+def index_media():
     db = database.SessionLocal()
     db_media = get_all_media(db)
 
-    medias = []
-    for media in db_media:
-        combined_provider_names = []
-        combined_providers = []
-        if media.providers:
-            if media.providers.get(country_code):
-                for provider_type in ["flatrate", "free"]:
-                    if providers := media.providers.get(country_code).get(
-                        provider_type
-                    ):
-                        for provider in providers:
-                            combined_provider_names.append(
-                                provider.get("provider_name")
-                            )
-                            combined_providers.append(provider)
-
-        medias.append(
-            schemas.Media(
-                id=media.id,
-                type="movie" if media.id[0] == "m" else "tv",
-                title=media.title,
-                original_title=media.original_title,
-                overview=media.overview,
-                release_date=media.release_date,
-                genres=media.genres,
-                poster_path=media.poster_path,
-                popularity=media.popularity,
-                provider_names=combined_provider_names,
-                providers=combined_providers,
-            ).dict()
-        )
-
-    client.index(f"media_{country_code}").add_documents(medias)
-
-
-def index_media_v2():
-    db = database.SessionLocal()
-    db_media = get_all_media(db)
-
-    print("in index_media_v2()")
+    print("in index_media()")
 
     # Filters empty provider dicts out
     # The ones that only have provider types we dont support(yet)

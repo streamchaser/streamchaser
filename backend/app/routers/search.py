@@ -37,29 +37,6 @@ def sort_from_queries(release_date: Order | None, popularity: Order | None) -> l
 
 
 def filter_from_queries(
-    providers: list | None = None,
-    genres: list | None = None,
-    types: list | None = None,
-    only_providers: bool = False,
-) -> list:
-    filter = []
-
-    if providers:
-        filter.append([f'provider_names="{provider}"' for provider in providers])
-    else:
-        if only_providers:
-            filter.append(['provider_names !=""'])
-
-    if genres:
-        filter = filter + [f'genres="{genre}"' for genre in genres]
-
-    if types:
-        filter.append([f'type="{type}"' for type in types])
-
-    return filter
-
-
-def filter_from_queries_v2(
     country_code: str,
     providers: list | None = None,
     genres: list | None = None,
@@ -68,8 +45,6 @@ def filter_from_queries_v2(
 ) -> list:
     filter = []
 
-    # search_results = client.index("a_test_index").search("*",
-    # {'filter': ['providers.NL.flatrate.provider_name = KPN']})
     if providers:
         flatrate = [
             f'providers.{country_code}.flatrate.provider_name ="{provider}"'
@@ -82,11 +57,6 @@ def filter_from_queries_v2(
         filter = [flatrate + free]
     else:
         if only_providers:
-            # filter.append(f'providers.{country_code}.flatrate != ""')
-            # filter.append(f'providers.{country_code} !=""')
-            # filter.append(f'providers.{country_code}.flatrate.provider_name !=""')
-            # filter.append(f'providers.{country_code}.free.provider_name !=""')
-            # filter.append(f'providers != ""')
             filter.append(f'supported_provider_countries = "{country_code}"')
 
     if genres:
@@ -95,55 +65,11 @@ def filter_from_queries_v2(
     if types:
         filter.append([f'type="{type}"' for type in types])
 
-    print(f"FILTERSSS!: {filter}")
-
     return filter
 
 
 @router.get("/{user_input}")
 async def search(
-    user_input: str = Path("*", description="The main query string"),
-    limit: int = Query(
-        20, description="Control the maximum amount of shown search results"
-    ),
-    c: str = Query("DK", description="Country code"),
-    only_providers: bool = Query(False, description="Only media with providers"),
-    g: list[str] | None = Query(None, description="Genres"),
-    p: list[str] | None = Query(None, description="Providers"),
-    t: list[str] | None = Query(None, description="Content type"),
-    release_date: Order | None = Query(None, description="Release date sorting"),
-    popularity: Order | None = Query(None, description="Popularity sorting"),
-):
-    """
-    # Our endpoint for the MeiliSearch API
-    This the main driver of the index page
-    """
-
-    country_code = c.upper()
-
-    # Default sorting if no user_input
-    if user_input == "*":
-        sort = sort_from_queries(release_date=None, popularity=Order.DESCENDING)
-    else:
-        sort = sort_from_queries(release_date=None, popularity=None)
-
-    if release_date or popularity:
-        sort = sort_from_queries(release_date=release_date, popularity=popularity)
-
-    filter = filter_from_queries(
-        providers=p, genres=g, types=t, only_providers=only_providers
-    )
-
-    return await async_client.index(f"media_{country_code}").search(
-        user_input,
-        limit=limit,
-        sort=sort,
-        filter=filter,
-    )
-
-
-@router.get("/v2/{user_input}")
-async def search_v2(
     user_input: str = Path("*", description="The main query string"),
     limit: int = Query(
         20, description="Control the maximum amount of shown search results"
@@ -176,7 +102,7 @@ async def search_v2(
     if release_date or popularity:
         sort = sort_from_queries(release_date=release_date, popularity=popularity)
 
-    filter = filter_from_queries_v2(
+    filter = filter_from_queries(
         country_code=country_code,
         providers=p,
         genres=g,

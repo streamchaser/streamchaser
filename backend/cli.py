@@ -13,12 +13,10 @@ from app.db.crud import delete_media_by_id
 from app.db.crud import get_media_by_id
 from app.db.database_service import extract_unique_providers_to_cache
 from app.db.database_service import index_media
-from app.db.database_service import index_media_v2
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.search import client
-from app.db.search import search_client_config_v2
-from app.db.search import update_index
+from app.db.search import search_client_config
 from app.util import chunkify
 from app.util import coroutine
 from tqdm import tqdm
@@ -52,24 +50,10 @@ def update_ids(ids: list[str]):
 def index_meilisearch():
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
-        update_index()
-
-    country_codes = get_settings().supported_country_codes
-
-    for country_code in tqdm(
-        country_codes, desc=f"Indexing {len(country_codes)} countries"
-    ):
-        index_media(country_code)
-
-
-@app.command()
-def index_meilisearch_v2():
-    if get_settings().app_environment == Environment.DEVELOPMENT:
-        # Is ran at startup in production
         print("about to do stuff")
-        search_client_config_v2()
+        search_client_config()
 
-        index_media_v2()
+        index_media()
 
 
 @app.command()
@@ -174,17 +158,6 @@ async def full_setup(popularity: float = 1, first_time: bool = False):
     remove_blacklisted_from_postgres()
     await extract_unique_providers_to_cache()
     index_meilisearch()
-
-
-@app.command()
-@coroutine
-async def full_setup_v2(popularity: float = 1, first_time: bool = False):
-    await insert_genres_to_cache(get_genres())
-    update_media(chunk_size=1000, first_time=first_time, popularity=popularity)
-    # Removes before indexing MeiliSearch
-    remove_blacklisted_from_postgres()
-    await extract_unique_providers_to_cache()
-    index_meilisearch_v2()
 
 
 @app.command()

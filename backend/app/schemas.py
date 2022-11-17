@@ -11,7 +11,6 @@ class Media(BaseModel):
     genres: list[str | None]
     poster_path: str | None
     popularity: int | None
-    provider_names: list[str] | None
     supported_provider_countries: list[str]
     providers: dict[str, dict[str, list[dict]]]
 
