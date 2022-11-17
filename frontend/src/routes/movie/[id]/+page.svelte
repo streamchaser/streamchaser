@@ -4,7 +4,7 @@
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
-  import Header from "$lib/components/header.svelte"
+  import Head from "$lib/components/head.svelte"
   import type { PageData } from "./$types"
 
   export let data: PageData
@@ -22,7 +22,7 @@
   }
 </script>
 
-<Header title={movie.title} description={movie.overview} images={[posterUrl]} />
+<Head title={movie.title} description={movie.overview} images={[posterUrl]} />
 
 <TopCard
   backdropPath={movie.backdrop_path}

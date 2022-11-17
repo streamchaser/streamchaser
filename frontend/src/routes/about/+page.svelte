@@ -1,10 +1,10 @@
 <script>
   import Collapse from "$lib/components/collapse.svelte"
   import Avatar from "$lib/components/avatar.svelte"
-  import Header from "$lib/components/header.svelte"
+  import Head from "$lib/components/head.svelte"
 </script>
 
-<Header title="About" description="About streamchaser" />
+<Head title="About" description="About streamchaser" />
 
 <br />
 <h1 class="text-center text-3xl">About</h1>

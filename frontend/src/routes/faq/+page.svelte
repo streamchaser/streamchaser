@@ -1,9 +1,9 @@
 <script>
   import Collapse from "$lib/components/collapse.svelte"
-  import Header from "$lib/components/header.svelte"
+  import Head from "$lib/components/head.svelte"
 </script>
 
-<Header title="Faq" description="A list of frequently asked questions" />
+<Head title="Faq" description="A list of frequently asked questions" />
 
 <br />
 <h1 class="text-center text-3xl">FAQ</h1>

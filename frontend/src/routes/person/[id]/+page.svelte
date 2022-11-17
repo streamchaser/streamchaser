@@ -3,7 +3,7 @@
   import { getMostPopularBackdropPath } from "$lib/utils"
   import TopCard from "$lib/components/details/top_card.svelte"
   import PersonMedia from "$lib/components/details/person_media.svelte"
-  import Header from "$lib/components/header.svelte"
+  import Head from "$lib/components/head.svelte"
   import type { Person } from "$lib/generated"
   import type { PageData } from "./$types"
 
@@ -16,7 +16,7 @@
   }
 </script>
 
-<Header title={person.name} description={person.biography} images={[posterUrl]} />
+<Head title={person.name} description={person.biography} images={[posterUrl]} />
 
 <TopCard
   backdropPath={getMostPopularBackdropPath(
