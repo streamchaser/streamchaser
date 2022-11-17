@@ -1,10 +1,9 @@
 <script>
   import Collapse from "$lib/components/collapse.svelte"
+  import Header from "$lib/components/header.svelte"
 </script>
 
-<svelte:head>
-  <title>FAQ - Streamchaser</title>
-</svelte:head>
+<Header title="Faq" description="A list of frequently asked questions" />
 
 <br />
 <h1 class="text-center text-3xl">FAQ</h1>

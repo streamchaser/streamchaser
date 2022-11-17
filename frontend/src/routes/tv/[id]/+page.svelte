@@ -1,13 +1,16 @@
 <script lang="ts">
+  import { PYTHON_API } from "$lib/variables.js"
   import { currentCountry } from "$lib/stores/country.js"
   import Seasons from "$lib/components/details/seasons.svelte"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
+  import Header from "$lib/components/header.svelte"
   import type { PageData } from "./$types"
 
   export let data: PageData
   const { tv } = data
+  const posterUrl = PYTHON_API + `/image/?size=original&path=/${tv.poster_path}`
 
   let firstLoadCompleted = false
 
@@ -19,9 +22,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>{tv.name} - Streamchaser</title>
-</svelte:head>
+<Header title={tv.name} description={tv.overview} images={[posterUrl]} />
 
 <TopCard
   backdropPath={tv.backdrop_path}

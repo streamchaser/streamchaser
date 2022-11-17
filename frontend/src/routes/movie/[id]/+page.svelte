@@ -1,12 +1,15 @@
 <script lang="ts">
+  import { PYTHON_API } from "$lib/variables.js"
   import { currentCountry } from "$lib/stores/country.js"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
+  import Header from "$lib/components/header.svelte"
   import type { PageData } from "./$types"
 
   export let data: PageData
   const { movie } = data
+  const posterUrl = PYTHON_API + `/image/?size=original&path=/${movie.poster_path}`
 
   let firstLoadCompleted = false // TODO: Kill with fire
 
@@ -19,9 +22,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>{movie.title} - Streamchaser</title>
-</svelte:head>
+<Header title={movie.title} description={movie.overview} images={[posterUrl]} />
 
 <TopCard
   backdropPath={movie.backdrop_path}
