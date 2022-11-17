@@ -17,6 +17,7 @@ from app.db.database_service import index_media_v2
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.search import client
+from app.db.search import search_client_config_v2
 from app.db.search import update_index
 from app.util import chunkify
 from app.util import coroutine
@@ -65,7 +66,7 @@ def index_meilisearch():
 def index_meilisearch_v2():
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
-        update_index()
+        search_client_config_v2()
 
         index_media_v2()
 
