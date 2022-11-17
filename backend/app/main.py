@@ -14,6 +14,7 @@ from app.routers import tv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from starlette_context import middleware
 from starlette_context import plugins
 
@@ -48,6 +49,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(media.router)
 app.include_router(providers.router)

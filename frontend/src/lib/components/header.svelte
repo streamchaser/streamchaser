@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { PYTHON_STATIC } from "$lib/variables.js"
   import { page } from "$app/stores"
 
   export let title: string
   export let description: string
-  export let images: string[] = [""]
+  export let images: string[] = [`${PYTHON_STATIC}/main_logo_dark.png`]
   export let type = "video.other"
+  console.log(images[0])
 </script>
 
 <svelte:head>
