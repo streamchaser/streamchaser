@@ -28,7 +28,7 @@ def search_client_config(country_code: str):
 
 def search_client_config_v2():
     client.index("a_test_index").update_filterable_attributes(
-        ["genres", "providers", "type", "id"]
+        ["genres", "providers", "supported_provider_countries", "type", "id"]
     )
 
     # Isolated the important

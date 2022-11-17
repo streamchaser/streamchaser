@@ -73,8 +73,25 @@ def index_media_v2():
     db = database.SessionLocal()
     db_media = get_all_media(db)
 
+    print("in index_media_v2()")
+
+    # Filters empty provider dicts out
+    # The ones that only have provider types we dont support(yet)
+    supported_providers = ["flatrate", "free"]
     medias = []
-    for media in db_media:
+    print("len db_media", len(db_media))
+    for media in tqdm(db_media, desc="Building documents for meilisearch"):
+        supported_provider_countries = [
+            country_code
+            for country_code in list(media.providers.keys())
+            if any(
+                [
+                    media.providers[country_code].get(provider_type)
+                    for provider_type in supported_providers
+                ]
+            )
+        ]
+
         medias.append(
             schemas.Media(
                 id=media.id,
@@ -87,10 +104,13 @@ def index_media_v2():
                 poster_path=media.poster_path,
                 popularity=media.popularity,
                 providers=media.providers,
+                supported_provider_countries=supported_provider_countries,
             ).dict()
         )
 
     client.index("a_test_index").add_documents(medias)
+
+    print("len medias", len(medias))
 
 
 async def extract_unique_providers_to_cache():

@@ -66,6 +66,7 @@ def index_meilisearch():
 def index_meilisearch_v2():
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
+        print("about to do stuff")
         search_client_config_v2()
 
         index_media_v2()

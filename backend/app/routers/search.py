@@ -84,8 +84,10 @@ def filter_from_queries_v2(
         if only_providers:
             # filter.append(f'providers.{country_code}.flatrate != ""')
             # filter.append(f'providers.{country_code} !=""')
-            filter.append(f'providers.{country_code}.flatrate.provider_name !=""')
-            # filter.append(f'providers !=""')
+            # filter.append(f'providers.{country_code}.flatrate.provider_name !=""')
+            # filter.append(f'providers.{country_code}.free.provider_name !=""')
+            # filter.append(f'providers != ""')
+            filter.append(f'provider_countries = "{country_code}"')
 
     if genres:
         filter = filter + [f'genres="{genre}"' for genre in genres]
