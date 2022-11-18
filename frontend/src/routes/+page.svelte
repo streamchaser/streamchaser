@@ -4,11 +4,11 @@
   import Select from "svelte-select"
   import MediaSearch from "$lib/components/media_search.svelte"
   import Filters from "$lib/components/filters.svelte"
+  import Head from "$lib/components/head.svelte"
   import { currentCountry } from "$lib/stores/country.js"
   import { currentProviders } from "$lib/stores/providers.js"
   import { currentGenres } from "$lib/stores/genres"
   import { inputQuery } from "$lib/stores/input"
-  import { chosenTheme } from "$lib/stores/theme.js"
   import { filters } from "$lib/stores/filters.js"
   import { sorting } from "$lib/stores/sorting.js"
   import { onMount } from "svelte"
@@ -138,9 +138,11 @@
   })
 </script>
 
-<svelte:head>
-  <title>Streamchaser</title>
-</svelte:head>
+<Head
+  title="streamchaser"
+  description="Trying to keep track of where to watch your favorite movies and TV series? Streamchaser provides the
+  definitive guide to what each streaming service has on offer right now!"
+/>
 
 <div class="bg-neutral shadow-md card pb-2 pt-6 px-2 sm:px-6">
   <div class="flex justify-between">

@@ -1,13 +1,16 @@
 <script lang="ts">
+  import { IMG_ORIGINAL } from "$lib/variables.js"
   import { currentCountry } from "$lib/stores/country.js"
   import Seasons from "$lib/components/details/seasons.svelte"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
+  import Head from "$lib/components/head.svelte"
   import type { PageData } from "./$types"
 
   export let data: PageData
   const { tv } = data
+  const posterUrl = IMG_ORIGINAL + tv.poster_path
 
   let firstLoadCompleted = false
 
@@ -19,9 +22,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>{tv.name} - Streamchaser</title>
-</svelte:head>
+<Head title={tv.name} description={tv.overview} images={[posterUrl]} />
 
 <TopCard
   backdropPath={tv.backdrop_path}

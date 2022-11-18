@@ -1,21 +1,22 @@
 <script lang="ts">
+  import { IMG_ORIGINAL } from "$lib/variables.js"
   import { getMostPopularBackdropPath } from "$lib/utils"
   import TopCard from "$lib/components/details/top_card.svelte"
   import PersonMedia from "$lib/components/details/person_media.svelte"
+  import Head from "$lib/components/head.svelte"
   import type { Person } from "$lib/generated"
   import type { PageData } from "./$types"
 
   export let data: PageData
   const { person } = data
+  const posterUrl = IMG_ORIGINAL + person.profile_path
 
   const mediaCreditsWithoutAdult = (person: Person) => {
     return person.movie_credits.concat(person.tv_credits).filter(m => !m.adult)
   }
 </script>
 
-<svelte:head>
-  <title>{person.name} - Streamchaser</title>
-</svelte:head>
+<Head title={person.name} description={person.biography} images={[posterUrl]} />
 
 <TopCard
   backdropPath={getMostPopularBackdropPath(

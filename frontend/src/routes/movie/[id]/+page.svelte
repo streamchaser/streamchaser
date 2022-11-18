@@ -1,12 +1,15 @@
 <script lang="ts">
+  import { IMG_ORIGINAL } from "$lib/variables.js"
   import { currentCountry } from "$lib/stores/country.js"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
+  import Head from "$lib/components/head.svelte"
   import type { PageData } from "./$types"
 
   export let data: PageData
   const { movie } = data
+  const posterUrl = IMG_ORIGINAL + movie.poster_path
 
   let firstLoadCompleted = false // TODO: Kill with fire
 
@@ -19,9 +22,7 @@
   }
 </script>
 
-<svelte:head>
-  <title>{movie.title} - Streamchaser</title>
-</svelte:head>
+<Head title={movie.title} description={movie.overview} images={[posterUrl]} />
 
 <TopCard
   backdropPath={movie.backdrop_path}
