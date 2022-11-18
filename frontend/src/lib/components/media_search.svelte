@@ -91,7 +91,6 @@
             {/each}
           </div>
         {:else}
-          <p>{providerAmounts[mediaIndex]}</p>
           <div class="-space-x-4 avatar-group">
             {#each combineProviders(media).slice(0, SHOWN_PROVIDERS - 1) as provider}
               <div class="avatar border-neutral">

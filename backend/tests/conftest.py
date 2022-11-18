@@ -98,7 +98,6 @@ def setup_meilisearch():
     search_client_config("media_TEST")
     client.index("media_TEST").delete_all_documents()
     task = client.index("media_TEST").add_documents(test_data)
-    print("task", task)
     client.wait_for_task(
         task.task_uid
     )  # Makes sure the database is ready for the tests

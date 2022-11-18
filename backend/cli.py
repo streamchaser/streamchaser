@@ -50,9 +50,7 @@ def update_ids(ids: list[str]):
 def index_meilisearch():
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
-        print("about to do stuff")
         search_client_config()
-
         index_media()
 
 

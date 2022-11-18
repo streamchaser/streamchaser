@@ -7,7 +7,6 @@ class TestMediaLookup:
             "*", {"filter": [['id = "m340102"']]}
         )
 
-        print()
         assert search_results["estimatedTotalHits"] == 1
 
         hit_ids = [hit["id"] for hit in search_results["hits"]]

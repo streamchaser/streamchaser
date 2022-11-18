@@ -33,13 +33,10 @@ def index_media():
     db = database.SessionLocal()
     db_media = get_all_media(db)
 
-    print("in index_media()")
-
     # Filters empty provider dicts out
     # The ones that only have provider types we dont support(yet)
     supported_providers = ["flatrate", "free"]
     medias = []
-    print("len db_media", len(db_media))
     for media in tqdm(db_media, desc="Building documents for meilisearch"):
         supported_provider_countries = [
             country_code
@@ -69,8 +66,6 @@ def index_media():
         )
 
     client.index("media").add_documents(medias)
-
-    print("len medias", len(medias))
 
 
 async def extract_unique_providers_to_cache():
