@@ -111,7 +111,7 @@ async def search(
         only_providers=only_providers,
     )
 
-    return await async_client.index("a_test_index").search(
+    return await async_client.index("media").search(
         user_input,
         limit=limit,
         sort=sort,
