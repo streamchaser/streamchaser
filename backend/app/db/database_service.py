@@ -29,26 +29,25 @@ async def insert_genres_to_cache(genres: dict) -> None:
     await redis.set("genres", json.dumps(fixed_genres))
 
 
-# TODO: Only index the recently updated media(updated_at)
-def index_media(country_code: str):
+def index_media():
     db = database.SessionLocal()
     db_media = get_all_media(db)
 
+    # Filters empty provider dicts out
+    # The ones that only have provider types we dont support(yet)
+    supported_providers = ["flatrate", "free"]
     medias = []
-    for media in db_media:
-        combined_provider_names = []
-        combined_providers = []
-        if media.providers:
-            if media.providers.get(country_code):
-                for provider_type in ["flatrate", "free"]:
-                    if providers := media.providers.get(country_code).get(
-                        provider_type
-                    ):
-                        for provider in providers:
-                            combined_provider_names.append(
-                                provider.get("provider_name")
-                            )
-                            combined_providers.append(provider)
+    for media in tqdm(db_media, desc="Building documents for meilisearch"):
+        supported_provider_countries = [
+            country_code
+            for country_code in list(media.providers.keys())
+            if any(
+                [
+                    media.providers[country_code].get(provider_type)
+                    for provider_type in supported_providers
+                ]
+            )
+        ]
 
         medias.append(
             schemas.Media(
@@ -61,12 +60,12 @@ def index_media(country_code: str):
                 genres=media.genres,
                 poster_path=media.poster_path,
                 popularity=media.popularity,
-                provider_names=combined_provider_names,
-                providers=combined_providers,
+                providers=media.providers,
+                supported_provider_countries=supported_provider_countries,
             ).dict()
         )
 
-    client.index(f"media_{country_code}").add_documents(medias)
+    client.index("media").add_documents(medias)
 
 
 async def extract_unique_providers_to_cache():

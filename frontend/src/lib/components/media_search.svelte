@@ -6,19 +6,32 @@
   import type { Meilisearch } from "../types"
   import Spinner from "$lib/components/loading/spinner.svelte"
   import { IMG_ORIGINAL, IMG_W342 } from "../variables"
-  import type { Genre } from "$lib/generated"
+  import type { Genre, Media } from "$lib/generated"
+  import { currentCountry } from "$lib/stores/country"
 
   const SHOWN_PROVIDERS: number = 5
 
   export let meilisearch: Meilisearch
   export let providerAmounts: number[]
-  export let currentCountry: string
   export let currentProviders: { index: number; label: string; value: string }[]
   export let mediaStartAmount: number
   export let currentMediaAmount: number
   export let input: string
   export let currentGenres: Genre[]
   export let search: Function
+
+  const combineProviders = (media: Media) => {
+    const providers = []
+    if (media.providers) {
+      if ("flatrate" in media.providers[$currentCountry]) {
+        providers.push(...media.providers[$currentCountry]["flatrate"])
+      }
+      if ("free" in media.providers[$currentCountry]) {
+        providers.push(...media.providers[$currentCountry]["free"])
+      }
+    }
+    return providers
+  }
 
   const loadMoreData = async ({ detail: { loaded } }) => {
     currentMediaAmount += mediaStartAmount
@@ -61,12 +74,12 @@
         {#if providerAmounts[mediaIndex] === 0}
           <div class="card-body">
             <p class="text-center text-neutral-content">
-              <strong>No providers in {currentCountry}</strong>
+              <strong>No providers in {$currentCountry}</strong>
             </p>
           </div>
         {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
           <div class="-space-x-4 avatar-group">
-            {#each media.providers as provider}
+            {#each combineProviders(media) as provider}
               <div class="avatar border-neutral">
                 <div class="w-12 h-12">
                   <img
@@ -79,7 +92,7 @@
           </div>
         {:else}
           <div class="-space-x-4 avatar-group">
-            {#each media.providers.slice(0, SHOWN_PROVIDERS - 1) as provider}
+            {#each combineProviders(media).slice(0, SHOWN_PROVIDERS - 1) as provider}
               <div class="avatar border-neutral">
                 <div class="w-12 h-12">
                   <img

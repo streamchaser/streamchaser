@@ -8,7 +8,7 @@ python-versions = ">=3.6,<4.0"
 
 [[package]]
 name = "anyio"
-version = "3.6.1"
+version = "3.6.2"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
 category = "main"
 optional = false
@@ -21,7 +21,7 @@ sniffio = ">=1.1"
 [package.extras]
 doc = ["packaging", "sphinx-rtd-theme", "sphinx-autodoc-typehints (>=1.2.0)"]
 test = ["coverage[toml] (>=4.5)", "hypothesis (>=4.0)", "pytest (>=7.0)", "pytest-mock (>=3.6.1)", "trustme", "contextlib2", "uvloop (<0.15)", "mock (>=4)", "uvloop (>=0.15)"]
-trio = ["trio (>=0.16)"]
+trio = ["trio (>=0.16,<0.22)"]
 
 [[package]]
 name = "async-timeout"
@@ -47,14 +47,17 @@ tests_no_zope = ["coverage[toml] (>=5.0.2)", "hypothesis", "pympler", "pytest (>
 
 [[package]]
 name = "camel-converter"
-version = "1.0.6"
+version = "1.0.7"
 description = "Converts a string from snake case to camel case or camel case to snake case"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
+[package.dependencies]
+pydantic = {version = ">=1.8.2", optional = true, markers = "extra == \"pydantic\""}
+
 [package.extras]
-pydantic = ["pydantic (>=1.8.2,<2.0.0)"]
+pydantic = ["pydantic (>=1.8.2)"]
 
 [[package]]
 name = "certifi"
@@ -88,11 +91,11 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
 name = "colorama"
-version = "0.4.5"
+version = "0.4.6"
 description = "Cross-platform colored terminal text."
 category = "main"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 
 [[package]]
 name = "deprecated"
@@ -128,14 +131,15 @@ test = ["anyio[trio] (>=3.2.1,<4.0.0)", "black (==22.8.0)", "coverage[toml] (>=6
 
 [[package]]
 name = "greenlet"
-version = "1.1.3"
+version = "2.0.1"
 description = "Lightweight in-process concurrent programming"
 category = "main"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
 [package.extras]
-docs = ["sphinx"]
+docs = ["sphinx", "docutils (<0.18)"]
+test = ["objgraph", "psutil", "faulthandler"]
 
 [[package]]
 name = "gunicorn"
@@ -181,11 +185,11 @@ python-versions = ">=3.6.1"
 
 [[package]]
 name = "httpcore"
-version = "0.14.7"
+version = "0.15.0"
 description = "A minimal low-level HTTP client."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 anyio = ">=3.0.0,<4.0.0"
@@ -199,23 +203,22 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 
 [[package]]
 name = "httpx"
-version = "0.22.0"
+version = "0.23.0"
 description = "The next generation HTTP client."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 certifi = "*"
-charset-normalizer = "*"
 h2 = {version = ">=3,<5", optional = true, markers = "extra == \"http2\""}
-httpcore = ">=0.14.5,<0.15.0"
+httpcore = ">=0.15.0,<0.16.0"
 rfc3986 = {version = ">=1.3,<2", extras = ["idna2008"]}
 sniffio = "*"
 
 [package.extras]
 brotli = ["brotlicffi", "brotli"]
-cli = ["click (>=8.0.0,<9.0.0)", "rich (>=10.0.0,<11.0.0)", "pygments (>=2.0.0,<3.0.0)"]
+cli = ["click (>=8.0.0,<9.0.0)", "rich (>=10,<13)", "pygments (>=2.0.0,<3.0.0)"]
 http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (>=1.0.0,<2.0.0)"]
 
@@ -245,28 +248,30 @@ python-versions = "*"
 
 [[package]]
 name = "meilisearch"
-version = "0.18.3"
+version = "0.22.2"
 description = "The python client for Meilisearch API."
 category = "main"
 optional = false
-python-versions = ">=3"
+python-versions = ">=3.7"
 
 [package.dependencies]
+camel-converter = {version = "*", extras = ["pydantic"]}
 requests = "*"
 
 [[package]]
 name = "meilisearch-python-async"
-version = "0.22.0"
-description = "A Python async client for the MeiliSearch API"
+version = "0.28.1"
+description = "A Python async client for the Meilisearch API"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 
 [package.dependencies]
-aiofiles = ">=0.7,<0.9"
-camel-converter = ">=1.0.0,<2.0.0"
-httpx = ">=0.17,<0.23"
-pydantic = ">=1.8,<2.0"
+aiofiles = ">=0.7"
+camel-converter = ">=1.0.0"
+httpx = ">=0.17"
+pydantic = ">=1.8"
+PyJWT = ">=2.3.0"
 
 [[package]]
 name = "packaging"
@@ -313,6 +318,20 @@ typing-extensions = ">=4.1.0"
 [package.extras]
 dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
+
+[[package]]
+name = "pyjwt"
+version = "2.6.0"
+description = "JSON Web Token implementation in Python"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+crypto = ["cryptography (>=3.4.0)"]
+dev = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface", "cryptography (>=3.4.0)", "pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)", "pre-commit"]
+docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
+tests = ["pytest (>=6.0.0,<7.0.0)", "coverage[toml] (==5.0.4)"]
 
 [[package]]
 name = "pyparsing"
@@ -507,7 +526,7 @@ test = ["shellingham (>=1.3.0,<2.0.0)", "pytest (>=4.4.0,<8.0.0)", "pytest-cov (
 
 [[package]]
 name = "typing-extensions"
-version = "4.3.0"
+version = "4.4.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
 category = "main"
 optional = false
@@ -552,14 +571,11 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11"
-content-hash = "00b8841f04d39055017fda08242608c5dbdeb54146968ce89328d89f9f0fabcb"
+content-hash = "44bcd4805a8aa9f6abdbc40606bf018e7a7fc1cc0afbbfbea2ae1be7748f2f03"
 
 [metadata.files]
 aiofiles = []
-anyio = [
-    {file = "anyio-3.6.1-py3-none-any.whl", hash = "sha256:cb29b9c70620506a9a8f87a309591713446953302d7d995344d0d7c6c0c9a7be"},
-    {file = "anyio-3.6.1.tar.gz", hash = "sha256:413adf95f93886e442aea925f3ee43baa5a765a64a0f52c6081894f9992fdd0b"},
-]
+anyio = []
 async-timeout = []
 attrs = []
 camel-converter = []
@@ -580,14 +596,8 @@ h11 = [
 ]
 h2 = []
 hpack = []
-httpcore = [
-    {file = "httpcore-0.14.7-py3-none-any.whl", hash = "sha256:47d772f754359e56dd9d892d9593b6f9870a37aeb8ba51e9a88b09b3d68cfade"},
-    {file = "httpcore-0.14.7.tar.gz", hash = "sha256:7503ec1c0f559066e7e39bc4003fd2ce023d01cf51793e3c173b864eb456ead1"},
-]
-httpx = [
-    {file = "httpx-0.22.0-py3-none-any.whl", hash = "sha256:e35e83d1d2b9b2a609ef367cc4c1e66fd80b750348b20cc9e19d1952fc2ca3f6"},
-    {file = "httpx-0.22.0.tar.gz", hash = "sha256:d8e778f76d9bbd46af49e7f062467e3157a5a3d2ae4876a4bbfd8a51ed9c9cb4"},
-]
+httpcore = []
+httpx = []
 hyperframe = []
 idna = []
 iniconfig = []
@@ -600,6 +610,7 @@ packaging = [
 pluggy = []
 psycopg2-binary = []
 pydantic = []
+pyjwt = []
 pyparsing = []
 pytest = []
 pytest-asyncio = []

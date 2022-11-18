@@ -16,7 +16,7 @@ from app.db.database_service import index_media
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.search import client
-from app.db.search import update_index
+from app.db.search import search_client_config
 from app.util import chunkify
 from app.util import coroutine
 from tqdm import tqdm
@@ -50,14 +50,8 @@ def update_ids(ids: list[str]):
 def index_meilisearch():
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
-        update_index()
-
-    country_codes = get_settings().supported_country_codes
-
-    for country_code in tqdm(
-        country_codes, desc=f"Indexing {len(country_codes)} countries"
-    ):
-        index_media(country_code)
+        search_client_config()
+        index_media()
 
 
 @app.command()

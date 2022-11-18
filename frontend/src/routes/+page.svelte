@@ -42,7 +42,16 @@
   const hitProviderAmounts = (searchHits: Media[]) => {
     providerAmounts = []
     searchHits.forEach(hit => {
-      providerAmounts.push(hit.providers.length)
+      let combinedAmount = 0
+      if (hit.providers) {
+        if ("flatrate" in hit.providers[$currentCountry]) {
+          combinedAmount += hit.providers[$currentCountry]["flatrate"].length
+        }
+        if ("free" in hit.providers[$currentCountry]) {
+          combinedAmount += hit.providers[$currentCountry]["free"].length
+        }
+      }
+      providerAmounts.push(combinedAmount)
     })
   }
 
@@ -220,7 +229,6 @@
 <MediaSearch
   {meilisearch}
   {providerAmounts}
-  currentCountry={$currentCountry}
   currentProviders={$currentProviders}
   bind:currentMediaAmount
   {input}

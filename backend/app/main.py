@@ -1,7 +1,7 @@
 from app.config import Environment
 from app.config import get_settings
 from app.db.cache import redis
-from app.db.search import update_index
+from app.db.search import search_client_config
 from app.routers import country
 from app.routers import genres
 from app.routers import image
@@ -26,7 +26,7 @@ app = FastAPI()
 async def init_db():
     if get_settings().app_environment == Environment.PRODUCTION:
         # Only done in production because of development reloading
-        update_index()
+        search_client_config()
 
 
 @app.on_event("shutdown")

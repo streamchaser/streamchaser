@@ -11,8 +11,8 @@ class Media(BaseModel):
     genres: list[str | None]
     poster_path: str | None
     popularity: int | None
-    provider_names: list[str] | None
-    providers: list[dict] | None
+    supported_provider_countries: list[str]
+    providers: dict[str, dict[str, list[dict]]]
 
     class Config:
         # Makes use of database syntax "media.id" instead of "media['id']
