@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PYTHON_API } from "$lib/variables.js"
+  import { IMG_ORIGINAL } from "$lib/variables.js"
   import { getMostPopularBackdropPath } from "$lib/utils"
   import TopCard from "$lib/components/details/top_card.svelte"
   import PersonMedia from "$lib/components/details/person_media.svelte"
@@ -9,7 +9,7 @@
 
   export let data: PageData
   const { person } = data
-  const posterUrl = PYTHON_API + `/image/?size=original&path=/${person.profile_path}`
+  const posterUrl = IMG_ORIGINAL + person.profile_path
 
   const mediaCreditsWithoutAdult = (person: Person) => {
     return person.movie_credits.concat(person.tv_credits).filter(m => !m.adult)

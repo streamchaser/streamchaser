@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PYTHON_API } from "$lib/variables.js"
+  import { IMG_ORIGINAL } from "$lib/variables.js"
   import { currentCountry } from "$lib/stores/country.js"
   import Seasons from "$lib/components/details/seasons.svelte"
   import Person from "$lib/components/details/person.svelte"
@@ -10,7 +10,7 @@
 
   export let data: PageData
   const { tv } = data
-  const posterUrl = PYTHON_API + `/image/?size=original&path=/${tv.poster_path}`
+  const posterUrl = IMG_ORIGINAL + tv.poster_path
 
   let firstLoadCompleted = false
 
