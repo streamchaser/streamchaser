@@ -1,6 +1,5 @@
 import json
 
-from app import schemas
 from app.config import get_settings
 from app.db import crud
 from app.db import database
@@ -44,36 +43,33 @@ async def index_media():
         total=total_chunks,
         desc="Indexing meilisearch in chunks",
     ):
-        medias = []
-        for media in media_chunk:
-            supported_provider_countries = [
-                country_code
-                for country_code in list(media.providers.keys())
-                if any(
-                    [
-                        media.providers[country_code].get(provider_type)
-                        for provider_type in supported_providers
-                    ]
-                )
+        await async_client.index("media").add_documents(
+            [
+                {
+                    "id": media.id,
+                    "type": "movie" if media.id[0] == "m" else "tv",
+                    "title": media.title,
+                    "original_title": media.original_title,
+                    "overview": media.overview,
+                    "release_date": media.release_date,
+                    "genres": media.genres,
+                    "poster_path": media.poster_path,
+                    "popularity": media.popularity,
+                    "providers": media.providers,
+                    "supported_provider_countries": [
+                        country_code
+                        for country_code in list(media.providers.keys())
+                        if any(
+                            [
+                                media.providers[country_code].get(provider_type)
+                                for provider_type in supported_providers
+                            ]
+                        )
+                    ],
+                }
+                for media in media_chunk
             ]
-
-            medias.append(
-                schemas.Media(
-                    id=media.id,
-                    type="movie" if media.id[0] == "m" else "tv",
-                    title=media.title,
-                    original_title=media.original_title,
-                    overview=media.overview,
-                    release_date=media.release_date,
-                    genres=media.genres,
-                    poster_path=media.poster_path,
-                    popularity=media.popularity,
-                    providers=media.providers,
-                    supported_provider_countries=supported_provider_countries,
-                ).dict()
-            )
-
-        await async_client.index("media").add_documents(medias)
+        )
 
 
 async def extract_unique_providers_to_cache():
