@@ -7,7 +7,8 @@ from app.db import database
 from app.db.cache import Genre
 from app.db.cache import redis
 from app.db.crud import get_all_media
-from app.db.search import client
+from app.db.search import async_client
+from app.util import chunkify
 from tqdm import tqdm
 
 
@@ -29,43 +30,50 @@ async def insert_genres_to_cache(genres: dict) -> None:
     await redis.set("genres", json.dumps(fixed_genres))
 
 
-def index_media():
+async def index_media():
     db = database.SessionLocal()
     db_media = get_all_media(db)
 
     # Filters empty provider dicts out
     # The ones that only have provider types we dont support(yet)
     supported_providers = ["flatrate", "free"]
-    medias = []
-    for media in tqdm(db_media, desc="Building documents for meilisearch"):
-        supported_provider_countries = [
-            country_code
-            for country_code in list(media.providers.keys())
-            if any(
-                [
-                    media.providers[country_code].get(provider_type)
-                    for provider_type in supported_providers
-                ]
+
+    chunked_media, total_chunks = chunkify(db_media, 50_000)
+    for media_chunk in tqdm(
+        chunked_media,
+        total=total_chunks,
+        desc="Indexing meilisearch in chunks",
+    ):
+        medias = []
+        for media in media_chunk:
+            supported_provider_countries = [
+                country_code
+                for country_code in list(media.providers.keys())
+                if any(
+                    [
+                        media.providers[country_code].get(provider_type)
+                        for provider_type in supported_providers
+                    ]
+                )
+            ]
+
+            medias.append(
+                schemas.Media(
+                    id=media.id,
+                    type="movie" if media.id[0] == "m" else "tv",
+                    title=media.title,
+                    original_title=media.original_title,
+                    overview=media.overview,
+                    release_date=media.release_date,
+                    genres=media.genres,
+                    poster_path=media.poster_path,
+                    popularity=media.popularity,
+                    providers=media.providers,
+                    supported_provider_countries=supported_provider_countries,
+                ).dict()
             )
-        ]
 
-        medias.append(
-            schemas.Media(
-                id=media.id,
-                type="movie" if media.id[0] == "m" else "tv",
-                title=media.title,
-                original_title=media.original_title,
-                overview=media.overview,
-                release_date=media.release_date,
-                genres=media.genres,
-                poster_path=media.poster_path,
-                popularity=media.popularity,
-                providers=media.providers,
-                supported_provider_countries=supported_provider_countries,
-            ).dict()
-        )
-
-    client.index("media").add_documents(medias)
+        await async_client.index("media").add_documents(medias)
 
 
 async def extract_unique_providers_to_cache():

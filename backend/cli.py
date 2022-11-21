@@ -47,11 +47,12 @@ def update_ids(ids: list[str]):
 
 
 @app.command()
-def index_meilisearch():
+@coroutine
+async def index_meilisearch():
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
         search_client_config()
-    index_media()
+    await index_media()
 
 
 @app.command()
