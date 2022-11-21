@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
-  "github.com/meilisearch/meilisearch-go"
+	"github.com/meilisearch/meilisearch-go"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -18,9 +18,9 @@ import (
 
 var TMDB_KEY = os.Getenv("TMDB_KEY")
 var meilisearchClient = meilisearch.NewClient(meilisearch.ClientConfig{
-    Host: "http://search:7700",
-    APIKey: "masterKey",
-  })
+	Host:   "http://search:7700",
+	APIKey: "masterKey",
+})
 
 func main() {
 	dsn := "host=db user=postgres password=postgres dbname=streamchaser port=5432 sslmode=disable"
@@ -30,7 +30,7 @@ func main() {
 	if err != nil {
 		panic("Could not connect to DB!")
 	}
-	db.AutoMigrate(&Media{})
+  db.AutoMigrate(&DBMedia{})
 
 	if TMDB_KEY == "" {
 		panic("No TMDB key provided")
@@ -40,7 +40,6 @@ func main() {
 
 	router := gin.Default()
 	router.POST("/update-media", env.processIds)
-  router.GET("/index-meilisearch", env.indexMeilisearch)
 	router.Run(":8888")
 }
 
@@ -57,7 +56,8 @@ func (e *Env) processIds(c *gin.Context) {
 	movieCh := make(chan Movie, len(media.Ids))
 	tvCh := make(chan TV, len(media.Ids))
 	guardCh := make(chan int, 100)
-	dbMedia := []Media{}
+	medias := []Media{}
+  dbMedia := []DBMedia{} // NOTE: deprecated soon tm
 	for _, id := range media.Ids {
 		guardCh <- 1
 		wg.Add(1)
@@ -90,7 +90,8 @@ func (e *Env) processIds(c *gin.Context) {
 			continue
 		}
 		if tv.Popularity > 1 {
-			dbMedia = append(dbMedia, *tv.toMedia())
+			medias = append(medias, *tv.toMedia())
+      dbMedia = append(dbMedia, *tv.toDBMedia())
 		}
 	}
 	// TODO: make popularity an optional query parameter and default to 0
@@ -100,9 +101,15 @@ func (e *Env) processIds(c *gin.Context) {
 			continue
 		}
 		if movie.Popularity > 1 {
-			dbMedia = append(dbMedia, *movie.toMedia())
+			medias = append(medias, *movie.toMedia())
+      dbMedia = append(dbMedia, *movie.toDBMedia())
 		}
 	}
+	task, err := meilisearchClient.Index("media").AddDocuments(&medias)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"info": fmt.Sprint(task.TaskUID) + ": " + err.Error()})
+	}
+	//c.JSON(http.StatusOK, gin.H{"info": medias})
 
 	e.db.Clauses(clause.OnConflict{
 		UpdateAll: true,
@@ -111,36 +118,6 @@ func (e *Env) processIds(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"info": fmt.Sprintf("Fetched and inserted %d media and skipped %d", len(dbMedia), failedMedia)})
 }
 
-func (e *Env) indexMeilisearch(c *gin.Context) {
-  dbMedia := []Media{}
-  e.db.Find(&dbMedia)
-
-  //supportedProviderTypes := []string{"flatrate", "free"}
-  medias := []Media{}
-  // for _, media := range dbMedia {
-    // TODO: add type to Media
-    // medias = append(medias,
-    //   Media{
-    //     media.Id,
-    //     media.Title,
-    //     media.OriginalTitle,
-    //     media.Overview,
-    //     media.ReleaseDate,
-    //     media.Genres,
-    //     media.PosterPath,
-    //     media.Popularity,
-    //     media.Providers,
-    //     })
-  // }
-  // 1. get media from db
-  // 2. index data
-  // 3. profit
-  task, err := meilisearchClient.Index("media").AddDocuments(medias)
-  if err != nil {
-    c.JSON(http.StatusInternalServerError, gin.H{"info": string(task.TaskUID) + ": " + err.Error()})
-  }
-  c.JSON(http.StatusOK, gin.H{"info": "indexed meilisearch successfully"})
-}
 
 func fetchMovie(id string, movieCh chan Movie) {
 	res, err := http.Get(

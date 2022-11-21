@@ -23,11 +23,11 @@
   const combineProviders = (media: Media) => {
     const providers = []
     if (media.providers) {
-      if ("flatrate" in media.providers[$currentCountry]) {
-        providers.push(...media.providers[$currentCountry]["flatrate"])
+      if ("flatrate" in media.providers.results[$currentCountry]) {
+        providers.push(...media.providers.results[$currentCountry]["flatrate"])
       }
-      if ("free" in media.providers[$currentCountry]) {
-        providers.push(...media.providers[$currentCountry]["free"])
+      if ("free" in media.providers.results[$currentCountry]) {
+        providers.push(...media.providers.results[$currentCountry]["free"])
       }
     }
     return providers

@@ -11,6 +11,7 @@ class Media(Base):
     __tablename__ = "media"
 
     id = Column(String, primary_key=True)
+    type = Column(String, nullable=False)
     created_at = Column(Date, nullable=False)
     updated_at = Column(Date, nullable=False)
     title = Column(String, nullable=True)
@@ -20,4 +21,5 @@ class Media(Base):
     genres = Column(postgresql.ARRAY(String), nullable=True)
     poster_path = Column(String, nullable=True)
     popularity = Column(Float, nullable=True)
+    supported_provider_countries = Column(postgresql.ARRAY(String), nullable=True)
     providers = Column(JSON, nullable=True)

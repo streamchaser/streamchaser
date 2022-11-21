@@ -11,7 +11,6 @@ from app.db.cache import redis
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
 from app.db.crud import get_media_by_id
-from app.db.database_service import index_media
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.database_service import prune_non_ascii_media_from_db
@@ -44,14 +43,6 @@ def update_ids(ids: list[str]):
     with httpx.Client(http2=True) as client:
         res = client.post("http://internal:8888/update-media", json={"ids": ids})
         echo_success(res.json()["info"])
-
-
-@app.command()
-def index_meilisearch():
-    if get_settings().app_environment == Environment.DEVELOPMENT:
-        # Is ran at startup in production
-        search_client_config()
-    index_media()
 
 
 @app.command()
@@ -149,9 +140,14 @@ async def genres_to_cache():
 
 @app.command()
 @coroutine
-async def full_setup(popularity: float = 1, first_time: bool = False):
+async def full_setup(
+    popularity: float = 1, first_time: bool = False, chunk_size: int = 50000
+):
     await insert_genres_to_cache(get_genres())
-    update_media(chunk_size=1000, first_time=first_time, popularity=popularity)
+    if get_settings().app_environment == Environment.DEVELOPMENT:
+        # Is ran at startup in production
+        search_client_config()
+    update_media(chunk_size=chunk_size, first_time=first_time, popularity=popularity)
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_postgres()
     await providers_to_redis()

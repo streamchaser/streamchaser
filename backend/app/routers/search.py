@@ -47,11 +47,11 @@ def filter_from_queries(
 
     if providers:
         flatrate = [
-            f'providers.{country_code}.flatrate.provider_name ="{provider}"'
+            f'providers.results.{country_code}.flatrate.provider_name ="{provider}"'
             for provider in providers
         ]
         free = [
-            f'providers.{country_code}.free.provider_name ="{provider}"'
+            f'providers.results.{country_code}.free.provider_name ="{provider}"'
             for provider in providers
         ]
         filter = [flatrate + free]
@@ -116,7 +116,7 @@ async def search(
         sort=sort,
         filter=filter,
         attributes_to_retrieve=[
-            f"providers.{country_code}",
+            f"providers.results.{country_code}",
             "title",
             "poster_path",
             "id",

@@ -75,12 +75,6 @@ Options:
 - `--first-time / --no-first-time` [default: no-first-time]
 - `--popularity FLOAT` [default: 1]
 
-### `index-meilisearch`
-
-> Makes MeiliSearch index all of the media in PostgreSQL
-
-Takes no arguments
-
 ## Use --help
 
 To get the full list of commands type:
