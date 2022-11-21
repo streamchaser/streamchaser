@@ -159,7 +159,7 @@ func (tv *TV) toMedia() *Media {
 }
 
 type Provider struct {
-	Country map[string]struct {
+	Results map[string]struct {
 		Flatrate []struct {
 			DisplayPriority int    `json:"display_priority"`
 			LogoPath        string `json:"logo_path"`
@@ -193,8 +193,8 @@ func getMediaType(id string) string {
 func getSupportedProviderCountries(providers Provider) []string {
 	supportedProviderCountries := []string{}
 	for _, countryCode := range getCountryCodeKeys(providers) {
-		if _, ok := providers.Country[countryCode]; ok {
-			if len(providers.Country[countryCode].Flatrate) > 0 || len(providers.Country[countryCode].Free) > 0 {
+		if _, ok := providers.Results[countryCode]; ok {
+			if len(providers.Results[countryCode].Flatrate) > 0 || len(providers.Results[countryCode].Free) > 0 {
 				supportedProviderCountries = append(supportedProviderCountries, countryCode)
 			}
 
@@ -206,7 +206,7 @@ func getSupportedProviderCountries(providers Provider) []string {
 
 func getCountryCodeKeys(providers Provider) []string {
 	keys := []string{}
-	for k := range providers.Country {
+	for k := range providers.Results {
 		keys = append(keys, k)
 	}
 

@@ -30,7 +30,7 @@ func main() {
 	if err != nil {
 		panic("Could not connect to DB!")
 	}
-  db.AutoMigrate(&DBMedia{})
+	db.AutoMigrate(&DBMedia{})
 
 	if TMDB_KEY == "" {
 		panic("No TMDB key provided")
@@ -57,7 +57,7 @@ func (e *Env) processIds(c *gin.Context) {
 	tvCh := make(chan TV, len(media.Ids))
 	guardCh := make(chan int, 100)
 	medias := []Media{}
-  dbMedia := []DBMedia{} // NOTE: deprecated soon tm
+	dbMedia := []DBMedia{} // NOTE: deprecated soon tm
 	for _, id := range media.Ids {
 		guardCh <- 1
 		wg.Add(1)
@@ -91,7 +91,7 @@ func (e *Env) processIds(c *gin.Context) {
 		}
 		if tv.Popularity > 1 {
 			medias = append(medias, *tv.toMedia())
-      dbMedia = append(dbMedia, *tv.toDBMedia())
+			dbMedia = append(dbMedia, *tv.toDBMedia()) // NOTE: deprecated soon tm
 		}
 	}
 	// TODO: make popularity an optional query parameter and default to 0
@@ -102,7 +102,7 @@ func (e *Env) processIds(c *gin.Context) {
 		}
 		if movie.Popularity > 1 {
 			medias = append(medias, *movie.toMedia())
-      dbMedia = append(dbMedia, *movie.toDBMedia())
+			dbMedia = append(dbMedia, *movie.toDBMedia()) // NOTE: deprecated soon tm
 		}
 	}
 	task, err := meilisearchClient.Index("media").AddDocuments(&medias)
@@ -113,11 +113,10 @@ func (e *Env) processIds(c *gin.Context) {
 
 	e.db.Clauses(clause.OnConflict{
 		UpdateAll: true,
-	}).Create(&dbMedia)
+	}).Create(&dbMedia) // NOTE: deprecated soon tm
 
 	c.JSON(http.StatusOK, gin.H{"info": fmt.Sprintf("Fetched and inserted %d media and skipped %d", len(dbMedia), failedMedia)})
 }
-
 
 func fetchMovie(id string, movieCh chan Movie) {
 	res, err := http.Get(

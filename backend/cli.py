@@ -47,12 +47,9 @@ def update_ids(ids: list[str]):
 
 @app.command()
 def update_media(
-    chunk_size: int = 1000, first_time: bool = False, popularity: float = 1
+    chunk_size: int = 25000, first_time: bool = False, popularity: float = 1
 ):
     """Sends media ids to our internal update-media endpoint in chunks"""
-    if chunk_size > 2500:
-        typer.confirm("Chunk size can be unstable if too high, continue?", abort=True)
-
     movie_ids, tv_ids = (
         fetch_media_ids(popularity) if first_time else fetch_changed_media_ids()
     )
@@ -141,7 +138,7 @@ async def genres_to_cache():
 @app.command()
 @coroutine
 async def full_setup(
-    popularity: float = 1, first_time: bool = False, chunk_size: int = 50000
+    popularity: float = 1, first_time: bool = False, chunk_size: int = 25000
 ):
     await insert_genres_to_cache(get_genres())
     if get_settings().app_environment == Environment.DEVELOPMENT:
