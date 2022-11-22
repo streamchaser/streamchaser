@@ -147,11 +147,7 @@
   })
 </script>
 
-<Head
-  title="streamchaser"
-  description="Trying to keep track of where to watch your favorite movies and TV series? Streamchaser provides the
-  definitive guide to what each streaming service has on offer right now!"
-/>
+<Head title="streamchaser" />
 
 <div class="bg-neutral shadow-md card pb-2 pt-6 px-2 sm:px-6">
   <div class="flex justify-between">
