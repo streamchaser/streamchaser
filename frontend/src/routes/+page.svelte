@@ -123,7 +123,7 @@
     hitProviderAmounts(meilisearch.hits)
   }
 
-  $: if (data.providers) {
+  $: if (browser && data.providers) {
     let selectedProviders = $currentProviders
     for (let i = 0; i < selectedProviders.length; i++) {
       if (!data.providers.includes(selectedProviders[i].value)) {
