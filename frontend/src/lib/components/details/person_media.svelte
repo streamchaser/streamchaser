@@ -55,14 +55,14 @@
         class="card compact bordered shadow-md
                        hover:contrast-75 hover:ring-2 ring-primary"
       >
+        <figure class="rounded-box">
+          <img src="{IMG_W342}{media.poster_path}" alt={getMediaTitle(media)} />
+        </figure>
         {#if media.id.charAt(0) == "t"}
           <div class="absolute top-0 right-0 mx-1 -mt-1 opacity-85">
             <div class="badge badge-sm">TV</div>
           </div>
         {/if}
-        <figure>
-          <img src="{IMG_W342}{media.poster_path}" alt={getMediaTitle(media)} />
-        </figure>
       </a>
     {/each}
   </div>
