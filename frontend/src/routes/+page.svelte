@@ -186,7 +186,7 @@
              --multiItemActiveColor: hsl(var(--bc));
              --clearSelectHoverColor: hsl(var(--pf));
              --itemIsActiveBG: hsl(var(--pc));
-             --itemColor: hsl(var(--sc));
+             --itemColor: hsl(var(--nc));
              --listBackground: hsl(var(--n));
              --itemHoverBG: hsl(var(--p));
              --itemHoverColor: hsl(var(--pc));
