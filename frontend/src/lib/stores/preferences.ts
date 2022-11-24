@@ -27,11 +27,11 @@ export const currentProviders = writable<Provider[]>(
     : []
 )
 
-currentProviders.subscribe(value => {
-  if (browser) {
-    localStorage.setItem("currentProviders", JSON.stringify(value))
-  }
-})
+// currentProviders.subscribe(value => {
+//   if (browser && allowPreference) {
+//     localStorage.setItem("currentProviders", JSON.stringify(value))
+//   }
+// })
 
 interface Sorting {
   by: {
@@ -47,11 +47,11 @@ export const sorting = writable<Sorting>(
     : { by: { popularity: false, releaseDate: false }, asc: false }
 )
 
-sorting.subscribe(value => {
-  if (browser) {
-    localStorage.setItem("sorting", JSON.stringify(value))
-  }
-})
+// sorting.subscribe(value => {
+//   if (browser && allowPreference) {
+//     localStorage.setItem("sorting", JSON.stringify(value))
+//   }
+// })
 
 interface Filters {
   tvChecked: boolean
@@ -74,19 +74,19 @@ export const chosenTheme = writable<string>(
   (browser && localStorage.chosenTheme) || "dark"
 )
 
-chosenTheme.subscribe(value => {
-  if (browser) {
-    localStorage.chosenTheme = value
-  }
-})
+// chosenTheme.subscribe(value => {
+//   if (browser && allowPreference) {
+//     localStorage.chosenTheme = value
+//   }
+// })
 
 export const currentCountry = writable<string>(setDefaultCountry())
 
-currentCountry.subscribe(value => {
-  if (browser) {
-    localStorage.currentCountry = value
-  }
-})
+// currentCountry.subscribe(value => {
+//   if (browser && allowPreference) {
+//     localStorage.currentCountry = value
+//   }
+// })
 
 export const confirmedCountry = writable<boolean>(
   (browser && localStorage.confirmedCountry) || false
