@@ -1,5 +1,6 @@
 import json
 
+import httpx
 from app import schemas
 from app.config import get_settings
 from app.db import crud
@@ -66,6 +67,55 @@ def index_media():
         )
 
     client.index("media").add_documents(medias)
+
+
+async def providers_to_redis():
+    providers = {}
+    countries_url = (
+        f"{get_settings().tmdb_url}"
+        f"configuration/countries?api_key={get_settings().tmdb_key}"
+    )
+    providers_movie_url = (
+        f"{get_settings().tmdb_url}"
+        f"watch/providers/movie?api_key={get_settings().tmdb_key}"
+    )
+    providers_tv_url = (
+        f"{get_settings().tmdb_url}"
+        f"watch/providers/movie?api_key={get_settings().tmdb_key}"
+    )
+
+    def __update_providers(fetched_providers: dict):
+        for provider in fetched_providers["results"]:
+            for country_code, display_priority in provider[
+                "display_priorities"
+            ].items():
+                if country_code in providers.keys():
+                    if provider["provider_name"] not in [
+                        provider["provider_name"]
+                        for provider in providers[country_code]
+                    ]:
+                        providers[country_code].append(
+                            {
+                                "provider_name": provider["provider_name"],
+                                "display_priority": display_priority,
+                            }
+                        )
+
+    async with httpx.AsyncClient(http2=True) as client:
+        res = await client.get(countries_url)
+        for country in res.json():
+            providers.update({country["iso_3166_1"]: []})
+
+        res = await client.get(providers_movie_url)
+        __update_providers(res.json())
+        res = await client.get(providers_tv_url)
+        __update_providers(res.json())
+
+    for country_code, provider_data in providers.items():
+        await redis.set(
+            f"{country_code}_providers",
+            json.dumps(provider_data),
+        )
 
 
 async def extract_unique_providers_to_cache():

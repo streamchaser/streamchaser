@@ -14,6 +14,7 @@ from app.db.crud import get_media_by_id
 from app.db.database_service import extract_unique_providers_to_cache
 from app.db.database_service import index_media
 from app.db.database_service import insert_genres_to_cache
+from app.db.database_service import providers_to_redis
 from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.search import client
 from app.db.search import search_client_config
@@ -29,6 +30,12 @@ app = typer.Typer()
 @app.command()
 def fetch_jsongz():
     fetch_jsongz_files()
+
+
+@app.command()
+@coroutine
+async def hest():
+    await providers_to_redis()
 
 
 @app.command()
