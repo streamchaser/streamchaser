@@ -43,7 +43,7 @@
     providerAmounts = []
     searchHits.forEach(hit => {
       let combinedAmount = 0
-      if (hit.providers.results) {
+      if (hit.providers) {
         if ("flatrate" in hit.providers.results[$currentCountry]) {
           combinedAmount += hit.providers.results[$currentCountry]["flatrate"].length
         }
