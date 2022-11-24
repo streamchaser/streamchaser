@@ -15,16 +15,18 @@ test_data = [
         "popularity": 89,
         "supported_provider_countries": ["DK"],
         "providers": {
-            "DK": {
-                "flatrate": [
-                    {
-                        "display_priority": 8,
-                        "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg",
-                        "provider_id": 384,
-                        "provider_name": "HBO Max",
-                    }
-                ],
-            }
+            "results": {
+                "DK": {
+                    "flatrate": [
+                        {
+                            "display_priority": 8,
+                            "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg",
+                            "provider_id": 384,
+                            "provider_name": "HBO Max",
+                        }
+                    ],
+                }
+            },
         },
     },
     {
@@ -39,15 +41,17 @@ test_data = [
         "popularity": 8,
         "supported_provider_countries": ["DK"],
         "providers": {
-            "DK": {
-                "flatrate": [
-                    {
-                        "display_priority": 0,
-                        "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
-                        "provider_id": 8,
-                        "provider_name": "Netflix",
-                    }
-                ]
+            "results": {
+                "DK": {
+                    "flatrate": [
+                        {
+                            "display_priority": 0,
+                            "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
+                            "provider_id": 8,
+                            "provider_name": "Netflix",
+                        }
+                    ]
+                },
             }
         },
     },
@@ -62,7 +66,7 @@ test_data = [
         "poster_path": "/cZwGewRof3bLIlKLfAaBeGCnahC.jpg",
         "popularity": 3,
         "supported_provider_countries": [],
-        "providers": {},
+        "providers": {"results": {}},
     },
     {
         "id": "t1877",
@@ -76,15 +80,17 @@ test_data = [
         "popularity": 64,
         "provider_names": ["DK"],
         "providers": {
-            "DK": {
-                "flatrate": [
-                    {
-                        "display_priority": 8,
-                        "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg",
-                        "provider_id": 384,
-                        "provider_name": "HBO Max",
-                    }
-                ],
+            "results": {
+                "DK": {
+                    "flatrate": [
+                        {
+                            "display_priority": 8,
+                            "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg",
+                            "provider_id": 384,
+                            "provider_name": "HBO Max",
+                        }
+                    ],
+                }
             }
         },
     },

@@ -71,7 +71,7 @@ class TestFilterFromQueries:
         assert "Netflix" in [
             provider["provider_name"]
             for hits in search_results["hits"]
-            for provider in hits["providers"]["DK"]["flatrate"]
+            for provider in hits["providers"]["results"]["DK"]["flatrate"]
         ]
 
         filter = filter_from_queries("DK", providers=["Netflix", "HBO Max"])
@@ -81,7 +81,7 @@ class TestFilterFromQueries:
         assert "Netflix" and "HBO Max" in [
             provider["provider_name"]
             for hits in search_results["hits"]
-            for provider in hits["providers"]["DK"]["flatrate"]
+            for provider in hits["providers"]["results"]["DK"]["flatrate"]
         ]
 
     def test_filter_from_queries_genres(self):
@@ -128,7 +128,7 @@ class TestFilterFromQueries:
         assert "HBO Max" in [
             provider["provider_name"]
             for hits in search_results["hits"]
-            for provider in hits["providers"]["DK"]["flatrate"]
+            for provider in hits["providers"]["results"]["DK"]["flatrate"]
         ]
         assert "Action" and "Horror" in search_results["hits"][0]["genres"]
 
