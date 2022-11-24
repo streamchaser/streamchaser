@@ -123,10 +123,20 @@
     hitProviderAmounts(meilisearch.hits)
   }
 
-  // Invalidates data(refetched) when the country changes
-  // The browser check is becuase of the messy viewport logic
+  $: if (browser && data.providers) {
+    let selectedProviders = $currentProviders
+    for (let i = 0; i < selectedProviders.length; i++) {
+      if (!data.providers.includes(selectedProviders[i].value)) {
+        selectedProviders.splice(i, 1)
+        i--
+      }
+    }
+    $currentProviders = selectedProviders
+  }
+
+  // Invalidates data (refetched) when the country changes
+  // The browser check is because of the messy viewport logic
   $: if ($currentCountry && browser) {
-    $currentProviders = []
     setViewportToDefault() // TODO: There must be a nicer way
     invalidateAll()
     search()
