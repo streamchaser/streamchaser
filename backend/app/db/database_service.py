@@ -118,39 +118,6 @@ async def providers_to_redis():
         )
 
 
-async def extract_unique_providers_to_cache():
-    db = database.SessionLocal()
-    db_media = get_all_media(db)
-
-    supported_countries = {x: set() for x in get_settings().supported_country_codes}
-
-    for media in db_media:
-        if media.providers:
-            filtered_countries = [
-                country
-                for country in list(media.providers.keys())
-                if country in supported_countries
-            ]
-            for country_code in filtered_countries:
-                for provider_type in ["flatrate", "free"]:
-                    if providers := media.providers.get(country_code).get(
-                        provider_type
-                    ):
-                        for provider in providers:
-                            supported_countries[country_code].add(
-                                provider["provider_name"]
-                            )
-
-    for country_code in get_settings().supported_country_codes:
-        providers: set = supported_countries[country_code]
-        ordered_providers: list = sorted(providers)
-
-        await redis.set(
-            f"{country_code}_providers",
-            json.dumps(ordered_providers),
-        )
-
-
 def prune_non_ascii_media_from_db():
     """Removes media with no genres or Animation that cannot be encoded with ASCII"""
 

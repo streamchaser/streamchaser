@@ -11,7 +11,6 @@ from app.db.cache import redis
 from app.db.crud import delete_all_media
 from app.db.crud import delete_media_by_id
 from app.db.crud import get_media_by_id
-from app.db.database_service import extract_unique_providers_to_cache
 from app.db.database_service import index_media
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
@@ -30,12 +29,6 @@ app = typer.Typer()
 @app.command()
 def fetch_jsongz():
     fetch_jsongz_files()
-
-
-@app.command()
-@coroutine
-async def hest():
-    await providers_to_redis()
 
 
 @app.command()
@@ -129,7 +122,7 @@ def remove_all_media():
 async def fill_redis():
     """Adds genres and providers to Redis"""
     await insert_genres_to_cache(get_genres())
-    await extract_unique_providers_to_cache()
+    await providers_to_redis()
 
 
 @app.command()
@@ -138,7 +131,7 @@ async def refresh_redis():
     """Flushes everything then adds genres and providers to Redis"""
     await redis.flushdb()
     await insert_genres_to_cache(get_genres())
-    await extract_unique_providers_to_cache()
+    await providers_to_redis()
 
 
 @app.command()
@@ -161,14 +154,14 @@ async def full_setup(popularity: float = 1, first_time: bool = False):
     update_media(chunk_size=1000, first_time=first_time, popularity=popularity)
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_postgres()
-    await extract_unique_providers_to_cache()
+    await providers_to_redis()
     index_meilisearch()
 
 
 @app.command()
 @coroutine
 async def providers_to_cache():
-    await extract_unique_providers_to_cache()
+    await providers_to_redis()
 
 
 @app.command()
