@@ -81,7 +81,7 @@ async def providers_to_redis():
     )
     providers_tv_url = (
         f"{get_settings().tmdb_url}"
-        f"watch/providers/movie?api_key={get_settings().tmdb_key}"
+        f"watch/providers/tv?api_key={get_settings().tmdb_key}"
     )
 
     def __update_providers(fetched_providers: dict):
@@ -112,9 +112,10 @@ async def providers_to_redis():
         __update_providers(res.json())
 
     for country_code, provider_data in providers.items():
+        sorted_provider_data = sorted(provider_data, key=lambda k: k["provider_name"])
         await redis.set(
             f"{country_code}_providers",
-            json.dumps(provider_data),
+            json.dumps(sorted_provider_data),
         )
 
 
