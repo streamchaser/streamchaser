@@ -3,22 +3,21 @@ package main
 import (
 	"fmt"
 	"strconv"
-
-	"github.com/lib/pq"
 )
 
 type Media struct {
-	Id                         string         `json:"id"`
-	Type                       string         `json:"type"`
-	Title                      string         `json:"title"`
-	OriginalTitle              string         `json:"original_title"`
-	Overview                   string         `json:"overview"`
-	ReleaseDate                string         `json:"release_date"`
-	Genres                     pq.StringArray `json:"genres"`
-	PosterPath                 string         `json:"poster_path"`
-	Popularity                 float32        `json:"popularity"`
-	SupportedProviderCountries pq.StringArray `json:"supported_provider_countries"`
-	Providers                  Provider       `json:"providers"`
+	Id                         string            `json:"id"`
+	Type                       string            `json:"type"`
+	Title                      string            `json:"title"`
+	OriginalTitle              string            `json:"original_title"`
+	Overview                   string            `json:"overview"`
+	ReleaseDate                string            `json:"release_date"`
+	Genres                     []string          `json:"genres"`
+	PosterPath                 string            `json:"poster_path"`
+	Popularity                 float32           `json:"popularity"`
+	SupportedProviderCountries []string          `json:"supported_provider_countries"`
+	Providers                  Provider          `json:"providers"`
+	FinalTranslations          FinalTranslations `json:"final_translations"`
 }
 
 type Movie struct {
@@ -30,9 +29,10 @@ type Movie struct {
 	Genres        []struct {
 		Name string `json:"name"`
 	} `json:"genres"`
-	PosterPath string   `json:"poster_path"`
-	Popularity float32  `json:"popularity"`
-	Providers  Provider `json:"watch/providers"`
+	PosterPath   string       `json:"poster_path"`
+	Popularity   float32      `json:"popularity"`
+	Providers    Provider     `json:"watch/providers"`
+	Translations Translations `json:"translations"`
 }
 
 func (movie *Movie) toMedia() *Media {
@@ -54,6 +54,7 @@ func (movie *Movie) toMedia() *Media {
 		Popularity:                 movie.Popularity,
 		SupportedProviderCountries: getSupportedProviderCountries(movie.Providers),
 		Providers:                  movie.Providers,
+		FinalTranslations:          getFinalTranslations(movie.Translations),
 	}
 }
 
@@ -64,11 +65,12 @@ type TV struct {
 	Overview     string `json:"overview"`
 	FirstAirDate string `json:"first_air_date"`
 	Genres       []struct {
-		Name string `json:"name" gorm:"type:text"`
-	} `json:"genres" gorm:"-"`
-	PosterPath string   `json:"poster_path"`
-	Popularity float32  `json:"popularity"`
-	Providers  Provider `json:"watch/providers"`
+		Name string `json:"name"`
+	} `json:"genres"`
+	PosterPath   string       `json:"poster_path"`
+	Popularity   float32      `json:"popularity"`
+	Providers    Provider     `json:"watch/providers"`
+	Translations Translations `json:"translations"`
 }
 
 func (tv *TV) toMedia() *Media {
@@ -90,6 +92,7 @@ func (tv *TV) toMedia() *Media {
 		Popularity:                 tv.Popularity,
 		SupportedProviderCountries: getSupportedProviderCountries(tv.Providers),
 		Providers:                  tv.Providers,
+		FinalTranslations:          getFinalTranslations(tv.Translations),
 	}
 }
 
@@ -107,7 +110,28 @@ type Provider struct {
 			Id              int    `json:"provider_id"`
 			Name            string `json:"provider_name"`
 		} `json:"free,omitempty"`
-	} `json:"results" gorm:"column:providers;type:json"`
+	} `json:"results"`
+}
+
+type Translations struct {
+	InnerTranslations []struct {
+		Iso311661   string `json:"iso_3166_1"`
+		Iso6391     string `json:"iso_639_1"`
+		Name        string `json:"name"`
+		EnglishName string `json:"english_name"`
+		Data        struct {
+			Homepage string `json:"homepage"`
+			Overview string `json:"overview"`
+			Runtime  int    `json:"runtime"`
+			Tagline  string `json:"tagline"`
+			Title    string `json:"title"`
+		} `json:"data"`
+	} `json:"translations"`
+}
+
+type FinalTranslations map[string]struct {
+	Title    string `json:title`
+	Overview string `json:overview`
 }
 
 type MediaIds struct {
@@ -137,6 +161,28 @@ func getSupportedProviderCountries(providers Provider) []string {
 	}
 
 	return supportedProviderCountries
+}
+
+// "translations": {
+//   "DK": {
+//     "title" : "string"
+//     "overview" : "string"
+//   },
+// }
+
+func getFinalTranslations(translations Translations) FinalTranslations {
+	finalTransations := FinalTranslations{}
+
+	for _, translation := range translations.InnerTranslations {
+		// fmt.Println(translation)
+		if translation.Data.Title != "" {
+			finalTransations[translation.Iso311661] = FinalTranslations{translation.Data.Title, translation.Data.Overview}
+		}
+	}
+
+	fmt.Println(hest)
+
+	return finalTransations
 }
 
 func getCountryCodeKeys(providers Provider) []string {
