@@ -44,11 +44,11 @@
     searchHits.forEach(hit => {
       let combinedAmount = 0
       if (hit.providers) {
-        if ("flatrate" in hit.providers[$currentCountry]) {
-          combinedAmount += hit.providers[$currentCountry]["flatrate"].length
+        if ("flatrate" in hit.providers.results[$currentCountry]) {
+          combinedAmount += hit.providers.results[$currentCountry]["flatrate"].length
         }
-        if ("free" in hit.providers[$currentCountry]) {
-          combinedAmount += hit.providers[$currentCountry]["free"].length
+        if ("free" in hit.providers.results[$currentCountry]) {
+          combinedAmount += hit.providers.results[$currentCountry]["free"].length
         }
       }
       providerAmounts.push(combinedAmount)

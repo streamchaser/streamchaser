@@ -1,23 +1,24 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/lib/pq"
-	"gorm.io/gorm"
 )
 
 type Media struct {
-	gorm.Model
-	Id            string
-	Title         string
-	OriginalTitle string
-	Overview      string
-	ReleaseDate   string
-	Genres        pq.StringArray `gorm:"type:text ARRAY"`
-	PosterPath    string
-	Popularity    float32
-	Providers     Provider `gorm:"embedded"`
+	Id                         string         `json:"id"`
+	Type                       string         `json:"type"`
+	Title                      string         `json:"title"`
+	OriginalTitle              string         `json:"original_title"`
+	Overview                   string         `json:"overview"`
+	ReleaseDate                string         `json:"release_date"`
+	Genres                     pq.StringArray `json:"genres"`
+	PosterPath                 string         `json:"poster_path"`
+	Popularity                 float32        `json:"popularity"`
+	SupportedProviderCountries pq.StringArray `json:"supported_provider_countries"`
+	Providers                  Provider       `json:"providers"`
 }
 
 type Movie struct {
@@ -39,16 +40,20 @@ func (movie *Movie) toMedia() *Media {
 	for _, genre := range movie.Genres {
 		genres = append(genres, genre.Name)
 	}
+	movieId := "m" + strconv.Itoa(movie.Id)
+
 	return &Media{
-		Id:            "m" + strconv.Itoa(movie.Id),
-		Title:         movie.Title,
-		OriginalTitle: movie.OriginalTitle,
-		Overview:      movie.Overview,
-		ReleaseDate:   movie.ReleaseDate,
-		Genres:        genres,
-		PosterPath:    movie.PosterPath,
-		Popularity:    movie.Popularity,
-		Providers:     movie.Providers,
+		Id:                         movieId,
+		Type:                       getMediaType(movieId),
+		Title:                      movie.Title,
+		OriginalTitle:              movie.OriginalTitle,
+		Overview:                   movie.Overview,
+		ReleaseDate:                movie.ReleaseDate,
+		Genres:                     genres,
+		PosterPath:                 movie.PosterPath,
+		Popularity:                 movie.Popularity,
+		SupportedProviderCountries: getSupportedProviderCountries(movie.Providers),
+		Providers:                  movie.Providers,
 	}
 }
 
@@ -71,16 +76,20 @@ func (tv *TV) toMedia() *Media {
 	for _, genre := range tv.Genres {
 		genres = append(genres, genre.Name)
 	}
+	tvId := "t" + strconv.Itoa(tv.Id)
+
 	return &Media{
-		Id:            "t" + strconv.Itoa(tv.Id),
-		Title:         tv.Name,
-		OriginalTitle: tv.OriginalName,
-		Overview:      tv.Overview,
-		ReleaseDate:   tv.FirstAirDate,
-		Genres:        genres,
-		PosterPath:    tv.PosterPath,
-		Popularity:    tv.Popularity,
-		Providers:     tv.Providers,
+		Id:                         tvId,
+		Type:                       getMediaType(tvId),
+		Title:                      tv.Name,
+		OriginalTitle:              tv.OriginalName,
+		Overview:                   tv.Overview,
+		ReleaseDate:                tv.FirstAirDate,
+		Genres:                     genres,
+		PosterPath:                 tv.PosterPath,
+		Popularity:                 tv.Popularity,
+		SupportedProviderCountries: getSupportedProviderCountries(tv.Providers),
+		Providers:                  tv.Providers,
 	}
 }
 
@@ -105,6 +114,36 @@ type MediaIds struct {
 	Ids []string `json:"ids"`
 }
 
-type Env struct {
-	db *gorm.DB
+func getMediaType(id string) string {
+	switch id[0:1] {
+	case "m":
+		return "movie"
+	case "t":
+		return "tv"
+	default:
+		panic(fmt.Sprintf("Received unexpected media type, got: %s", id))
+	}
+}
+
+func getSupportedProviderCountries(providers Provider) []string {
+	supportedProviderCountries := []string{}
+	for _, countryCode := range getCountryCodeKeys(providers) {
+		if _, ok := providers.Results[countryCode]; ok {
+			if len(providers.Results[countryCode].Flatrate) > 0 || len(providers.Results[countryCode].Free) > 0 {
+				supportedProviderCountries = append(supportedProviderCountries, countryCode)
+			}
+
+		}
+	}
+
+	return supportedProviderCountries
+}
+
+func getCountryCodeKeys(providers Provider) []string {
+	keys := []string{}
+	for k := range providers.Results {
+		keys = append(keys, k)
+	}
+
+	return keys
 }

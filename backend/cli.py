@@ -6,19 +6,14 @@ from app.api import fetch_media_ids
 from app.api import get_genres
 from app.config import Environment
 from app.config import get_settings
-from app.db import database
 from app.db.cache import redis
-from app.db.crud import delete_all_media
-from app.db.crud import delete_media_by_id
-from app.db.crud import get_media_by_id
-from app.db.database_service import index_media
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
-from app.db.database_service import prune_non_ascii_media_from_db
 from app.db.search import client
 from app.db.search import search_client_config
 from app.util import chunkify
 from app.util import coroutine
+from meilisearch.errors import MeiliSearchApiError
 from tqdm import tqdm
 
 supported_country_codes = get_settings().supported_country_codes
@@ -47,28 +42,17 @@ def update_ids(ids: list[str]):
 
 
 @app.command()
-def index_meilisearch():
-    if get_settings().app_environment == Environment.DEVELOPMENT:
-        # Is ran at startup in production
-        search_client_config()
-    index_media()
-
-
-@app.command()
 def update_media(
-    chunk_size: int = 1000, first_time: bool = False, popularity: float = 1
+    chunk_size: int = 25000, first_time: bool = False, popularity: float = 1
 ):
     """Sends media ids to our internal update-media endpoint in chunks"""
-    if chunk_size > 2500:
-        typer.confirm("Chunk size can be unstable if too high, continue?", abort=True)
-
     movie_ids, tv_ids = (
         fetch_media_ids(popularity) if first_time else fetch_changed_media_ids()
     )
 
     print(f"\nAbout to update {len(movie_ids)} movies and {len(tv_ids)} TV shows")
 
-    with httpx.Client(http2=True, timeout=30) as client:
+    with httpx.Client(http2=True, timeout=60) as client:
         for media in zip(["movies", "tv shows"], [movie_ids, tv_ids]):
             id_chunks, total_chunks = chunkify(media[1], chunk_size)
             for id_chunk in tqdm(
@@ -80,41 +64,12 @@ def update_media(
 
 
 @app.command()
-def remove_blacklisted_from_postgres():
-    """Deletes all the ids from blacklist.txt from Postgres"""
-    blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
-    db = database.SessionLocal()
-
-    for id in blacklisted_media:
-        delete_media_by_id(db, id)
-
-    db.close()
-
-
-@app.command()
 def remove_blacklisted_from_search():
     """Deletes all the ids from blacklist.txt from MeiliSearch"""
     blacklisted_media = [line.rstrip() for line in open("blacklist.txt")]
-    for country_code in supported_country_codes:
-        client.index(f"media_{country_code}").delete_documents(blacklisted_media)
+    client.index("media").delete_documents(blacklisted_media)
 
-    typer.echo(
-        f"Attempted to remove {len(blacklisted_media)} blacklisted media elements in "
-        f"{len(supported_country_codes)} indexes"
-    )
-
-
-@app.command()
-def remove_non_ascii_media():
-    prune_non_ascii_media_from_db()
-
-
-@app.command()
-def remove_all_media():
-    """Deletes all media from Postgres"""
-    db = database.SessionLocal()
-    delete_all_media(db=db)
-    typer.echo("All media has been deleted")
+    typer.echo(f"Attempted to remove {len(blacklisted_media)} blacklisted media")
 
 
 @app.command()
@@ -149,13 +104,17 @@ async def genres_to_cache():
 
 @app.command()
 @coroutine
-async def full_setup(popularity: float = 1, first_time: bool = False):
+async def full_setup(
+    popularity: float = 1, first_time: bool = False, chunk_size: int = 25000
+):
     await insert_genres_to_cache(get_genres())
-    update_media(chunk_size=1000, first_time=first_time, popularity=popularity)
+    if get_settings().app_environment == Environment.DEVELOPMENT:
+        # Is ran at startup in production
+        search_client_config()
+    update_media(chunk_size=chunk_size, first_time=first_time, popularity=popularity)
     # Removes before indexing MeiliSearch
-    remove_blacklisted_from_postgres()
     await providers_to_redis()
-    index_meilisearch()
+    remove_blacklisted_from_search()
 
 
 @app.command()
@@ -166,25 +125,22 @@ async def providers_to_cache():
 
 @app.command()
 def remove_media(media_id: str, blacklist: bool = True):
-    """Deletes a media from Postgres and MeiliSearch and adds it to the blacklist"""
-    db = database.SessionLocal()
-    media = get_media_by_id(db=db, media_id=media_id)
-    if not media:
-        typer.echo(f"Cannot find media in db: {media_id}")
-        typer.confirm("Are you sure you want to continue?", abort=True)
-
-    else:
+    """Deletes a media from MeiliSearch and adds it to the blacklist"""
+    try:
+        media = client.index("media").get_document(media_id)
         typer.confirm(
             f"Are you sure you want to remove & blacklist [{media.title}]?", abort=True
         )
+    except MeiliSearchApiError as e:
+        typer.echo(e)
+        typer.confirm("Are you sure you want to continue?", abort=True)
 
-    if media:
-        typer.echo(f"Removing and blacklisting: {media_id}")
-        delete_media_by_id(db=db, media_id=media_id)
-        typer.echo("Removed from database ✓")
+    typer.echo(f"Removing and blacklisting: {media_id}")
+    client.index("media").delete_document(media_id)
+    typer.echo("Removed from Meilisearch ✓")
 
     if blacklist:
-        with open("../blacklist.txt", "a+") as file:
+        with open("blacklist.txt", "a+") as file:
             file.seek(0)
             if media_id in file.read().splitlines():
                 typer.echo(f"{media_id} already in blacklist")
@@ -192,12 +148,7 @@ def remove_media(media_id: str, blacklist: bool = True):
                 file.write(f"{media_id}\n")
                 typer.echo("Added to blacklist ✓")
 
-    for country_code in supported_country_codes:
-        client.index(f"media_{country_code}").delete_document(media_id)
-
     typer.echo("Meilisearch updated ✓")
-
-    db.close()
 
 
 def echo_success(msg: str):
