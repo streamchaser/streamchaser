@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 import httpx
@@ -106,10 +107,11 @@ async def providers_to_redis():
         for country in res.json():
             providers.update({country["iso_3166_1"]: []})
 
-        res = await client.get(providers_movie_url)
-        __update_providers(res.json())
-        res = await client.get(providers_tv_url)
-        __update_providers(res.json())
+        group = await asyncio.gather(
+            client.get(providers_movie_url), client.get(providers_tv_url)
+        )
+        for res in tqdm(group, desc="Adding each country's providers to Redis"):
+            __update_providers(res.json())
 
     for country_code, provider_data in providers.items():
         sorted_provider_data = sorted(provider_data, key=lambda k: k["provider_name"])

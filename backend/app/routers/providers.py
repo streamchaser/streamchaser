@@ -1,8 +1,8 @@
 import json
 
 from app.db.cache import redis
+from app.schemas import Provider
 from fastapi import APIRouter
-from pydantic import BaseModel
 
 
 router = APIRouter(
@@ -10,11 +10,6 @@ router = APIRouter(
     tags=["providers"],
     responses={404: {"description": "Provider(s) not found"}},
 )
-
-
-class Provider(BaseModel):
-    provider_name: str
-    display_priority: int
 
 
 @router.get("/{country_code}", response_model=list[Provider])
