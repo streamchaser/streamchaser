@@ -68,3 +68,8 @@ class Person(BaseModel):
     movie_credits: list[dict] | None
     tv_credits: list[dict] | None
     gender: int
+
+
+class Provider(BaseModel):
+    provider_name: str
+    display_priority: int

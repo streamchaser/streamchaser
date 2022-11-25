@@ -1,6 +1,7 @@
 import json
 
 from app.db.cache import redis
+from app.schemas import Provider
 from fastapi import APIRouter
 
 
@@ -11,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{country_code}", response_model=list[str])
+@router.get("/{country_code}", response_model=list[Provider])
 async def read_all_providers(country_code):
     """Reads all the providers from providers.txt"""
     country_code = country_code.upper()

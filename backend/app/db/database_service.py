@@ -1,5 +1,7 @@
+import asyncio
 import json
 
+import httpx
 from app import schemas
 from app.config import get_settings
 from app.db import crud
@@ -68,36 +70,56 @@ def index_media():
     client.index("media").add_documents(medias)
 
 
-async def extract_unique_providers_to_cache():
-    db = database.SessionLocal()
-    db_media = get_all_media(db)
+async def providers_to_redis():
+    providers = {}
+    countries_url = (
+        f"{get_settings().tmdb_url}"
+        f"configuration/countries?api_key={get_settings().tmdb_key}"
+    )
+    providers_movie_url = (
+        f"{get_settings().tmdb_url}"
+        f"watch/providers/movie?api_key={get_settings().tmdb_key}"
+    )
+    providers_tv_url = (
+        f"{get_settings().tmdb_url}"
+        f"watch/providers/tv?api_key={get_settings().tmdb_key}"
+    )
 
-    supported_countries = {x: set() for x in get_settings().supported_country_codes}
+    def __update_providers(fetched_providers: dict):
+        for provider in fetched_providers["results"]:
+            for country_code, display_priority in provider[
+                "display_priorities"
+            ].items():
+                if country_code in providers.keys():
+                    if provider["provider_name"] not in [
+                        provider["provider_name"]
+                        for provider in providers[country_code]
+                    ]:
+                        providers[country_code].append(
+                            {
+                                "provider_name": provider["provider_name"],
+                                "display_priority": display_priority,
+                            }
+                        )
 
-    for media in db_media:
-        if media.providers:
-            filtered_countries = [
-                country
-                for country in list(media.providers.keys())
-                if country in supported_countries
-            ]
-            for country_code in filtered_countries:
-                for provider_type in ["flatrate", "free"]:
-                    if providers := media.providers.get(country_code).get(
-                        provider_type
-                    ):
-                        for provider in providers:
-                            supported_countries[country_code].add(
-                                provider["provider_name"]
-                            )
+    async with httpx.AsyncClient(http2=True) as client:
+        res = await client.get(countries_url)
+        for country in res.json():
+            providers.update({country["iso_3166_1"]: []})
 
-    for country_code in get_settings().supported_country_codes:
-        providers: set = supported_countries[country_code]
-        ordered_providers: list = sorted(providers)
+        group = await asyncio.gather(
+            client.get(providers_movie_url), client.get(providers_tv_url)
+        )
+        for res in group:
+            __update_providers(res.json())
 
+    for country_code, provider_data in tqdm(
+        providers.items(), desc="Adding each country's providers to Redis"
+    ):
+        sorted_provider_data = sorted(provider_data, key=lambda k: k["provider_name"])
         await redis.set(
             f"{country_code}_providers",
-            json.dumps(ordered_providers),
+            json.dumps(sorted_provider_data),
         )
 
 

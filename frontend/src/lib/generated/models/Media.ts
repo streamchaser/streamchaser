@@ -12,6 +12,6 @@ export type Media = {
   genres: Array<string>
   poster_path?: string
   popularity?: number
-  provider_names?: Array<string>
-  providers?: Array<any>
+  supported_provider_countries: Array<string>
+  providers: Record<string, Record<string, Array<any>>>
 }

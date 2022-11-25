@@ -126,7 +126,9 @@
   $: if (browser && data.providers) {
     let selectedProviders = $currentProviders
     for (let i = 0; i < selectedProviders.length; i++) {
-      if (!data.providers.includes(selectedProviders[i].value)) {
+      if (
+        !data.providers.map(v => v.provider_name).includes(selectedProviders[i].value)
+      ) {
         selectedProviders.splice(i, 1)
         i--
       }
@@ -225,7 +227,7 @@
             : []
         }}
         value={$currentProviders.length ? $currentProviders : null}
-        items={data.providers}
+        items={data.providers.map(v => v.provider_name)}
         isMulti={true}
         placeholder="Select providers..."
       />
