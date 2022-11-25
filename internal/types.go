@@ -4,27 +4,7 @@ import (
 	"strconv"
 
 	"github.com/lib/pq"
-	"gorm.io/gorm"
 )
-
-type DBMedia struct {
-	gorm.Model
-	Id                         string
-	Type                       string
-	Title                      string
-	OriginalTitle              string
-	Overview                   string
-	ReleaseDate                string
-	Genres                     pq.StringArray `gorm:"type:text ARRAY"`
-	PosterPath                 string
-	Popularity                 float32
-	SupportedProviderCountries pq.StringArray `gorm:"type:text ARRAY"`
-	Providers                  Provider       `gorm:"embedded"`
-}
-
-func (DBMedia) TableName() string {
-	return "media"
-}
 
 type Media struct {
 	Id                         string         `json:"id"`
@@ -52,28 +32,6 @@ type Movie struct {
 	PosterPath string   `json:"poster_path"`
 	Popularity float32  `json:"popularity"`
 	Providers  Provider `json:"watch/providers"`
-}
-
-func (movie *Movie) toDBMedia() *DBMedia {
-	genres := []string{}
-	for _, genre := range movie.Genres {
-		genres = append(genres, genre.Name)
-	}
-	movieId := "m" + strconv.Itoa(movie.Id)
-	mediaType := getMediaType(movieId)
-	return &DBMedia{
-		Id:                         movieId,
-		Type:                       mediaType,
-		Title:                      movie.Title,
-		OriginalTitle:              movie.OriginalTitle,
-		Overview:                   movie.Overview,
-		ReleaseDate:                movie.ReleaseDate,
-		Genres:                     genres,
-		PosterPath:                 movie.PosterPath,
-		Popularity:                 movie.Popularity,
-		SupportedProviderCountries: getSupportedProviderCountries(movie.Providers),
-		Providers:                  movie.Providers,
-	}
 }
 
 func (movie *Movie) toMedia() *Media {
@@ -110,30 +68,6 @@ type TV struct {
 	PosterPath string   `json:"poster_path"`
 	Popularity float32  `json:"popularity"`
 	Providers  Provider `json:"watch/providers"`
-}
-
-func (tv *TV) toDBMedia() *DBMedia {
-	genres := []string{}
-	for _, genre := range tv.Genres {
-		genres = append(genres, genre.Name)
-	}
-
-	tvId := "t" + strconv.Itoa(tv.Id)
-	mediaType := getMediaType(tvId)
-
-	return &DBMedia{
-		Id:                         tvId,
-		Type:                       mediaType,
-		Title:                      tv.Name,
-		OriginalTitle:              tv.OriginalName,
-		Overview:                   tv.Overview,
-		ReleaseDate:                tv.FirstAirDate,
-		Genres:                     genres,
-		PosterPath:                 tv.PosterPath,
-		Popularity:                 tv.Popularity,
-		SupportedProviderCountries: getSupportedProviderCountries(tv.Providers),
-		Providers:                  tv.Providers,
-	}
 }
 
 func (tv *TV) toMedia() *Media {
@@ -177,10 +111,6 @@ type Provider struct {
 
 type MediaIds struct {
 	Ids []string `json:"ids"`
-}
-
-type Env struct {
-	db *gorm.DB
 }
 
 func getMediaType(id string) string {
