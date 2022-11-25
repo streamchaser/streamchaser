@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/lib/pq"
@@ -114,10 +115,14 @@ type MediaIds struct {
 }
 
 func getMediaType(id string) string {
-	if id[0:1] == "m" {
+	switch id[0:1] {
+	case "m":
 		return "movie"
+	case "t":
+		return "tv"
+	default:
+		panic(fmt.Sprintf("Received unexpected media type, got: %s", id))
 	}
-	return "tv"
 }
 
 func getSupportedProviderCountries(providers Provider) []string {

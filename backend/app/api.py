@@ -14,7 +14,6 @@ from app.api_helpers import valid_original_title
 from app.api_helpers import valid_release_date
 from app.api_helpers import valid_title
 from app.config import get_settings
-from app.db import models
 from app.schemas import Media
 from app.schemas import Movie
 from app.schemas import Person
@@ -277,44 +276,6 @@ def get_genres() -> dict:
 
     # Only keeps the unique keys
     return {**movie_genre_dict, **tv_genre_dict}
-
-
-def request_data(media: models.Media):
-    title = ""
-
-    try:
-        if media.id[0] == "m":
-            url = (
-                f"{tmdb_url}movie/{media.id[1:]}?api_key={tmdb_key}"
-                "&append_to_response=watch/providers"
-            )
-            title = "title"
-
-        elif media.id[0] == "t":
-            url = (
-                f"{tmdb_url}tv/{media.id[1:]}?api_key={tmdb_key}"
-                "&append_to_response=watch/providers"
-            )
-            title = "name"
-
-        data = requests.get(url).json()
-
-        return {
-            "media_id": media.id,
-            "title": data.get(title),
-            "poster_path": data.get("poster_path"),
-            "popularity": data.get("popularity"),
-            "flatrate_providers": get_providers(
-                "flatrate", data.get("watch/providers")
-            ),
-            "free_providers": get_providers("free", data.get("watch/providers")),
-            "genres": [genre.get("name") for genre in data.get("genres")]
-            if data.get("genres")
-            else ["Unknown"],
-        }
-
-    except Exception as e:
-        print(e)
 
 
 def get_recommendations(recommendations: dict) -> list[dict]:
