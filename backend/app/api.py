@@ -4,20 +4,15 @@ import os
 from datetime import datetime
 from datetime import timedelta
 from pathlib import Path
-from typing import Generator
 from typing import Tuple
 
 import httpx
 import requests
 from app.api_helpers import get_providers
-from app.api_helpers import valid_original_title
-from app.api_helpers import valid_release_date
-from app.api_helpers import valid_title
 from app.config import get_settings
-from app.schemas import Media
-from app.schemas import Movie
-from app.schemas import Person
-from app.schemas import TV
+from app.models import Movie
+from app.models import Person
+from app.models import TV
 from tqdm import tqdm
 
 
@@ -143,25 +138,6 @@ def fetch_trending_tv(page: int) -> dict:
     return requests.get(url).json()["results"]
 
 
-def media_converter(mixed_list: list[dict]) -> Generator[Media, None, None]:
-    """Takes a list movie/tv json ["results"] and converts it to Media"""
-
-    return (
-        # pydantic Media schema
-        Media(
-            id=media.get("id"),
-            title=valid_title(media),
-            original_title=valid_original_title(media),
-            overview=media.get("overview"),
-            release_date=valid_release_date(media),
-            genres=[],
-            poster_path=media.get("poster_path"),
-            popularity=media.get("popularity"),
-        ).dict()
-        for media in mixed_list
-    )
-
-
 async def get_person_from_id(person_id: int):
     """Gets data of a person from an id"""
     # Here we make 3 api calls into 1 using the append_to_response header
@@ -174,7 +150,7 @@ async def get_person_from_id(person_id: int):
         response = await client.get(url)
         person = response.json()
 
-        # pydantic schema for a person
+        # pydantic model for a person
         return Person(
             id=person.get("id"),
             name=person.get("name"),
@@ -203,7 +179,7 @@ async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
         response = await client.get(url)
         movie = response.json()
 
-        # pydantic schema for a movie
+        # pydantic model for a movie
         return Movie(
             id=movie.get("id"),
             title=movie.get("title"),
@@ -238,7 +214,7 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
         response = await client.get(url)
         tv = response.json()
 
-        # pydantic schema for a tv series
+        # pydantic model for a tv series
         return TV(
             id=tv.get("id"),
             name=tv.get("name"),

@@ -2,7 +2,7 @@ import json
 
 from app.api import get_person_from_id
 from app.db.cache import redis
-from app.schemas import Person
+from app.models import Person
 from fastapi import APIRouter
 
 
