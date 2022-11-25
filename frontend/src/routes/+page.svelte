@@ -225,7 +225,7 @@
             : []
         }}
         value={$currentProviders.length ? $currentProviders : null}
-        items={data.providers}
+        items={data.providers.map(v => v.provider_name)}
         isMulti={true}
         placeholder="Select providers..."
       />
