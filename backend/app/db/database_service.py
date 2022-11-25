@@ -110,10 +110,12 @@ async def providers_to_redis():
         group = await asyncio.gather(
             client.get(providers_movie_url), client.get(providers_tv_url)
         )
-        for res in tqdm(group, desc="Adding each country's providers to Redis"):
+        for res in group:
             __update_providers(res.json())
 
-    for country_code, provider_data in providers.items():
+    for country_code, provider_data in tqdm(
+        providers.items(), desc="Adding each country's providers to Redis"
+    ):
         sorted_provider_data = sorted(provider_data, key=lambda k: k["provider_name"])
         await redis.set(
             f"{country_code}_providers",
