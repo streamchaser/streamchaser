@@ -62,8 +62,6 @@ services:
     build:
       context: ./go_backend
       target: ${APP_ENVIRONMENT}
-      args:
-        - APP_ENV=${APP_ENVIRONMENT}
     container_name: go_backend
     restart: always
     ports:
@@ -89,9 +87,7 @@ services:
   internal:
     build:
       context: ./internal
-      target: ${APP_ENVIRONMENT}
-      args:
-        - APP_ENV=${APP_ENVIRONMENT}
+      target: ${APP_ENVIRONMENT} # Specify which stage of the dockerfile to use
     container_name: internal
     restart: always
     ports:
