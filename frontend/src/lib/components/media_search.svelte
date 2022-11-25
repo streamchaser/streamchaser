@@ -103,7 +103,7 @@
               </div>
             {/each}
             <div class="avatar placeholder border-neutral">
-              <div class="w-12 h-12 rounded-full bg-neutral text-neutral-content">
+              <div class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
                 <span>
                   +{providerAmounts[mediaIndex] - SHOWN_PROVIDERS + 1}
                 </span>
