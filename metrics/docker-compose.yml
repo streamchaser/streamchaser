@@ -64,12 +64,53 @@ services:
   #   volumes:
   #     - grafana-storage:/var/lib/grafana
 
+  umami:
+    image: docker.umami.dev/umami-software/umami:postgresql-latest
+    restart: unless-stopped
+    container_name: umami
+    networks:
+      - traefik
+      - umami
+    ports:
+      - 9999:9999
+    environment:
+      DATABASE_URL: postgresql://umami:umami@umami-db:5432/umami
+    depends_on:
+      - umami-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.umami-web.rule=Host(`umami.${HOST_NAME}`)"
+      - "traefik.http.routers.umami-secured.rule=Host(`umami.${HOST_NAME}`)"
+      - "traefik.http.routers.umami.tls=true"
+      - "traefik.http.routers.umami.tls.certresolver=mytlschallenge"
+      - "traefik.docker.network=traefik"
+
+  umami-db:
+    image: postgres:12-alpine
+    restart: always
+    container_name: umami-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: umami
+      POSTGRES_USER: umami
+      POSTGRES_PASSWORD: umami
+    volumes:
+      - ./sql/schema.postgresql.sql:/docker-entrypoint-initdb.d/schema.postgresql.sql:ro
+      - umami-db-data:/var/lib/postgresql/data
+    networks:
+      - traefik
+      - umami
+
 networks:
   traefik:
     external: true
   prometheus:
     external: true
+  umami:
+    external: false
 
 volumes:
   prometheus:
+  umami-db-data:
   grafana-storage:
