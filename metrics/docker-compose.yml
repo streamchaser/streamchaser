@@ -15,7 +15,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.prometheus-web.rule=Host(`prometheus.${HOST_NAME}`)"
       - "traefik.http.routers.prometheus-secured.rule=Host(`prometheus.${HOST_NAME}`)"
-      - "traefik.http.routers.prometheus.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.prometheus-secured.tls.certresolver=mytlschallenge"
       - "traefik.http.routers.prom-api.middlewares=prometheus-auth"
       - "traefik.http.middlewares.prometheus-auth.basicauth.users=prometheus:$$2y$$12$$KmNp57BG8MyGMTV2gR4NpOKAH08e3ZaByZ0Z1Yqk6qSqW4LFgh7Nm"
       - "traefik.docker.network=traefik"
@@ -82,7 +82,7 @@ services:
       - "traefik.http.routers.umami-web.rule=Host(`umami.${HOST_NAME}`)"
       - "traefik.http.routers.umami-secured.rule=Host(`umami.${HOST_NAME}`)"
       - "traefik.http.routers.umami.tls=true"
-      - "traefik.http.routers.umami.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.umami-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
 
   umami-db:
