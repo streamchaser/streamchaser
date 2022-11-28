@@ -2,7 +2,7 @@ import json
 
 from app.api import get_movie_from_id
 from app.db.cache import redis
-from app.schemas import Movie
+from app.models import Movie
 from fastapi import APIRouter
 
 

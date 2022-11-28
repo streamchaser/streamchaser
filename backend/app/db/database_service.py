@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 
 async def insert_genres_to_cache(genres: dict) -> None:
-    """Turns a dict of genres into Genre-schemas, and feeds them to crud create"""
+    """Turns a dict of genres into Genre-models, and feeds them to Redis"""
 
     fixed_genres = [
         Genre(

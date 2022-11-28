@@ -1,5 +1,5 @@
 from app.db.search import async_client
-from app.schemas import Media
+from app.models import Media
 from fastapi import APIRouter
 from fastapi.param_functions import Query
 

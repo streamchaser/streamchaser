@@ -6,8 +6,6 @@ authors = ["Your Name <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-SQLAlchemy = "^1.4.43"
-requests = "^2.28.1"
 meilisearch = "^0.22.2"
 psycopg2-binary = "^2.9.5"
 typer = "^0.7.0"

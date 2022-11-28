@@ -1,7 +1,7 @@
 import json
 
 from app.db.cache import redis
-from app.schemas import Provider
+from app.models import Provider
 from fastapi import APIRouter
 
 
