@@ -99,7 +99,6 @@ services:
       - ./sql/schema.postgresql.sql:/docker-entrypoint-initdb.d/schema.postgresql.sql:ro
       - umami-db-data:/var/lib/postgresql/data
     networks:
-      - traefik
       - umami
 
 networks:
