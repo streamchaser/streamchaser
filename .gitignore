@@ -11,6 +11,8 @@ __pycache__/
 # VSCode
 .vscode
 
+*yarn-error.log
+
 # JetBrains
 .idea
 
