@@ -103,6 +103,11 @@ async def genres_to_cache():
 
 
 @app.command()
+def update_search_config():
+    search_client_config()
+
+
+@app.command()
 @coroutine
 async def full_setup(
     popularity: float = 1, first_time: bool = False, chunk_size: int = 25000

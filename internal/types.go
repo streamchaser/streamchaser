@@ -3,21 +3,22 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type Media struct {
-	Id                         string            `json:"id"`
-	Type                       string            `json:"type"`
-	Title                      string            `json:"title"`
-	OriginalTitle              string            `json:"original_title"`
-	Overview                   string            `json:"overview"`
-	ReleaseDate                string            `json:"release_date"`
-	Genres                     []string          `json:"genres"`
-	PosterPath                 string            `json:"poster_path"`
-	Popularity                 float32           `json:"popularity"`
-	SupportedProviderCountries []string          `json:"supported_provider_countries"`
-	Providers                  Provider          `json:"providers"`
-	FinalTranslations          FinalTranslations `json:"final_translations"`
+	Id                         string   `json:"id"`
+	Type                       string   `json:"type"`
+	Title                      string   `json:"title"`
+	OriginalTitle              string   `json:"original_title"`
+	Overview                   string   `json:"overview"`
+	ReleaseDate                string   `json:"release_date"`
+	Genres                     []string `json:"genres"`
+	PosterPath                 string   `json:"poster_path"`
+	Popularity                 float32  `json:"popularity"`
+	SupportedProviderCountries []string `json:"supported_provider_countries"`
+	Providers                  Provider `json:"providers"`
+	TitleTranslations          string   `json:"title_translations"`
 }
 
 type Movie struct {
@@ -54,7 +55,7 @@ func (movie *Movie) toMedia() *Media {
 		Popularity:                 movie.Popularity,
 		SupportedProviderCountries: getSupportedProviderCountries(movie.Providers),
 		Providers:                  movie.Providers,
-		FinalTranslations:          getFinalTranslations(movie.Translations),
+		TitleTranslations:          concatenateTranslatedTitles(movie.Translations),
 	}
 }
 
@@ -92,7 +93,7 @@ func (tv *TV) toMedia() *Media {
 		Popularity:                 tv.Popularity,
 		SupportedProviderCountries: getSupportedProviderCountries(tv.Providers),
 		Providers:                  tv.Providers,
-		FinalTranslations:          getFinalTranslations(tv.Translations),
+		TitleTranslations:          concatenateTranslatedTitles(tv.Translations),
 	}
 }
 
@@ -163,26 +164,16 @@ func getSupportedProviderCountries(providers Provider) []string {
 	return supportedProviderCountries
 }
 
-// "translations": {
-//   "DK": {
-//     "title" : "string"
-//     "overview" : "string"
-//   },
-// }
-
-func getFinalTranslations(translations Translations) FinalTranslations {
-	finalTransations := FinalTranslations{}
+func concatenateTranslatedTitles(translations Translations) string {
+	var translatedTitles strings.Builder
 
 	for _, translation := range translations.InnerTranslations {
-		// fmt.Println(translation)
 		if translation.Data.Title != "" {
-			finalTransations[translation.Iso311661] = FinalTranslations{translation.Data.Title, translation.Data.Overview}
+			translatedTitles.WriteString(translation.Data.Title + ", ")
 		}
 	}
 
-	fmt.Println(hest)
-
-	return finalTransations
+	return translatedTitles.String()
 }
 
 func getCountryCodeKeys(providers Provider) []string {
