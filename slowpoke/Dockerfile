@@ -12,7 +12,7 @@ EXPOSE 80
 
 
 FROM base as prod
-RUN echo "Starting backend as production" \
+RUN echo "Starting slowpoke as production" \
     && poetry export -f requirements.txt --output requirements.txt --without-hashes \
     && pip install --no-cache-dir -r requirements.txt
 
@@ -21,7 +21,7 @@ CMD gunicorn app.main:app --access-logfile - -k uvicorn.workers.UvicornWorker -b
 
 
 FROM base as dev
-RUN echo "Starting backend as development" \
+RUN echo "Starting slowpone as development" \
     && poetry export --with dev -f requirements.txt --output requirements.txt --without-hashes \
     && pip install --no-cache-dir -r requirements.txt
 CMD uvicorn app.main:app --host 0.0.0.0 --port 80 --reload

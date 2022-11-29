@@ -1,4 +1,4 @@
-module go_backend
+module blazing
 
 go 1.18
 

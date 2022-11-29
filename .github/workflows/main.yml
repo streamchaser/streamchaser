@@ -4,7 +4,7 @@ name: CI
 on: push
 
 jobs:
-  backend-build-and-test:
+  slowpoke-build-and-test:
     runs-on: ubuntu-latest
     steps:
       # https://github.com/actions/checkout
@@ -19,4 +19,4 @@ jobs:
           docker network create prometheus
           docker-compose build
       - name: Run test suite
-        run: docker-compose run backend pytest -v tests
+        run: docker-compose run slowpoke pytest -v tests

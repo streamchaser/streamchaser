@@ -33,16 +33,16 @@ services:
       - "traefik.http.routers.frontend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
 
-  backend:
+  slowpoke:
     build:
-      context: ./backend
+      context: ./slowpoke
       target: ${APP_ENVIRONMENT} # Which stage to build
     restart: always
-    container_name: backend
+    container_name: slowpoke
     env_file:
       - .env
     volumes:
-      - ./backend/:/app
+      - ./slowpoke/:/app
     depends_on:
       - redis
       - search
@@ -52,17 +52,17 @@ services:
       - streamchaser
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend-web.rule=Host(`api.${HOST_NAME}`)"
-      - "traefik.http.routers.backend-web.middlewares=${SECURE_REDIRECT}"
-      - "traefik.http.routers.backend-secured.rule=Host(`api.${HOST_NAME}`)"
-      - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.slowpoke-web.rule=Host(`api.${HOST_NAME}`)"
+      - "traefik.http.routers.slowpoke-web.middlewares=${SECURE_REDIRECT}"
+      - "traefik.http.routers.slowpoke-secured.rule=Host(`api.${HOST_NAME}`)"
+      - "traefik.http.routers.slowpoke-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
 
-  go_backend:
+  blazing:
     build:
-      context: ./go_backend
+      context: ./blazing
       target: ${APP_ENVIRONMENT}
-    container_name: go_backend
+    container_name: blazing
     restart: always
     ports:
       - 9001:9001
@@ -72,16 +72,16 @@ services:
     env_file:
       - .env
     volumes:
-      - ./go_backend:/app
+      - ./blazing:/app
     depends_on:
       - traefik
       - redis
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.go-backend-web.rule=Host(`apiv2.${HOST_NAME}`)"
-      - "traefik.http.routers.go-backend-web.middlewares=${SECURE_REDIRECT}"
-      - "traefik.http.routers.go-backend-secured.rule=Host(`apiv2.${HOST_NAME}`)"
-      - "traefik.http.routers.go-backend-secured.tls.certresolver=mytlschallenge"
+      - "traefik.http.routers.blazing-web.rule=Host(`apiv2.${HOST_NAME}`)"
+      - "traefik.http.routers.blazing-web.middlewares=${SECURE_REDIRECT}"
+      - "traefik.http.routers.blazing-secured.rule=Host(`apiv2.${HOST_NAME}`)"
+      - "traefik.http.routers.blazing-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
 
   internal:

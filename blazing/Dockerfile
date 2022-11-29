@@ -10,7 +10,7 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN CGO_ENABLED=0 go build -o go_backend .
+RUN CGO_ENABLED=0 go build -o blazing .
 
 FROM scratch as prod
 
@@ -19,7 +19,7 @@ WORKDIR /app
 ENV GIN_MODE=release
 
 COPY --from=base /app /usr/bin/
-CMD ["go_backend"]
+CMD ["blazing"]
 
 FROM base as dev
 

@@ -37,14 +37,14 @@ Here's how to get the application up and running for development
   - `VITE_GO_API_PATH=http://apiv2.localhost`
 
 3. Build the container `docker-compose up --build -d`
-4. Run `docker-compose exec backend python3 cli.py full-setup --first-time --popularity <1-1000>`(the more the less amount of media)
+4. Run `docker-compose exec slowpoke python3 cli.py full-setup --first-time --popularity <1-1000>`(the more the less amount of media)
 5. Go to http://localhost/ and search
 6. Optional: `docker-compose stop frontend && cd frontend && yarn dev` and go to http://localhost:3000 - Our workaround for hot-reloading
 
 # CLI
 
 To use the cronjob use the following in the terminal:
-`docker-compose exec backend python3 cli.py <command> <parameter>`
+`docker-compose exec slowpoke python3 cli.py <command> <parameter>`
 
 ## The most used commands:
 
@@ -79,11 +79,11 @@ Options:
 
 To get the full list of commands type:
 
-- `docker-compose exec backend python3 cli.py --help`
+- `docker-compose exec slowpoke python3 cli.py --help`
 
 or to get help with a command:
 
-- `docker-compose exec backend python3 cli.py <command> --help`
+- `docker-compose exec slowpoke python3 cli.py <command> --help`
 
 # Our tech stack
 
