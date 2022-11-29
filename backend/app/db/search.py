@@ -17,8 +17,14 @@ def search_client_config(index: str = "media"):
 
     client.index(index).update_sortable_attributes(["popularity", "release_date"])
 
-    # Sort is moved higher than default
     client.index(index).update_ranking_rules(
-        # ["words", "sort", "typo", "proximity", "attribute", "exactness"]
-        ["words", "exactness", "typo", "attribute", "sort", "proximity"]
+        [
+            "words",
+            "exactness",
+            "sort",
+            "popularity:desc",
+            "typo",
+            "attribute",
+            "proximity",
+        ]
     )
