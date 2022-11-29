@@ -11,11 +11,20 @@ def search_client_config(index: str = "media"):
     )
 
     # Isolated the important
-    client.index(index).update_searchable_attributes(["original_title", "title"])
+    client.index(index).update_searchable_attributes(
+        ["original_title", "title", "title_translations"]
+    )
 
     client.index(index).update_sortable_attributes(["popularity", "release_date"])
 
-    # Sort is moved higher than default
     client.index(index).update_ranking_rules(
-        ["words", "sort", "typo", "proximity", "attribute", "exactness"]
+        [
+            "words",
+            "exactness",
+            "sort",
+            "popularity:desc",
+            "typo",
+            "attribute",
+            "proximity",
+        ]
     )
