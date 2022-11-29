@@ -40,8 +40,8 @@
 </script>
 
 <div
-  class="flex items-center px-2 sm:mx-2 py-10 bg-cover card bg-base-100 rounded-box shadow-md"
-  style="background-image: url(&quot;{IMG_W1280}{backdropPath}&quot;);e"
+  class="flex items-center px-2 sm:mx-2 py-10 bg-cover card bg-base-100 rounded-box rounded-b-none"
+  style="background-image: linear-gradient(to bottom, hsla(0, 0%, 0%, 0) 70%, hsl(var(--b1)) 100%), url(&quot;{IMG_W1280}{backdropPath}&quot;);"
 >
   <div
     class="card sm:card-side bg-neutral bg-opacity-90 bordered
