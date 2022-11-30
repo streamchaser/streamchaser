@@ -1,10 +1,7 @@
 <script lang="ts">
   import ReadMore from "./read_more.svelte"
   import { uniqueProviders } from "$lib/utils"
-  import { currentCountry } from "$lib/stores/preferences"
-  import { currentGenres } from "$lib/stores/preferences"
-  import { inputQuery } from "$lib/stores/preferences"
-  import { uniqueArray } from "$lib/utils"
+  import { currentCountry, currentGenres, inputQuery } from "$lib/stores/preferences"
   import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "$lib/variables"
   import type { Provider } from "$lib/generated"
 
