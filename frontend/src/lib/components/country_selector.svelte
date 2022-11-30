@@ -1,6 +1,6 @@
 <script lang="ts">
   import { COUNTRIES } from "../variables.js"
-  import { currentCountry } from "../stores/country.js"
+  import { currentCountry } from "../stores/preferences"
 </script>
 
 <select bind:value={$currentCountry} class="select select-bordered max-sm">

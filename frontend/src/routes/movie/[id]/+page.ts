@@ -1,6 +1,6 @@
 import { removeContentWithMissingImagePath, sortListByPopularity } from "$lib/utils"
 import { PYTHON_API } from "$lib/variables.js"
-import { currentCountry } from "$lib/stores/country.js"
+import { currentCountry } from "$lib/stores/preferences"
 import type { PageLoad } from "./$types"
 import type { Movie } from "$lib/generated"
 import { env } from "$env/dynamic/public"

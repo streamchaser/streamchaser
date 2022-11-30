@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade, fly } from "svelte/transition"
-  import { cookieDisclaimer } from "../stores/cookie_disclaimer.js"
+  import { cookieDisclaimer } from "../stores/cookies.js"
   import { onMount } from "svelte"
 
   let loadDisclaimer = false
