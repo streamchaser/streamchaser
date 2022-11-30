@@ -26,6 +26,23 @@ async def insert_genres_to_cache(genres: dict) -> None:
     await redis.set("genres", json.dumps(fixed_genres))
 
 
+async def countries_to_redis():
+    countries_url = (
+        f"{get_settings().tmdb_url}"
+        f"configuration/countries?api_key={get_settings().tmdb_key}"
+    )
+    async with httpx.AsyncClient(http2=True) as client:
+        res = await client.get(countries_url)
+
+    countries = res.json()
+    for country in countries:
+        country["name"] = country["english_name"]
+        country.pop("english_name", None)
+        country.pop("native_name", None)
+    print(countries)
+    await redis.set("countries", json.dumps(countries))
+
+
 async def providers_to_redis():
     providers = {}
     countries_url = (
