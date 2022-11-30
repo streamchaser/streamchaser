@@ -2,7 +2,9 @@ ci:
   autoupdate_schedule: monthly # weekly(default), monthly, quarterly
 
 default_language_version:
-  python: python3.10
+  python: python3.11
+
+exclude: '^.*swagger\.json$'
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -39,3 +41,12 @@ repos:
           - prettier@2.5.1
           - prettier-plugin-svelte@v2.6.0
           - svelte@v3.46.2
+
+  - repo: https://github.com/muya/swaggo-hooks
+    rev: "main"
+    hooks:
+      - id: swag-fmt
+      - id: swag-init
+        args:
+          - --dir=./go_backend
+          - --output=./go_backend/docs
