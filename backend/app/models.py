@@ -19,6 +19,34 @@ class Media(BaseModel):
         orm_mode = True
 
 
+class Provider(BaseModel):
+    provider_name: str
+    display_priority: int
+    provider_id: int | None
+    logo_path: str | None
+
+
+class Providers(BaseModel):
+    results: dict[str, dict[str, list[Provider] | None]]
+
+
+class Hit(BaseModel):
+    id: str
+    title: str
+    poster_path: str
+    providers: Providers | None
+
+
+class Meilisearch(BaseModel):
+    hits: list[Hit]
+    offset: int
+    limit: int
+    query: str
+    estimatedTotalHits: int
+    processingTimeMs: int
+    facetDistribution: bool | None
+
+
 class Movie(BaseModel):
     id: int
     title: str
@@ -68,8 +96,3 @@ class Person(BaseModel):
     movie_credits: list[dict] | None
     tv_credits: list[dict] | None
     gender: int
-
-
-class Provider(BaseModel):
-    provider_name: str
-    display_priority: int

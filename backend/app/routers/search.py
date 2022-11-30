@@ -1,6 +1,7 @@
 from enum import Enum
 
 from app.db.search import async_client
+from app.models import Meilisearch
 from fastapi import APIRouter
 from fastapi import Path
 from fastapi import Query
@@ -68,7 +69,7 @@ def filter_from_queries(
     return filter
 
 
-@router.get("/{user_input}")
+@router.get("/{user_input}", response_model=Meilisearch)
 async def search(
     user_input: str = Path("*", description="The main query string"),
     limit: int = Query(
@@ -81,7 +82,7 @@ async def search(
     t: list[str] | None = Query(None, description="Content type"),
     release_date: Order | None = Query(None, description="Release date sorting"),
     popularity: Order | None = Query(None, description="Popularity sorting"),
-):
+) -> Meilisearch:
     """
     # Our endpoint for the MeiliSearch API
     * **user_input**: Input to lookup media
