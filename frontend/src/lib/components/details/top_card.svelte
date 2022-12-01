@@ -3,8 +3,9 @@
   import { currentCountry } from "$lib/stores/country.js"
   import { currentGenres } from "$lib/stores/genres.js"
   import { inputQuery } from "$lib/stores/input.js"
-  import { uniqueArray } from "$lib/utils"
+  import { uniqueProviders } from "$lib/utils"
   import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "$lib/variables"
+  import type { Provider } from "$lib/generated"
 
   const INITIAL_OVERVIEW_LENGTH: number = 550
 
@@ -13,8 +14,8 @@
   export let title: string
   export let overview: string
   export let genres: string[]
-  export let freeProviders: string[]
-  export let flatrateProviders: string[]
+  export let freeProviders: Provider[]
+  export let flatrateProviders: Provider[]
   export let runtime: number
   export let imdbId: string
   export let releaseDate: string
@@ -124,7 +125,9 @@
       </div>
     {:else}
       <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
-        {#each uniqueArray(freeProviders.concat(flatrateProviders), "provider_id") as provider}
+        <!-- TODO: We dont want to do this, but due to a tmdb issue we need to remove HBO manually -->
+        <!-- https://github.com/streamchaser/streamchaser/issues/286 -->
+        {#each uniqueProviders(freeProviders.concat(flatrateProviders)).filter(p => p.provider_name !== "HBO") as provider}
           <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
             <div
               data-tip={provider.provider_name}

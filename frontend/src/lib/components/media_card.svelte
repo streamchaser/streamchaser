@@ -1,8 +1,8 @@
 <script lang="ts">
   import { fade } from "svelte/transition"
-  import { mediaIdToUrlConverter } from "../utils"
+  import { mediaIdToUrlConverter, uniqueProviders } from "$lib/utils"
   import { currentCountry } from "$lib/stores/country"
-  import { IMG_ORIGINAL, IMG_W342 } from "../variables"
+  import { IMG_ORIGINAL, IMG_W342 } from "$lib/variables"
   import type { Hit } from "$lib/generated"
 
   const SHOWN_PROVIDERS: number = 5
@@ -15,13 +15,20 @@
     const providers = []
     if (media.providers) {
       if ("flatrate" in media.providers.results[$currentCountry]) {
-        providers.push(...media.providers.results[$currentCountry]["flatrate"])
+        // TODO: We dont want to do this, but due to a tmdb issue we need to remove HBO manually
+        // https://github.com/streamchaser/streamchaser/issues/286
+        for (let provider of media.providers.results[$currentCountry]["flatrate"]) {
+          if (provider.provider_name !== "HBO") {
+            providers.push(provider)
+          }
+        }
+        // providers.push(...media.providers.results[$currentCountry]["flatrate"])
       }
       if ("free" in media.providers.results[$currentCountry]) {
         providers.push(...media.providers.results[$currentCountry]["free"])
       }
     }
-    return providers
+    return uniqueProviders(providers)
   }
 </script>
 
@@ -31,11 +38,15 @@
   href={mediaIdToUrlConverter(media.id)}
   data-sveltekit-prefetch
   class="card compact w-auto bordered bg-neutral m-1
-                           shadow-md hover:contrast-75 hover:ring-2 ring-primary aspect-[19/33]"
+                           shadow-md hover:contrast-75 hover:ring-2 ring-primary"
 >
   {#if media.poster_path}
-    <figure>
-      <img src="{IMG_W342}{media.poster_path}" alt={media.title} />
+    <figure class="aspect-[342/513]">
+      <img
+        class="aspect-[342/513]"
+        src="{IMG_W342}{media.poster_path}"
+        alt={media.title}
+      />
     </figure>
   {:else}
     <figure class="grid place-items-center bg-slate-100 h-5/6">
