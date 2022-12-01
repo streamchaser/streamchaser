@@ -53,7 +53,7 @@
       />
     </figure>
   {:else}
-    <figure class="grid place-items-center bg-slate-100 h-5/6">
+    <figure class="grid place-items-center bg-slate-100 aspect-[342/513]">
       <h2 class="text-center text-lg text-gray-900">
         <strong>{media.title}</strong>
       </h2>
@@ -65,7 +65,7 @@
     </div>
   {/if}
   {#if providerAmounts[mediaIndex] === 0}
-    <div class="card-body">
+    <div class="card-body h-14">
       <p class="text-center text-neutral-content">
         <strong>No providers in {$currentCountry}</strong>
       </p>

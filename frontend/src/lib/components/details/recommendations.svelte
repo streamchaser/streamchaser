@@ -50,11 +50,11 @@
 </script>
 
 {#if recommendations.length && loadedPage}
-  <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
   {#await lookupRecommendations()}
     Lol kom nu
   {:then recs}
-    <div class="bg-neutral rounded-box swiper-container px-2 mx-2">
+    <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
+    <div class="swiper-container px-2 mx-2">
       <Swiper
         style="
         --swiper-navigation-color: text-blue-500;

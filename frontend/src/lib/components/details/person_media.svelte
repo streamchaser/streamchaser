@@ -1,40 +1,47 @@
 <script lang="ts">
-  import { fade } from "svelte/transition"
-  import InfiniteLoading from "svelte-infinite-loading"
+  import MediaCard from "$lib/components/media_card.svelte"
   import {
-    mediaIdToUrlConverter,
-    calculateAmountOfShownItems,
     removeDuplicates,
     sortListByPopularity,
     removeContentWithMissingImagePath,
-    getMediaTitle,
-  } from "../../utils"
-  import type { Media } from "../../types"
-  import { IMG_W342 } from "$lib/variables"
-  import { onMount } from "svelte"
+  } from "$lib/utils"
+  import type { Media } from "$lib/types"
+  import { PYTHON_API } from "$lib/variables"
+  import { currentCountry } from "$lib/stores/country"
+  import type { Meilisearch, Hit } from "$lib/generated"
 
   export let media: Media[]
 
-  let currentMediaAmount: number
-  let mediaStartAmount: number
+  let providerAmounts: number[]
 
-  // TODO: Kill with fire
-  onMount(() => {
-    currentMediaAmount = calculateAmountOfShownItems({
-      width: window.visualViewport.width,
-      xxl: 32,
-      xl: 28,
-      lg: 24,
-      md: 20,
-      sm: 16,
-      mobile: 10,
+  const hitProviderAmounts = (searchHits: Hit[]) => {
+    providerAmounts = []
+    searchHits.forEach(hit => {
+      let combinedAmount = 0
+      if (hit.providers) {
+        if ("flatrate" in hit.providers.results[$currentCountry]) {
+          combinedAmount += hit.providers.results[$currentCountry]["flatrate"].length
+        }
+        if ("free" in hit.providers.results[$currentCountry]) {
+          combinedAmount += hit.providers.results[$currentCountry]["free"].length
+        }
+      }
+      providerAmounts.push(combinedAmount)
     })
-    mediaStartAmount = currentMediaAmount
-  })
+  }
 
-  const loadMoreData = async ({ detail: { loaded } }) => {
-    currentMediaAmount += mediaStartAmount
-    loaded()
+  const lookupMedia = async (): Promise<Meilisearch> => {
+    const ids = media.map(v => v.id)
+    const res = await fetch(
+      `${PYTHON_API}/media?c=${$currentCountry}&limit=${ids.length}&ids=${ids.join(
+        "&ids="
+      )}`
+    )
+    const json: Meilisearch = await res.json()
+
+    hitProviderAmounts(json.hits)
+
+    return json
   }
 
   removeDuplicates(media)
@@ -43,32 +50,17 @@
 </script>
 
 {#if media.length}
-  <h1 class="text-center text-3xl pt-5">Starred in</h1>
-  <div
-    class="grid grid-cols-2 2xl:grid-cols-8 xl:grid-cols-7 lg:grid-cols-6 md:grid-cols-5 md:grid-cols-4 gap-3 p-2 pt-4"
-  >
-    {#each media.slice(0, currentMediaAmount) as media}
-      <a
-        in:fade
-        href={mediaIdToUrlConverter(media.id)}
-        data-sveltekit-prefetch
-        class="card compact bordered shadow-md
-                       hover:contrast-75 hover:ring-2 ring-primary"
-      >
-        <figure class="rounded-box">
-          <img src="{IMG_W342}{media.poster_path}" alt={getMediaTitle(media)} />
-        </figure>
-        {#if media.id.charAt(0) == "t"}
-          <div class="absolute top-0 right-0 mx-1 -mt-1 opacity-85">
-            <div class="badge badge-sm">TV</div>
-          </div>
-        {/if}
-      </a>
-    {/each}
-  </div>
-  {#if media.length > currentMediaAmount}
-    <InfiniteLoading on:infinite={loadMoreData} />
-  {:else}
-    <p class="text-center italic">Showing {media.length} results</p>
-  {/if}
+  {#await lookupMedia()}
+    Loader lol
+  {:then med}
+    <h1 class="text-center text-3xl pt-5">Starred in</h1>
+    <div
+      class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-1 p-2 pt-4"
+    >
+      {#each med.hits as media, index}
+        <MediaCard {media} mediaIndex={index} {providerAmounts} />
+      {/each}
+    </div>
+    <p class="text-center italic">Showing {med.hits.length} results</p>
+  {/await}
 {/if}
