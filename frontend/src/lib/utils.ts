@@ -1,3 +1,4 @@
+import type { Provider } from "./generated"
 import type { ViewPort, Media, FilmOrSeries } from "./types"
 
 // Generic Javascript Functions
@@ -61,8 +62,8 @@ export const sortListByPopularity = (list: Media[]) => {
   list.sort((a, b) => b.popularity - a.popularity)
 }
 
-export const uniqueArray = (list: object[], filterBy: string) => {
-  return [...new Map(list.map(item => [item[filterBy], item])).values()]
+export const uniqueProviders = (list: Provider[]): Provider[] => {
+  return [...new Map(list.map(item => [item["provider_id"], item])).values()]
 }
 
 export const calculateAmountOfShownItems = (viewPort: ViewPort) => {
