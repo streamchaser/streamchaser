@@ -1,5 +1,4 @@
 from app.db.search import async_client
-from app.models import Media
 from fastapi import APIRouter
 from fastapi.param_functions import Query
 
@@ -11,7 +10,7 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[Media])
+@router.get("")
 async def lookup_ids(
     c: str = Query("DK", description="A country code"),
     ids: list[str] = Query(
@@ -23,4 +22,13 @@ async def lookup_ids(
     country_code = c.upper()
     filter = [[f"id={id}" for id in ids]]
 
-    return await async_client.index(f"media_{country_code}").search("*", filter=filter)
+    return await async_client.index("media").search(
+        "*",
+        filter=filter,
+        attributes_to_retrieve=[
+            f"providers.results.{country_code}",
+            "title",
+            "poster_path",
+            "id",
+        ],
+    )

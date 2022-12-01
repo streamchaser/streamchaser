@@ -11,6 +11,9 @@
   export let mediaIndex: number
   export let media: Hit
 
+  // console.log(media)
+  // console.log(providerAmounts)
+
   const combineProviders = (media: Hit) => {
     const providers = []
     if (media.providers) {
@@ -36,6 +39,7 @@
   in:fade
   out:fade|local={{ duration: 200 }}
   href={mediaIdToUrlConverter(media.id)}
+  target="_self"
   data-sveltekit-prefetch
   class="card compact w-auto bordered bg-neutral m-1
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
