@@ -9,6 +9,7 @@
   import { onMount } from "svelte"
   import { currentCountry } from "$lib/stores/country"
   import type { Meilisearch, Hit } from "$lib/generated"
+  import Spinner from "../loading/spinner.svelte"
 
   export let recommendations: Recommendation[]
   export let mediaType: string
@@ -50,10 +51,10 @@
 </script>
 
 {#if recommendations.length && loadedPage}
+  <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
   {#await lookupRecommendations()}
-    Lol kom nu
+    <Spinner />
   {:then recs}
-    <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
     <div class="swiper-container px-2 mx-2">
       <Swiper
         style="

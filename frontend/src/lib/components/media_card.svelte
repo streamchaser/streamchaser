@@ -11,9 +11,6 @@
   export let mediaIndex: number
   export let media: Hit
 
-  // console.log(media)
-  // console.log(providerAmounts)
-
   const combineProviders = (media: Hit) => {
     const providers = []
     if (media.providers) {

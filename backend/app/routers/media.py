@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get("")
+@router.get("", response_model=Meilisearch)
 async def lookup_ids(
     c: str = Query("DK", description="A country code"),
     limit: int = Query(

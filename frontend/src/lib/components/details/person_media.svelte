@@ -9,6 +9,7 @@
   import { PYTHON_API } from "$lib/variables"
   import { currentCountry } from "$lib/stores/country"
   import type { Meilisearch, Hit } from "$lib/generated"
+  import Spinner from "../loading/spinner.svelte"
 
   export let media: Media[]
 
@@ -44,16 +45,22 @@
     return json
   }
 
+  let refreshLookupMedia = lookupMedia
+
+  $: if ($currentCountry) {
+    refreshLookupMedia = lookupMedia
+  }
+
   removeDuplicates(media)
   removeContentWithMissingImagePath(media, "poster_path")
   sortListByPopularity(media)
 </script>
 
 {#if media.length}
-  {#await lookupMedia()}
-    Loader lol
+  <h1 class="text-center text-3xl pt-5">Starred in</h1>
+  {#await refreshLookupMedia()}
+    <Spinner />
   {:then med}
-    <h1 class="text-center text-3xl pt-5">Starred in</h1>
     <div
       class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-1 p-2 pt-4"
     >
