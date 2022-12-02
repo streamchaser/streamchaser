@@ -36,6 +36,7 @@
   in:fade
   out:fade|local={{ duration: 200 }}
   href={mediaIdToUrlConverter(media.id)}
+  target="_self"
   data-sveltekit-prefetch
   class="card compact w-auto bordered bg-neutral m-1
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
@@ -49,7 +50,7 @@
       />
     </figure>
   {:else}
-    <figure class="grid place-items-center bg-slate-100 h-5/6">
+    <figure class="grid place-items-center bg-slate-100 aspect-[342/513]">
       <h2 class="text-center text-lg text-gray-900">
         <strong>{media.title}</strong>
       </h2>
@@ -61,7 +62,7 @@
     </div>
   {/if}
   {#if providerAmounts[mediaIndex] === 0}
-    <div class="card-body">
+    <div class="card-body h-14">
       <p class="text-center text-neutral-content">
         <strong>No providers in {$currentCountry}</strong>
       </p>
