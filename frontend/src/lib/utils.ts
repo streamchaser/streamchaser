@@ -1,5 +1,6 @@
-import type { Provider } from "./generated"
-import type { ViewPort, Media, FilmOrSeries } from "./types"
+import type { Provider, Hit, Meilisearch } from "$lib/generated"
+import type { ViewPort, Media, FilmOrSeries, Recommendation } from "$lib/types"
+import { PYTHON_API } from "$lib/variables"
 
 // Generic Javascript Functions
 export const getKeyByValue = (object: {}, value: string): string => {
@@ -100,4 +101,36 @@ export const getMediaTitle = (media: FilmOrSeries) => {
   } else {
     return media.name
   }
+}
+
+export const hitProviderAmounts = (searchHits: Hit[], country: string) => {
+  const providerAmounts = []
+  searchHits.forEach(hit => {
+    let combinedAmount = 0
+    if (hit.providers) {
+      if ("flatrate" in hit.providers.results[country]) {
+        combinedAmount += hit.providers.results[country]["flatrate"].length
+      }
+      if ("free" in hit.providers.results[country]) {
+        combinedAmount += hit.providers.results[country]["free"].length
+      }
+    }
+    providerAmounts.push(combinedAmount)
+  })
+  return providerAmounts
+}
+
+export const lookupMedia = async (
+  media: Media[] | Recommendation[],
+  country: string
+): Promise<{ meilisearch: Meilisearch; providerAmounts: number[] }> => {
+  const ids = media.map((v: Media | Recommendation) => v.id)
+  const res = await fetch(
+    `${PYTHON_API}/media?c=${country}&limit=${ids.length}&ids=${ids.join("&ids=")}`
+  )
+  const json: Meilisearch = await res.json()
+
+  const providerAmounts = hitProviderAmounts(json.hits, country)
+
+  return { meilisearch: json, providerAmounts: providerAmounts }
 }

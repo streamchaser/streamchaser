@@ -61,7 +61,7 @@ export interface Recommendation {
   adult: boolean
   backdrop_path: string
   genre_ids: number[]
-  id: number
+  id: number | string
   media_type: string
   original_language: string
   original_title: string

@@ -5,45 +5,17 @@
   import MediaCard from "$lib/components/media_card.svelte"
   import "swiper/css"
   import "swiper/css/free-mode"
-  import { PYTHON_API } from "$lib/variables"
   import { onMount } from "svelte"
   import { currentCountry } from "$lib/stores/country"
-  import type { Meilisearch, Hit } from "$lib/generated"
-  import Spinner from "../loading/spinner.svelte"
+  import Spinner from "$lib/components/loading/spinner.svelte"
+  import { lookupMedia } from "$lib/utils"
 
   export let recommendations: Recommendation[]
   export let mediaType: string
 
+  recommendations.forEach(v => (v.id = mediaType[0] + v.id))
+
   let loadedPage: boolean
-  let providerAmounts: number[]
-
-  const hitProviderAmounts = (searchHits: Hit[]) => {
-    providerAmounts = []
-    searchHits.forEach(hit => {
-      let combinedAmount = 0
-      if (hit.providers) {
-        if ("flatrate" in hit.providers.results[$currentCountry]) {
-          combinedAmount += hit.providers.results[$currentCountry]["flatrate"].length
-        }
-        if ("free" in hit.providers.results[$currentCountry]) {
-          combinedAmount += hit.providers.results[$currentCountry]["free"].length
-        }
-      }
-      providerAmounts.push(combinedAmount)
-    })
-  }
-
-  const lookupRecommendations = async (): Promise<Meilisearch> => {
-    const ids = recommendations.map(v => mediaType[0] + v.id)
-    const res = await fetch(
-      `${PYTHON_API}/media?c=${$currentCountry}&ids=${ids.join("&ids=")}`
-    )
-    const json: Meilisearch = await res.json()
-
-    hitProviderAmounts(json.hits)
-
-    return json
-  }
 
   onMount(() => {
     loadedPage = true
@@ -52,9 +24,9 @@
 
 {#if recommendations.length && loadedPage}
   <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
-  {#await lookupRecommendations()}
+  {#await lookupMedia(recommendations, $currentCountry)}
     <Spinner timeout={false} />
-  {:then meilisearch}
+  {:then lookup}
     <div class="swiper-container px-2 mx-2">
       <Swiper
         style="
@@ -85,11 +57,15 @@
         freeMode={true}
         touchEventsTarget={{ touchEventsTarget: "container" }}
       >
-        {#each meilisearch.hits as hit, index}
+        {#each lookup.meilisearch.hits as hit, index}
           {#if hit.poster_path}
             <SwiperSlide>
               <div class="p-1 swiper-lazy">
-                <MediaCard media={hit} mediaIndex={index} {providerAmounts} />
+                <MediaCard
+                  media={hit}
+                  mediaIndex={index}
+                  providerAmounts={lookup.providerAmounts}
+                />
               </div>
             </SwiperSlide>
           {/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { calculateAmountOfShownItems } from "$lib/utils"
+  import { calculateAmountOfShownItems, hitProviderAmounts } from "$lib/utils"
   import { PYTHON_API } from "$lib/variables.js"
   import Select from "svelte-select"
   import MediaSearch from "$lib/components/media_search.svelte"
@@ -12,7 +12,7 @@
   import { filters } from "$lib/stores/filters.js"
   import { sorting } from "$lib/stores/sorting.js"
   import { onMount } from "svelte"
-  import type { Media, Meilisearch } from "$lib/types"
+  import type { Meilisearch } from "$lib/generated"
   import type { PageData } from "./$types"
   import { invalidateAll } from "$app/navigation"
   import { browser } from "$app/environment"
@@ -37,22 +37,6 @@
       setViewportToDefault()
       search()
     }, INPUT_TIMER)
-  }
-
-  const hitProviderAmounts = (searchHits: Media[]) => {
-    providerAmounts = []
-    searchHits.forEach(hit => {
-      let combinedAmount = 0
-      if (hit.providers) {
-        if ("flatrate" in hit.providers.results[$currentCountry]) {
-          combinedAmount += hit.providers.results[$currentCountry]["flatrate"].length
-        }
-        if ("free" in hit.providers.results[$currentCountry]) {
-          combinedAmount += hit.providers.results[$currentCountry]["free"].length
-        }
-      }
-      providerAmounts.push(combinedAmount)
-    })
   }
 
   const setViewportToDefault = () => {
@@ -120,7 +104,7 @@
           )
     $inputQuery = input
     meilisearch = await res.json()
-    hitProviderAmounts(meilisearch.hits)
+    providerAmounts = hitProviderAmounts(meilisearch.hits, $currentCountry)
   }
 
   $: if (browser && data.providers) {
