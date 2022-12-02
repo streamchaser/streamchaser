@@ -59,15 +59,15 @@
 {#if media.length}
   <h1 class="text-center text-3xl pt-5">Starred in</h1>
   {#await refreshLookupMedia()}
-    <Spinner />
-  {:then med}
+    <Spinner timeout={false} />
+  {:then meilisearch}
     <div
       class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 gap-1 p-2 pt-4"
     >
-      {#each med.hits as media, index}
-        <MediaCard {media} mediaIndex={index} {providerAmounts} />
+      {#each meilisearch.hits as hit, index}
+        <MediaCard media={hit} mediaIndex={index} {providerAmounts} />
       {/each}
     </div>
-    <p class="text-center italic">Showing {med.hits.length} results</p>
+    <p class="text-center italic">Showing {meilisearch.hits.length} results</p>
   {/await}
 {/if}

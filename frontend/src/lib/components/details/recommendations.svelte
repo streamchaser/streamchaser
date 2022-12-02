@@ -53,8 +53,8 @@
 {#if recommendations.length && loadedPage}
   <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
   {#await lookupRecommendations()}
-    <Spinner />
-  {:then recs}
+    <Spinner timeout={false} />
+  {:then meilisearch}
     <div class="swiper-container px-2 mx-2">
       <Swiper
         style="
@@ -85,15 +85,11 @@
         freeMode={true}
         touchEventsTarget={{ touchEventsTarget: "container" }}
       >
-        {#each recs.hits as recommendation, index}
-          {#if recommendation.poster_path}
+        {#each meilisearch.hits as hit, index}
+          {#if hit.poster_path}
             <SwiperSlide>
               <div class="p-1 swiper-lazy">
-                <MediaCard
-                  media={recommendation}
-                  mediaIndex={index}
-                  {providerAmounts}
-                />
+                <MediaCard media={hit} mediaIndex={index} {providerAmounts} />
               </div>
             </SwiperSlide>
           {/if}
