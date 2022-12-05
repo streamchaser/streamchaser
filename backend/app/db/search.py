@@ -29,6 +29,4 @@ def search_client_config(index: str = "media"):
         ]
     )
 
-    client.index(index).update_settings(
-        {"synonyms": {"and": ["&"], "og": ["&"], "&": ["and", "og"]}}
-    )
+    client.index(index).update_settings({"synonyms": {"and": ["&"], "&": ["and"]}})
