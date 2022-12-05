@@ -107,6 +107,7 @@ async def full_setup(
     update_media(chunk_size=chunk_size, first_time=first_time, popularity=popularity)
     # Removes before indexing MeiliSearch
     await providers_to_redis()
+    await countries_to_redis()
     remove_blacklisted_from_search()
 
 
