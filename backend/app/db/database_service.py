@@ -39,7 +39,7 @@ async def countries_to_redis():
         country["name"] = country["english_name"]
         country.pop("english_name", None)
         country.pop("native_name", None)
-    print(countries)
+
     await redis.set("countries", json.dumps(countries))
 
 

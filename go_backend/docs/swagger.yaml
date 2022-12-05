@@ -24,41 +24,41 @@ paths:
   /:
     get:
       consumes:
-      - '*/*'
+        - "*/*"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/main.Health'
+            $ref: "#/definitions/main.Health"
       summary: Show the status of server.
   /countries:
     get:
       consumes:
-      - '*/*'
+        - "*/*"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/main.Country'
+              $ref: "#/definitions/main.Country"
             type: array
       summary: Gets the countries used by TMDB
   /genres:
     get:
       consumes:
-      - '*/*'
+        - "*/*"
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/main.Genre'
+              $ref: "#/definitions/main.Genre"
             type: array
       summary: Gets the genres used by TMDB
 swagger: "2.0"

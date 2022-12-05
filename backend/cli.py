@@ -77,9 +77,9 @@ def remove_blacklisted_from_search():
 @coroutine
 async def refresh_redis():
     """Flushes everything then adds genres and providers to Redis"""
-    # await redis.flushdb()
-    # await insert_genres_to_cache(get_genres())
-    # await providers_to_redis()
+    await redis.flushdb()
+    await insert_genres_to_cache(get_genres())
+    await providers_to_redis()
     await countries_to_redis()
 
 
