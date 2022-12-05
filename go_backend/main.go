@@ -7,9 +7,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 
-   docs "go_backend/docs"
-   swaggerFiles "github.com/swaggo/files"
-   ginSwagger "github.com/swaggo/gin-swagger"
+	docs "go_backend/docs"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 var ctx = context.Background()
@@ -26,7 +27,7 @@ const (
 
 func main() {
 	r := gin.Default()
-  docs.SwaggerInfo.BasePath = "/"
+	docs.SwaggerInfo.BasePath = "/"
 
 	r.Use(func(c *gin.Context) {})
 	r.Use(cors.New(cors.Config{
@@ -36,10 +37,10 @@ func main() {
 		AllowHeaders:     []string{"*"},
 	}))
 
-  r.GET("/", HealthCheck)
+	r.GET("/", DocsRedirect)
 	r.GET("/genres", GetGenres)
-  r.GET("/countries", GetCountries)
-  r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/countries", GetCountries)
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.Run(":9001")
 }

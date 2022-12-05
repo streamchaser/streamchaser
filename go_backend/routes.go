@@ -3,13 +3,10 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 
 	"github.com/gin-gonic/gin"
 )
-
-type Health struct {
-  Data string
-}
 
 type Genre struct {
 	Label string `json:"label"`
@@ -17,23 +14,22 @@ type Genre struct {
 }
 
 type Country struct {
-		Iso311661   string `json:"iso_3166_1"`
-    Name string `json:"name"`
+	Iso311661 string `json:"iso_3166_1"`
+	Name      string `json:"name"`
 }
 
-// HealthCheck godoc
-//	@Summary	Show the status of server.
+// DocsRedirect godoc
+//	@Summary	Redirects to the docs
 //	@Accept		*/*
-//	@Produce	json
-//	@Success	200	{object}	Health
+//	@Success	301
 //	@Router		/ [get]
-func HealthCheck(c *gin.Context) {
-   res := map[string]interface{}{
-      "data": "Server is up and running",
-   }
+func DocsRedirect(c *gin.Context) {
 
-   c.JSON(http.StatusOK, res)
+	location := url.URL{Path: "/docs/index.html"}
+	c.Redirect(http.StatusFound, location.RequestURI())
+
 }
+
 
 // GetGenres godoc
 //	@Summary	Gets the genres used by TMDB
@@ -61,14 +57,14 @@ func GetGenres(c *gin.Context) {
 //	@Success	200	{object}	[]Country
 //	@Router		/countries [get]
 func GetCountries(c *gin.Context) {
-  countryJson, err := Rdb.Get(ctx, "countries").Result()
-  if err != nil {
-    panic(err)
-  }
+	countryJson, err := Rdb.Get(ctx, "countries").Result()
+	if err != nil {
+		panic(err)
+	}
 
-  var countries []Country
+	var countries []Country
 
-  json.Unmarshal([]byte(countryJson), &countries)
+	json.Unmarshal([]byte(countryJson), &countries)
 
-  c.JSON(http.StatusOK, countries)
+	c.JSON(http.StatusOK, countries)
 }
