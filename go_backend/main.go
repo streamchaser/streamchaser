@@ -6,6 +6,11 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+
+	docs "go_backend/docs"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 var ctx = context.Background()
@@ -21,17 +26,21 @@ const (
 )
 
 func main() {
-	app := gin.Default()
+	r := gin.Default()
+	docs.SwaggerInfo.BasePath = "/"
 
-	// FIXME: The regex isn't working
-	// The streamchaser-xxx-vercel.app path isn't being let through
-	app.Use(func(c *gin.Context) {})
-	app.Use(cors.New(cors.Config{
+	r.Use(func(c *gin.Context) {})
+	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowCredentials: true,
 		AllowMethods:     []string{"*"},
 		AllowHeaders:     []string{"*"},
 	}))
-	go app.GET("/genres/", GetGenres)
-	app.Run("0.0.0.0:9001")
+
+	r.GET("/", DocsRedirect)
+	r.GET("/genres", GetGenres)
+	r.GET("/countries", GetCountries)
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	r.Run(":9001")
 }

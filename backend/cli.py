@@ -7,6 +7,7 @@ from app.api import get_genres
 from app.config import Environment
 from app.config import get_settings
 from app.db.cache import redis
+from app.db.database_service import countries_to_redis
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.search import client
@@ -74,19 +75,12 @@ def remove_blacklisted_from_search():
 
 @app.command()
 @coroutine
-async def fill_redis():
-    """Adds genres and providers to Redis"""
-    await insert_genres_to_cache(get_genres())
-    await providers_to_redis()
-
-
-@app.command()
-@coroutine
 async def refresh_redis():
     """Flushes everything then adds genres and providers to Redis"""
     await redis.flushdb()
     await insert_genres_to_cache(get_genres())
     await providers_to_redis()
+    await countries_to_redis()
 
 
 @app.command()
@@ -94,12 +88,6 @@ async def refresh_redis():
 async def flush_cache():
     """Flushes everything from Redis"""
     await redis.flushdb()
-
-
-@app.command()
-@coroutine
-async def genres_to_cache():
-    await insert_genres_to_cache(get_genres())
 
 
 @app.command()
@@ -119,13 +107,8 @@ async def full_setup(
     update_media(chunk_size=chunk_size, first_time=first_time, popularity=popularity)
     # Removes before indexing MeiliSearch
     await providers_to_redis()
+    await countries_to_redis()
     remove_blacklisted_from_search()
-
-
-@app.command()
-@coroutine
-async def providers_to_cache():
-    await providers_to_redis()
 
 
 @app.command()
