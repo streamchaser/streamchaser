@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { filters } from "$lib/stores/filters"
-  import { sorting } from "$lib/stores/sorting"
+  import { filters, sorting } from "$lib/stores/preferences"
 
   const contentTypes = ["Filters", "Sorting"]
 

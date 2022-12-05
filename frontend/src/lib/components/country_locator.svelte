@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { currentCountry, confirmedCountry } from "../stores/country"
+  import { currentCountry, confirmedCountry } from "$lib/stores/preferences"
   import { PYTHON_API } from "../variables"
 
   let hasError = false

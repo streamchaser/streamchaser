@@ -1,7 +1,7 @@
 <script lang="ts">
   import { themeChange } from "theme-change"
   import { onMount } from "svelte"
-  import { chosenTheme } from "../stores/theme.js"
+  import { chosenTheme } from "$lib/stores/preferences"
   import { THEMES } from "../variables.js"
 
   let isDropdownOpen = false

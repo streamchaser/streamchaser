@@ -55,22 +55,6 @@
   resolved "https://registry.yarnpkg.com/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
-"@macfja/serializer@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@macfja/serializer/-/serializer-1.1.2.tgz#02956d16dcc7a2371407d2aed6c583c8044d012f"
-  integrity sha512-kqEg3Zu5/g3ivdeb+jP4rBVVdmtKXVsRwH+x9KdM2Y7d2mKLq54g+YLSgTQ4KwJvWmyHFvRq0ouX5Dr4H1Hw3Q==
-
-"@macfja/svelte-persistent-store@^2.1.0":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@macfja/svelte-persistent-store/-/svelte-persistent-store-2.2.1.tgz#805a48b34b9dece351f7851172fb73a253cb8cee"
-  integrity sha512-3KI5w7uWR4jTTfXBZFDQQSTyv6j+OA80uTiSWdCnLHEzgpcl1jgQjb8xNL/mZO/GFp7lwToPDvyMXSk5mToaIQ==
-  dependencies:
-    "@macfja/serializer" "^1.1.2"
-    browser-cookies "^1.2.0"
-    idb-keyval "^5.1.3"
-    sjcl-codec-hex "^1.0.0"
-    sjcl-es "^2.0.0"
-
 "@mapbox/node-pre-gyp@^1.0.5":
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.10.tgz#8e6735ccebbb1581e5a7e652244cadc8a844d03c"
@@ -451,11 +435,6 @@ braces@^3.0.2, braces@~3.0.2:
   integrity sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==
   dependencies:
     fill-range "^7.0.1"
-
-browser-cookies@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/browser-cookies/-/browser-cookies-1.2.0.tgz#fca3ffb9b6a63aadc4d8c0999c6b57d0fa7d29b5"
-  integrity sha512-cg2WuoOJo+F+g2XjEaP8nmeRp1vDHjt7sqpKJMsTNXKrpyIBNVslYJeehvs6FEddj8usV2+qyRSBEX244yN5/g==
 
 browserslist@^4.21.4:
   version "4.21.4"
@@ -1006,13 +985,6 @@ https-proxy-agent@^5.0.0:
     agent-base "6"
     debug "4"
 
-idb-keyval@^5.1.3:
-  version "5.1.5"
-  resolved "https://registry.yarnpkg.com/idb-keyval/-/idb-keyval-5.1.5.tgz#be11174bac0cb756dba4cc86fb36b6cd63f5ce6d"
-  integrity sha512-J1utxYWQokYjy01LvDQ7WmiAtZCGUSkVi9EIBfUSyLOr/BesnMIxNGASTh9A1LzeISSjSqEPsfFdTss7EE7ofQ==
-  dependencies:
-    safari-14-idb-fix "^1.0.6"
-
 import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -1522,11 +1494,6 @@ sade@^1.7.4, sade@^1.8.1:
   dependencies:
     mri "^1.1.0"
 
-safari-14-idb-fix@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/safari-14-idb-fix/-/safari-14-idb-fix-1.0.6.tgz#cbaabc33a4500c44b5c432d6c525b0ed9b68bb65"
-  integrity sha512-oTEQOdMwRX+uCtWCKT1nx2gAeSdpr8elg/2gcaKUH00SJU2xWESfkx11nmXwTRHy7xfQoj1o4TTQvdmuBosTnA==
-
 safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
@@ -1584,23 +1551,6 @@ sirv@^2.0.2:
     "@polka/url" "^1.0.0-next.20"
     mrmime "^1.0.0"
     totalist "^3.0.0"
-
-sjcl-bit-array@~1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/sjcl-bit-array/-/sjcl-bit-array-1.0.0.tgz#0ad772b7be6c02bda6ccf36abc764f7a0eafb0f4"
-  integrity sha512-xoR134YJa7AHToLqCWuLYGpAdcBuLbSgwXe9c5HTIN4vr5TILXO/jVF8pLeXDhC7JTOvpmXUkiOupawVNTZVdQ==
-
-sjcl-codec-hex@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/sjcl-codec-hex/-/sjcl-codec-hex-1.0.0.tgz#a710dfbaad9483b1b0c60aac5c4bace22ec0f25d"
-  integrity sha512-lBBjqky1BEH+WZdABR/iSl2Pu3HO8n8r2D7nkzYLZfcR9ke4kUGMvO0ztRkla5oi4Esbc9pOlBtyGeMjYOU0ng==
-  dependencies:
-    sjcl-bit-array "~1.0.0"
-
-sjcl-es@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/sjcl-es/-/sjcl-es-2.0.0.tgz#23030ca2eda9e324bbaf27f6b86221d37431144d"
-  integrity sha512-P8O+4pAt95XqmTlvvPdbmBggjAgSE0LQnhSEYUKYKepN176b/8K9zcVrrqhuLu5EUQyeCYy/56J9FzxvzvMavg==
 
 sorcery@^0.10.0:
   version "0.10.0"
