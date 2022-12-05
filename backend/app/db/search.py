@@ -28,3 +28,5 @@ def search_client_config(index: str = "media"):
             "proximity",
         ]
     )
+
+    client.index(index).update_settings({"synonyms": {"and": ["&"], "&": ["and"]}})
