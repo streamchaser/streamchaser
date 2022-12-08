@@ -41,3 +41,4 @@ go_backend/go_backend
 go_backend/tmp
 internal/tmp
 go_backend/docs/*
+internal/docs/*
