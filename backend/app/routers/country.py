@@ -38,6 +38,7 @@ async def lookup_country():
 
     if payload.get("location"):
         country_code = payload["location"]["country"]["code"]
+        # TODO: Needs to be updated. Should use the dynamic countries
         if country_code in get_settings().supported_country_codes:
             return country_code
 

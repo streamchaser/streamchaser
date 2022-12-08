@@ -80,6 +80,11 @@ app.include_router(image.router)
 app.include_router(stats.router)
 
 
+@app.get("/flag")
+async def _():
+    return chr(ord("G") + 127397) + chr(ord("B") + 127397)
+
+
 @app.get("/")
 async def root() -> dict | RedirectResponse:
     """Home page"""

@@ -1,7 +1,11 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
+  import type { main_Country } from "$lib/generated/go"
+
   import CountrySelector from "../country_selector.svelte"
   import ThemeSelector from "../theme_selector.svelte"
+
+  export let countries: main_Country[]
 
   let isDropdownOpen = false
 
@@ -73,7 +77,7 @@
         style:visibility={isDropdownOpen ? "visible" : "hidden"}
       >
         <li>
-          <CountrySelector />
+          <CountrySelector {countries} />
         </li>
         <li><a href="/faq">FAQ</a></li>
         <li><a href="/about">About</a></li>

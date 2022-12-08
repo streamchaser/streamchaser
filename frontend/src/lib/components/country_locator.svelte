@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte"
   import { currentCountry, confirmedCountry } from "$lib/stores/preferences"
-  import { PYTHON_API } from "../variables"
+  import { PYTHON_API } from "$lib/variables"
 
   let hasError = false
   let errorMsg: string
