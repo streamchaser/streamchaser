@@ -7,7 +7,7 @@ import { env } from "$env/dynamic/public"
 // TODO: Kill this with fire, when https://github.com/sveltejs/kit/issues/5606 is fixed
 export const ssr = env.PUBLIC_ENV && env.PUBLIC_ENV === "prod"
 
-const GENRE_URL = `${GO_API}/genres/`
+const GENRE_URL = `${GO_API}/genres`
 const PROVIDER_URL = `${PYTHON_API}/providers/`
 
 export const load: PageLoad = async ({ fetch }) => {
