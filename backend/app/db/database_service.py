@@ -40,11 +40,15 @@ async def countries_to_redis():
 
     countries = res.json()
     for country in countries:
-        country["name"] = country["english_name"]
+        country["label"] = country["english_name"]
+        country["value"] = country["iso_3166_1"]
         country.pop("english_name", None)
         country.pop("native_name", None)
+        country.pop("iso_3166_1", None)
 
-    await redis.set("countries", json.dumps(countries))
+    sorted_countries = sorted(countries, key=lambda country: country["label"])
+
+    await redis.set("countries", json.dumps(sorted_countries))
 
 
 async def providers_to_redis():
