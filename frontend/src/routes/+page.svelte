@@ -5,12 +5,14 @@
   import MediaSearch from "$lib/components/media_search.svelte"
   import Filters from "$lib/components/filters.svelte"
   import Head from "$lib/components/head.svelte"
-  import { currentCountry } from "$lib/stores/country.js"
-  import { currentProviders } from "$lib/stores/providers.js"
-  import { currentGenres } from "$lib/stores/genres"
-  import { inputQuery } from "$lib/stores/input"
-  import { filters } from "$lib/stores/filters.js"
-  import { sorting } from "$lib/stores/sorting.js"
+  import {
+    currentCountry,
+    currentProviders,
+    currentGenres,
+    inputQuery,
+    filters,
+    sorting,
+  } from "$lib/stores/preferences"
   import { onMount } from "svelte"
   import type { Meilisearch } from "$lib/generated"
   import type { PageData } from "./$types"

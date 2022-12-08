@@ -6,7 +6,7 @@
     removeContentWithMissingImagePath,
   } from "$lib/utils"
   import type { Media } from "$lib/types"
-  import { currentCountry } from "$lib/stores/country"
+  import { currentCountry } from "$lib/stores/preferences"
   import Spinner from "$lib/components/loading/spinner.svelte"
   import { lookupMedia } from "$lib/utils"
 

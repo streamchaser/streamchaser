@@ -1,6 +1,6 @@
 import type { PageLoad } from "./$types"
 import { GO_API, PYTHON_API } from "$lib/variables.js"
-import { currentCountry } from "$lib/stores/country.js"
+import { currentCountry } from "$lib/stores/preferences"
 import type { Genre, Provider } from "$lib/generated"
 import { env } from "$env/dynamic/public"
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fade } from "svelte/transition"
   import { mediaIdToUrlConverter, uniqueProviders } from "$lib/utils"
-  import { currentCountry } from "$lib/stores/country"
+  import { currentCountry } from "$lib/stores/preferences"
   import { IMG_ORIGINAL, IMG_W342 } from "$lib/variables"
   import type { Hit } from "$lib/generated"
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fade } from "svelte/transition"
   import type { Genre } from "../types"
-  import { filters } from "../stores/filters.js"
+  import { filters } from "$lib/stores/preferences"
 
   export let currentProviders: { index: number; label: string; value: string }[]
   export let currentGenres: Genre[]

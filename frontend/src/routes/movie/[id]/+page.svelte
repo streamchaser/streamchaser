@@ -1,6 +1,6 @@
 <script lang="ts">
   import { IMG_ORIGINAL } from "$lib/variables.js"
-  import { currentCountry } from "$lib/stores/country.js"
+  import { currentCountry } from "$lib/stores/preferences"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
