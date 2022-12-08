@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +17,26 @@ var meilisearchClient = meilisearch.NewClient(meilisearch.ClientConfig{
 	APIKey: "masterKey",
 })
 
+// DocsRedirect godoc
+//
+//	@Summary	Redirects to the docs
+//	@Accept		*/*
+//	@Success	301
+//	@Router		/ [get]
+func DocsRedirect(c *gin.Context) {
+	location := url.URL{Path: "/docs/index.html"}
+	c.Redirect(http.StatusFound, location.RequestURI())
+}
 
+
+// processIds godoc
+//
+//	@Summary	Takes list of ids, fetch from TMDB, and put into Meilisearch
+//	@Accept		json
+//  @Produce  json
+//  @Param    Ids body MediaIds true "ids to fetch"
+//	@Success	200
+//	@Router		/update-media [post]
 func processIds(c *gin.Context) {
 	media := MediaIds{}
 

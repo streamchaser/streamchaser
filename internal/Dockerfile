@@ -4,11 +4,12 @@ WORKDIR /app
 
 EXPOSE 8888
 
-COPY go.mod ./
-COPY go.sum ./
+COPY . .
+
 RUN go mod download
 
-COPY *.go ./
+RUN go install github.com/swaggo/swag/cmd/swag@latest
+RUN swag init
 
 RUN CGO_ENABLED=0 go build -o internal .
 
@@ -27,4 +28,4 @@ FROM base as dev
 WORKDIR /app
 
 RUN go install github.com/cosmtrek/air@latest
-CMD air
+CMD air --build.cmd "swag init && go build -o ./tmp/main ." --build.exclude_dir "docs"
