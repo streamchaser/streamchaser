@@ -68,7 +68,7 @@ export const chosenTheme = writable<string>(
 
 chosenTheme.subscribe(value => {
   if (browser) {
-    localStorage.chosenTheme = value
+    localStorage.chosenTheme = JSON.stringify(value)
   }
 })
 
@@ -78,7 +78,7 @@ export const currentCountry = writable<string>(
 
 currentCountry.subscribe(value => {
   if (browser) {
-    localStorage.currentCountry = value
+    localStorage.currentCountry = JSON.stringify(value)
   }
 })
 
