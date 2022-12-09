@@ -29,8 +29,8 @@ def search_client_config(index: str = "media"):
     client.index(index).update_ranking_rules(
         [
             "words",
-            "exactness",
             "sort",
+            "exactness",
             "popularity:desc",
             "typo",
             "attribute",
