@@ -9,7 +9,7 @@
   import CountryLocator from "$lib/components/country_locator.svelte"
 </script>
 
-<div class="flex flex-col h-screen">
+<div class="flex flex-col h-screen pl-full">
   <!-- Query for mobile -->
   <MediaQuery query="(max-width: 640px)" let:matches>
     {#if matches}
