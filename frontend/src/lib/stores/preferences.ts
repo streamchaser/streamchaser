@@ -1,5 +1,6 @@
 import { writable } from "svelte/store"
 import { browser } from "$app/environment"
+import { setDefaultCountry } from "$lib/utils"
 
 export const currentGenres = writable<string[]>(
   browser && sessionStorage.getItem("currentGenres") !== null
@@ -68,17 +69,15 @@ export const chosenTheme = writable<string>(
 
 chosenTheme.subscribe(value => {
   if (browser) {
-    localStorage.chosenTheme = JSON.stringify(value)
+    localStorage.chosenTheme = value
   }
 })
 
-export const currentCountry = writable<string>(
-  (browser && localStorage.currentCountry) || "DK"
-)
+export const currentCountry = writable<string>(setDefaultCountry())
 
 currentCountry.subscribe(value => {
   if (browser) {
-    localStorage.currentCountry = JSON.stringify(value)
+    localStorage.currentCountry = value
   }
 })
 
