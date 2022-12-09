@@ -49,7 +49,7 @@ func processIds(c *gin.Context) {
 	var wg sync.WaitGroup
 	movieCh := make(chan Movie, len(media.Ids))
 	tvCh := make(chan TV, len(media.Ids))
-	guardCh := make(chan int, 100)
+	guardCh := make(chan int, 1000)
 	medias := []Media{}
 	for _, id := range media.Ids {
 		guardCh <- 1
