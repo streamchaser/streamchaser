@@ -12,6 +12,7 @@ from app.routers import movie
 from app.routers import person
 from app.routers import providers
 from app.routers import search
+from app.routers import stats
 from app.routers import tv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -76,6 +77,7 @@ app.include_router(search.router)
 app.include_router(person.router)
 app.include_router(country.router)
 app.include_router(image.router)
+app.include_router(stats.router)
 
 
 @app.get("/")
