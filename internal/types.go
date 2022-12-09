@@ -4,21 +4,24 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Media struct {
-	Id                         string   `json:"id"`
-	Type                       string   `json:"type"`
-	Title                      string   `json:"title"`
-	OriginalTitle              string   `json:"original_title"`
-	Overview                   string   `json:"overview"`
-	ReleaseDate                string   `json:"release_date"`
-	Genres                     []string `json:"genres"`
-	PosterPath                 string   `json:"poster_path"`
-	Popularity                 float32  `json:"popularity"`
-	SupportedProviderCountries []string `json:"supported_provider_countries"`
-	Providers                  Provider `json:"providers"`
-	TitleTranslations          string   `json:"title_translations"`
+	Id                         string    `json:"id"`
+	Type                       string    `json:"type"`
+	Title                      string    `json:"title"`
+	OriginalTitle              string    `json:"original_title"`
+	Overview                   string    `json:"overview"`
+	ReleaseDate                string    `json:"release_date"`
+	Genres                     []string  `json:"genres"`
+	PosterPath                 string    `json:"poster_path"`
+	Popularity                 float32   `json:"popularity"`
+	SupportedProviderCountries []string  `json:"supported_provider_countries"`
+	Providers                  Provider  `json:"providers"`
+	TitleTranslations          string    `json:"title_translations"`
+	UpdatedAt                  time.Time `json:"updated_at"`
+	UpdatedAtUnix              int64     `json:"updated_at_unix"`
 }
 
 type Movie struct {
@@ -56,6 +59,8 @@ func (movie *Movie) toMedia() *Media {
 		SupportedProviderCountries: getSupportedProviderCountries(movie.Providers),
 		Providers:                  movie.Providers,
 		TitleTranslations:          concatenateTranslatedTitles(movie.Translations),
+		UpdatedAt:                  time.Now(),
+		UpdatedAtUnix:              time.Now().Unix(),
 	}
 }
 
@@ -94,6 +99,8 @@ func (tv *TV) toMedia() *Media {
 		SupportedProviderCountries: getSupportedProviderCountries(tv.Providers),
 		Providers:                  tv.Providers,
 		TitleTranslations:          concatenateTranslatedTitles(tv.Translations),
+		UpdatedAt:                  time.Now(),
+		UpdatedAtUnix:              time.Now().Unix(),
 	}
 }
 
@@ -131,8 +138,8 @@ type Translations struct {
 }
 
 type FinalTranslations map[string]struct {
-	Title    string `json:title`
-	Overview string `json:overview`
+	Title    string `json:"title"`
+	Overview string `json:"overview"`
 }
 
 type MediaIds struct {
