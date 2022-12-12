@@ -2,9 +2,15 @@ import { browser } from "$app/environment"
 import { writable } from "svelte/store"
 
 export interface CookieSelection {
-  allowMarketing: boolean
   allowPreference: boolean
-  allowAnalytical: boolean
+  allowStatistical: boolean
+}
+
+export interface CookieType {
+  name: string
+  type?: string
+  description: string
+  cookieAmount: number
 }
 
 export const allowNecessaryCookies = writable<boolean>(
