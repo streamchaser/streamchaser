@@ -119,7 +119,7 @@ async def full_setup(
     await providers_to_redis()
     await countries_to_redis()
     remove_blacklisted_from_search()
-    await remove_stale_media() # TODO: remove when it is it's own cronjob
+    await remove_stale_media()  # TODO: remove when it is it's own cronjob
 
 
 @app.command()
