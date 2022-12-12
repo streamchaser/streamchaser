@@ -22,7 +22,6 @@
   export let data: PageData
 
   const SEARCH_URL = `${PYTHON_API}/search/`
-  const INPUT_TIMER = 200
 
   let input = ""
   let timer: NodeJS.Timeout
@@ -31,15 +30,6 @@
   let viewPortWidth: number
   let currentMediaAmount: number
   let mediaStartAmount: number
-
-  // run search if we haven't received input in the last 200ms
-  const debounceInput = () => {
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      setViewportToDefault()
-      search()
-    }, INPUT_TIMER)
-  }
 
   const setViewportToDefault = () => {
     viewPortWidth = window.visualViewport.width
@@ -155,7 +145,7 @@
       placeholder="Search in {$currentCountry}"
       class="input input-bordered input-primary grow min-w-0 hover:border-primary-focus"
       bind:value={input}
-      on:input={debounceInput}
+      on:input={search}
       autofocus={viewPortWidth > 640}
     />
     <Filters {search} />
