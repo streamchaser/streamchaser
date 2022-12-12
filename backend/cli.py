@@ -10,6 +10,7 @@ from app.db.cache import redis
 from app.db.database_service import countries_to_redis
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
+from app.db.database_service import remove_stale_media
 from app.db.search import client
 from app.db.search import search_client_config
 from app.util import chunkify
@@ -51,7 +52,10 @@ def update_media(
         fetch_media_ids(popularity) if first_time else fetch_changed_media_ids()
     )
 
-    print(f"\nAbout to update {len(movie_ids)} movies and {len(tv_ids)} TV shows")
+    print(
+        f"\nAbout to update {len(movie_ids)} movies and {len(tv_ids)} TV shows"
+        f" in chunks of {chunk_size}"
+    )
 
     with httpx.Client(http2=True, timeout=60) as client:
         for media in zip(["movies", "tv shows"], [movie_ids, tv_ids]):
@@ -62,6 +66,12 @@ def update_media(
                 desc=f"Updating {media[0]}",
             ):
                 client.post("http://internal:8888/update-media", json={"ids": id_chunk})
+
+
+@app.command()
+@coroutine
+async def clear_stale_media_from_search(days_for_expiry: int = 3):
+    await remove_stale_media(days_for_expiry)
 
 
 @app.command()
@@ -109,6 +119,7 @@ async def full_setup(
     await providers_to_redis()
     await countries_to_redis()
     remove_blacklisted_from_search()
+    await remove_stale_media()  # TODO: remove when it is it's own cronjob
 
 
 @app.command()

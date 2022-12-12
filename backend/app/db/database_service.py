@@ -1,10 +1,14 @@
 import asyncio
 import json
+from datetime import date
+from datetime import timedelta
 
 import httpx
 from app.config import get_settings
 from app.db.cache import Genre
 from app.db.cache import redis
+from app.db.search import async_client
+from app.db.search import client
 from tqdm import tqdm
 
 
@@ -94,3 +98,30 @@ async def providers_to_redis():
             f"{country_code}_providers",
             json.dumps(sorted_provider_data),
         )
+
+
+async def remove_stale_media(days_for_expiry=3):
+    """Will remove all media that havn't been updated in 3 days
+    (the ones that float around 1 popularity or have been removed by TMDB)"""
+    print(f"Removing media that hasn't been updated the last {days_for_expiry} days")
+    expiry_date = (date.today() - timedelta(days_for_expiry)).strftime("%s")
+
+    estimated_total_hits = 1000
+    while estimated_total_hits == 1000:  # 1000 means there is probably more
+        documents = await async_client.index("media").search(
+            limit=1000,  # Max limit is 1000
+            filter=[f"updated_at_unix < {expiry_date}"],
+            sort=["updated_at_unix:asc"],
+            attributes_to_retrieve=[
+                "id",
+            ],
+        )
+
+        estimated_total_hits = documents.estimated_total_hits
+
+        ids = [document["id"] for document in documents.hits]
+
+        if ids:
+            task = await async_client.index("media").delete_documents(ids)
+
+            client.wait_for_task(uid=task.task_uid)
