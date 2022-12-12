@@ -10,7 +10,6 @@ export interface CookieType {
   name: string
   type?: string
   description: string
-  cookieAmount: number
 }
 
 export const allowNecessaryCookies = writable<boolean>(
