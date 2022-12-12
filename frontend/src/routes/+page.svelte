@@ -24,7 +24,6 @@
   const SEARCH_URL = `${PYTHON_API}/search/`
 
   let input = ""
-  let timer: NodeJS.Timeout
   let meilisearch: Meilisearch
   let providerAmounts: number[] = []
   let viewPortWidth: number
@@ -79,7 +78,7 @@
       input !== ""
         ? await fetch(
             SEARCH_URL +
-              input +
+              input.replace(/[^\w\d\s\&]/g, " ") +
               "?c=" +
               $currentCountry +
               query +
