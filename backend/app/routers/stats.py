@@ -9,7 +9,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=ClientStats)
+@router.get("", response_model=ClientStats)
 async def get_all_stats() -> ClientStats:
     """Specific Movie page"""
     return await async_client.get_all_stats()

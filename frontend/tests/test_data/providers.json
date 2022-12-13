@@ -1,42 +1,284 @@
 [
-  "Acorn TV",
-  "Amazon Prime Video",
-  "Apple TV Plus",
-  "Argo",
-  "BroadwayHD",
-  "C More",
-  "Classix",
-  "Crunchyroll",
-  "Cultpix",
-  "Curiosity Stream",
-  "DOCSVILLE",
-  "Dansk Filmskat",
-  "Dekkoo",
-  "Discovery Plus",
-  "Disney Plus",
-  "DocAlliance Films",
-  "FilmBox+",
-  "Filmstriben",
-  "GuideDoc",
-  "HBO",
-  "HBO Max",
-  "Hoichoi",
-  "Magellan TV",
-  "Mubi",
-  "Netflix",
-  "Netflix Kids",
-  "Paramount Plus",
-  "TV 2",
-  "True Story",
-  "Viaplay",
-  "WAKANIM",
-  "WOW Presents Plus",
-  "YouTube Premium",
-  "hayu",
-  "Amazon Prime Video",
-  "Cultpix",
-  "DRTV",
-  "Eventive",
-  "Hoichoi",
-  "Spamflix"
+  {
+    "provider_name": "Acorn TV",
+    "display_priority": 16,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Amazon Prime Video",
+    "display_priority": 2,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Apple TV Plus",
+    "display_priority": 12,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Apple iTunes",
+    "display_priority": 7,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Blockbuster",
+    "display_priority": 20,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "BritBox",
+    "display_priority": 38,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "BroadwayHD",
+    "display_priority": 27,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "C More",
+    "display_priority": 5,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Classix",
+    "display_priority": 44,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Crunchyroll",
+    "display_priority": 16,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Cultpix",
+    "display_priority": 36,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Curiosity Stream",
+    "display_priority": 22,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "DOCSVILLE",
+    "display_priority": 23,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "DRTV",
+    "display_priority": 34,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Dansk Filmskat",
+    "display_priority": 33,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Dekkoo",
+    "display_priority": 29,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Disney Plus",
+    "display_priority": 1,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "DocAlliance Films",
+    "display_priority": 31,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Eventive",
+    "display_priority": 35,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "FilmBox+",
+    "display_priority": 37,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Filmstriben",
+    "display_priority": 19,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Filmzie",
+    "display_priority": 28,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Google Play Movies",
+    "display_priority": 8,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "GuideDoc",
+    "display_priority": 13,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "HBO Max",
+    "display_priority": 3,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Hayu",
+    "display_priority": 4,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Hoichoi",
+    "display_priority": 32,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Lionsgate Plus",
+    "display_priority": 42,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "MUBI",
+    "display_priority": 11,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Magellan TV",
+    "display_priority": 26,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Microsoft Store",
+    "display_priority": 10,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Netflix",
+    "display_priority": 0,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Netflix Kids",
+    "display_priority": 14,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Paramount Plus",
+    "display_priority": 9,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Pluto TV",
+    "display_priority": 39,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Rakuten TV",
+    "display_priority": 18,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "SF Anytime",
+    "display_priority": 21,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "SkyShowtime",
+    "display_priority": 40,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Spamflix",
+    "display_priority": 24,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Sun Nxt",
+    "display_priority": 43,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "TV 2",
+    "display_priority": 9,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Takflix",
+    "display_priority": 41,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "True Story",
+    "display_priority": 30,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "Viaplay",
+    "display_priority": 6,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "WAKANIM",
+    "display_priority": 17,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "WOW Presents Plus",
+    "display_priority": 25,
+    "provider_id": null,
+    "logo_path": null
+  },
+  {
+    "provider_name": "YouTube Premium",
+    "display_priority": 15,
+    "provider_id": null,
+    "logo_path": null
+  }
 ]
