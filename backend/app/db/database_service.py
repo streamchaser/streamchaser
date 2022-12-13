@@ -9,6 +9,7 @@ from app.db.cache import Genre
 from app.db.cache import redis
 from app.db.search import async_client
 from app.db.search import client
+from meilisearch_python_async.errors import MeiliSearchApiError
 from tqdm import tqdm
 
 
@@ -39,12 +40,45 @@ async def countries_to_redis():
         res = await client.get(countries_url)
 
     countries = res.json()
-    for country in countries:
-        country["name"] = country["english_name"]
+    for country in tqdm(countries, desc="Creating flags"):
+        country_code = country["iso_3166_1"]
+        unicode_flag = chr(ord(country_code[0]) + 127397) + chr(
+            ord(country_code[1]) + 127397
+        )
+
+        country["label"] = f"{unicode_flag} {country['english_name']}"
+        country["value"] = country_code
+
         country.pop("english_name", None)
         country.pop("native_name", None)
+        country.pop("iso_3166_1", None)
 
-    await redis.set("countries", json.dumps(countries))
+    sorted_countries = sorted(countries, key=lambda country: country["label"])
+
+    try:
+        documents = await async_client.index("media").get_documents(
+            limit=1_000_000, fields=["supported_provider_countries"]
+        )
+
+        # Gather and flatten supported country providers into set
+        supported_countries = {
+            country
+            for document in documents.results
+            for country in document["supported_provider_countries"]
+        }
+
+        # Filter out countries that are not supported by any media
+        sorted_countries = [
+            country
+            for country in sorted_countries
+            if country["value"] in supported_countries
+        ]
+        print("Successfully filtered supported countries")
+    except MeiliSearchApiError as e:
+        # Happens when running for the first time(empty meilisearch)
+        print("First time running the setup(empty database)", e)
+
+    await redis.set("countries", json.dumps(sorted_countries))
 
 
 async def providers_to_redis():

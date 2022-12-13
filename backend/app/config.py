@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     ipregistry_key: str = "tryout"
     tmdb_key: str = "no key"
     tmdb_url: str = "https://api.themoviedb.org/3/"
-    supported_country_codes: list[str] = [
+    supported_country_codes: list[str] = [  # TODO: Kill with fire
         "AR",
         "AU",
         "AT",

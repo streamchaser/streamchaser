@@ -14,8 +14,8 @@ type Genre struct {
 }
 
 type Country struct {
-	Iso311661 string `json:"iso_3166_1"`
-	Name      string `json:"name"`
+	Label string `json:"label"`
+	Value string `json:"value"`
 }
 
 // DocsRedirect godoc
@@ -29,7 +29,6 @@ func DocsRedirect(c *gin.Context) {
 	c.Redirect(http.StatusFound, location.RequestURI())
 
 }
-
 
 // GetGenres godoc
 //	@Summary	Gets the genres used by TMDB

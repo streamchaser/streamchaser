@@ -111,13 +111,13 @@ async def full_setup(
     popularity: float = 1, first_time: bool = False, chunk_size: int = 25000
 ):
     await insert_genres_to_cache(get_genres())
+    await providers_to_redis()
+    await countries_to_redis()
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
         search_client_config()
     update_media(chunk_size=chunk_size, first_time=first_time, popularity=popularity)
     # Removes before indexing MeiliSearch
-    await providers_to_redis()
-    await countries_to_redis()
     remove_blacklisted_from_search()
     await remove_stale_media()  # TODO: remove when it is it's own cronjob
 

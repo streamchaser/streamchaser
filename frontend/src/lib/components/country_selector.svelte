@@ -1,11 +1,38 @@
 <script lang="ts">
-  import { COUNTRIES } from "../variables.js"
   import { currentCountry } from "$lib/stores/preferences"
+  import type { main_Country } from "$lib/generated/go/index.js"
+  import Select from "svelte-select"
+
+  export let countries: main_Country[]
 </script>
 
-<select bind:value={$currentCountry} class="select select-bordered max-sm">
-  <option disabled={true}>Choose country</option>
-  {#each COUNTRIES as country}
-    <option value={country.value}>{country.icon} {country.name}</option>
-  {/each}
-</select>
+<div
+  class="w-60"
+  style="
+   --borderRadius: var(--rounded-btn, .5rem);
+   --background: hsl(var(--b1));
+   --border: 1px solid hsl(var(--p));
+   --borderFocusColor: hsl(var(--p));
+   --borderHoverColor: hsl(var(--pf));
+   --itemColor: hsl(var(--er));
+   --itemIsActiveBG: hsl(var(--pf));
+   --itemIsActiveColor: hsl(var(--pc));
+   --clearSelectHoverColor: hsl(var(--pf));
+   --itemColor: hsl(var(--nc));
+   --listBackground: hsl(var(--n));
+   --itemHoverBG: hsl(var(--p));
+   --itemHoverColor: hsl(var(--pc));
+   --inputColor: hsl(var(--bc));
+   --clearSelectFocusColor: hsl(var(--p));
+  "
+>
+  <Select
+    value={$currentCountry}
+    on:select={e => {
+      $currentCountry = e.detail.value
+    }}
+    items={countries}
+    placeholder="Select country..."
+    isClearable={false}
+  />
+</div>

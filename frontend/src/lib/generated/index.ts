@@ -5,7 +5,6 @@
 export type { Genre } from "./models/Genre"
 export type { Hit } from "./models/Hit"
 export type { HTTPValidationError } from "./models/HTTPValidationError"
-export type { Media } from "./models/Media"
 export type { Meilisearch } from "./models/Meilisearch"
 export type { Movie } from "./models/Movie"
 export { Order } from "./models/Order"
