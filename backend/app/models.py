@@ -57,6 +57,8 @@ class Movie(BaseModel):
     runtime: int | None
     flatrate_providers: list[dict] | None
     free_providers: list[dict] | None
+    rent_providers: list[dict] | None
+    buy_providers: list[dict] | None
     recommendations: list[dict]
     poster_path: str | None
     popularity: int
@@ -74,6 +76,8 @@ class TV(BaseModel):
     episode_run_time: list[int]
     flatrate_providers: list[dict] | None
     free_providers: list[dict] | None
+    rent_providers: list[dict] | None
+    buy_providers: list[dict] | None
     recommendations: list[dict] | None
     poster_path: str | None
     popularity: int

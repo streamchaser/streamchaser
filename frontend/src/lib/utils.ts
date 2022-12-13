@@ -115,6 +115,12 @@ export const hitProviderAmounts = (searchHits: Hit[], country: string) => {
       if ("free" in hit.providers.results[country]) {
         combinedAmount += hit.providers.results[country]["free"].length
       }
+      if ("rent" in hit.providers.results[country]) {
+        combinedAmount += hit.providers.results[country]["rent"].length
+      }
+      if ("buy" in hit.providers.results[country]) {
+        combinedAmount += hit.providers.results[country]["buy"].length
+      }
     }
     providerAmounts.push(combinedAmount)
   })

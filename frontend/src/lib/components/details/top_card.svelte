@@ -14,6 +14,8 @@
   export let genres: string[]
   export let freeProviders: Provider[]
   export let flatrateProviders: Provider[]
+  export let rentProviders: Provider[]
+  export let buyProviders: Provider[]
   export let runtime: number
   export let imdbId: string
   export let releaseDate: string
@@ -114,8 +116,8 @@
     </div>
   </div>
 
-  {#if freeProviders || flatrateProviders}
-    {#if !freeProviders.length && !flatrateProviders.length}
+  {#if freeProviders || flatrateProviders || rentProviders || buyProviders}
+    {#if !freeProviders.length && !flatrateProviders.length && !rentProviders.length && !buyProviders.length}
       <div class="pt-5">
         <div class="badge badge-lg shadow-2xl">
           No providers in {$currentCountry}
@@ -125,7 +127,10 @@
       <div class="sm:flex sm:justify-center grid grid-cols-4 pt-5">
         <!-- TODO: We dont want to do this, but due to a tmdb issue we need to remove HBO manually -->
         <!-- https://github.com/streamchaser/streamchaser/issues/286 -->
-        {#each uniqueProviders(freeProviders.concat(flatrateProviders)).filter(p => p.provider_name !== "HBO") as provider}
+        {#each uniqueProviders(freeProviders
+            .concat(flatrateProviders)
+            .concat(rentProviders)
+            .concat(buyProviders)).filter(p => p.provider_name !== "HBO") as provider}
           <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
             <div
               data-tip={provider.provider_name}

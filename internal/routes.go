@@ -42,7 +42,7 @@ func processIds(c *gin.Context) {
 
 	c.Bind(&media)
 	if len(media.Ids) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"info": "Please provide id's to fetch"})
+		c.JSON(http.StatusBadRequest, gin.H{"info": "Please provide ids to fetch"})
 		return
 	}
 
@@ -120,7 +120,7 @@ func fetchMovie(id string, movieCh chan Movie) {
 	errDecode := json.NewDecoder(res.Body).Decode(&movie)
 	if errDecode != nil {
 		fmt.Println("Failed to decode movie:", id, errDecode)
-		// Adds a dummy movie that will be filtered out when exhasting the channel
+		// Adds a dummy movie that will be filtered out when exhausting the channel
 		movieCh <- Movie{Id: -1}
 		return
 	}
@@ -144,7 +144,7 @@ func fetchTV(id string, TVCh chan TV) {
 	errDecode := json.NewDecoder(res.Body).Decode(&tv)
 	if errDecode != nil {
 		fmt.Println("Failed to decode tv-series: ", id, errDecode)
-		// Adds a dummy tv that will be filtered out when exhasting the channel
+		// Adds a dummy tv that will be filtered out when exhausting the channel
 		TVCh <- TV{Id: -1}
 		return
 	}
