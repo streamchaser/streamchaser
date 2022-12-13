@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[Genre])
+@router.get("", response_model=list[Genre])
 async def read_all_genres():
     """Reads all genres, returns only name and value"""
     return json.loads(await redis.get("genres"))

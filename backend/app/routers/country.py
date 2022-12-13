@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("")
 async def lookup_country():
     """Uses the client's ip-address to return their country code"""
     key = get_settings().ipregistry_key

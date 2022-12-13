@@ -1,137 +1,352 @@
 {
   "hits": [
     {
-      "original_title": "Harry Potter and the Philosopher's Stone",
-      "title": "Harry Potter and the Philosopher's Stone",
-      "id": "m671",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Adventure", "Fantasy"],
-      "poster_path": "/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
-      "popularity": 214,
-      "provider_names": ["HBO Max", "HBO"],
-      "providers": [
-        {
-          "display_priority": 8,
-          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
-          "provider_id": 384,
-          "provider_name": "HBO Max"
-        },
-        {
-          "display_priority": 36,
-          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
-          "provider_id": 118,
-          "provider_name": "HBO"
-        }
-      ]
-    },
-    {
-      "original_title": "Harry Potter and the Chamber of Secrets",
-      "title": "Harry Potter and the Chamber of Secrets",
       "id": "m672",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Adventure", "Fantasy"],
+      "title": "Harry Potter and the Chamber of Secrets",
       "poster_path": "/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg",
-      "popularity": 190,
-      "provider_names": ["HBO Max", "HBO"],
-      "providers": [
-        {
-          "display_priority": 8,
-          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
-          "provider_id": 384,
-          "provider_name": "HBO Max"
-        },
-        {
-          "display_priority": 36,
-          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
-          "provider_id": 118,
-          "provider_name": "HBO"
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              },
+              {
+                "provider_name": "HBO",
+                "display_priority": 1000,
+                "provider_id": 118,
+                "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg"
+              }
+            ]
+          }
         }
-      ]
+      }
     },
     {
-      "original_title": "Harry Potter and the Half-Blood Prince",
-      "title": "Harry Potter and the Half-Blood Prince",
+      "id": "m671",
+      "title": "Harry Potter and the Philosopher's Stone",
+      "poster_path": "/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              },
+              {
+                "provider_name": "HBO",
+                "display_priority": 1000,
+                "provider_id": 118,
+                "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
       "id": "m767",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Adventure", "Fantasy"],
+      "title": "Harry Potter and the Half-Blood Prince",
       "poster_path": "/z7uo9zmQdQwU5ZJHFpv2Upl30i1.jpg",
-      "popularity": 188,
-      "provider_names": ["HBO Max", "HBO"],
-      "providers": [
-        {
-          "display_priority": 8,
-          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
-          "provider_id": 384,
-          "provider_name": "HBO Max"
-        },
-        {
-          "display_priority": 36,
-          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
-          "provider_id": 118,
-          "provider_name": "HBO"
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              },
+              {
+                "provider_name": "HBO",
+                "display_priority": 1000,
+                "provider_id": 118,
+                "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg"
+              }
+            ]
+          }
         }
-      ]
+      }
     },
     {
-      "original_title": "Harry Potter and the Goblet of Fire",
-      "title": "Harry Potter and the Goblet of Fire",
       "id": "m674",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Adventure", "Fantasy", "Family"],
+      "title": "Harry Potter and the Goblet of Fire",
       "poster_path": "/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
-      "popularity": 182,
-      "provider_names": ["HBO Max", "HBO"],
-      "providers": [
-        {
-          "display_priority": 8,
-          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
-          "provider_id": 384,
-          "provider_name": "HBO Max"
-        },
-        {
-          "display_priority": 36,
-          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
-          "provider_id": 118,
-          "provider_name": "HBO"
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              },
+              {
+                "provider_name": "HBO",
+                "display_priority": 1000,
+                "provider_id": 118,
+                "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg"
+              }
+            ]
+          }
         }
-      ]
+      }
     },
     {
-      "original_title": "Harry Potter and the Prisoner of Azkaban",
-      "title": "Harry Potter and the Prisoner of Azkaban",
       "id": "m673",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Adventure", "Fantasy"],
+      "title": "Harry Potter and the Prisoner of Azkaban",
       "poster_path": "/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg",
-      "popularity": 178,
-      "provider_names": ["HBO Max", "HBO"],
-      "providers": [
-        {
-          "display_priority": 8,
-          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
-          "provider_id": 384,
-          "provider_name": "HBO Max"
-        },
-        {
-          "display_priority": 36,
-          "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg",
-          "provider_id": 118,
-          "provider_name": "HBO"
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              },
+              {
+                "provider_name": "HBO",
+                "display_priority": 1000,
+                "provider_id": 118,
+                "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg"
+              }
+            ]
+          }
         }
-      ]
+      }
+    },
+    {
+      "id": "m12445",
+      "title": "Harry Potter and the Deathly Hallows: Part 2",
+      "poster_path": "/c54HpQmuwXjHq2C9wmoACjxoom3.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              },
+              {
+                "provider_name": "HBO",
+                "display_priority": 1000,
+                "provider_id": 118,
+                "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "m12444",
+      "title": "Harry Potter and the Deathly Hallows: Part 1",
+      "poster_path": "/iGoXIpQb7Pot00EEdwpwPajheZ5.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              },
+              {
+                "provider_name": "HBO",
+                "display_priority": 1000,
+                "provider_id": 118,
+                "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "m675",
+      "title": "Harry Potter and the Order of the Phoenix",
+      "poster_path": "/5aOyriWkPec0zUDxmHFP9qMmBaj.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              },
+              {
+                "provider_name": "HBO",
+                "display_priority": 1000,
+                "provider_id": 118,
+                "logo_path": "/fWqVPYArdFwBc6vYqoyQB6XUl85.jpg"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "m899082",
+      "title": "Harry Potter 20th Anniversary: Return to Hogwarts",
+      "poster_path": "/jntLBq0MLR3hrwKaTQswxACRPMs.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "t215492",
+      "title": "Harry & Meghan",
+      "poster_path": "/nxbQLpCm78w5UHOyLrnkFJVCY7p.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "Netflix",
+                "display_priority": 0,
+                "provider_id": 8,
+                "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "t133723",
+      "title": "Harry Potter: Hogwarts Tournament of Houses",
+      "poster_path": "/tEHHfzqHnfNJUp4L30wQeYl2xRo.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "HBO Max",
+                "display_priority": 3,
+                "provider_id": 384,
+                "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "m483898",
+      "title": "50 Greatest Harry Potter Moments",
+      "poster_path": "/g1xiBoLD6v3ZaXPa4QtuXiQeYKW.jpg",
+      "providers": null
+    },
+    {
+      "id": "m518527",
+      "title": "Harry & Meghan: A Royal Romance",
+      "poster_path": "/2ODzSaM8EKF28mGjNTH3ptb3BJu.jpg",
+      "providers": null
+    },
+    {
+      "id": "m639",
+      "title": "When Harry Met Sally...",
+      "poster_path": "/3wkbKeowUp1Zpkw1KkBqMWbt0P9.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "C More",
+                "display_priority": 5,
+                "provider_id": 77,
+                "logo_path": "/pCIkSBek0aZfPQzOn9gfazuYaLV.jpg"
+              },
+              {
+                "provider_name": "Viaplay",
+                "display_priority": 6,
+                "provider_id": 76,
+                "logo_path": "/cvl65OJnz14LUlC3yGK1KHj8UYs.jpg"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": "m10648",
+      "title": "Magnum Force",
+      "poster_path": "/cmQuj67qbijnC9dAQZf8x4X1KEr.jpg",
+      "providers": {
+        "results": {
+          "DK": {}
+        }
+      }
+    },
+    {
+      "id": "m10152",
+      "title": "Dumb and Dumberer: When Harry Met Lloyd",
+      "poster_path": "/qxD6P3UXASFCdbrVavceZzgOfI9.jpg",
+      "providers": null
+    },
+    {
+      "id": "m919590",
+      "title": "Phantastische Harry Potter Momente - Das große SAT.1 Spezial",
+      "poster_path": "/1Ci05BbrRgc8qwKSvliJH6gqzol.jpg",
+      "providers": null
+    },
+    {
+      "id": "m10649",
+      "title": "The Enforcer",
+      "poster_path": "/l0W85fpnsfnpLSSF3D6bKKlH1dD.jpg",
+      "providers": {
+        "results": {
+          "DK": {}
+        }
+      }
+    },
+    {
+      "id": "m482408",
+      "title": "Harry Potter: A History Of Magic",
+      "poster_path": "/geike7VgTrftxwzcvND4dRdZdAv.jpg",
+      "providers": null
+    },
+    {
+      "id": "m10651",
+      "title": "The Dead Pool",
+      "poster_path": "/mqwGpW0Ptrvz1GmfCnLAOA4cQ8g.jpg",
+      "providers": {
+        "results": {
+          "DK": {}
+        }
+      }
     }
   ],
   "offset": 0,
-  "limit": 5,
-  "nbHits": 386,
-  "exhaustiveNbHits": false,
-  "facetsDistribution": null,
-  "exhaustiveFacetsCount": null,
-  "processingTimeMs": 29,
-  "query": "harry p"
+  "limit": 20,
+  "query": "harry p",
+  "estimatedTotalHits": 211,
+  "processingTimeMs": 111,
+  "facetDistribution": null
 }

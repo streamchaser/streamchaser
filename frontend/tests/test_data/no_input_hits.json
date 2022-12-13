@@ -1,488 +1,186 @@
 {
   "hits": [
     {
-      "original_title": "Sonic the Hedgehog 2",
-      "title": "Sonic the Hedgehog 2",
-      "id": "m675353",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action", "Science Fiction", "Comedy", "Family", "Adventure"],
-      "poster_path": "/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg",
-      "popularity": 9974,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "Halo",
-      "title": "Halo",
-      "id": "t52814",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action & Adventure", "Sci-Fi & Fantasy"],
-      "poster_path": "/nJUHX3XL1jMkk8honUZnUmudFb9.jpg",
-      "popularity": 5108,
-      "provider_names": ["Paramount Plus", "TV 2"],
-      "providers": [
-        {
-          "display_priority": 7,
-          "logo_path": "/xbhHHa1YgtpwhC8lb1NQ3ACVcLd.jpg",
-          "provider_id": 531,
-          "provider_name": "Paramount Plus"
-        },
-        {
-          "display_priority": 10,
-          "logo_path": "/yBrCoCGMIiHPHuoyh1mg82Pwlhx.jpg",
-          "provider_id": 383,
-          "provider_name": "TV 2"
+      "id": "t119051",
+      "title": "Wednesday",
+      "poster_path": "/9PFonBhy4cQy7Jz20NpMygczOkv.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "Netflix",
+                "display_priority": 0,
+                "provider_id": 8,
+                "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg"
+              }
+            ]
+          }
         }
-      ]
+      }
     },
     {
-      "original_title": "Uncharted",
-      "title": "Uncharted",
-      "id": "m335787",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action", "Adventure"],
-      "poster_path": "/tlZpSxYuBRoVJBOpUrPdQe9FmFq.jpg",
-      "popularity": 4740,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "The Bad Guys",
-      "title": "The Bad Guys",
-      "id": "m629542",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Animation", "Comedy", "Action", "Family", "Crime"],
-      "poster_path": "/7qop80YfuO0BwJa1uXk1DXUUEwv.jpg",
-      "popularity": 4412,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "Doctor Strange in the Multiverse of Madness",
-      "title": "Doctor Strange in the Multiverse of Madness",
-      "id": "m453395",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Fantasy", "Action", "Adventure"],
-      "poster_path": "/JCo4gelTpavJin6CnzEdfYwLsM.jpg",
-      "popularity": 4209,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "The Batman",
-      "title": "The Batman",
-      "id": "m414906",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Crime", "Mystery", "Thriller"],
-      "poster_path": "/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-      "popularity": 3815,
-      "provider_names": ["HBO Max"],
-      "providers": [
-        {
-          "display_priority": 8,
-          "logo_path": "/rrta9psrx3e7F9wLUfpANdJzudx.jpg",
-          "provider_id": 384,
-          "provider_name": "HBO Max"
+      "id": "m436270",
+      "title": "Black Adam",
+      "poster_path": "/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg",
+      "providers": {
+        "results": {
+          "DK": {}
         }
-      ]
+      }
     },
     {
-      "original_title": "Spider-Man: No Way Home",
-      "title": "Spider-Man: No Way Home",
-      "id": "m634649",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action", "Adventure", "Science Fiction"],
-      "poster_path": "/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-      "popularity": 3815,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "Moon Knight",
-      "title": "Moon Knight",
-      "id": "t92749",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action & Adventure", "Sci-Fi & Fantasy", "Mystery"],
-      "poster_path": "/YksR65as1ppF2N48TJAh2PLamX.jpg",
-      "popularity": 3688,
-      "provider_names": ["Disney Plus"],
-      "providers": [
-        {
-          "display_priority": 1,
-          "logo_path": "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
-          "provider_id": 337,
-          "provider_name": "Disney Plus"
+      "id": "m736526",
+      "title": "Troll",
+      "poster_path": "/9z4jRr43JdtU66P0iy8h18OyLql.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "Netflix",
+                "display_priority": 0,
+                "provider_id": 8,
+                "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg"
+              }
+            ]
+          }
         }
-      ]
+      }
     },
     {
-      "original_title": "The Contractor",
-      "title": "The Contractor",
-      "id": "m628900",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action", "Thriller"],
-      "poster_path": "/rJPGPZ5soaG27MK90oKpioSiJE2.jpg",
-      "popularity": 3286,
-      "provider_names": ["Amazon Prime Video"],
-      "providers": [
-        {
-          "display_priority": 1,
-          "logo_path": "/emthp39XA2YScoYL1p0sdbAH2WA.jpg",
-          "provider_id": 119,
-          "provider_name": "Amazon Prime Video"
+      "id": "m724495",
+      "title": "The Woman King",
+      "poster_path": "/lQMJHnHxUyj8kJlC2YOKNuzuwMP.jpg",
+      "providers": null
+    },
+    {
+      "id": "m1013860",
+      "title": "R.I.P.D. 2: Rise of the Damned",
+      "poster_path": "/g4yJTzMtOBUTAR2Qnmj8TYIcFVq.jpg",
+      "providers": null
+    },
+    {
+      "id": "m873126",
+      "title": "My Name Is Vendetta",
+      "poster_path": "/7l3war94J4tRyWUiLAGokr3ViF2.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "Netflix",
+                "display_priority": 0,
+                "provider_id": 8,
+                "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg"
+              }
+            ]
+          }
         }
-      ]
+      }
     },
     {
-      "original_title": "Turning Red",
-      "title": "Turning Red",
-      "id": "m508947",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Animation", "Family", "Comedy", "Fantasy"],
-      "poster_path": "/qsdjk9oAKSQMWs0Vt5Pyfh6O4GZ.jpg",
-      "popularity": 2820,
-      "provider_names": ["Disney Plus"],
-      "providers": [
-        {
-          "display_priority": 1,
-          "logo_path": "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
-          "provider_id": 337,
-          "provider_name": "Disney Plus"
+      "id": "m1049233",
+      "title": "Lesson Plan",
+      "poster_path": "/wawP3mOUeRBrAtnbPwWK5eFaMdV.jpg",
+      "providers": {
+        "results": {
+          "DK": {
+            "flatrate": [
+              {
+                "provider_name": "Netflix",
+                "display_priority": 0,
+                "provider_id": 8,
+                "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg"
+              }
+            ]
+          }
         }
-      ]
+      }
     },
     {
-      "original_title": "Moonfall",
-      "title": "Moonfall",
-      "id": "m406759",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Science Fiction", "Adventure", "Action"],
-      "poster_path": "/odVv1sqVs0KxBXiA8bhIBlPgalx.jpg",
-      "popularity": 2367,
-      "provider_names": [],
-      "providers": []
+      "id": "m505642",
+      "title": "Black Panther: Wakanda Forever",
+      "poster_path": "/ps2oKfhY6DL3alynlSqY97gHSsg.jpg",
+      "providers": null
     },
     {
-      "original_title": "La Octava Cláusula",
-      "title": "The Eighth Clause",
-      "id": "m956101",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Thriller"],
-      "poster_path": "/8tc8eMFAX2SDC1TRu987qFQy8Cl.jpg",
-      "popularity": 2259,
-      "provider_names": [],
-      "providers": []
+      "id": "m988233",
+      "title": "Hex",
+      "poster_path": "/xFJHb43ZAnnuiDztxZYsmyopweb.jpg",
+      "providers": null
     },
     {
-      "original_title": "Ambulance",
-      "title": "Ambulance",
-      "id": "m763285",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action", "Thriller", "Crime"],
-      "poster_path": "/zT5ynZ0UR6HFfWQSRf2uKtqCyWD.jpg",
-      "popularity": 2199,
-      "provider_names": [],
-      "providers": []
+      "id": "m747803",
+      "title": "One Way",
+      "poster_path": "/uQCxOziq79P3wDsRwQhhkhQyDsJ.jpg",
+      "providers": null
     },
     {
-      "original_title": "Doctor Strange",
-      "title": "Doctor Strange",
-      "id": "m284052",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action", "Adventure", "Fantasy", "Science Fiction"],
-      "poster_path": "/uGBVj3bEbCoZbDjjl9wTxcygko1.jpg",
-      "popularity": 1940,
-      "provider_names": ["Disney Plus"],
-      "providers": [
-        {
-          "display_priority": 1,
-          "logo_path": "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
-          "provider_id": 337,
-          "provider_name": "Disney Plus"
-        }
-      ]
+      "id": "m855440",
+      "title": "Polar",
+      "poster_path": "/efuKHH9LqBZB67AS87kprLgaYO8.jpg",
+      "providers": null
     },
     {
-      "original_title": "Fortress: Sniper’s Eye",
-      "title": "Fortress: Sniper's Eye",
-      "id": "m883502",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Crime", "Action"],
-      "poster_path": "/61J34xHVVdQHbJ4MSCWQo4e727v.jpg",
-      "popularity": 1855,
-      "provider_names": [],
-      "providers": []
+      "id": "m941520",
+      "title": "Alien Sniperess",
+      "poster_path": "/bI1ZDRkerXrcaFa5kWjEMw80aqE.jpg",
+      "providers": null
     },
     {
-      "original_title": "Virus 32",
-      "title": "Virus:32",
-      "id": "m893370",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Horror"],
-      "poster_path": "/wZiF79hbhLK1U2Pj9bF67NAKXQR.jpg",
-      "popularity": 1781,
-      "provider_names": [],
-      "providers": []
+      "id": "m934641",
+      "title": "The Minute You Wake Up Dead",
+      "poster_path": "/pUPwTbnAqfm95BZjNBnMMf39ChT.jpg",
+      "providers": null
     },
     {
-      "original_title": "The Outfit",
-      "title": "The Outfit",
-      "id": "m799876",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Drama", "Thriller", "Crime"],
-      "poster_path": "/lZa5EB6PVJBT5mxhgZS5ftqdAm6.jpg",
-      "popularity": 1562,
-      "provider_names": [],
-      "providers": []
+      "id": "t130542",
+      "title": "Bhagya Lakshmi",
+      "poster_path": "/7XEE8LyVxEJl5l4IK9r1wytDBPm.jpg",
+      "providers": null
     },
     {
-      "original_title": "Ten Dzień",
-      "title": "365 Days: This Day",
-      "id": "m829557",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Romance", "Drama"],
-      "poster_path": "/7qU0SOVcQ8BTJLodcAlulUAG16C.jpg",
-      "popularity": 1509,
-      "provider_names": ["Netflix"],
-      "providers": [
-        {
-          "display_priority": 0,
-          "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
-          "provider_id": 8,
-          "provider_name": "Netflix"
-        }
-      ]
+      "id": "m829799",
+      "title": "Paradise City",
+      "poster_path": "/xdmmd437QdjcCls8yCQxrH5YYM4.jpg",
+      "providers": null
     },
     {
-      "original_title": "Encanto",
-      "title": "Encanto",
-      "id": "m568124",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Animation", "Comedy", "Family", "Fantasy"],
-      "poster_path": "/4j0PNHkMr5ax3IA8tjtxcmPU3QT.jpg",
-      "popularity": 1378,
-      "provider_names": ["Disney Plus"],
-      "providers": [
-        {
-          "display_priority": 1,
-          "logo_path": "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
-          "provider_id": 337,
-          "provider_name": "Disney Plus"
-        }
-      ]
+      "id": "t213713",
+      "title": "Faltu",
+      "poster_path": "/sNaiDVJxPz0GrjEolEDgR5LUuK5.jpg",
+      "providers": null
     },
     {
-      "original_title": "SPY×FAMILY",
-      "title": "SPY x FAMILY",
-      "id": "t120089",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Animation", "Comedy", "Action & Adventure", "Crime"],
-      "poster_path": "/3r4LYFuXrg3G8fepysr4xSLWnQL.jpg",
-      "popularity": 1335,
-      "provider_names": ["Crunchyroll"],
-      "providers": [
-        {
-          "display_priority": 9,
-          "logo_path": "/8Gt1iClBlzTeQs8WQm8UrCoIxnQ.jpg",
-          "provider_id": 283,
-          "provider_name": "Crunchyroll"
-        }
-      ]
+      "id": "t210855",
+      "title": "Now what",
+      "poster_path": "/89kiLK0S7Rbfjorvhm0vxTAgAH3.jpg",
+      "providers": null
     },
     {
-      "original_title": "Silverton Siege",
-      "title": "Silverton Siege",
-      "id": "m951470",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action", "Crime", "Drama"],
-      "poster_path": "/5HruMN0vvl84AqD7sCDXFNO4RhP.jpg",
-      "popularity": 1256,
-      "provider_names": ["Netflix"],
-      "providers": [
-        {
-          "display_priority": 0,
-          "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
-          "provider_id": 8,
-          "provider_name": "Netflix"
-        }
-      ]
+      "id": "t197189",
+      "title": "Cara e Coragem",
+      "poster_path": "/8CXbCCGiJxi4AXPBQ1QPrehMIGG.jpg",
+      "providers": null
     },
     {
-      "original_title": "Robinson",
-      "title": "Robinson",
-      "id": "t12610",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Reality"],
-      "poster_path": "/sWA0Uo9hkiAtvtjnPvaqfnulIIE.jpg",
-      "popularity": 1199,
-      "provider_names": [],
-      "providers": []
+      "id": "t204370",
+      "title": "Travessia",
+      "poster_path": "/jFZJEoPzt2RKSsZG8QEWptX5Xyw.jpg",
+      "providers": null
     },
     {
-      "original_title": "Fantastic Beasts: The Secrets of Dumbledore",
-      "title": "Fantastic Beasts: The Secrets of Dumbledore",
-      "id": "m338953",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Adventure", "Fantasy"],
-      "poster_path": "/jrgifaYeUtTnaH7NF5Drkgjg2MB.jpg",
-      "popularity": 1164,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "Pasión de gavilanes",
-      "title": "Hidden Passion",
-      "id": "t11250",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Drama"],
-      "poster_path": "/lWlsZIsrGVWHtBeoOeLxIKDd9uy.jpg",
-      "popularity": 1111,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "The Lost City",
-      "title": "The Lost City",
-      "id": "m752623",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Action", "Adventure", "Comedy", "Romance"],
-      "poster_path": "/neMZH82Stu91d3iqvLdNQfqPPyl.jpg",
-      "popularity": 1079,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "Doctor Strange: The Score-Cerer Supreme",
-      "title": "Doctor Strange: The Score-Cerer Supreme",
-      "id": "m448383",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Documentary"],
-      "poster_path": "/zHJYRHI5HkQuwLW5KyeXGQ596u7.jpg",
-      "popularity": 1045,
-      "provider_names": [],
-      "providers": []
-    },
-    {
-      "original_title": "All the Old Knives",
-      "title": "All the Old Knives",
-      "id": "m294793",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Thriller", "Action"],
-      "poster_path": "/g4tMniKxol1TBJrHlAtiDjjlx4Q.jpg",
-      "popularity": 1031,
-      "provider_names": ["Amazon Prime Video"],
-      "providers": [
-        {
-          "display_priority": 1,
-          "logo_path": "/emthp39XA2YScoYL1p0sdbAH2WA.jpg",
-          "provider_id": 119,
-          "provider_name": "Amazon Prime Video"
-        }
-      ]
-    },
-    {
-      "original_title": "Hotel Transylvania: Transformania",
-      "title": "Hotel Transylvania: Transformania",
-      "id": "m585083",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Animation", "Family", "Fantasy", "Comedy", "Adventure"],
-      "poster_path": "/teCy1egGQa0y8ULJvlrDHQKnxBL.jpg",
-      "popularity": 1018,
-      "provider_names": ["Amazon Prime Video"],
-      "providers": [
-        {
-          "display_priority": 1,
-          "logo_path": "/emthp39XA2YScoYL1p0sdbAH2WA.jpg",
-          "provider_id": 119,
-          "provider_name": "Amazon Prime Video"
-        }
-      ]
-    },
-    {
-      "original_title": "Peaky Blinders",
-      "title": "Peaky Blinders",
-      "id": "t60574",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Drama", "Crime"],
-      "poster_path": "/vUUqzWa2LnHIVqkaKVlVGkVcZIW.jpg",
-      "popularity": 996,
-      "provider_names": ["Netflix", "C More"],
-      "providers": [
-        {
-          "display_priority": 0,
-          "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
-          "provider_id": 8,
-          "provider_name": "Netflix"
-        },
-        {
-          "display_priority": 6,
-          "logo_path": "/pCIkSBek0aZfPQzOn9gfazuYaLV.jpg",
-          "provider_id": 77,
-          "provider_name": "C More"
-        }
-      ]
-    },
-    {
-      "original_title": "Star Trek: Strange New Worlds",
-      "title": "Star Trek: Strange New Worlds",
-      "id": "t103516",
-      "overview": null,
-      "release_date": "None",
-      "genres": ["Sci-Fi & Fantasy"],
-      "poster_path": "/iwIdajr5Y4zq2ibvq75VnDAJBr.jpg",
-      "popularity": 977,
-      "provider_names": ["Paramount Plus", "TV 2"],
-      "providers": [
-        {
-          "display_priority": 7,
-          "logo_path": "/xbhHHa1YgtpwhC8lb1NQ3ACVcLd.jpg",
-          "provider_id": 531,
-          "provider_name": "Paramount Plus"
-        },
-        {
-          "display_priority": 10,
-          "logo_path": "/yBrCoCGMIiHPHuoyh1mg82Pwlhx.jpg",
-          "provider_id": 383,
-          "provider_name": "TV 2"
-        }
-      ]
+      "id": "t210708",
+      "title": "De Oranjewinter",
+      "poster_path": "/h8kxyDP9Rhh7fIJoElev9Bm73Dl.jpg",
+      "providers": null
     }
   ],
   "offset": 0,
-  "limit": 30,
-  "nbHits": 670604,
-  "exhaustiveNbHits": false,
-  "facetsDistribution": null,
-  "exhaustiveFacetsCount": null,
-  "processingTimeMs": 8,
-  "query": "*"
+  "limit": 20,
+  "query": "*",
+  "estimatedTotalHits": 1000,
+  "processingTimeMs": 24,
+  "facetDistribution": null
 }

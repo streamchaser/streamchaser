@@ -1,0 +1,478 @@
+[
+  {
+    "label": "🇦🇩 Andorra",
+    "value": "AD"
+  },
+  {
+    "label": "🇦🇪 United Arab Emirates",
+    "value": "AE"
+  },
+  {
+    "label": "🇦🇬 Antigua and Barbuda",
+    "value": "AG"
+  },
+  {
+    "label": "🇦🇱 Albania",
+    "value": "AL"
+  },
+  {
+    "label": "🇦🇷 Argentina",
+    "value": "AR"
+  },
+  {
+    "label": "🇦🇹 Austria",
+    "value": "AT"
+  },
+  {
+    "label": "🇦🇺 Australia",
+    "value": "AU"
+  },
+  {
+    "label": "🇧🇦 Bosnia and Herzegovina",
+    "value": "BA"
+  },
+  {
+    "label": "🇧🇧 Barbados",
+    "value": "BB"
+  },
+  {
+    "label": "🇧🇪 Belgium",
+    "value": "BE"
+  },
+  {
+    "label": "🇧🇬 Bulgaria",
+    "value": "BG"
+  },
+  {
+    "label": "🇧🇭 Bahrain",
+    "value": "BH"
+  },
+  {
+    "label": "🇧🇲 Bermuda",
+    "value": "BM"
+  },
+  {
+    "label": "🇧🇴 Bolivia",
+    "value": "BO"
+  },
+  {
+    "label": "🇧🇷 Brazil",
+    "value": "BR"
+  },
+  {
+    "label": "🇧🇸 Bahamas",
+    "value": "BS"
+  },
+  {
+    "label": "🇨🇦 Canada",
+    "value": "CA"
+  },
+  {
+    "label": "🇨🇭 Switzerland",
+    "value": "CH"
+  },
+  {
+    "label": "🇨🇮 Cote D'Ivoire",
+    "value": "CI"
+  },
+  {
+    "label": "🇨🇱 Chile",
+    "value": "CL"
+  },
+  {
+    "label": "🇨🇴 Colombia",
+    "value": "CO"
+  },
+  {
+    "label": "🇨🇷 Costa Rica",
+    "value": "CR"
+  },
+  {
+    "label": "🇨🇺 Cuba",
+    "value": "CU"
+  },
+  {
+    "label": "🇨🇻 Cape Verde",
+    "value": "CV"
+  },
+  {
+    "label": "🇨🇿 Czech Republic",
+    "value": "CZ"
+  },
+  {
+    "label": "🇩🇪 Germany",
+    "value": "DE"
+  },
+  {
+    "label": "🇩🇰 Denmark",
+    "value": "DK"
+  },
+  {
+    "label": "🇩🇴 Dominican Republic",
+    "value": "DO"
+  },
+  {
+    "label": "🇩🇿 Algeria",
+    "value": "DZ"
+  },
+  {
+    "label": "🇪🇨 Ecuador",
+    "value": "EC"
+  },
+  {
+    "label": "🇪🇪 Estonia",
+    "value": "EE"
+  },
+  {
+    "label": "🇪🇬 Egypt",
+    "value": "EG"
+  },
+  {
+    "label": "🇪🇸 Spain",
+    "value": "ES"
+  },
+  {
+    "label": "🇫🇮 Finland",
+    "value": "FI"
+  },
+  {
+    "label": "🇫🇯 Fiji",
+    "value": "FJ"
+  },
+  {
+    "label": "🇫🇷 France",
+    "value": "FR"
+  },
+  {
+    "label": "🇬🇧 United Kingdom",
+    "value": "GB"
+  },
+  {
+    "label": "🇬🇫 French Guiana",
+    "value": "GF"
+  },
+  {
+    "label": "🇬🇭 Ghana",
+    "value": "GH"
+  },
+  {
+    "label": "🇬🇮 Gibraltar",
+    "value": "GI"
+  },
+  {
+    "label": "🇬🇶 Equatorial Guinea",
+    "value": "GQ"
+  },
+  {
+    "label": "🇬🇷 Greece",
+    "value": "GR"
+  },
+  {
+    "label": "🇬🇹 Guatemala",
+    "value": "GT"
+  },
+  {
+    "label": "🇭🇰 Hong Kong",
+    "value": "HK"
+  },
+  {
+    "label": "🇭🇳 Honduras",
+    "value": "HN"
+  },
+  {
+    "label": "🇭🇷 Croatia",
+    "value": "HR"
+  },
+  {
+    "label": "🇭🇺 Hungary",
+    "value": "HU"
+  },
+  {
+    "label": "🇮🇩 Indonesia",
+    "value": "ID"
+  },
+  {
+    "label": "🇮🇪 Ireland",
+    "value": "IE"
+  },
+  {
+    "label": "🇮🇱 Israel",
+    "value": "IL"
+  },
+  {
+    "label": "🇮🇳 India",
+    "value": "IN"
+  },
+  {
+    "label": "🇮🇶 Iraq",
+    "value": "IQ"
+  },
+  {
+    "label": "🇮🇸 Iceland",
+    "value": "IS"
+  },
+  {
+    "label": "🇮🇹 Italy",
+    "value": "IT"
+  },
+  {
+    "label": "🇯🇲 Jamaica",
+    "value": "JM"
+  },
+  {
+    "label": "🇯🇴 Jordan",
+    "value": "JO"
+  },
+  {
+    "label": "🇯🇵 Japan",
+    "value": "JP"
+  },
+  {
+    "label": "🇰🇪 Kenya",
+    "value": "KE"
+  },
+  {
+    "label": "🇰🇷 South Korea",
+    "value": "KR"
+  },
+  {
+    "label": "🇰🇼 Kuwait",
+    "value": "KW"
+  },
+  {
+    "label": "🇱🇧 Lebanon",
+    "value": "LB"
+  },
+  {
+    "label": "🇱🇨 St. Lucia",
+    "value": "LC"
+  },
+  {
+    "label": "🇱🇮 Liechtenstein",
+    "value": "LI"
+  },
+  {
+    "label": "🇱🇹 Lithuania",
+    "value": "LT"
+  },
+  {
+    "label": "🇱🇻 Latvia",
+    "value": "LV"
+  },
+  {
+    "label": "🇱🇾 Libyan Arab Jamahiriya",
+    "value": "LY"
+  },
+  {
+    "label": "🇲🇦 Morocco",
+    "value": "MA"
+  },
+  {
+    "label": "🇲🇨 Monaco",
+    "value": "MC"
+  },
+  {
+    "label": "🇲🇩 Moldova",
+    "value": "MD"
+  },
+  {
+    "label": "🇲🇰 Macedonia",
+    "value": "MK"
+  },
+  {
+    "label": "🇲🇹 Malta",
+    "value": "MT"
+  },
+  {
+    "label": "🇲🇺 Mauritius",
+    "value": "MU"
+  },
+  {
+    "label": "🇲🇽 Mexico",
+    "value": "MX"
+  },
+  {
+    "label": "🇲🇾 Malaysia",
+    "value": "MY"
+  },
+  {
+    "label": "🇲🇿 Mozambique",
+    "value": "MZ"
+  },
+  {
+    "label": "🇳🇪 Niger",
+    "value": "NE"
+  },
+  {
+    "label": "🇳🇬 Nigeria",
+    "value": "NG"
+  },
+  {
+    "label": "🇳🇱 Netherlands",
+    "value": "NL"
+  },
+  {
+    "label": "🇳🇴 Norway",
+    "value": "NO"
+  },
+  {
+    "label": "🇳🇿 New Zealand",
+    "value": "NZ"
+  },
+  {
+    "label": "🇴🇲 Oman",
+    "value": "OM"
+  },
+  {
+    "label": "🇵🇦 Panama",
+    "value": "PA"
+  },
+  {
+    "label": "🇵🇪 Peru",
+    "value": "PE"
+  },
+  {
+    "label": "🇵🇫 French Polynesia",
+    "value": "PF"
+  },
+  {
+    "label": "🇵🇭 Philippines",
+    "value": "PH"
+  },
+  {
+    "label": "🇵🇰 Pakistan",
+    "value": "PK"
+  },
+  {
+    "label": "🇵🇱 Poland",
+    "value": "PL"
+  },
+  {
+    "label": "🇵🇸 Palestinian Territory",
+    "value": "PS"
+  },
+  {
+    "label": "🇵🇹 Portugal",
+    "value": "PT"
+  },
+  {
+    "label": "🇵🇾 Paraguay",
+    "value": "PY"
+  },
+  {
+    "label": "🇶🇦 Qatar",
+    "value": "QA"
+  },
+  {
+    "label": "🇷🇴 Romania",
+    "value": "RO"
+  },
+  {
+    "label": "🇷🇸 Serbia",
+    "value": "RS"
+  },
+  {
+    "label": "🇷🇺 Russia",
+    "value": "RU"
+  },
+  {
+    "label": "🇸🇦 Saudi Arabia",
+    "value": "SA"
+  },
+  {
+    "label": "🇸🇨 Seychelles",
+    "value": "SC"
+  },
+  {
+    "label": "🇸🇪 Sweden",
+    "value": "SE"
+  },
+  {
+    "label": "🇸🇬 Singapore",
+    "value": "SG"
+  },
+  {
+    "label": "🇸🇮 Slovenia",
+    "value": "SI"
+  },
+  {
+    "label": "🇸🇰 Slovakia",
+    "value": "SK"
+  },
+  {
+    "label": "🇸🇲 San Marino",
+    "value": "SM"
+  },
+  {
+    "label": "🇸🇳 Senegal",
+    "value": "SN"
+  },
+  {
+    "label": "🇸🇻 El Salvador",
+    "value": "SV"
+  },
+  {
+    "label": "🇹🇨 Turks and Caicos Islands",
+    "value": "TC"
+  },
+  {
+    "label": "🇹🇭 Thailand",
+    "value": "TH"
+  },
+  {
+    "label": "🇹🇳 Tunisia",
+    "value": "TN"
+  },
+  {
+    "label": "🇹🇷 Turkey",
+    "value": "TR"
+  },
+  {
+    "label": "🇹🇹 Trinidad and Tobago",
+    "value": "TT"
+  },
+  {
+    "label": "🇹🇼 Taiwan",
+    "value": "TW"
+  },
+  {
+    "label": "🇹🇿 Tanzania",
+    "value": "TZ"
+  },
+  {
+    "label": "🇺🇬 Uganda",
+    "value": "UG"
+  },
+  {
+    "label": "🇺🇸 United States of America",
+    "value": "US"
+  },
+  {
+    "label": "🇺🇾 Uruguay",
+    "value": "UY"
+  },
+  {
+    "label": "🇻🇦 Holy See",
+    "value": "VA"
+  },
+  {
+    "label": "🇻🇪 Venezuela",
+    "value": "VE"
+  },
+  {
+    "label": "🇽🇰 Kosovo",
+    "value": "XK"
+  },
+  {
+    "label": "🇾🇪 Yemen",
+    "value": "YE"
+  },
+  {
+    "label": "🇿🇦 South Africa",
+    "value": "ZA"
+  },
+  {
+    "label": "🇿🇲 Zambia",
+    "value": "ZM"
+  }
+]
