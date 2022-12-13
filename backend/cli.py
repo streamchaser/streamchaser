@@ -35,35 +35,37 @@ async def create_sitemap(chunk_size: int = 25000):
         await async_client.index("media").get_stats()
     ).number_of_documents
     offset = 0
-    urls = {
-        "https://streamchaser.tv",
-        "https://streamchaser.tv/faq",
-        "https://streamchaser.tv/about",
-    }
+    pages = [
+        {"https://streamchaser.tv": 1.0},
+        {"https://streamchaser.tv/faq": 0.5},
+        {"https://streamchaser.tv/about": 0.5},
+    ]
 
     typer.echo(
         f"Creating sitemap with {total_documents} documents in chunks of {chunk_size}"
     )
 
     with tqdm(
-        total=floor(total_documents / chunk_size), desc="Fetching data from meilisearch"
+        total=floor(total_documents / chunk_size + 1),
+        desc="Fetching data from meilisearch",
     ) as pbar:
         while offset < total_documents:
             chunked_media = await async_client.index("media").get_documents(
-                limit=chunk_size, offset=offset, fields=["id"]
+                limit=chunk_size, offset=offset, fields=["id", "popularity"]
             )
-            if not chunked_media:
-                offset += chunk_size
-                continue
-
             for media in chunked_media.results:
+                priority = 0.5
                 url = ""
                 if media["id"][0] == "m":
                     url = f"https://streamchaser.tv/movie/{media['id'][1:]}"
                 else:
                     url = f"https://streamchaser.tv/tv/{media['id'][1:]}"
-                urls.add(url)
 
+                if media["popularity"] > 5:
+                    priority = 0.9
+                else:
+                    priority = 0.8
+                pages.append({url: priority})
             offset += chunk_size
             pbar.update(1)
 
@@ -77,9 +79,11 @@ async def create_sitemap(chunk_size: int = 25000):
 
     date = datetime.datetime.now().strftime("%Y-%m-%d")
 
-    for url in tqdm(urls, desc="Generating sitemap"):
+    for page in tqdm(pages, desc="Generating sitemap"):
+        url, priority = page.popitem()
         doc = ET.SubElement(root, "url")
         ET.SubElement(doc, "loc").text = url
+        ET.SubElement(doc, "priority").text = str(priority)
         ET.SubElement(doc, "lastmod").text = date
         ET.SubElement(doc, "changefreq").text = "daily"
 
