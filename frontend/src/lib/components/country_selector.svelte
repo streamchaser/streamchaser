@@ -1,16 +1,9 @@
 <script lang="ts">
-  import { GO_API } from "../variables.js"
   import { currentCountry } from "$lib/stores/preferences"
   import type { main_Country } from "$lib/generated/go/index.js"
-  import CountryLocator from "./country_locator.svelte"
   import Select from "svelte-select"
 
   export let countries: main_Country[]
-
-  const fetchCountries = async (): Promise<main_Country[]> => {
-    const res = await fetch(`${GO_API}/countries`)
-    return await res.json()
-  }
 </script>
 
 <div
@@ -40,5 +33,6 @@
     }}
     items={countries}
     placeholder="Select country..."
+    isClearable={false}
   />
 </div>
