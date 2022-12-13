@@ -9,7 +9,8 @@
     "htest": "playwright test --headed",
     "lint": "prettier --ignore-path ../.gitignore  --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path ../.gitignore --write --plugin-search-dir=. .",
-    "generate-types": "openapi --input http://api.localhost/openapi.json  --exportCore false --exportServices false --indent 2 --output ./src/lib/generated/"
+    "generate-types": "openapi --input http://api.localhost/openapi.json  --exportCore false --exportServices false --indent 2 --output ./src/lib/generated/",
+    "generate-types-go": "openapi --input http://apiv2.localhost/docs/doc.json  --exportCore false --exportServices false --indent 2 --output ./src/lib/generated/go/"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
