@@ -12,6 +12,8 @@ export type TV = {
   episode_run_time: Array<number>
   flatrate_providers?: Array<any>
   free_providers?: Array<any>
+  rent_providers?: Array<any>
+  buy_providers?: Array<any>
   recommendations?: Array<any>
   poster_path?: string
   popularity: number
