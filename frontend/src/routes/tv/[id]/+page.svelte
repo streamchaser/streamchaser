@@ -1,6 +1,5 @@
 <script lang="ts">
   import { IMG_ORIGINAL } from "$lib/variables.js"
-  import { currentCountry } from "$lib/stores/preferences"
   import Seasons from "$lib/components/details/seasons.svelte"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
@@ -8,10 +7,12 @@
   import Head from "$lib/components/head.svelte"
   import type { PageData } from "./$types"
   import { invalidate } from "$app/navigation"
+  import { currentCountry } from "$lib/stores/preferences"
+  import { browser } from "$app/environment"
 
   export let data: PageData
 
-  $: if ($currentCountry) {
+  $: if (browser && $currentCountry) {
     invalidate("app:tv")
   }
 </script>

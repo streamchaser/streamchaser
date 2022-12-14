@@ -7,10 +7,11 @@
   import Head from "$lib/components/head.svelte"
   import type { PageData } from "./$types"
   import { invalidate } from "$app/navigation"
+  import { browser } from "$app/environment"
 
   export let data: PageData
 
-  $: if ($currentCountry) {
+  $: if (browser && $currentCountry) {
     invalidate("app:movie")
   }
 </script>
