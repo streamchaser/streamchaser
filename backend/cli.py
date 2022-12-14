@@ -100,7 +100,7 @@ async def create_sitemap(sitemap_size: int = 49000):
 
             tree = ET.ElementTree(root)
             tree.write(
-                f"./static/sitemap_{count+1}.xml",
+                f"./static/sitemap{count+1}.xml",
                 encoding="utf-8",
                 xml_declaration=True,
             )
