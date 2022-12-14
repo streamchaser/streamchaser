@@ -1,4 +1,5 @@
 import datetime
+import os
 import xml.etree.cElementTree as ET
 from math import floor
 
@@ -29,12 +30,29 @@ app = typer.Typer()
 
 
 @app.command()
+def remove_sitemap(no_verify: bool = False):
+    if not no_verify:
+        typer.confirm("Are you sure you want to remove sitemap files?")
+    num = 0
+    my_dir = "./static"
+    for fname in os.listdir(my_dir):
+        if fname.startswith("sitemap"):
+            os.remove(os.path.join(my_dir, fname))
+            num += 1
+    echo_success(f"Removed {num} sitemap file(s)")
+
+
+@app.command()
 @coroutine
-async def create_sitemap(chunk_size: int = 25000):
+async def create_sitemap(sitemap_size: int = 49000):
+    typer.echo("First removing old sitemap files")
+    remove_sitemap(no_verify=True)
     total_documents = (
         await async_client.index("media").get_stats()
     ).number_of_documents
     offset = 0
+    index = 0
+    date = datetime.datetime.now().strftime("%Y-%m-%d")
     pages = [
         {"https://streamchaser.tv": 1.0},
         {"https://streamchaser.tv/faq": 0.5},
@@ -42,16 +60,19 @@ async def create_sitemap(chunk_size: int = 25000):
     ]
 
     typer.echo(
-        f"Creating sitemap with {total_documents} documents in chunks of {chunk_size}"
+        (
+            f"Aboit to create {floor(total_documents / sitemap_size + 1)} sitemaps"
+            f"with {sitemap_size} url's in each (total: {total_documents})"
+        )
     )
 
     with tqdm(
-        total=floor(total_documents / chunk_size + 1),
-        desc="Fetching data from meilisearch",
+        total=floor(total_documents / sitemap_size + 1),
+        desc="Creating sitemaps",
     ) as pbar:
         while offset < total_documents:
             chunked_media = await async_client.index("media").get_documents(
-                limit=chunk_size, offset=offset, fields=["id", "popularity"]
+                limit=sitemap_size, offset=offset, fields=["id", "popularity"]
             )
             for media in chunked_media.results:
                 priority = 0.5
@@ -66,33 +87,45 @@ async def create_sitemap(chunk_size: int = 25000):
                 else:
                     priority = 0.8
                 pages.append({url: priority})
-            offset += chunk_size
+
+            root = ET.Element("urlset")
+            root.attrib["xmlns"] = "http://www.sitemaps.org/schemas/sitemap/0.9"
+
+            for page in pages:
+                url, priority = page.popitem()
+                doc = ET.SubElement(root, "url")
+                ET.SubElement(doc, "loc").text = url
+                ET.SubElement(doc, "priority").text = str(priority)
+                ET.SubElement(doc, "lastmod").text = date
+                ET.SubElement(doc, "changefreq").text = "daily"
+
+            tree = ET.ElementTree(root)
+            tree.write(
+                f"./static/sitemap_{index+1}.xml",
+                encoding="utf-8",
+                xml_declaration=True,
+            )
+
+            pages = []
+            index += 1
+            offset += sitemap_size
             pbar.update(1)
 
-    root = ET.Element("urlset")
-    root.attrib["xmlns:xsi"] = "http://www.w3.org/2001/XMLSchema-instance"
-    root.attrib["xsi:schemaLocation"] = (
-        "http://www.sitemaps.org/schemas/sitemap/0.9 "
-        "http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
-    )
+    typer.echo("Creating main sitemap file...")
+
+    root = ET.Element("sitemapindex")
     root.attrib["xmlns"] = "http://www.sitemaps.org/schemas/sitemap/0.9"
 
-    date = datetime.datetime.now().strftime("%Y-%m-%d")
-
-    for page in tqdm(pages, desc="Generating sitemap"):
-        url, priority = page.popitem()
-        doc = ET.SubElement(root, "url")
-        ET.SubElement(doc, "loc").text = url
-        ET.SubElement(doc, "priority").text = str(priority)
-        ET.SubElement(doc, "lastmod").text = date
-        ET.SubElement(doc, "changefreq").text = "daily"
-
-    typer.echo("Writing sitemap file...")
+    for i in range(index):
+        doc = ET.SubElement(root, "sitemap")
+        ET.SubElement(
+            doc, "loc"
+        ).text = f"https://api.streamchaser.tv/static/sitemap_{i+1}"
 
     tree = ET.ElementTree(root)
-    tree.write("./static/sitemap.xml", encoding="utf-8", xml_declaration=True)
+    tree.write("./static/sitemap_main.xml", encoding="utf-8", xml_declaration=True)
 
-    echo_success("Successfully created sitemap")
+    echo_success("Successfully created sitemaps")
 
 
 @app.command()
