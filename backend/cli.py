@@ -1,7 +1,7 @@
 import datetime
 import os
 import xml.etree.cElementTree as ET
-from math import floor
+from math import ceil
 
 import httpx
 import typer
@@ -51,7 +51,7 @@ async def create_sitemap(sitemap_size: int = 49000):
         await async_client.index("media").get_stats()
     ).number_of_documents
     offset = 0
-    index = 0
+    count = 0
     date = datetime.datetime.now().strftime("%Y-%m-%d")
     pages = [
         {"https://streamchaser.tv": 1.0},
@@ -61,13 +61,13 @@ async def create_sitemap(sitemap_size: int = 49000):
 
     typer.echo(
         (
-            f"Aboit to create {floor(total_documents / sitemap_size + 1)} sitemaps"
+            f"About to create {ceil(total_documents / sitemap_size)} sitemaps "
             f"with {sitemap_size} url's in each (total: {total_documents})"
         )
     )
 
     with tqdm(
-        total=floor(total_documents / sitemap_size + 1),
+        total=ceil(total_documents / sitemap_size),
         desc="Creating sitemaps",
     ) as pbar:
         while offset < total_documents:
@@ -75,7 +75,6 @@ async def create_sitemap(sitemap_size: int = 49000):
                 limit=sitemap_size, offset=offset, fields=["id", "popularity"]
             )
             for media in chunked_media.results:
-                priority = 0.5
                 url = ""
                 if media["id"][0] == "m":
                     url = f"https://streamchaser.tv/movie/{media['id'][1:]}"
@@ -101,13 +100,13 @@ async def create_sitemap(sitemap_size: int = 49000):
 
             tree = ET.ElementTree(root)
             tree.write(
-                f"./static/sitemap_{index+1}.xml",
+                f"./static/sitemap_{count+1}.xml",
                 encoding="utf-8",
                 xml_declaration=True,
             )
 
             pages = []
-            index += 1
+            count += 1
             offset += sitemap_size
             pbar.update(1)
 
@@ -116,14 +115,14 @@ async def create_sitemap(sitemap_size: int = 49000):
     root = ET.Element("sitemapindex")
     root.attrib["xmlns"] = "http://www.sitemaps.org/schemas/sitemap/0.9"
 
-    for i in range(index):
+    for i in range(count):
         doc = ET.SubElement(root, "sitemap")
         ET.SubElement(
             doc, "loc"
-        ).text = f"https://api.streamchaser.tv/static/sitemap_{i+1}"
+        ).text = f"https://api.streamchaser.tv/static/sitemap{i+1}.xml"
 
     tree = ET.ElementTree(root)
-    tree.write("./static/sitemap_main.xml", encoding="utf-8", xml_declaration=True)
+    tree.write("./static/sitemap_index.xml", encoding="utf-8", xml_declaration=True)
 
     echo_success("Successfully created sitemaps")
 
