@@ -1,3 +1,8 @@
+import datetime
+import os
+import xml.etree.cElementTree as ET
+from math import ceil
+
 import httpx
 import typer
 from app.api import fetch_changed_media_ids
@@ -11,6 +16,7 @@ from app.db.database_service import countries_to_redis
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
+from app.db.search import async_client
 from app.db.search import client
 from app.db.search import search_client_config
 from app.util import chunkify
@@ -21,6 +27,104 @@ from tqdm import tqdm
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
+
+
+@app.command()
+def remove_sitemap(no_verify: bool = False):
+    if not no_verify:
+        typer.confirm("Are you sure you want to remove sitemap files?")
+    num = 0
+    my_dir = "./static"
+    for fname in os.listdir(my_dir):
+        if fname.startswith("sitemap"):
+            os.remove(os.path.join(my_dir, fname))
+            num += 1
+    echo_success(f"Removed {num} sitemap file(s)")
+
+
+@app.command()
+@coroutine
+async def create_sitemap(sitemap_size: int = 49000):
+    typer.echo("First removing old sitemap files")
+    remove_sitemap(no_verify=True)
+    total_documents = (
+        await async_client.index("media").get_stats()
+    ).number_of_documents
+    offset = 0
+    count = 0
+    date = datetime.datetime.now().strftime("%Y-%m-%d")
+    pages = [
+        {"https://streamchaser.tv": 1.0},
+        {"https://streamchaser.tv/faq": 0.5},
+        {"https://streamchaser.tv/about": 0.5},
+    ]
+
+    typer.echo(
+        (
+            f"About to create {ceil(total_documents / sitemap_size)} sitemaps "
+            f"with {sitemap_size} url's in each (total: {total_documents})"
+        )
+    )
+
+    with tqdm(
+        total=ceil(total_documents / sitemap_size),
+        desc="Creating sitemaps",
+    ) as pbar:
+        while offset < total_documents:
+            chunked_media = await async_client.index("media").get_documents(
+                limit=sitemap_size, offset=offset, fields=["id", "popularity"]
+            )
+            for media in chunked_media.results:
+                url = ""
+                if media["id"][0] == "m":
+                    url = f"https://streamchaser.tv/movie/{media['id'][1:]}"
+                else:
+                    url = f"https://streamchaser.tv/tv/{media['id'][1:]}"
+
+                if media["popularity"] > 5:
+                    priority = 0.9
+                else:
+                    priority = 0.8
+                pages.append({url: priority})
+
+            root = ET.Element("urlset")
+            root.attrib["xmlns"] = "http://www.sitemaps.org/schemas/sitemap/0.9"
+
+            for page in pages:
+                url, priority = page.popitem()
+                doc = ET.SubElement(root, "url")
+                ET.SubElement(doc, "loc").text = url
+                ET.SubElement(doc, "priority").text = str(priority)
+                ET.SubElement(doc, "lastmod").text = date
+                ET.SubElement(doc, "changefreq").text = "daily"
+
+            tree = ET.ElementTree(root)
+            tree.write(
+                f"./static/sitemap_{count+1}.xml",
+                encoding="utf-8",
+                xml_declaration=True,
+            )
+
+            pages = []
+            count += 1
+            offset += sitemap_size
+            pbar.update(1)
+
+    typer.echo("Creating main sitemap file...")
+
+    root = ET.Element("sitemapindex")
+    root.attrib["xmlns"] = "http://www.sitemaps.org/schemas/sitemap/0.9"
+
+    for i in range(count):
+        doc = ET.SubElement(root, "sitemap")
+        ET.SubElement(
+            doc, "loc"
+        ).text = f"https://api.streamchaser.tv/static/sitemap{i+1}.xml"
+
+    tree = ET.ElementTree(root)
+    tree.write("./static/sitemap_index.xml", encoding="utf-8", xml_declaration=True)
+
+    echo_success("Successfully created sitemaps")
 
 
 @app.command()

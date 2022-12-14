@@ -42,3 +42,4 @@ go_backend/tmp
 internal/tmp
 go_backend/docs/*
 internal/docs/*
+backend/static/sitemap*
