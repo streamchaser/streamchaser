@@ -7,18 +7,14 @@
   import Recommendations from "$lib/components/details/recommendations.svelte"
   import Head from "$lib/components/head.svelte"
   import type { PageData } from "./$types"
+  import { invalidateAll } from "$app/navigation"
 
   export let data: PageData
   const { tv } = data
   const posterUrl = IMG_ORIGINAL + tv.poster_path
 
-  let firstLoadCompleted = false
-
   $: if ($currentCountry) {
-    if (firstLoadCompleted) {
-      location.reload()
-    }
-    firstLoadCompleted = true
+    invalidateAll()
   }
 </script>
 
