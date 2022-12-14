@@ -7,7 +7,9 @@ import { env } from "$env/dynamic/public"
 // TODO: Kill this with fire, when https://github.com/sveltejs/kit/issues/5606 is fixed
 export const ssr = env.PUBLIC_ENV === "prod"
 
-export const load: PageLoad = async ({ params, fetch }) => {
+export const load: PageLoad = async ({ params, fetch, depends }) => {
+  depends("app:person")
+
   const res = await fetch(`${PYTHON_API}/person/${params.id}`)
 
   if (res.status == 200) {

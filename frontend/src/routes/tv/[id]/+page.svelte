@@ -1,44 +1,43 @@
 <script lang="ts">
   import { IMG_ORIGINAL } from "$lib/variables.js"
-  import { currentCountry } from "$lib/stores/preferences"
   import Seasons from "$lib/components/details/seasons.svelte"
   import Person from "$lib/components/details/person.svelte"
   import TopCard from "$lib/components/details/top_card.svelte"
   import Recommendations from "$lib/components/details/recommendations.svelte"
   import Head from "$lib/components/head.svelte"
   import type { PageData } from "./$types"
+  import { invalidate } from "$app/navigation"
+  import { currentCountry } from "$lib/stores/preferences"
+  import { browser } from "$app/environment"
 
   export let data: PageData
-  const { tv } = data
-  const posterUrl = IMG_ORIGINAL + tv.poster_path
 
-  let firstLoadCompleted = false
-
-  $: if ($currentCountry) {
-    if (firstLoadCompleted) {
-      location.reload()
-    }
-    firstLoadCompleted = true
+  $: if (browser && $currentCountry) {
+    invalidate("app:tv")
   }
 </script>
 
-<Head title={tv.name} description={tv.overview} images={[posterUrl]} />
-
-<TopCard
-  backdropPath={tv.backdrop_path}
-  posterPath={tv.poster_path}
-  title={tv.name}
-  overview={tv.overview}
-  genres={tv.genres}
-  freeProviders={tv.free_providers}
-  flatrateProviders={tv.flatrate_providers}
-  runtime={tv.episode_run_time[0]}
-  imdbId={tv.imdb_id}
-  releaseDate={tv.first_air_date}
+<Head
+  title={data.tv.name}
+  description={data.tv.overview}
+  images={[`${IMG_ORIGINAL}${data.tv.poster_path}`]}
 />
 
-<Seasons seasons={tv.seasons} />
+<TopCard
+  backdropPath={data.tv.backdrop_path}
+  posterPath={data.tv.poster_path}
+  title={data.tv.name}
+  overview={data.tv.overview}
+  genres={data.tv.genres}
+  freeProviders={data.tv.free_providers}
+  flatrateProviders={data.tv.flatrate_providers}
+  runtime={data.tv.episode_run_time[0]}
+  imdbId={data.tv.imdb_id}
+  releaseDate={data.tv.first_air_date}
+/>
 
-<Person cast={tv.cast} />
+<Seasons seasons={data.tv.seasons} />
 
-<Recommendations recommendations={tv.recommendations} mediaType={"tv"} />
+<Person cast={data.tv.cast} />
+
+<Recommendations recommendations={data.tv.recommendations} mediaType={"tv"} />

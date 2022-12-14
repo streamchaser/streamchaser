@@ -6,37 +6,35 @@
   import Recommendations from "$lib/components/details/recommendations.svelte"
   import Head from "$lib/components/head.svelte"
   import type { PageData } from "./$types"
+  import { invalidate } from "$app/navigation"
+  import { browser } from "$app/environment"
 
   export let data: PageData
-  const { movie } = data
-  const posterUrl = IMG_ORIGINAL + movie.poster_path
 
-  let firstLoadCompleted = false // TODO: Kill with fire
-
-  // TODO: Kill with fire
-  $: if ($currentCountry) {
-    if (firstLoadCompleted) {
-      location.reload()
-    }
-    firstLoadCompleted = true
+  $: if (browser && $currentCountry) {
+    invalidate("app:movie")
   }
 </script>
 
-<Head title={movie.title} description={movie.overview} images={[posterUrl]} />
-
-<TopCard
-  backdropPath={movie.backdrop_path}
-  posterPath={movie.poster_path}
-  title={movie.title}
-  overview={movie.overview}
-  genres={movie.genres}
-  freeProviders={movie.free_providers}
-  flatrateProviders={movie.flatrate_providers}
-  runtime={movie.runtime}
-  imdbId={movie.imdb_id}
-  releaseDate={movie.release_date}
+<Head
+  title={data.movie.title}
+  description={data.movie.overview}
+  images={[`${IMG_ORIGINAL}${data.movie.poster_path}`]}
 />
 
-<Person cast={movie.cast} />
+<TopCard
+  backdropPath={data.movie.backdrop_path}
+  posterPath={data.movie.poster_path}
+  title={data.movie.title}
+  overview={data.movie.overview}
+  genres={data.movie.genres}
+  freeProviders={data.movie.free_providers}
+  flatrateProviders={data.movie.flatrate_providers}
+  runtime={data.movie.runtime}
+  imdbId={data.movie.imdb_id}
+  releaseDate={data.movie.release_date}
+/>
 
-<Recommendations recommendations={movie.recommendations} mediaType={"movie"} />
+<Person cast={data.movie.cast} />
+
+<Recommendations recommendations={data.movie.recommendations} mediaType={"movie"} />
