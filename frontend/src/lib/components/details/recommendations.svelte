@@ -53,7 +53,7 @@
         loop={true}
         navigation={true}
         freeMode={true}
-        touchEventsTarget={{ touchEventsTarget: "container" }}
+        touchEventsTarget={"container"}
       >
         {#each lookup.meilisearch.hits as hit, index}
           {#if hit.poster_path}

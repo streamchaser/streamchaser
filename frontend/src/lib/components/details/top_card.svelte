@@ -22,7 +22,7 @@
 
   const changeGenreAndRedirectHome = (genre: string) => {
     // Needs to replace the &'s for the multiselects to find it
-    $currentGenres = [genre.replace(" & ", "%20%26%20")]
+    $currentGenres = [{ label: genre, value: genre.replace(" & ", "%20%26%20") }]
     $inputQuery = ""
     window.location.href = "/"
   }
@@ -101,13 +101,13 @@
       {#if genres}
         <div class="flex-wrap mt-2">
           {#each genres as genre}
-            <div
+            <button
               on:click={() => changeGenreAndRedirectHome(genre)}
               class="badge badge-primary mx-2 my-1 transform cursor-pointer
                                    hover:contrast-75"
             >
               {genre}
-            </div>
+            </button>
           {/each}
         </div>
       {/if}

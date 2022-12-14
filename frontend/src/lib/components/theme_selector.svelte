@@ -22,7 +22,7 @@
 </script>
 
 <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
-  <div
+  <button
     tabindex="0"
     class="btn btn-ghost btn-sm rounded-btn text-xl"
     on:click={handleDropdownClick}
@@ -50,9 +50,9 @@
         /></svg
       >
     {/if}
-  </div>
+  </button>
   <ul
-    tabindex="0"
+    tabindex="-1"
     class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
     style:visibility={isDropdownOpen ? "visible" : "hidden"}
   >
@@ -60,7 +60,7 @@
       <li
         data-set-theme={theme.value}
         data-act-class="ACTIVECLASS"
-        on:click={() => ($chosenTheme = theme.value)}
+        on:keypress={() => ($chosenTheme = theme.value)}
       >
         {#if $chosenTheme == theme.value}
           <div class="bg-primary hover:bg-primary">

@@ -42,10 +42,9 @@
     </div>
     <ThemeSelector />
     <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
-      <label
-        tabindex="0"
+      <div
         class="btn btn-ghost btn-sm rounded-btn text-xl"
-        on:click={handleDropdownClick}
+        on:keypress={handleDropdownClick}
       >
         {#if isDropdownOpen}
           <svg
@@ -70,10 +69,10 @@
             /></svg
           >
         {/if}
-      </label>
+      </div>
       <ul
         tabindex="0"
-        class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56"
+        class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-60"
         style:visibility={isDropdownOpen ? "visible" : "hidden"}
       >
         <CountrySelector {countries} on:click={handleDropdownClick} />

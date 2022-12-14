@@ -138,6 +138,7 @@
 
 <div class="bg-neutral shadow-md card pb-2 pt-6 px-2 sm:px-6">
   <div class="flex justify-between">
+    <!-- svelte-ignore a11y-autofocus -->
     <input
       id="input-field"
       type="text"
