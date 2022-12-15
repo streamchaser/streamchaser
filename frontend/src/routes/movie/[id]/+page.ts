@@ -22,6 +22,8 @@ export const load: PageLoad = async ({ params, fetch, depends }) => {
     removeContentWithMissingImagePath(movie.cast, "profile_path")
     sortListByPopularity(movie.cast)
 
+    movie.recommendations.forEach(v => (v.id = "m" + v.id))
+
     return { movie }
   } else {
     throw new Error(res.statusText)

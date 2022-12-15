@@ -13,8 +13,6 @@
   export let recommendations: Recommendation[]
   export let mediaType: string
 
-  recommendations.forEach(v => (v.id = mediaType[0] + v.id))
-
   let loadedPage: boolean
 
   onMount(() => {
