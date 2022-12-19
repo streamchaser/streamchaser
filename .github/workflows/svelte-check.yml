@@ -1,0 +1,20 @@
+name: Svelte-check
+
+# Events that trigger the workflow
+on: push
+
+jobs:
+  frontend-svelte-check:
+    runs-on: ubuntu-latest
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+      - name: Run build
+        run: |
+          cd frontend/
+          touch .env
+          variables="VITE_API_PATH=http://api.localhost
+          VITE_GO_API_PATH=http://apiv2.localhost"
+          echo "$variables" > .env
+          yarn install
+          yarn svelte-check --fail-on-warning --fail-on-hints

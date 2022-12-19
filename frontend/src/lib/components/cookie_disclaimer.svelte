@@ -26,7 +26,11 @@
             Your continued browsing means that you have understood and accepted this.
           </p>
           <div class="flex justify-center">
-            <a href="https://www.cookiesandyou.com/about-cookies/" target="_blank">
+            <a
+              href="https://www.cookiesandyou.com/about-cookies/"
+              target="_blank"
+              rel="noreferrer"
+            >
               <button class="btn btn-sm btn-ghost mr-2">About cookies</button>
             </a>
             <button

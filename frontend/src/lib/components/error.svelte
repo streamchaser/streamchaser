@@ -1,7 +1,7 @@
 <script lang="ts">
   import ErrorButtons from "./error_buttons.svelte"
 
-  export let error
+  export let error: string
 
   console.error(error)
 </script>

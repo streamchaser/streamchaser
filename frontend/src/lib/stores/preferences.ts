@@ -1,8 +1,9 @@
 import { writable } from "svelte/store"
 import { browser } from "$app/environment"
 import { setDefaultCountry } from "$lib/utils"
+import type { Genre } from "$lib/generated"
 
-export const currentGenres = writable<string[]>(
+export const currentGenres = writable<Genre[]>(
   browser && sessionStorage.getItem("currentGenres") !== null
     ? JSON.parse(sessionStorage.getItem("currentGenres"))
     : []
@@ -14,7 +15,13 @@ currentGenres.subscribe(value => {
   }
 })
 
-export const currentProviders = writable<string[]>(
+interface Provider {
+  index: number
+  value: string
+  label: string
+}
+
+export const currentProviders = writable<Provider[]>(
   browser && localStorage.getItem("currentProviders") !== null
     ? JSON.parse(localStorage.getItem("currentProviders"))
     : []

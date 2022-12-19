@@ -6,8 +6,9 @@
   import "swiper/css"
   import "swiper/css/free-mode"
   import "swiper/css/navigation"
+  import type { TV } from "$lib/generated"
 
-  export let seasons
+  export let seasons: TV["seasons"]
 </script>
 
 <div class="container p-2">
@@ -43,7 +44,7 @@
       modules={[Navigation, Lazy]}
       initialSlide={seasons[0].name === "Specials" ? 1 : 0}
     >
-      {#each seasons as season, index}
+      {#each seasons as season}
         <SwiperSlide>
           <div
             class="card h-[350px] aspect-[342/513] bg-base-100 image-full swiper-lazy"
