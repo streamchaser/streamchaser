@@ -28,7 +28,6 @@ func DocsRedirect(c *gin.Context) {
 	c.Redirect(http.StatusFound, location.RequestURI())
 }
 
-
 // processIds godoc
 //
 //	@Summary	Takes list of ids, fetch from TMDB, and put into Meilisearch
