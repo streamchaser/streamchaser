@@ -62,8 +62,16 @@ export const chosenTheme = writable<string>(
 )
 
 export const currentCountry = writable<string>(
-  (browser && localStorage.currentCountry) || "DK"
+  (browser && localStorage.currentCountry) ||
+    (browser && sessionStorage.currentCountry) ||
+    "DK"
 )
+
+currentCountry.subscribe(value => {
+  if (browser) {
+    sessionStorage.currentCountry = value
+  }
+})
 
 export const confirmedCountry = writable<boolean>(
   (browser && localStorage.confirmedCountry) || false
