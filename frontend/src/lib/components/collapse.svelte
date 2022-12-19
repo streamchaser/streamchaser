@@ -15,7 +15,7 @@
   {#if link && linkText}
     <div class="collapse-content">
       <p class="inline">{description}</p>
-      <p class="inline link link-hover" on:keypress={() => window.open(link)}>
+      <p class="inline link link-hover">
         {linkText}
       </p>
       .
