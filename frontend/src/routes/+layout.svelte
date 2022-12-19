@@ -18,8 +18,8 @@
   import { browser } from "$app/environment"
 
   $: if (browser && $allowedCookies && $allowedCookies.allowPreference) {
-    currentProviders.subscribe(value => {
-      localStorage.setItem("currentProviders", JSON.stringify(value))
+    currentCountry.subscribe(value => {
+      localStorage.currentCountry = value
     })
     sorting.subscribe(value => {
       localStorage.setItem("sorting", JSON.stringify(value))
@@ -27,8 +27,8 @@
     chosenTheme.subscribe(value => {
       localStorage.chosenTheme = value
     })
-    currentCountry.subscribe(value => {
-      localStorage.currentCountry = value
+    currentProviders.subscribe(value => {
+      localStorage.setItem("currentProviders", JSON.stringify(value))
     })
   }
 
