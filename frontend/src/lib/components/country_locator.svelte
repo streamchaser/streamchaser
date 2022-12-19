@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { onMount } from "svelte"
   import { currentCountry, confirmedCountry } from "$lib/stores/preferences"
+  import { allowedCookies } from "$lib/stores/cookies"
   import { PYTHON_API } from "$lib/variables"
+  import { browser } from "$app/environment"
 
   let hasError = false
   let errorMsg: string
@@ -27,12 +28,9 @@
       })
   }
 
-  onMount(async () => {
-    // Will only look for the country of new users
-    if (!$confirmedCountry) {
-      await lookupCountry()
-    }
-  })
+  $: if (browser && $allowedCookies && $allowedCookies.allowPreference) {
+    lookupCountry()
+  }
 </script>
 
 {#if hasError}

@@ -8,6 +8,29 @@
   import MediaQuery from "svelte-media-query"
   import CountryLocator from "$lib/components/country_locator.svelte"
   import type { PageData } from "./$types"
+  import { allowedCookies } from "$lib/stores/cookies.js"
+  import {
+    currentCountry,
+    currentProviders,
+    sorting,
+    chosenTheme,
+  } from "$lib/stores/preferences"
+  import { browser } from "$app/environment"
+
+  $: if (browser && $allowedCookies && $allowedCookies.allowPreference) {
+    currentProviders.subscribe(value => {
+      localStorage.setItem("currentProviders", JSON.stringify(value))
+    })
+    sorting.subscribe(value => {
+      localStorage.setItem("sorting", JSON.stringify(value))
+    })
+    chosenTheme.subscribe(value => {
+      localStorage.chosenTheme = value
+    })
+    currentCountry.subscribe(value => {
+      localStorage.currentCountry = value
+    })
+  }
 
   export let data: PageData
 </script>

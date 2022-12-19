@@ -1,12 +1,36 @@
 import { browser } from "$app/environment"
 import { writable } from "svelte/store"
 
+export interface CookieSelection {
+  allowPreference: boolean
+}
+
+export interface CookieType {
+  name: string
+  type?: string
+  description: string
+}
+
+export const allowNecessaryCookies = writable<boolean>(
+  (browser && sessionStorage.allowNecessaryCookies) || false
+)
+
+allowNecessaryCookies.subscribe(value => {
+  if (browser) {
+    sessionStorage.allowNecessaryCookies = String(value)
+  }
+})
+
+export const allowedCookies = writable<CookieSelection>()
+
+// true if user has allowed cookies or allowed necessary, false if not
 export const cookieDisclaimer = writable<boolean>(
-  (browser && localStorage.cookieDisclaimer) || false
+  (browser && localStorage.allowedCookies != null) ||
+    (browser && sessionStorage.allowNecessaryCookies === "true")
 )
 
 cookieDisclaimer.subscribe(value => {
   if (browser) {
-    localStorage.cookieDisclaimer = String(value)
+    sessionStorage.cookieDisclaimer = String(value)
   }
 })

@@ -37,4 +37,4 @@
 
 <Person cast={data.movie.cast} />
 
-<Recommendations recommendations={data.movie.recommendations} mediaType={"movie"} />
+<Recommendations recommendations={data.movie.recommendations} />

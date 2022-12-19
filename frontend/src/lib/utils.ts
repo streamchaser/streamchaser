@@ -1,4 +1,3 @@
-import { browser } from "$app/environment"
 import type { Provider, Hit, Meilisearch } from "$lib/generated"
 import type { ViewPort, Media, FilmOrSeries, Recommendation } from "$lib/types"
 import { PYTHON_API } from "$lib/variables"
@@ -134,25 +133,4 @@ export const lookupMedia = async (
   const providerAmounts = hitProviderAmounts(json.hits, country)
 
   return { meilisearch: json, providerAmounts: providerAmounts }
-}
-
-export const isJsonString = (str: string) => {
-  try {
-    JSON.parse(str)
-  } catch (e) {
-    return false
-  }
-  return true
-}
-
-// NOTE: delete in like a week? this is a hack for now :^)
-export const setDefaultCountry = () => {
-  if (browser && localStorage.currentCountry) {
-    if (isJsonString(localStorage.currentCountry)) {
-      return JSON.parse(localStorage.currentCountry)
-    }
-    return localStorage.currentCountry
-  }
-
-  return "DK"
 }

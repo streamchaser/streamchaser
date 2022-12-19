@@ -1,6 +1,5 @@
 import { writable } from "svelte/store"
 import { browser } from "$app/environment"
-import { setDefaultCountry } from "$lib/utils"
 import type { Genre } from "$lib/generated"
 
 export const currentGenres = writable<Genre[]>(
@@ -27,12 +26,6 @@ export const currentProviders = writable<Provider[]>(
     : []
 )
 
-currentProviders.subscribe(value => {
-  if (browser) {
-    localStorage.setItem("currentProviders", JSON.stringify(value))
-  }
-})
-
 interface Sorting {
   by: {
     popularity: boolean
@@ -46,12 +39,6 @@ export const sorting = writable<Sorting>(
     ? JSON.parse(localStorage.getItem("sorting"))
     : { by: { popularity: false, releaseDate: false }, asc: false }
 )
-
-sorting.subscribe(value => {
-  if (browser) {
-    localStorage.setItem("sorting", JSON.stringify(value))
-  }
-})
 
 interface Filters {
   tvChecked: boolean
@@ -74,19 +61,9 @@ export const chosenTheme = writable<string>(
   (browser && localStorage.chosenTheme) || "dark"
 )
 
-chosenTheme.subscribe(value => {
-  if (browser) {
-    localStorage.chosenTheme = value
-  }
-})
-
-export const currentCountry = writable<string>(setDefaultCountry())
-
-currentCountry.subscribe(value => {
-  if (browser) {
-    localStorage.currentCountry = value
-  }
-})
+export const currentCountry = writable<string>(
+  (browser && localStorage.currentCountry) || "DK"
+)
 
 export const confirmedCountry = writable<boolean>(
   (browser && localStorage.confirmedCountry) || false
