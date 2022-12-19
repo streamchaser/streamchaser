@@ -39,3 +39,8 @@ repos:
           - prettier@2.5.1
           - prettier-plugin-svelte@v2.6.0
           - svelte@v3.46.2
+
+  - repo: https://github.com/dnephin/pre-commit-golang
+    rev: v0.5.1
+    hooks:
+      - id: go-fmt
