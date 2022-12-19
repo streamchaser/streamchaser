@@ -60,6 +60,7 @@
       <li
         data-set-theme={theme.value}
         data-act-class="ACTIVECLASS"
+        on:click={() => ($chosenTheme = theme.value)}
         on:keypress={() => ($chosenTheme = theme.value)}
       >
         {#if $chosenTheme == theme.value}

@@ -6,6 +6,7 @@
 </script>
 
 <div
+  tabindex="-1"
   class="collapse max-w-screen-lg min-w-full border rounded-box border-base-300 collapse-arrow my-4"
 >
   <div class="collapse-title text-xl font-medium">

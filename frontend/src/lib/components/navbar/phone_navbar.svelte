@@ -43,7 +43,9 @@
     <ThemeSelector />
     <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
       <div
+        tabindex="-1"
         class="btn btn-ghost btn-sm rounded-btn text-xl"
+        on:click={handleDropdownClick}
         on:keypress={handleDropdownClick}
       >
         {#if isDropdownOpen}
@@ -71,8 +73,8 @@
         {/if}
       </div>
       <ul
-        tabindex="0"
-        class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-60"
+        tabindex="-1"
+        class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56"
         style:visibility={isDropdownOpen ? "visible" : "hidden"}
       >
         <CountrySelector {countries} on:click={handleDropdownClick} />
