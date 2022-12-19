@@ -11,7 +11,6 @@
   import { lookupMedia } from "$lib/utils"
 
   export let recommendations: Recommendation[]
-  export let mediaType: string
 
   let loadedPage: boolean
 

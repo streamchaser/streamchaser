@@ -40,4 +40,4 @@
 
 <Person cast={data.tv.cast} />
 
-<Recommendations recommendations={data.tv.recommendations} mediaType={"tv"} />
+<Recommendations recommendations={data.tv.recommendations} />

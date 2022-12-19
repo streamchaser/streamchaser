@@ -2,7 +2,6 @@ import type { CookieSelection, CookieType } from "$lib/stores/cookies"
 
 export const cookieSelection: CookieSelection = {
   allowPreference: true,
-  allowStatistical: true,
 }
 export const statistical: CookieType = {
   name: "Statistical",

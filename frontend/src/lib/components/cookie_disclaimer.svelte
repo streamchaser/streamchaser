@@ -5,17 +5,17 @@
     allowNecessaryCookies,
   } from "$lib/stores/cookies"
   import type { CookieType } from "$lib/stores/cookies"
-  import { fade, fly, slide } from "svelte/transition"
+  import { fade, fly } from "svelte/transition"
   import { onMount } from "svelte"
   import { browser } from "$app/environment"
-  import { cookieSelection, necessary, preferences, statistical } from "$lib/cookies"
+  import { cookieSelection, necessary, preferences } from "$lib/cookies"
 
   const cookieDisclaimerTabs = ["Consent", "Options"]
 
   let currentTab = 0
   let loadDisclaimer = true
   let allowSelection: boolean
-  let cookieTypes: CookieType[] = [necessary, preferences, statistical]
+  let cookieTypes: CookieType[] = [necessary, preferences]
 
   $: allowSelection = Object.values(cookieSelection).some(value => value === false)
 
@@ -44,7 +44,11 @@
 
 {#if loadDisclaimer}
   {#if !$cookieDisclaimer}
-    <div class="flex justify-center z-50" in:fade out:fly={{ y: 200, duration: 1000 }}>
+    <div
+      class="flex justify-center z-50"
+      in:fade={{ duration: 500 }}
+      out:fly={{ y: 200, duration: 1000 }}
+    >
       <div class="alert flex-col shadow fixed sm:bottom-2 bottom-0 max-w-2xl ">
         <div class="flex flex-col">
           <h4 class="flex justify-center">
@@ -66,7 +70,7 @@
             {/each}
           </div>
           {#if cookieDisclaimerTabs[currentTab] === "Consent"}
-            <div in:slide={{ duration: 1000 }} class="flex flex-col mb-4">
+            <div class="flex flex-col mb-4">
               <p class="pb-2">
                 We use cookies to improve your experience. We save your country and
                 chosen providers, and store this data for your next visit. For
@@ -80,7 +84,7 @@
               </p>
             </div>
           {:else}
-            <div in:slide={{ duration: 100000 }} class="flex flex-col mb-4">
+            <div class="flex flex-col mb-4">
               <div class="form-control">
                 {#each cookieTypes as cookieType}
                   <label class="label cursor-pointer">
@@ -90,7 +94,6 @@
                         type="checkbox"
                         class="toggle"
                         bind:checked={cookieSelection[cookieType.type]}
-                        on:change={!cookieSelection[cookieType.type]}
                       />
                     {:else}
                       <input type="checkbox" class="toggle" disabled checked />

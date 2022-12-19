@@ -3,7 +3,6 @@ import { writable } from "svelte/store"
 
 export interface CookieSelection {
   allowPreference: boolean
-  allowStatistical: boolean
 }
 
 export interface CookieType {

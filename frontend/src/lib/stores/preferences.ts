@@ -1,6 +1,5 @@
 import { writable } from "svelte/store"
 import { browser } from "$app/environment"
-import { setDefaultCountry } from "$lib/utils"
 import type { Genre } from "$lib/generated"
 
 export const currentGenres = writable<Genre[]>(
@@ -62,7 +61,9 @@ export const chosenTheme = writable<string>(
   (browser && localStorage.chosenTheme) || "dark"
 )
 
-export const currentCountry = writable<string>(setDefaultCountry())
+export const currentCountry = writable<string>(
+  (browser && localStorage.currentCountry) || "DK"
+)
 
 export const confirmedCountry = writable<boolean>(
   (browser && localStorage.confirmedCountry) || false
