@@ -9,7 +9,7 @@
 
 <div>
   <div
-    class="w-48"
+    class="sm:w-32 md:w-52 lg:w-56 w-52"
     style="
    --borderRadius: var(--rounded-btn, .5rem);
    --background: hsl(var(--b1));
