@@ -21,7 +21,11 @@ allowNecessaryCookies.subscribe(value => {
   }
 })
 
-export const allowedCookies = writable<CookieSelection>()
+export const allowedCookies = writable<CookieSelection>(
+  browser &&
+    localStorage.getItem("allowedCookies") &&
+    JSON.parse(localStorage.getItem("allowedCookies"))
+)
 
 // true if user has allowed cookies or allowed necessary, false if not
 export const cookieDisclaimer = writable<boolean>(
