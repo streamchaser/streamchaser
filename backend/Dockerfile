@@ -17,7 +17,7 @@ RUN echo "Starting backend as production" \
     && pip install --no-cache-dir -r requirements.txt
 
 # '-' after --access-logfile means to log to stdout
-CMD gunicorn app.main:app --access-logfile - -k uvicorn.workers.UvicornWorker -b :80
+CMD gunicorn app.main:app --forwarded-allow-ips="*" --access-logfile - -k uvicorn.workers.UvicornWorker -b :80
 
 
 FROM base as dev
