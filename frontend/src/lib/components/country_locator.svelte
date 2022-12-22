@@ -12,7 +12,7 @@
       return
     }
 
-    await fetch(`${PYTHON_API}/country/`)
+    await fetch(`${PYTHON_API}/country`)
       .then(async (response: Response) => {
         const data = await response.json()
 
