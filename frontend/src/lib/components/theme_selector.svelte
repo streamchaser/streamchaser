@@ -2,7 +2,7 @@
   import { themeChange } from "theme-change"
   import { onMount } from "svelte"
   import { chosenTheme } from "$lib/stores/preferences"
-  import { THEMES } from "../variables.js"
+  import { THEMES } from "$lib/variables.js"
 
   let isDropdownOpen = false
 
@@ -22,10 +22,11 @@
 </script>
 
 <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
-  <button
-    tabindex="0"
+  <div
+    tabindex="-1"
     class="btn btn-ghost btn-sm rounded-btn text-xl"
     on:click={handleDropdownClick}
+    on:keypress={handleDropdownClick}
   >
     {#if isDropdownOpen}
       <svg
@@ -50,7 +51,7 @@
         /></svg
       >
     {/if}
-  </button>
+  </div>
   <ul
     tabindex="-1"
     class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
