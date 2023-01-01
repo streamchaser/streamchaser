@@ -130,7 +130,8 @@ func fetchMovie(id string, movieCh chan Movie) {
 func fetchTV(id string, TVCh chan TV) {
 	res, err := http.Get(
 		fmt.Sprintf(
-			"https://api.themoviedb.org/3/tv/%s?api_key=%s&append_to_response=watch/providers,translation", id, TMDB_KEY,
+			// TODO: Re-add tranlations when this is solved: https://www.themoviedb.org/talk/63b20e84875d1a00bdde67a2
+			"https://api.themoviedb.org/3/tv/%s?api_key=%s&append_to_response=watch/providers", id, TMDB_KEY,
 		),
 	)
 	if err != nil {
