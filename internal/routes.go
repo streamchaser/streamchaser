@@ -32,8 +32,8 @@ func DocsRedirect(c *gin.Context) {
 //
 //	@Summary	Takes list of ids, fetch from TMDB, and put into Meilisearch
 //	@Accept		json
-//  @Produce  json
-//  @Param    Ids body MediaIds true "ids to fetch"
+//	@Produce  json
+//	@Param    Ids body MediaIds true "ids to fetch"
 //	@Success	200
 //	@Router		/update-media [post]
 func processIds(c *gin.Context) {

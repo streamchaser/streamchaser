@@ -19,6 +19,7 @@ type Country struct {
 }
 
 // DocsRedirect godoc
+//
 //	@Summary	Redirects to the docs
 //	@Accept		*/*
 //	@Success	301
@@ -31,6 +32,7 @@ func DocsRedirect(c *gin.Context) {
 }
 
 // GetGenres godoc
+//
 //	@Summary	Gets the genres used by TMDB
 //	@Accept		*/*
 //	@Produce	json
@@ -50,6 +52,7 @@ func GetGenres(c *gin.Context) {
 }
 
 // GetCountries godoc
+//
 //	@Summary	Gets the countries used by TMDB
 //	@Accept		*/*
 //	@Produce	json
