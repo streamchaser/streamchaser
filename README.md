@@ -93,6 +93,8 @@ or to get help with a command:
 
 **Thanks to all the great frameworks and tools!**
 
+We will probably forget some, sorry!
+
 Frontend:
 
 - [Svelte](https://github.com/sveltejs/svelte)
@@ -103,14 +105,12 @@ Frontend:
 Backend:
 
 - [FastAPI](https://github.com/tiangolo/fastapi)
-- [SQLAlchemy](https://www.sqlalchemy.org)
+- [redis-py](https://github.com/redis/redis-py)
 - [Gin Gonic](https://gin-gonic.com)
-- [GORM](https://gorm.io)
 
 Databases:
 
 - [MeiliSearch](https://github.com/meilisearch/MeiliSearch)
-- [PostgreSQL](https://github.com/postgres/postgres)
 - [Redis](https://redis.com)
 
 DevOps:
