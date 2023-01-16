@@ -7,6 +7,8 @@ services:
       target: ${APP_ENVIRONMENT} # Specify which stage of the dockerfile to use
     restart: always
     container_name: frontend
+    environment:
+      PUBLIC_ENV: prod
     env_file:
       - .env
     ports:
