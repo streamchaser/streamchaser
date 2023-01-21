@@ -34,48 +34,49 @@ app = typer.Typer()
 
 
 @app.command()
-def imdb_ratings():
+def add_imdb_ratings():
     url = "https://datasets.imdbws.com/title.ratings.tsv.gz"
 
     dir = "../imdb_dumps/"
     Path(dir).mkdir(exist_ok=True)
     res = requests.get(url, stream=True)
-    ratings = []
+    imdb_ratings = {}
 
-    if res.status_code == 200:
-        # First we remove the old files
-        if os.path.isdir(dir):
-            for file in os.listdir(dir):
-                os.remove(os.path.join(dir, file))
+    if not res.status_code == 200:
+        echo_warning("Failed to download imdb file")
+        return
 
-        with open(f"{dir}title.ratings.tsv.gz", "wb") as f:
-            f.write(res.raw.read())
-            print("Downloaded imdb file")
+    # First we remove the old files
+    if os.path.isdir(dir):
+        for file in os.listdir(dir):
+            os.remove(os.path.join(dir, file))
 
-        with gzip.open(dir + "title.ratings.tsv.gz", "rt") as file:
-            tsv_reader = csv.reader(file, delimiter="\t")
+    with open(f"{dir}title.ratings.tsv.gz", "wb") as f:
+        f.write(res.raw.read())
+        print("Downloaded imdb file")
 
-            for _ in file:
-                rating = next(tsv_reader)
-                ratings.append(
-                    {
-                        "imdb_id": rating[0],
-                        "imdb_rating": rating[1],
-                        "rating_amount": rating[2],
-                    }
-                )
+    with gzip.open(dir + "title.ratings.tsv.gz", "rt") as file:
+        tsv_file = csv.reader(file, delimiter="\t")
 
-        all_media = client.index("media").get_documents(
-            {"fields": ["imdb_id", "id"], "limit": 200}
-        )
+        for rating in tsv_file:
+            imdb_ratings[rating[0]] = rating[1]
 
-        for media in all_media.results:
-            for rating in ratings:
-                if rating["imdb_id"] == media.imdb_id:
-                    print(media.id)
-                    client.index("media").update_documents(
-                        [{"id": media.id, "imdb_rating": rating["imdb_rating"]}]
-                    )
+    typer.echo("About to fetch all meilisearch media...")
+
+    all_media = client.index("media").get_documents(
+        {"fields": ["imdb_id", "id", "title"], "limit": 999_999}
+    )
+
+    typer.echo("Adding ratings to meilisearch...")
+
+    imdb_media = [
+        {"id": media.id, "imdb_rating": imdb_ratings.get(media.imdb_id)}
+        for media in all_media.results
+    ]
+
+    client.index("media").update_documents(imdb_media)
+
+    echo_success("Successfully added imdb ratings - indexing might take a while")
 
 
 @app.command()
