@@ -274,6 +274,7 @@ async def full_setup(
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_search()
     await remove_stale_media()  # TODO: remove when it is it's own cronjob
+    add_imdb_ratings()
 
 
 @app.command()
