@@ -14,7 +14,7 @@ client = httpx.AsyncClient(http2=True, base_url="https://image.tmdb.org/t/p/")
 
 @router.get("/")
 async def cached_image_proxy(size: str = "w342", path: str = "/example.jpg"):
-    headers = {"Cache-Control": "max-age=31536000"}
+    headers = {"Cache-Control": "max-age=7200"}  # 2 hours
     if cached_image := (await redis.get(f"image:{size}_{path}")):
         return Response(content=cached_image, media_type="image/jpg", headers=headers)
 
