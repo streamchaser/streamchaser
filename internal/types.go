@@ -9,6 +9,7 @@ import (
 
 type Media struct {
 	Id                         string    `json:"id"`
+	ImdbId                     string    `json:"imdb_id"`
 	Type                       string    `json:"type"`
 	Title                      string    `json:"title"`
 	OriginalTitle              string    `json:"original_title"`
@@ -25,11 +26,12 @@ type Media struct {
 }
 
 type Movie struct {
-	Id            int    `json:"id"`
-	Title         string `json:"title"`
-	OriginalTitle string `json:"original_title"`
-	Overview      string `json:"overview"`
-	ReleaseDate   string `json:"release_date"`
+	Id            int         `json:"id"`
+	ExternalIds   ExternalIds `json:"external_ids"`
+	Title         string      `json:"title"`
+	OriginalTitle string      `json:"original_title"`
+	Overview      string      `json:"overview"`
+	ReleaseDate   string      `json:"release_date"`
 	Genres        []struct {
 		Name string `json:"name"`
 	} `json:"genres"`
@@ -48,6 +50,7 @@ func (movie *Movie) toMedia() *Media {
 
 	return &Media{
 		Id:                         movieId,
+		ImdbId:                     getImdbID(movie.ExternalIds),
 		Type:                       getMediaType(movieId),
 		Title:                      movie.Title,
 		OriginalTitle:              movie.OriginalTitle,
@@ -65,11 +68,12 @@ func (movie *Movie) toMedia() *Media {
 }
 
 type TV struct {
-	Id           int    `json:"id"`
-	Name         string `json:"name"`
-	OriginalName string `json:"original_name"`
-	Overview     string `json:"overview"`
-	FirstAirDate string `json:"first_air_date"`
+	Id           int         `json:"id"`
+	ExternalIds  ExternalIds `json:"external_ids"`
+	Name         string      `json:"name"`
+	OriginalName string      `json:"original_name"`
+	Overview     string      `json:"overview"`
+	FirstAirDate string      `json:"first_air_date"`
 	Genres       []struct {
 		Name string `json:"name"`
 	} `json:"genres"`
@@ -88,6 +92,7 @@ func (tv *TV) toMedia() *Media {
 
 	return &Media{
 		Id:                         tvId,
+		ImdbId:                     getImdbID(tv.ExternalIds),
 		Type:                       getMediaType(tvId),
 		Title:                      tv.Name,
 		OriginalTitle:              tv.OriginalName,
@@ -144,6 +149,14 @@ type FinalTranslations map[string]struct {
 
 type MediaIds struct {
 	Ids []string `json:"ids"`
+}
+
+type ExternalIds struct {
+	ImdbId string `json:"imdb_id"`
+}
+
+func getImdbID(externalIds ExternalIds) string {
+	return externalIds.ImdbId
 }
 
 func getMediaType(id string) string {

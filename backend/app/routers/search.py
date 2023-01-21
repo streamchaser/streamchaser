@@ -121,5 +121,6 @@ async def search(
             "title",
             "poster_path",
             "id",
+            "imdb_rating",
         ],
     )

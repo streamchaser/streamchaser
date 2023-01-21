@@ -11,6 +11,7 @@ class Media(BaseModel):
     genres: list[str | None]
     poster_path: str | None
     popularity: int | None
+    imdb_id: str | None
     supported_provider_countries: list[str]
     providers: dict[str, dict[str, list[dict]]]
 
@@ -34,6 +35,7 @@ class Hit(BaseModel):
     id: str
     title: str
     poster_path: str
+    imdb_rating: str | None
     providers: Providers | None
 
 

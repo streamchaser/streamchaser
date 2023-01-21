@@ -1,9 +1,13 @@
+import csv
 import datetime
+import gzip
 import os
 import xml.etree.cElementTree as ET
 from math import ceil
+from pathlib import Path
 
 import httpx
+import requests
 import typer
 from app.api import fetch_changed_media_ids
 from app.api import fetch_jsongz_files
@@ -27,6 +31,51 @@ from tqdm import tqdm
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
+
+
+@app.command()
+def imdb_ratings():
+    url = "https://datasets.imdbws.com/title.ratings.tsv.gz"
+
+    dir = "../imdb_dumps/"
+    Path(dir).mkdir(exist_ok=True)
+    res = requests.get(url, stream=True)
+    ratings = []
+
+    if res.status_code == 200:
+        # First we remove the old files
+        if os.path.isdir(dir):
+            for file in os.listdir(dir):
+                os.remove(os.path.join(dir, file))
+
+        with open(f"{dir}title.ratings.tsv.gz", "wb") as f:
+            f.write(res.raw.read())
+            print("Downloaded imdb file")
+
+        with gzip.open(dir + "title.ratings.tsv.gz", "rt") as file:
+            tsv_reader = csv.reader(file, delimiter="\t")
+
+            for _ in file:
+                rating = next(tsv_reader)
+                ratings.append(
+                    {
+                        "imdb_id": rating[0],
+                        "imdb_rating": rating[1],
+                        "rating_amount": rating[2],
+                    }
+                )
+
+        all_media = client.index("media").get_documents(
+            {"fields": ["imdb_id", "id"], "limit": 200}
+        )
+
+        for media in all_media.results:
+            for rating in ratings:
+                if rating["imdb_id"] == media.imdb_id:
+                    print(media.id)
+                    client.index("media").update_documents(
+                        [{"id": media.id, "imdb_rating": rating["imdb_rating"]}]
+                    )
 
 
 @app.command()

@@ -19,6 +19,7 @@ __pycache__/
 # Data
 pgdata
 providers_txt
+docker-compose.override.yml
 
 # Frontend
 *.DS_Store
