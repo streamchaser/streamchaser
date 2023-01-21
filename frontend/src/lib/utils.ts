@@ -120,6 +120,18 @@ export const hitProviderAmounts = (searchHits: Hit[], country: string) => {
   return providerAmounts
 }
 
+export const lookupSingleMedia = async (
+  mediaId: string,
+  country: string
+): Promise<{ meilisearch: Meilisearch; providerAmounts: number[] }> => {
+  const res = await fetch(`${PYTHON_API}/media?c=${country}&limit=1&ids=${mediaId}`)
+  const json: Meilisearch = await res.json()
+
+  const providerAmounts = hitProviderAmounts(json.hits, country)
+
+  return { meilisearch: json, providerAmounts: providerAmounts }
+}
+
 export const lookupMedia = async (
   media: Media[] | Recommendation[],
   country: string

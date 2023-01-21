@@ -31,6 +31,7 @@
   runtime={null}
   imdbId={person.imdb_id}
   releaseDate={null}
+  mediaType={"person"}
 />
 
 <PersonMedia media={mediaCreditsWithoutAdult(person)} />

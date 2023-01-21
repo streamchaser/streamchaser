@@ -1,6 +1,7 @@
 <script lang="ts">
-  import ReadMore from "./read_more.svelte"
-  import { uniqueProviders } from "$lib/utils"
+  import ReadMore from "$lib/components/details/read_more.svelte"
+  import { page } from "$app/stores"
+  import { lookupSingleMedia, uniqueProviders } from "$lib/utils"
   import { currentCountry, currentGenres, inputQuery } from "$lib/stores/preferences"
   import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "$lib/variables"
   import type { Provider } from "$lib/generated"
@@ -17,6 +18,9 @@
   export let runtime: number
   export let imdbId: string
   export let releaseDate: string
+  export let mediaType: string
+
+  const mediaId = mediaType.charAt(0) + $page.params.id
 
   let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
 
@@ -70,18 +74,34 @@
       <div class="flex justify-between">
         <h2 class="card-title">{title}</h2>
         {#if imdbId}
-          <a
-            href="https://www.imdb.com/{imdbId.startsWith('tt')
-              ? 'title'
-              : 'name'}/{imdbId}"
-          >
-            <div
-              class="badge badge-secondary mx-2 transform
+          {#if imdbId.startsWith("tt")}
+            {#await lookupSingleMedia(mediaId, $currentCountry)}
+              <a href="https://www.imdb.com/title/{imdbId}">
+                <div
+                  class="badge badge-secondary mx-2 transform
                                 hover:contrast-75"
-            >
-              IMDb
-            </div>
-          </a>
+                >
+                  IMDb
+                </div>
+              </a>
+            {:then lookup}
+              <a href="https://www.imdb.com/title/{imdbId}">
+                <div class="badge badge-secondary mx-2 transform hover:contrast-75">
+                  <b>IMDb&nbsp;</b>{lookup.meilisearch.hits[0].imdb_rating}<b>&nbsp;★</b
+                  >
+                </div>
+              </a>
+            {/await}
+          {:else}
+            <a href="https://www.imdb.com/name/{imdbId}">
+              <div
+                class="badge badge-secondary mx-2 transform
+                                hover:contrast-75"
+              >
+                IMDb
+              </div>
+            </a>
+          {/if}
         {/if}
       </div>
       {#if releaseDate && runtime}
