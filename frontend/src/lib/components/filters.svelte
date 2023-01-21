@@ -202,6 +202,30 @@
                 }}
               />
             </label>
+            <label class="label cursor-pointer">
+              <span class="label-text">IMDb rating</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$sorting.by.imdbRating}
+                on:change={() => {
+                  if (!$sorting.by.imdbRating) {
+                    //When disabled
+                    $sorting.by.imdbRating = false
+                  } else if ($sorting.by.imdbRating) {
+                    //When enabled
+                    for (const key in $sorting.by) {
+                      $sorting.by[key] = false
+                    }
+                    $sorting.by.imdbRating = true
+                    descLabelText = "Higest"
+                    ascLabelText = "Lowest"
+                  }
+
+                  search()
+                }}
+              />
+            </label>
             <div class="divider" />
             <div class="form-control">
               <label class="label cursor-pointer">

@@ -23,7 +23,7 @@ def search_client_config(index: str = "media"):
     )
 
     client.index(index).update_sortable_attributes(
-        ["popularity", "release_date", "updated_at_unix"]
+        ["popularity", "release_date", "updated_at_unix", "imdb_rating"]
     )
 
     client.index(index).update_ranking_rules(

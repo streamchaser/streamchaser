@@ -71,6 +71,8 @@
       query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
     } else if ($sorting.by.releaseDate) {
       query += `&release_date=${$sorting.asc ? "asc" : "desc"}`
+    } else if ($sorting.by.imdbRating) {
+      query += `&imdb_rating=${$sorting.asc ? "asc" : "desc"}`
     }
     // Searches for all(*) if empty input
     // Empty input will only return media with providers

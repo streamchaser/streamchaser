@@ -19,7 +19,9 @@ class Order(Enum):
     DESCENDING = "desc"
 
 
-def sort_from_queries(release_date: Order | None, popularity: Order | None) -> list:
+def sort_from_queries(
+    release_date: Order | None, popularity: Order | None, imdb_rating: Order | None
+) -> list:
     sort = []
 
     match release_date:
@@ -33,6 +35,12 @@ def sort_from_queries(release_date: Order | None, popularity: Order | None) -> l
             sort.append("popularity:asc")
         case Order.DESCENDING:
             sort.append("popularity:desc")
+
+    match imdb_rating:
+        case Order.ASCENDING:
+            sort.append("imdb_rating:asc")
+        case Order.DESCENDING:
+            sort.append("imdb_rating:desc")
 
     return sort
 
@@ -82,6 +90,7 @@ async def search(
     t: list[str] | None = Query(None, description="Content type"),
     release_date: Order | None = Query(None, description="Release date sorting"),
     popularity: Order | None = Query(None, description="Popularity sorting"),
+    imdb_rating: Order | None = Query(None, description="IMDb rating sorting"),
 ) -> Meilisearch:
     """
     # Our endpoint for the MeiliSearch API
@@ -96,12 +105,16 @@ async def search(
 
     # Default sorting if no user_input
     if user_input == "*":
-        sort = sort_from_queries(release_date=None, popularity=Order.DESCENDING)
+        sort = sort_from_queries(
+            release_date=None, popularity=Order.DESCENDING, imdb_rating=None
+        )
     else:
-        sort = sort_from_queries(release_date=None, popularity=None)
+        sort = sort_from_queries(release_date=None, popularity=None, imdb_rating=None)
 
-    if release_date or popularity:
-        sort = sort_from_queries(release_date=release_date, popularity=popularity)
+    if release_date or popularity or imdb_rating:
+        sort = sort_from_queries(
+            release_date=release_date, popularity=popularity, imdb_rating=imdb_rating
+        )
 
     filter = filter_from_queries(
         country_code=country_code,

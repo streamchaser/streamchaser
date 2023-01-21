@@ -30,6 +30,7 @@ interface Sorting {
   by: {
     popularity: boolean
     releaseDate: boolean
+    imdbRating: boolean
   }
   asc: boolean
 }
@@ -37,7 +38,7 @@ interface Sorting {
 export const sorting = writable<Sorting>(
   browser && localStorage.getItem("sorting") !== null
     ? JSON.parse(localStorage.getItem("sorting"))
-    : { by: { popularity: false, releaseDate: false }, asc: false }
+    : { by: { popularity: false, releaseDate: false, imdbRating: false }, asc: false }
 )
 
 interface Filters {
