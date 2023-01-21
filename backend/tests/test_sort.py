@@ -35,3 +35,21 @@ class TestReleaseDateSort:
         hit_release_dates = [hit["release_date"] for hit in search_results["hits"]]
 
         assert sorted(hit_release_dates, reverse=True) == hit_release_dates
+
+
+class TestImdbRatingSorting:
+    def test_imdb_rating_ascending(self):
+        search_results = client.index("media_TEST").search(
+            "*", {"sort": ["imdb_rating:asc"]}
+        )
+        hit_imdb_ratings = [hit["imdb_rating"] for hit in search_results["hits"]]
+
+        assert sorted(hit_imdb_ratings) == hit_imdb_ratings
+
+    def test_imdb_rating_descending(self):
+        search_results = client.index("media_TEST").search(
+            "*", {"sort": ["imdb_rating:desc"]}
+        )
+        hit_imdb_ratings = [hit["imdb_rating"] for hit in search_results["hits"]]
+
+        assert sorted(hit_imdb_ratings, reverse=True) == hit_imdb_ratings
