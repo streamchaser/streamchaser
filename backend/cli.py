@@ -1,3 +1,4 @@
+import asyncio
 import csv
 import datetime
 import gzip
@@ -274,6 +275,17 @@ async def full_setup(
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_search()
     await remove_stale_media()  # TODO: remove when it is it's own cronjob
+
+    typer.echo("Waiting for indexing to finish...")
+
+    stats = await async_client.index("media").get_stats()
+
+    while stats.is_indexing:
+        await asyncio.sleep(1)
+        stats = await async_client.index("media").get_stats()
+
+    echo_success("indexing finished")
+
     add_imdb_ratings()
 
 
