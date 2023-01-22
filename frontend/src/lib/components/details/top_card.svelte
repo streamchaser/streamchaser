@@ -88,8 +88,13 @@
             {:then lookup}
               <a href="https://www.imdb.com/title/{imdbId}">
                 <div class="badge badge-secondary mx-2 transform hover:contrast-75">
-                  <b>IMDb&nbsp;</b>{lookup.meilisearch.hits[0].imdb_rating}<b>&nbsp;★</b
-                  >
+                  {#if lookup.meilisearch.hits[0].imdb_rating}
+                    <b>IMDb&nbsp;</b>{lookup.meilisearch.hits[0].imdb_rating}<b
+                      >&nbsp;★</b
+                    >
+                  {:else}
+                    <b>IMDb</b>
+                  {/if}
                 </div>
               </a>
             {/await}
@@ -100,7 +105,7 @@
                 class="badge badge-secondary mx-2 transform
                                 hover:contrast-75"
               >
-                IMDb
+                <b>IMDb</b>
               </div>
             </a>
           {/if}
