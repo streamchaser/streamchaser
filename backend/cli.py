@@ -54,7 +54,7 @@ def add_imdb_ratings():
 
     with open(f"{dir}title.ratings.tsv.gz", "wb") as f:
         f.write(res.raw.read())
-        print("Downloaded imdb file")
+        echo_success("Downloaded IMDb file")
 
     with gzip.open(dir + "title.ratings.tsv.gz", "rt") as file:
         tsv_file = csv.reader(file, delimiter="\t")

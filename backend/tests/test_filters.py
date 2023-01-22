@@ -48,6 +48,29 @@ class TestTypeFilter:
         assert "movie" and "tv" in [media["type"] for media in search_results["hits"]]
 
 
+class TestImdbFilter:
+    def test_5_9_rating(self):
+        search_results = client.index("media_TEST").search(
+            "*", {"filter": "imdb_rating >= 5.9"}
+        )
+
+        assert search_results["estimatedTotalHits"] == 2
+
+    def test_10_rating(self):
+        search_results = client.index("media_TEST").search(
+            "*", {"filter": "imdb_rating >= 10"}
+        )
+
+        assert search_results["estimatedTotalHits"] == 0
+
+    def test_2_rating(self):
+        search_results = client.index("media_TEST").search(
+            "*", {"filter": "imdb_rating >= 2"}
+        )
+
+        assert search_results["estimatedTotalHits"] == 3
+
+
 class TestFilterFromQueries:
     """Tests the functionality of filter_from_queries()
     which is used to turn the index page queries into a MeiliSearch filter

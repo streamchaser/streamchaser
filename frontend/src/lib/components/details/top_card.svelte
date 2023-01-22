@@ -74,6 +74,7 @@
       <div class="flex justify-between">
         <h2 class="card-title">{title}</h2>
         {#if imdbId}
+          <!-- TV shows or movies -->
           {#if imdbId.startsWith("tt")}
             {#await lookupSingleMedia(mediaId, $currentCountry)}
               <a href="https://www.imdb.com/title/{imdbId}">
@@ -92,6 +93,7 @@
                 </div>
               </a>
             {/await}
+            <!-- Person -->
           {:else}
             <a href="https://www.imdb.com/name/{imdbId}">
               <div

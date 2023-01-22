@@ -131,6 +131,7 @@ type Translations struct {
 		Iso311661   string `json:"iso_3166_1"`
 		Iso6391     string `json:"iso_639_1"`
 		Title       string `json:"title"`
+		Name        string `json:"name"`
 		EnglishName string `json:"english_name"`
 		Data        struct {
 			Homepage string `json:"homepage"`
