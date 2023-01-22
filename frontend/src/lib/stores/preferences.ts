@@ -44,12 +44,13 @@ export const sorting = writable<Sorting>(
 interface Filters {
   tvChecked: boolean
   movieChecked: boolean
+  minImdb: number
 }
 
 export const filters = writable<Filters>(
   browser && sessionStorage.getItem("filters") !== null
     ? JSON.parse(sessionStorage.getItem("filters"))
-    : { tvChecked: true, movieChecked: true }
+    : { tvChecked: true, movieChecked: true, minImdb: 0 }
 )
 
 filters.subscribe(value => {

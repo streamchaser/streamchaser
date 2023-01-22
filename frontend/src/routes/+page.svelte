@@ -67,6 +67,10 @@
       query += "&t=tv"
     }
 
+    if ($filters.minImdb) {
+      query += `&min_imdb=${$filters.minImdb}`
+    }
+
     if ($sorting.by.popularity) {
       query += `&popularity=${$sorting.asc ? "asc" : "desc"}`
     } else if ($sorting.by.releaseDate) {

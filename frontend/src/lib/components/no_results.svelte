@@ -28,13 +28,16 @@
         <i>Consider adding more providers or removing all</i>
       </p>
     {/if}
-    {#if Object.values($filters).includes(false)}
+    {#if Object.values($filters).includes(false) || $filters.minImdb}
       <p class="pt-2">With filter(s):</p>
       {#if !$filters.movieChecked}
-        <div class="badge mx-1">No Movies</div>
+        <div class="badge mx-1">No movies</div>
       {/if}
       {#if !$filters.tvChecked}
-        <div class="badge mx-1">No TV Shows</div>
+        <div class="badge mx-1">No TV shows</div>
+      {/if}
+      {#if $filters.minImdb}
+        <div class="badge mx-1">IMDb rating above {$filters.minImdb}</div>
       {/if}
       <p class="text-xs pt-1">
         <i>Consider removing the filter(s)</i>

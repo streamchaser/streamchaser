@@ -71,7 +71,9 @@ def add_imdb_ratings():
     typer.echo("Adding ratings to meilisearch...")
 
     imdb_media = [
-        {"id": media.id, "imdb_rating": imdb_ratings.get(media.imdb_id)}
+        {"id": media.id, "imdb_rating": float(imdb_ratings[media.imdb_id])}
+        if imdb_ratings.get(media.imdb_id)
+        else {"id": media.id, "imdb_rating": None}
         for media in all_media.results
     ]
 

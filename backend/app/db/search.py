@@ -14,6 +14,7 @@ def search_client_config(index: str = "media"):
             "type",
             "id",
             "updated_at_unix",
+            "imdb_rating",
         ]
     )
 
