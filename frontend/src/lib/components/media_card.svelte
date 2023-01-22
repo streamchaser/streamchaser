@@ -56,6 +56,11 @@
       </h2>
     </figure>
   {/if}
+  {#if media.imdb_rating}
+    <div class="absolute top-0 left-0 mx-1 -mt-1 opacity-85">
+      <div class="badge badge-sm"><b>★&nbsp;</b>{media.imdb_rating}</div>
+    </div>
+  {/if}
   {#if media.id.charAt(0) == "t"}
     <div class="absolute top-0 right-0 mx-1 -mt-1 opacity-85">
       <div class="badge badge-sm">TV</div>

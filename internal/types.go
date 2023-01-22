@@ -9,6 +9,7 @@ import (
 
 type Media struct {
 	Id                         string    `json:"id"`
+	ImdbId                     string    `json:"imdb_id"`
 	Type                       string    `json:"type"`
 	Title                      string    `json:"title"`
 	OriginalTitle              string    `json:"original_title"`
@@ -25,11 +26,12 @@ type Media struct {
 }
 
 type Movie struct {
-	Id            int    `json:"id"`
-	Title         string `json:"title"`
-	OriginalTitle string `json:"original_title"`
-	Overview      string `json:"overview"`
-	ReleaseDate   string `json:"release_date"`
+	Id            int         `json:"id"`
+	ExternalIds   ExternalIds `json:"external_ids"`
+	Title         string      `json:"title"`
+	OriginalTitle string      `json:"original_title"`
+	Overview      string      `json:"overview"`
+	ReleaseDate   string      `json:"release_date"`
 	Genres        []struct {
 		Name string `json:"name"`
 	} `json:"genres"`
@@ -48,6 +50,7 @@ func (movie *Movie) toMedia() *Media {
 
 	return &Media{
 		Id:                         movieId,
+		ImdbId:                     movie.ExternalIds.ImdbId,
 		Type:                       getMediaType(movieId),
 		Title:                      movie.Title,
 		OriginalTitle:              movie.OriginalTitle,
@@ -58,18 +61,19 @@ func (movie *Movie) toMedia() *Media {
 		Popularity:                 movie.Popularity,
 		SupportedProviderCountries: getSupportedProviderCountries(movie.Providers),
 		Providers:                  movie.Providers,
-		TitleTranslations:          concatenateTranslatedTitles(movie.Translations),
+		TitleTranslations:          concatenateTranslatedTitles(movie.Translations, "movie"),
 		UpdatedAt:                  time.Now(),
 		UpdatedAtUnix:              time.Now().Unix(),
 	}
 }
 
 type TV struct {
-	Id           int    `json:"id"`
-	Name         string `json:"name"`
-	OriginalName string `json:"original_name"`
-	Overview     string `json:"overview"`
-	FirstAirDate string `json:"first_air_date"`
+	Id           int         `json:"id"`
+	ExternalIds  ExternalIds `json:"external_ids"`
+	Name         string      `json:"name"`
+	OriginalName string      `json:"original_name"`
+	Overview     string      `json:"overview"`
+	FirstAirDate string      `json:"first_air_date"`
 	Genres       []struct {
 		Name string `json:"name"`
 	} `json:"genres"`
@@ -88,6 +92,7 @@ func (tv *TV) toMedia() *Media {
 
 	return &Media{
 		Id:                         tvId,
+		ImdbId:                     tv.ExternalIds.ImdbId,
 		Type:                       getMediaType(tvId),
 		Title:                      tv.Name,
 		OriginalTitle:              tv.OriginalName,
@@ -98,7 +103,7 @@ func (tv *TV) toMedia() *Media {
 		Popularity:                 tv.Popularity,
 		SupportedProviderCountries: getSupportedProviderCountries(tv.Providers),
 		Providers:                  tv.Providers,
-		TitleTranslations:          concatenateTranslatedTitles(tv.Translations),
+		TitleTranslations:          concatenateTranslatedTitles(tv.Translations, "tv"),
 		UpdatedAt:                  time.Now(),
 		UpdatedAtUnix:              time.Now().Unix(),
 	}
@@ -125,12 +130,14 @@ type Translations struct {
 	InnerTranslations []struct {
 		Iso311661   string `json:"iso_3166_1"`
 		Iso6391     string `json:"iso_639_1"`
+		Title       string `json:"title"`
 		Name        string `json:"name"`
 		EnglishName string `json:"english_name"`
 		Data        struct {
 			Homepage string `json:"homepage"`
 			Overview string `json:"overview"`
 			Runtime  int    `json:"runtime"`
+			Name     string `json:"name"`
 			Tagline  string `json:"tagline"`
 			Title    string `json:"title"`
 		} `json:"data"`
@@ -144,6 +151,10 @@ type FinalTranslations map[string]struct {
 
 type MediaIds struct {
 	Ids []string `json:"ids"`
+}
+
+type ExternalIds struct {
+	ImdbId string `json:"imdb_id"`
 }
 
 func getMediaType(id string) string {
@@ -171,12 +182,20 @@ func getSupportedProviderCountries(providers Provider) []string {
 	return supportedProviderCountries
 }
 
-func concatenateTranslatedTitles(translations Translations) string {
+func concatenateTranslatedTitles(translations Translations, mediaType string) string {
 	var translatedTitles strings.Builder
 
-	for _, translation := range translations.InnerTranslations {
-		if translation.Data.Title != "" {
-			translatedTitles.WriteString(translation.Data.Title + ", ")
+	if mediaType == "movie" {
+		for _, translation := range translations.InnerTranslations {
+			if translation.Data.Title != "" {
+				translatedTitles.WriteString(translation.Data.Title + ", ")
+			}
+		}
+	} else {
+		for _, translation := range translations.InnerTranslations {
+			if translation.Data.Name != "" {
+				translatedTitles.WriteString(translation.Data.Name + ", ")
+			}
 		}
 	}
 

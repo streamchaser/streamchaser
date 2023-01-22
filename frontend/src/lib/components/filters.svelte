@@ -11,9 +11,8 @@
   let ascLabelText = "Lowest"
 
   $: sortingAmount = Object.values($sorting.by).filter(v => v === true).length
-
-  $: filterAmount = Object.values($filters).filter(v => v === false).length
-
+  $: imdbAmount = $filters.minImdb != 0 ? 1 : 0
+  $: filterAmount = Object.values($filters).filter(v => v === false).length + imdbAmount
   $: totalAmount =
     sortingAmount + filterAmount + (sortingAmount ? ($sorting.asc ? 1 : 0) : 0)
 
@@ -143,11 +142,26 @@
               />
             </label>
           </div>
+
+          <div class="divider" />
+          <h3 class="text-neutral-content"><b>IMDb rating</b></h3>
+          <p class="text-neutral-content">Minimum: {$filters.minImdb}</p>
+          <input
+            type="range"
+            min="0.0"
+            max="10.0"
+            step="0.1"
+            on:change={search}
+            bind:value={$filters.minImdb}
+            class="range"
+          />
           <br />
           <button
             class="btn btn-xs {filterAmount ? 'btn-primary' : 'btn-disabled'}"
             on:click={() => {
-              Object.keys($filters).forEach(k => ($filters[k] = true))
+              $filters.minImdb = 0
+              $filters.tvChecked = true
+              $filters.movieChecked = true
               search()
             }}>{filterAmount ? "Clear filters" : "No filters chosen"}</button
           >
@@ -196,6 +210,30 @@
                     $sorting.by.releaseDate = true
                     descLabelText = "Newest"
                     ascLabelText = "Oldest"
+                  }
+
+                  search()
+                }}
+              />
+            </label>
+            <label class="label cursor-pointer">
+              <span class="label-text">IMDb rating</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$sorting.by.imdbRating}
+                on:change={() => {
+                  if (!$sorting.by.imdbRating) {
+                    //When disabled
+                    $sorting.by.imdbRating = false
+                  } else if ($sorting.by.imdbRating) {
+                    //When enabled
+                    for (const key in $sorting.by) {
+                      $sorting.by[key] = false
+                    }
+                    $sorting.by.imdbRating = true
+                    descLabelText = "Higest"
+                    ascLabelText = "Lowest"
                   }
 
                   search()

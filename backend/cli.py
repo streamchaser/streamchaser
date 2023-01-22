@@ -1,9 +1,14 @@
+import asyncio
+import csv
 import datetime
+import gzip
 import os
 import xml.etree.cElementTree as ET
 from math import ceil
+from pathlib import Path
 
 import httpx
+import requests
 import typer
 from app.api import fetch_changed_media_ids
 from app.api import fetch_jsongz_files
@@ -27,6 +32,54 @@ from tqdm import tqdm
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
+
+
+@app.command()
+def add_imdb_ratings():
+    url = "https://datasets.imdbws.com/title.ratings.tsv.gz"
+
+    dir = "../imdb_dumps/"
+    Path(dir).mkdir(exist_ok=True)
+    res = requests.get(url, stream=True)
+    imdb_ratings = {}
+
+    if not res.status_code == 200:
+        echo_warning("Failed to download imdb file")
+        return
+
+    # First we remove the old files
+    if os.path.isdir(dir):
+        for file in os.listdir(dir):
+            os.remove(os.path.join(dir, file))
+
+    with open(f"{dir}title.ratings.tsv.gz", "wb") as f:
+        f.write(res.raw.read())
+        echo_success("Downloaded IMDb file")
+
+    with gzip.open(dir + "title.ratings.tsv.gz", "rt") as file:
+        tsv_file = csv.reader(file, delimiter="\t")
+
+        for rating in tsv_file:
+            imdb_ratings[rating[0]] = rating[1]
+
+    typer.echo("About to fetch all meilisearch media...")
+
+    all_media = client.index("media").get_documents(
+        {"fields": ["imdb_id", "id", "title"], "limit": 999_999}
+    )
+
+    typer.echo("Adding ratings to meilisearch...")
+
+    imdb_media = [
+        {"id": media.id, "imdb_rating": float(imdb_ratings[media.imdb_id])}
+        if imdb_ratings.get(media.imdb_id)
+        else {"id": media.id, "imdb_rating": None}
+        for media in all_media.results
+    ]
+
+    client.index("media").update_documents(imdb_media)
+
+    echo_success("Successfully added imdb ratings - indexing might take a while")
 
 
 @app.command()
@@ -224,6 +277,18 @@ async def full_setup(
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_search()
     await remove_stale_media()  # TODO: remove when it is it's own cronjob
+
+    typer.echo("Waiting for indexing to finish...")
+
+    stats = await async_client.index("media").get_stats()
+
+    while stats.is_indexing:
+        await asyncio.sleep(1)
+        stats = await async_client.index("media").get_stats()
+
+    echo_success("indexing finished")
+
+    add_imdb_ratings()
 
 
 @app.command()

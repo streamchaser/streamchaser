@@ -19,7 +19,9 @@ class Order(Enum):
     DESCENDING = "desc"
 
 
-def sort_from_queries(release_date: Order | None, popularity: Order | None) -> list:
+def sort_from_queries(
+    release_date: Order | None, popularity: Order | None, imdb_rating: Order | None
+) -> list:
     sort = []
 
     match release_date:
@@ -34,6 +36,12 @@ def sort_from_queries(release_date: Order | None, popularity: Order | None) -> l
         case Order.DESCENDING:
             sort.append("popularity:desc")
 
+    match imdb_rating:
+        case Order.ASCENDING:
+            sort.append("imdb_rating:asc")
+        case Order.DESCENDING:
+            sort.append("imdb_rating:desc")
+
     return sort
 
 
@@ -43,6 +51,7 @@ def filter_from_queries(
     genres: list | None = None,
     types: list | None = None,
     only_providers: bool = False,
+    min_imdb: float | None = None,
 ) -> list:
     filter = []
 
@@ -66,6 +75,10 @@ def filter_from_queries(
     if types:
         filter.append([f'type="{type}"' for type in types])
 
+    if min_imdb:
+        print(min_imdb)
+        filter.append([f"imdb_rating >= {min_imdb}"])
+
     return filter
 
 
@@ -77,11 +90,13 @@ async def search(
     ),
     c: str = Query("DK", description="Country code"),
     only_providers: bool = Query(False, description="Only media with providers"),
+    min_imdb: float | None = Query(None, description="Filter by minimum IMDb rating"),
     g: list[str] | None = Query(None, description="Genres"),
     p: list[str] | None = Query(None, description="Providers"),
     t: list[str] | None = Query(None, description="Content type"),
     release_date: Order | None = Query(None, description="Release date sorting"),
     popularity: Order | None = Query(None, description="Popularity sorting"),
+    imdb_rating: Order | None = Query(None, description="IMDb rating sorting"),
 ) -> Meilisearch:
     """
     # Our endpoint for the MeiliSearch API
@@ -96,12 +111,16 @@ async def search(
 
     # Default sorting if no user_input
     if user_input == "*":
-        sort = sort_from_queries(release_date=None, popularity=Order.DESCENDING)
+        sort = sort_from_queries(
+            release_date=None, popularity=Order.DESCENDING, imdb_rating=None
+        )
     else:
-        sort = sort_from_queries(release_date=None, popularity=None)
+        sort = sort_from_queries(release_date=None, popularity=None, imdb_rating=None)
 
-    if release_date or popularity:
-        sort = sort_from_queries(release_date=release_date, popularity=popularity)
+    if release_date or popularity or imdb_rating:
+        sort = sort_from_queries(
+            release_date=release_date, popularity=popularity, imdb_rating=imdb_rating
+        )
 
     filter = filter_from_queries(
         country_code=country_code,
@@ -109,7 +128,10 @@ async def search(
         genres=g,
         types=t,
         only_providers=only_providers,
+        min_imdb=min_imdb,
     )
+
+    print(filter)
 
     return await async_client.index("media").search(
         user_input,
@@ -121,5 +143,6 @@ async def search(
             "title",
             "poster_path",
             "id",
+            "imdb_rating",
         ],
     )

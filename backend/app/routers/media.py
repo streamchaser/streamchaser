@@ -35,5 +35,6 @@ async def lookup_ids(
             "title",
             "poster_path",
             "id",
+            "imdb_rating",
         ],
     )

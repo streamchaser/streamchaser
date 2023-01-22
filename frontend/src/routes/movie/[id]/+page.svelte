@@ -33,6 +33,7 @@
   runtime={data.movie.runtime}
   imdbId={data.movie.imdb_id}
   releaseDate={data.movie.release_date}
+  mediaType={"movie"}
 />
 
 <Person cast={data.movie.cast} />

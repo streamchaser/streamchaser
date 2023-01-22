@@ -6,6 +6,7 @@ test_data = [
     {
         "id": "m340102",
         "type": "movie",
+        "imdb_rating": 5.3,
         "title": "The New Mutants",
         "original_title": "The New Mutants",
         "overview": "The New Mutants overview",
@@ -32,6 +33,7 @@ test_data = [
     {
         "id": "m283700",
         "type": "movie",
+        "imdb_rating": 5.9,
         "title": "Pasolini",
         "original_title": "Pasolini",
         "overview": "Pasolini overview",
@@ -58,6 +60,7 @@ test_data = [
     {
         "id": "t205051",
         "type": "tv",
+        "imdb_rating": 1.2,
         "title": "Pela Estrada Fora",
         "original_title": "Pela Estrada Fora",
         "overview": "",
@@ -71,6 +74,7 @@ test_data = [
     {
         "id": "t1877",
         "type": "tv",
+        "imdb_rating": 8.1,
         "title": "Phineas and Ferb",
         "original_title": "Phineas and Ferb",
         "overview": "Phineas and Ferb overview",

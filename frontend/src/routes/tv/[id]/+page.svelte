@@ -34,6 +34,7 @@
   runtime={data.tv.episode_run_time[0]}
   imdbId={data.tv.imdb_id}
   releaseDate={data.tv.first_air_date}
+  mediaType={"tv"}
 />
 
 <Seasons seasons={data.tv.seasons} />
