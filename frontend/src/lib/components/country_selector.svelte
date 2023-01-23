@@ -5,6 +5,7 @@
   import { get } from "svelte/store"
 
   export let countries: main_Country[]
+  export let handleDropdownClick: Function | undefined = undefined
 </script>
 
 <div>
@@ -32,6 +33,9 @@
       value={countries[countries.findIndex(v => v.value === get(currentCountry))]}
       on:select={e => {
         $currentCountry = e.detail.value
+        if (handleDropdownClick) {
+          handleDropdownClick()
+        }
       }}
       items={countries}
       placeholder="Select country..."

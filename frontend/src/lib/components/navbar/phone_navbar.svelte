@@ -1,7 +1,6 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
   import type { main_Country } from "$lib/generated/go"
-
   import CountrySelector from "$lib/components/country_selector.svelte"
   import ThemeSelector from "$lib/components/theme_selector.svelte"
 
@@ -48,9 +47,9 @@
         on:click={handleDropdownClick}
         on:keypress={handleDropdownClick}
       >
-        {#if isDropdownOpen}
+        <div class="swap swap-rotate">
           <svg
-            class="swap-on fill-current"
+            class="{isDropdownOpen ? 'swap-off' : 'swap-on'} fill-current"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -59,9 +58,8 @@
               points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"
             /></svg
           >
-        {:else}
           <svg
-            class="swap-off fill-current"
+            class="{isDropdownOpen ? 'swap-on' : 'swap-off'} fill-current"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -70,16 +68,14 @@
               d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
             /></svg
           >
-        {/if}
+        </div>
       </div>
       <ul
         tabindex="-1"
         class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56"
         style:visibility={isDropdownOpen ? "visible" : "hidden"}
-        on:click={handleDropdownClick}
-        on:keypress={handleDropdownClick}
       >
-        <CountrySelector {countries} />
+        <CountrySelector {countries} {handleDropdownClick} />
         <li><a href="/faq">FAQ</a></li>
         <li><a href="/about">About</a></li>
         <li>
