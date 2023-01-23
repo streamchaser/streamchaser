@@ -3,19 +3,18 @@
   import type { main_Country } from "$lib/generated/go"
   import CountrySelector from "$lib/components/country_selector.svelte"
   import ThemeSelector from "$lib/components/theme_selector.svelte"
+  import { isBurgerMenuOpen } from "$lib/stores/stores"
 
   export let countries: main_Country[]
 
-  let isDropdownOpen = false
-
   const handleDropdownClick = () => {
-    isDropdownOpen = !isDropdownOpen
+    $isBurgerMenuOpen = !$isBurgerMenuOpen
   }
 
   const handleDropdownFocusLost = ({ relatedTarget, currentTarget }) => {
     if (relatedTarget instanceof HTMLElement && currentTarget.contains(relatedTarget))
       return
-    isDropdownOpen = false
+    $isBurgerMenuOpen = false
   }
 </script>
 
@@ -49,7 +48,7 @@
       >
         <div class="swap swap-rotate">
           <svg
-            class="{isDropdownOpen ? 'swap-off' : 'swap-on'} fill-current"
+            class="{$isBurgerMenuOpen ? 'swap-off' : 'swap-on'} fill-current"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -59,7 +58,7 @@
             /></svg
           >
           <svg
-            class="{isDropdownOpen ? 'swap-on' : 'swap-off'} fill-current"
+            class="{$isBurgerMenuOpen ? 'swap-on' : 'swap-off'} fill-current"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -73,9 +72,9 @@
       <ul
         tabindex="-1"
         class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56"
-        style:visibility={isDropdownOpen ? "visible" : "hidden"}
+        style:visibility={$isBurgerMenuOpen ? "visible" : "hidden"}
       >
-        <CountrySelector {countries} {handleDropdownClick} />
+        <CountrySelector {countries} />
         <li><a href="/faq">FAQ</a></li>
         <li><a href="/about">About</a></li>
         <li>
