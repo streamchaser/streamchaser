@@ -35,7 +35,7 @@ app = typer.Typer()
 
 
 @app.command()
-def add_imdb_ratings():
+def add_imdb_ratings(min_votes: int = 50):
     url = "https://datasets.imdbws.com/title.ratings.tsv.gz"
 
     dir = "../imdb_dumps/"
@@ -60,7 +60,7 @@ def add_imdb_ratings():
         tsv_file = csv.reader(file, delimiter="\t")
 
         for rating in tsv_file:
-            imdb_ratings[rating[0]] = rating[1]
+            imdb_ratings[rating[0]] = {"rating": rating[1], "votes": rating[2]}
 
     typer.echo("About to fetch all meilisearch media...")
 
@@ -71,8 +71,12 @@ def add_imdb_ratings():
     typer.echo("Adding ratings to meilisearch...")
 
     imdb_media = [
-        {"id": media.id, "imdb_rating": float(imdb_ratings[media.imdb_id])}
+        {
+            "id": media.id,
+            "imdb_rating": float(imdb_ratings[media.imdb_id].get("rating")),
+        }
         if imdb_ratings.get(media.imdb_id)
+        and int(imdb_ratings[media.imdb_id]["votes"]) >= min_votes
         else {"id": media.id, "imdb_rating": None}
         for media in all_media.results
     ]
