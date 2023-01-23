@@ -8,7 +8,7 @@
   export let countries: main_Country[]
 </script>
 
-<div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16">
+<div class="w-full navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16">
   <div class="flex-none sm:px-2 sm:mx-2">
     <a href="/">
       <img

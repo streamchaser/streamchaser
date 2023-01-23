@@ -24,8 +24,8 @@
 
 {#if meilisearch && meilisearch.hits.length}
   <div
-    class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
-                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-2 pb-4"
+    class="grid grid-cols-2 2xl:grid-cols-6 xl:grid-cols-5 lg:grid-cols-4
+                    md:grid-cols-3 sm:grid-cols-3 gap-2 pt-2 pb-4 mx-2"
   >
     {#each meilisearch.hits as media, mediaIndex}
       <MediaCard {providerAmounts} {mediaIndex} {media} />

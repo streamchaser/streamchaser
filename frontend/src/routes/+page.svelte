@@ -3,7 +3,6 @@
   import { PYTHON_API } from "$lib/variables.js"
   import Select from "svelte-select"
   import MediaSearch from "$lib/components/media_search.svelte"
-  import Filters from "$lib/components/filters.svelte"
   import Head from "$lib/components/head.svelte"
   import {
     currentCountry,
@@ -13,6 +12,7 @@
     filters,
     sorting,
   } from "$lib/stores/preferences"
+  import { totalFilterAmount } from "$lib/stores/stores"
   import { onMount } from "svelte"
   import type { Meilisearch } from "$lib/generated"
   import type { PageData } from "./$types"
@@ -27,30 +27,14 @@
   let meilisearch: Meilisearch
   let providerAmounts: number[] = []
   let viewPortWidth: number
-  let currentMediaAmount: number
-  let mediaStartAmount: number
+  let currentMediaAmount = 24
+  let mediaStartAmount = 24
 
-  const setViewportToDefault = () => {
-    viewPortWidth = window.visualViewport.width
-    currentMediaAmount = calculateAmountOfShownItems({
-      width: viewPortWidth,
-      xxl: 35,
-      xl: 30,
-      lg: 25,
-      md: 20,
-      sm: 15,
-      mobile: 10,
-    })
-    mediaStartAmount = currentMediaAmount
-  }
+  $: $filters, $sorting, search()
 
   const search = async () => {
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
-
-    if (!currentMediaAmount) {
-      setViewportToDefault()
-    }
 
     let query = ""
     for (let i = 0; i < $currentGenres.length; i++) {
@@ -120,7 +104,6 @@
   // Invalidates data (refetched) when the country changes
   // The browser check is because of the messy viewport logic
   $: if ($currentCountry && browser) {
-    setViewportToDefault() // TODO: There must be a nicer way
     invalidateAll()
     search()
   }
@@ -142,8 +125,31 @@
 
 <Head title="streamchaser" />
 
-<div class="bg-neutral shadow-md card pb-2 pt-6 px-2 sm:px-6">
+<div class="bg-neutral shadow-md card pb-2 pt-6 px-2 mx-2 sm:px-6">
   <div class="flex justify-between">
+    <div class="indicator lg:hidden">
+      {#if $totalFilterAmount}
+        <span
+          class="indicator-item indicator-top sm:indicator-start indicator-center badge badge-secondary"
+          >{$totalFilterAmount}</span
+        >
+      {/if}
+      <!-- Button to open drawer -->
+      <label for="my-drawer-2" class="btn btn-primary mr-2 lg:hidden">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          class="inline-block w-6 h-6 stroke-current"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          /></svg
+        >
+      </label>
+    </div>
     <!-- svelte-ignore a11y-autofocus -->
     <input
       id="input-field"
@@ -154,7 +160,6 @@
       on:input={search}
       autofocus={viewPortWidth > 640}
     />
-    <Filters {search} />
   </div>
   <div
     class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
@@ -182,7 +187,6 @@
       <Select
         on:select={e => {
           $currentGenres = e.detail ? e.detail : []
-          setViewportToDefault()
           search()
         }}
         on:clear={e => {
@@ -200,7 +204,6 @@
       <Select
         on:select={e => {
           $currentProviders = e.detail ? e.detail : []
-          setViewportToDefault()
           search()
         }}
         on:clear={e => {
