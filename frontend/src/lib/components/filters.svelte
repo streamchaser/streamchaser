@@ -42,9 +42,9 @@
       on:click={handleDropdownClick}
       on:keypress={handleDropdownClick}
     >
-      {#if isDropdownOpen}
+      <div class="swap swap-rotate">
         <svg
-          class="swap-on fill-current"
+          class="{isDropdownOpen ? 'swap-off' : 'swap-on'} fill-current"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -53,8 +53,8 @@
             points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"
           /></svg
         >
-      {:else}
         <svg
+          class="{isDropdownOpen ? 'swap-on' : 'swap-off'} fill-current"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
           height="24"
@@ -86,7 +86,7 @@
             y2="8"
           /><line x1="17" y1="16" x2="23" y2="16" /></svg
         >
-      {/if}
+      </div>
     </label>
     <div
       tabindex="-1"

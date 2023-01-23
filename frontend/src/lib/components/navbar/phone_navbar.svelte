@@ -1,22 +1,20 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
   import type { main_Country } from "$lib/generated/go"
-
   import CountrySelector from "$lib/components/country_selector.svelte"
   import ThemeSelector from "$lib/components/theme_selector.svelte"
+  import { isBurgerMenuOpen } from "$lib/stores/stores"
 
   export let countries: main_Country[]
 
-  let isDropdownOpen = false
-
   const handleDropdownClick = () => {
-    isDropdownOpen = !isDropdownOpen
+    $isBurgerMenuOpen = !$isBurgerMenuOpen
   }
 
   const handleDropdownFocusLost = ({ relatedTarget, currentTarget }) => {
     if (relatedTarget instanceof HTMLElement && currentTarget.contains(relatedTarget))
       return
-    isDropdownOpen = false
+    $isBurgerMenuOpen = false
   }
 </script>
 
@@ -48,9 +46,9 @@
         on:click={handleDropdownClick}
         on:keypress={handleDropdownClick}
       >
-        {#if isDropdownOpen}
+        <div class="swap swap-rotate">
           <svg
-            class="swap-on fill-current"
+            class="{$isBurgerMenuOpen ? 'swap-off' : 'swap-on'} fill-current"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -59,9 +57,8 @@
               points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49"
             /></svg
           >
-        {:else}
           <svg
-            class="swap-off fill-current"
+            class="{$isBurgerMenuOpen ? 'swap-on' : 'swap-off'} fill-current"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -70,14 +67,14 @@
               d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z"
             /></svg
           >
-        {/if}
+        </div>
       </div>
       <ul
         tabindex="-1"
         class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56"
-        style:visibility={isDropdownOpen ? "visible" : "hidden"}
+        style:visibility={$isBurgerMenuOpen ? "visible" : "hidden"}
       >
-        <CountrySelector {countries} on:click={handleDropdownClick} />
+        <CountrySelector {countries} />
         <li><a href="/faq">FAQ</a></li>
         <li><a href="/about">About</a></li>
         <li>

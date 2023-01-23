@@ -1,5 +1,6 @@
 <script lang="ts">
   import { currentCountry } from "$lib/stores/preferences"
+  import { isBurgerMenuOpen } from "$lib/stores/stores"
   import type { main_Country } from "$lib/generated/go/index.js"
   import Select from "svelte-select"
   import { get } from "svelte/store"
@@ -32,6 +33,7 @@
       value={countries[countries.findIndex(v => v.value === get(currentCountry))]}
       on:select={e => {
         $currentCountry = e.detail.value
+        $isBurgerMenuOpen = !$isBurgerMenuOpen
       }}
       items={countries}
       placeholder="Select country..."
