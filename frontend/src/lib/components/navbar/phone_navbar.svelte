@@ -76,8 +76,10 @@
         tabindex="-1"
         class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56"
         style:visibility={isDropdownOpen ? "visible" : "hidden"}
+        on:click={handleDropdownClick}
+        on:keypress={handleDropdownClick}
       >
-        <CountrySelector {countries} on:click={handleDropdownClick} />
+        <CountrySelector {countries} />
         <li><a href="/faq">FAQ</a></li>
         <li><a href="/about">About</a></li>
         <li>
