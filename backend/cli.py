@@ -35,7 +35,7 @@ app = typer.Typer()
 
 
 @app.command()
-def add_imdb_ratings(min_votes: int = 100):
+def add_imdb_ratings(min_votes: int = 50):
     url = "https://datasets.imdbws.com/title.ratings.tsv.gz"
 
     dir = "../imdb_dumps/"
@@ -76,7 +76,7 @@ def add_imdb_ratings(min_votes: int = 100):
             "imdb_rating": float(imdb_ratings[media.imdb_id].get("rating")),
         }
         if imdb_ratings.get(media.imdb_id)
-        and int(imdb_ratings[media.imdb_id].get("votes")) >= min_votes
+        and int(imdb_ratings[media.imdb_id]["votes"]) >= min_votes
         else {"id": media.id, "imdb_rating": None}
         for media in all_media.results
     ]
