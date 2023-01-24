@@ -38,7 +38,7 @@
   href={mediaIdToUrlConverter(media.id)}
   target="_self"
   data-sveltekit-prefetch
-  class="card compact w-auto bordered bg-neutral m-1
+  class="card compact w-auto bordered bg-neutral m-1 overflow-x-hidden
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
 >
   {#if media.poster_path}
@@ -57,13 +57,17 @@
     </figure>
   {/if}
   {#if media.imdb_rating}
-    <div class="absolute top-0 left-0 mx-1 -mt-1 opacity-85">
-      <div class="badge badge-sm"><b>★&nbsp;</b>{media.imdb_rating}</div>
+    <div class="absolute top-0 left-0 mx-1 -ml-1 opacity-85">
+      <div class="badge badge-sm rounded-l-none"><b>★&nbsp;</b>{media.imdb_rating}</div>
     </div>
   {/if}
   {#if media.id.charAt(0) == "t"}
-    <div class="absolute top-0 right-0 mx-1 -mt-1 opacity-85">
-      <div class="badge badge-sm">TV</div>
+    <div
+      class="absolute top-0 left-0 mx-1 -ml-1 opacity-85 {media.imdb_rating
+        ? 'mt-5'
+        : 'mt-1'}"
+    >
+      <div class="badge badge-sm rounded-l-none">TV</div>
     </div>
   {/if}
   {#if providerAmounts[mediaIndex] === 0}
