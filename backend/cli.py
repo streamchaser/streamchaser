@@ -268,6 +268,12 @@ def update_search_config():
 
 @app.command()
 @coroutine
+async def clean_stale_media():
+    await remove_stale_media()
+
+
+@app.command()
+@coroutine
 async def full_setup(
     popularity: float = 1, first_time: bool = False, chunk_size: int = 25000
 ):
@@ -280,7 +286,6 @@ async def full_setup(
     update_media(chunk_size=chunk_size, first_time=first_time, popularity=popularity)
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_search()
-    await remove_stale_media()  # TODO: remove when it is it's own cronjob
 
     typer.echo("Waiting for indexing to finish...")
 
