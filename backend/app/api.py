@@ -175,9 +175,29 @@ async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
         "&append_to_response=watch/providers,recommendations,credits"
     )
 
+    jw_url = f"http://apis.justwatch.com/content/titles/en_{country_code}/popular"
+
     async with httpx.AsyncClient(http2=True) as client:
         response = await client.get(url)
         movie = response.json()
+
+        jw_res = await client.post(url=jw_url, json={"query": movie.get("title")})
+        jw_providers = jw_res.json()
+
+        comp = [
+            {k: v}
+            for k, v in movie["watch/providers"]["results"][country_code].items()
+            if isinstance(v, list)
+        ]
+
+        for provider in comp:
+            for k, v in provider.items():
+                for i, p in enumerate(v):
+                    for jw in jw_providers["items"][0]["offers"]:
+                        if p["provider_id"] == jw["provider_id"]:
+                            movie["watch/providers"]["results"][country_code][k][i][
+                                "deep_link"
+                            ] = jw["urls"]["standard_web"]
 
         # pydantic model for a movie
         return Movie(
@@ -210,9 +230,29 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
         "&append_to_response=watch/providers,recommendations,credits,external_ids"
     )
 
+    jw_url = f"http://apis.justwatch.com/content/titles/en_{country_code}/popular"
+
     async with httpx.AsyncClient(http2=True) as client:
         response = await client.get(url)
         tv = response.json()
+
+        jw_res = await client.post(url=jw_url, json={"query": tv.get("name")})
+        jw_providers = jw_res.json()
+
+        comp = [
+            {k: v}
+            for k, v in tv["watch/providers"]["results"][country_code].items()
+            if isinstance(v, list)
+        ]
+
+        for provider in comp:
+            for k, v in provider.items():
+                for i, p in enumerate(v):
+                    for jw in jw_providers["items"][0]["offers"]:
+                        if p["provider_id"] == jw["provider_id"]:
+                            tv["watch/providers"]["results"][country_code][k][i][
+                                "deep_link"
+                            ] = jw["urls"]["standard_web"]
 
         # pydantic model for a tv series
         return TV(

@@ -153,7 +153,11 @@
         <!-- TODO: We dont want to do this, but due to a tmdb issue we need to remove HBO manually -->
         <!-- https://github.com/streamchaser/streamchaser/issues/286 -->
         {#each uniqueProviders(freeProviders.concat(flatrateProviders)).filter(p => p.provider_name !== "HBO") as provider}
-          <div class="avatar tooltip border-neutral" data-tip={provider.provider_name}>
+          <a
+            href={provider.deep_link}
+            class="avatar tooltip border-neutral"
+            data-tip={provider.provider_name}
+          >
             <div
               data-tip={provider.provider_name}
               class="mb-2 rounded-full w-20 h-20 ring ring-neutral
@@ -164,7 +168,7 @@
                 alt={provider.provider_name}
               />
             </div>
-          </div>
+          </a>
         {/each}
       </div>
     {/if}

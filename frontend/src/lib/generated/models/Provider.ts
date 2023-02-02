@@ -7,4 +7,5 @@ export type Provider = {
   display_priority: number
   provider_id?: number
   logo_path?: string
+  deep_link?: string
 }
