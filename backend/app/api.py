@@ -184,20 +184,24 @@ async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
         jw_res = await client.post(url=jw_url, json={"query": movie.get("title")})
         jw_providers = jw_res.json()
 
-        comp = [
-            {k: v}
-            for k, v in movie["watch/providers"]["results"][country_code].items()
-            if isinstance(v, list)
-        ]
+        try:
+            comp = [
+                {k: v}
+                for k, v in movie["watch/providers"]["results"][country_code].items()
+                if isinstance(v, list)
+            ]
 
-        for provider in comp:
-            for k, v in provider.items():
-                for i, p in enumerate(v):
-                    for jw in jw_providers["items"][0]["offers"]:
-                        if p["provider_id"] == jw["provider_id"]:
-                            movie["watch/providers"]["results"][country_code][k][i][
-                                "deep_link"
-                            ] = jw["urls"]["standard_web"]
+            for provider in comp:
+                for k, v in provider.items():
+                    for i, p in enumerate(v):
+                        for jw in jw_providers["items"][0]["offers"]:
+                            if p["provider_id"] == jw["provider_id"]:
+                                movie["watch/providers"]["results"][country_code][k][i][
+                                    "deep_link"
+                                ] = jw["urls"]["standard_web"]
+
+        except KeyError as e:
+            print(e)
 
         # pydantic model for a movie
         return Movie(
@@ -239,20 +243,24 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
         jw_res = await client.post(url=jw_url, json={"query": tv.get("name")})
         jw_providers = jw_res.json()
 
-        comp = [
-            {k: v}
-            for k, v in tv["watch/providers"]["results"][country_code].items()
-            if isinstance(v, list)
-        ]
+        try:
+            comp = [
+                {k: v}
+                for k, v in tv["watch/providers"]["results"][country_code].items()
+                if isinstance(v, list)
+            ]
 
-        for provider in comp:
-            for k, v in provider.items():
-                for i, p in enumerate(v):
-                    for jw in jw_providers["items"][0]["offers"]:
-                        if p["provider_id"] == jw["provider_id"]:
-                            tv["watch/providers"]["results"][country_code][k][i][
-                                "deep_link"
-                            ] = jw["urls"]["standard_web"]
+            for provider in comp:
+                for k, v in provider.items():
+                    for i, p in enumerate(v):
+                        for jw in jw_providers["items"][0]["offers"]:
+                            if p["provider_id"] == jw["provider_id"]:
+                                tv["watch/providers"]["results"][country_code][k][i][
+                                    "deep_link"
+                                ] = jw["urls"]["standard_web"]
+
+        except KeyError as e:
+            print(e)
 
         # pydantic model for a tv series
         return TV(

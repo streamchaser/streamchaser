@@ -156,7 +156,8 @@
           <a
             href={provider.deep_link}
             class="avatar tooltip border-neutral"
-            data-tip={provider.provider_name}
+            data-tip={provider.provider_name +
+              (provider.deep_link ? "" : " | No deep link available")}
           >
             <div
               data-tip={provider.provider_name}
