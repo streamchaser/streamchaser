@@ -67,6 +67,38 @@ func (movie *Movie) toMedia() *Media {
 	}
 }
 
+type Person struct {
+	Id                 int     `json:"id"`
+	Name               string  `json:"name"`
+	Gender             int     `json:"gender"`
+	ImdbId             string  `json:"imdb_id"`
+	ProfilePath        string  `json:"profile_path"`
+	Popularity         float32 `json:"popularity"`
+	Birthday           string  `json:"birthday"`
+	KnownForDepartment string  `json:"known_for_department"`
+	PlaceOfBirth       string  `json:"place_of_birth"`
+	Biography          string  `json:"biography"`
+	// MovieCredits []struct {
+	//   Cast [] struct {
+	//   } `json:"cast"`
+	// } `json:"movie_credits"`
+}
+
+func (person *Person) toMedia() *Media {
+	personId := "p" + strconv.Itoa(person.Id)
+	return &Media{
+		Id:            personId,
+		ImdbId:        person.ImdbId,
+		Type:          getMediaType(personId),
+		Title:         person.Name,
+		Overview:      person.Biography,
+		PosterPath:    person.ProfilePath,
+		Popularity:    person.Popularity,
+		UpdatedAt:     time.Now(),
+		UpdatedAtUnix: time.Now().Unix(),
+	}
+}
+
 type TV struct {
 	Id           int         `json:"id"`
 	ExternalIds  ExternalIds `json:"external_ids"`
@@ -163,6 +195,8 @@ func getMediaType(id string) string {
 		return "movie"
 	case "t":
 		return "tv"
+	case "p":
+		return "person"
 	default:
 		panic(fmt.Sprintf("Received unexpected media type, got: %s", id))
 	}

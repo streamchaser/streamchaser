@@ -1,7 +1,7 @@
 # I've gathered some of the most used commands in Streamchaser for ease of use
 
 full-setup popularity:
-  docker-compose exec backend python3 cli.py full-setup --first-time --popularity {{popularity}}
+  docker-compose exec backend python3 cli.py full-setup --popularity {{popularity}}
 
 migrate:
   edgedb --tls-security=insecure -P 5656 --user edgedb --password migrate

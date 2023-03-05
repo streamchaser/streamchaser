@@ -48,6 +48,7 @@ func processIds(c *gin.Context) {
 	var wg sync.WaitGroup
 	movieCh := make(chan Movie, len(media.Ids))
 	tvCh := make(chan TV, len(media.Ids))
+	personCh := make(chan Person, len(media.Ids))
 	guardCh := make(chan int, 1000)
 	medias := []Media{}
 	for _, id := range media.Ids {
@@ -66,6 +67,12 @@ func processIds(c *gin.Context) {
 				fetchTV(id[1:], TVCh)
 				<-guardCh
 			}(id, tvCh)
+		case "p":
+			go func(id string, personCh chan Person) {
+				defer wg.Done()
+				fetchPerson(id[1:], personCh)
+				<-guardCh
+			}(id, personCh)
 		default:
 			log.Fatal("This is not the movie type you seek")
 		}
@@ -73,6 +80,7 @@ func processIds(c *gin.Context) {
 	wg.Wait()
 	close(movieCh)
 	close(tvCh)
+	close(personCh)
 
 	failedMedia := 0
 	// TODO: make popularity an optional query parameter and default to 0
@@ -93,6 +101,16 @@ func processIds(c *gin.Context) {
 		}
 		if movie.Popularity > 1 {
 			medias = append(medias, *movie.toMedia())
+		}
+	}
+	// TODO: make popularity an optional query parameter and default to 0
+	for person := range personCh {
+		if person.Id == -1 {
+			failedMedia++
+			continue
+		}
+		if person.Popularity > 1 {
+			medias = append(medias, *person.toMedia())
 		}
 	}
 	task, err := meilisearchClient.Index("media").AddDocuments(&medias)
@@ -149,4 +167,28 @@ func fetchTV(id string, TVCh chan TV) {
 	}
 
 	TVCh <- tv
+}
+
+func fetchPerson(id string, personCh chan Person) {
+	res, err := http.Get(
+		fmt.Sprintf(
+			"https://api.themoviedb.org/3/person/%s?api_key=%s&append_to_response=movie_credits,tv_credits,external_ids", id, TMDB_KEY,
+		),
+	)
+	if err != nil {
+		log.Fatal("Ran into an issue while fetching the person: ", id, err)
+	}
+
+	defer res.Body.Close()
+
+	person := Person{}
+	errDecode := json.NewDecoder(res.Body).Decode(&person)
+	if errDecode != nil {
+		fmt.Println("Failed to decode person: ", id, errDecode)
+		// Adds a dummy tv that will be filtered out when exhasting the channel
+		personCh <- Person{Id: -1}
+		return
+	}
+
+	personCh <- person
 }

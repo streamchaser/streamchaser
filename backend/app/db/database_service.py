@@ -60,13 +60,13 @@ async def fetch_countries_with_providers() -> list[dict[str, str]]:
 
     try:
         documents = await async_client.index("media").get_documents(
-            limit=1_000_000, fields=["supported_provider_countries"]
+            limit=1_000_000, fields=["supported_provider_countries", "id"]
         )
-
         # Gather and flatten supported country providers into set
         supported_countries = {
             country
             for document in documents.results
+            if not document["id"][0] == "p"
             for country in document["supported_provider_countries"]
         }
 

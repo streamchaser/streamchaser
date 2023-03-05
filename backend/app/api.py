@@ -40,6 +40,10 @@ def fetch_jsongz_files():
             f"http://files.tmdb.org/p/exports/movie_ids_{date.month:02d}_"
             f"{date.day:02d}_{date.year}.json.gz"
         )
+        person_url = (
+            f"http://files.tmdb.org/p/exports/person_ids_{date.month:02d}_"
+            f"{date.day:02d}_{date.year}.json.gz"
+        )
 
         movie_path = (
             f"{directory}movie_ids_{date.month:02d}"
@@ -49,11 +53,20 @@ def fetch_jsongz_files():
             f"{directory}tv_series_ids_{date.month:02d}"
             f"_{date.day:02d}_{date.year}.json.gz"
         )
+        person_path = (
+            f"{directory}person_ids_{date.month:02d}"
+            f"_{date.day:02d}_{date.year}.json.gz"
+        )
 
         movie_response = requests.get(movie_url, stream=True)
         tv_response = requests.get(tv_url, stream=True)
+        person_response = requests.get(person_url, stream=True)
 
-        if movie_response.status_code == 200 and tv_response.status_code == 200:
+        if (
+            movie_response.status_code == 200
+            and tv_response.status_code == 200
+            and person_response.status_code == 200
+        ):
             no_data = False
             # First we remove the old files
             if os.path.isdir(directory):
@@ -67,6 +80,10 @@ def fetch_jsongz_files():
             with open(tv_path, "wb") as f:
                 f.write(tv_response.raw.read())
                 print(f"[{tv_path}] downloaded succesfully".replace(directory, ""))
+
+            with open(person_path, "wb") as f:
+                f.write(person_response.raw.read())
+                print(f"[{person_path}] downloaded succesfully".replace(directory, ""))
         else:
             # if we have tried to get data for more than 30 days we give up
             if day >= 30:
@@ -77,13 +94,16 @@ def fetch_jsongz_files():
             day += 1
 
 
-def fetch_media_ids(popularity: float | None = 1) -> Tuple[list[str], list[str]]:
+def fetch_media_ids(
+    popularity: float | None = 1,
+) -> Tuple[list[str], list[str], list[str]]:
     """Fetches jsongz file from TMDB with all the relevant tv/movies"""
     fetch_jsongz_files()
 
     directory = "../json.gz_dumps"
     movie_ids = []
     tv_ids = []
+    person_ids = []
 
     for file in tqdm(os.listdir(directory), desc="Running through json.gz files"):
         with gzip.open(os.path.join(directory, file), "r") as f:
@@ -96,10 +116,12 @@ def fetch_media_ids(popularity: float | None = 1) -> Tuple[list[str], list[str]]
                 movie_ids = list(map(lambda x: f"m{x['id']}", filtered))
             elif "tv" in file:
                 tv_ids = list(map(lambda x: f"t{x['id']}", filtered))
+            elif "person" in file:
+                person_ids = list(map(lambda x: f"p{x['id']}", filtered))
             else:
-                print('Filename doesn\'t start with "movie" or "tv"')
+                print('Filename doesn\'t start with "movie", "tv" or "person"')
 
-    return movie_ids, tv_ids
+    return movie_ids, tv_ids, person_ids
 
 
 def fetch_changed_media_ids() -> Tuple[list[str], list[str]]:

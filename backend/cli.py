@@ -34,6 +34,8 @@ from app.util import coroutine
 from meilisearch.errors import MeiliSearchApiError
 from tqdm import tqdm
 
+# from app.api import fetch_changed_media_ids
+
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
@@ -197,7 +199,7 @@ def fetch_jsongz():
 @app.command()
 def update_ids(ids: list[str]):
     if wrong_ids := [
-        id for id in ids if id[0] not in ["m", "t"] or not id[1:].isnumeric()
+        id for id in ids if id[0] not in ["m", "t", "p"] or not id[1:].isnumeric()
     ]:
         echo_warning(
             f"One or more of the ids are not formatted correctly: {wrong_ids}\n"
@@ -210,21 +212,20 @@ def update_ids(ids: list[str]):
 
 
 @app.command()
-def update_media(
-    chunk_size: int = 25000, first_time: bool = False, popularity: float = 1
-):
+def update_media(chunk_size: int = 25000, popularity: float = 1):
     """Sends media ids to our internal update-media endpoint in chunks"""
-    movie_ids, tv_ids = (
-        fetch_media_ids(popularity) if first_time else fetch_changed_media_ids()
-    )
+    movie_ids, tv_ids, person_ids = fetch_media_ids(popularity)
 
     print(
-        f"\nAbout to update {len(movie_ids)} movies and {len(tv_ids)} TV shows"
+        f"\nAbout to update {len(movie_ids)} movies, {len(tv_ids)} "
+        "TV shows and {len(person_ids)} people"
         f" in chunks of {chunk_size}"
     )
 
     with httpx.Client(http2=True, timeout=60) as client:
-        for media in zip(["movies", "tv shows"], [movie_ids, tv_ids]):
+        for media in zip(
+            ["movies", "tv shows", "person"], [movie_ids, tv_ids, person_ids]
+        ):
             id_chunks, total_chunks = chunkify(media[1], chunk_size)
             for id_chunk in tqdm(
                 id_chunks,
@@ -285,7 +286,7 @@ async def clean_stale_media():
 @app.command()
 @coroutine
 async def full_setup(
-    popularity: float = 1, first_time: bool = False, chunk_size: int = 25000
+    popularity: float = 1, chunk_size: int = 25000
 ):
     await insert_genres_to_cache(fetch_genres())
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
@@ -297,7 +298,7 @@ async def full_setup(
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
         search_client_config()
-    update_media(chunk_size=chunk_size, first_time=first_time, popularity=popularity)
+    update_media(chunk_size=chunk_size, popularity=popularity)
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_search()
 
