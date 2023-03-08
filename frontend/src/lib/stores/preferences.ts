@@ -42,9 +42,11 @@ export const sorting = writable<Sorting>(
 )
 
 interface Filters {
-  tvChecked: boolean
-  movieChecked: boolean
-  personChecked: boolean
+  checked: {
+    tv: boolean
+    movie: boolean
+    person: boolean
+  }
   minImdb: number
 }
 
@@ -66,8 +68,8 @@ export const chosenTheme = writable<string>(
 
 export const currentCountry = writable<string>(
   (browser && localStorage.currentCountry) ||
-  (browser && sessionStorage.currentCountry) ||
-  "DK"
+    (browser && sessionStorage.currentCountry) ||
+    "DK"
 )
 
 currentCountry.subscribe(value => {

@@ -78,7 +78,7 @@ type Person struct {
 	KnownForDepartment string  `json:"known_for_department"`
 	PlaceOfBirth       string  `json:"place_of_birth"`
 	Biography          string  `json:"biography"`
-  // TODO: Add rest of person items when we migrate to edgeDB
+	// TODO: Add rest of person items when we migrate to edgeDB
 }
 
 func (person *Person) toMedia() *Media {

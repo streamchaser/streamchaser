@@ -57,12 +57,12 @@
     // Searches for all(*) if empty input
     // Empty input will only return media with providers
     if (input == "") {
-      userInput = "*" 
+      userInput = "*"
       if (!$filters.checked.person) {
         query += "&only_providers=true"
       }
-    } 
-    
+    }
+
     for (let i = 0; i < $currentGenres.length; i++) {
       query += `&g=${$currentGenres[i].value}`
     }
@@ -75,7 +75,7 @@
     }
     if ($filters.checked.tv) {
       query += "&t=tv"
-    } 
+    }
     if ($filters.checked.person) {
       query += "&t=person"
     }
@@ -98,7 +98,7 @@
         "?c=" +
         $currentCountry +
         query +
-        `&limit=${currentMediaAmount}` 
+        `&limit=${currentMediaAmount}`
     )
 
     $inputQuery = input
