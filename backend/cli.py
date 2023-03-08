@@ -218,8 +218,8 @@ def update_media(chunk_size: int = 25000, popularity: float = 1):
 
     print(
         f"\nAbout to update {len(movie_ids)} movies, {len(tv_ids)} "
-        "TV shows and {len(person_ids)} people"
-        f" in chunks of {chunk_size}"
+        f"TV shows and {len(person_ids)} people "
+        f"in chunks of {chunk_size}"
     )
 
     with httpx.Client(http2=True, timeout=60) as client:
