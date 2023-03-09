@@ -1,0 +1,4 @@
+select Country {
+  label,
+  value
+}

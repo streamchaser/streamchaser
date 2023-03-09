@@ -11,16 +11,19 @@ import httpx
 import requests
 import typer
 from app.api import fetch_changed_media_ids
+from app.api import fetch_genres
 from app.api import fetch_jsongz_files
 from app.api import fetch_media_ids
-from app.api import get_genres
 from app.config import Environment
 from app.config import get_settings
 from app.db.cache import redis
+from app.db.database import db_client
 from app.db.database_service import countries_to_redis
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
+from app.db.queries.get_countries_async_edgeql import get_countries
+from app.db.queries.get_genres_async_edgeql import get_genres
 from app.db.search import async_client
 from app.db.search import client
 from app.db.search import search_client_config
@@ -32,6 +35,15 @@ from tqdm import tqdm
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
+
+
+@app.command()
+@coroutine
+async def edgedb_demo():
+    genres = await get_genres(db_client)
+    countries = await get_countries(db_client)
+
+    print("Genres:", genres, "\nCountries:", countries)
 
 
 @app.command()
@@ -249,7 +261,7 @@ def remove_blacklisted_from_search():
 async def refresh_redis():
     """Flushes everything then adds genres and providers to Redis"""
     await redis.flushdb()
-    await insert_genres_to_cache(get_genres())
+    await insert_genres_to_cache(fetch_genres())
     await providers_to_redis()
     await countries_to_redis()
 
@@ -277,7 +289,7 @@ async def clean_stale_media():
 async def full_setup(
     popularity: float = 1, first_time: bool = False, chunk_size: int = 25000
 ):
-    await insert_genres_to_cache(get_genres())
+    await insert_genres_to_cache(fetch_genres())
     await providers_to_redis()
     await countries_to_redis()
     if get_settings().app_environment == Environment.DEVELOPMENT:

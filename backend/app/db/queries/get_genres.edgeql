@@ -1,0 +1,4 @@
+select Genre {
+  label,
+  value
+}

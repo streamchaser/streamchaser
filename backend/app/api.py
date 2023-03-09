@@ -239,7 +239,7 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
         )
 
 
-def get_genres() -> dict:
+def fetch_genres() -> dict:
     """Gets genres from movies and tv-series to translate genre_ids"""
     movie_url = "https://api.themoviedb.org/3/genre/movie/list?" f"api_key={tmdb_key}"
     tv_url = "https://api.themoviedb.org/3/genre/tv/list?" f"api_key={tmdb_key}"
