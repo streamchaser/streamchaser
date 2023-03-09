@@ -134,6 +134,21 @@ services:
     networks:
       - streamchaser
 
+  edgedb:
+    container_name: edgedb
+    image: edgedb/edgedb
+    environment:
+      EDGEDB_SERVER_SECURITY: insecure_dev_mode # TODO: Move to override
+      EDGEDB_SERVER_ADMIN_UI: enabled
+    volumes:
+      - ./dbschema:/dbschema
+      # - .edgedb.toml:/edgedb.toml
+      - edgedb-data:/var/lib/edgedb/data
+    ports:
+      - 5656:5656
+    networks:
+      - streamchaser
+
   traefik:
     image: traefik:v2.5
     restart: always
@@ -184,6 +199,7 @@ networks:
 
 volumes:
   meili:
+  edgedb-data:
   node_modules:
   cache:
     driver: local
