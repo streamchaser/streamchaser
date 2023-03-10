@@ -138,11 +138,11 @@ services:
     container_name: edgedb
     image: edgedb/edgedb
     environment:
-      EDGEDB_SERVER_SECURITY: insecure_dev_mode # TODO: Move to override
+      EDGEDB_SERVER_TLS_CERT_MODE: generate_self_signed
       EDGEDB_SERVER_ADMIN_UI: enabled
+      EDGEDB_SERVER_PASSWORD: secret # TODO: Yea... Don't let this get to prod
     volumes:
       - ./dbschema:/dbschema
-      # - .edgedb.toml:/edgedb.toml
       - edgedb-data:/var/lib/edgedb/data
     ports:
       - 5656:5656
