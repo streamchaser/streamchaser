@@ -2,6 +2,7 @@ import asyncio
 import csv
 import datetime
 import gzip
+import json
 import os
 import xml.etree.cElementTree as ET
 from math import ceil
@@ -19,11 +20,13 @@ from app.config import get_settings
 from app.db.cache import redis
 from app.db.database import db_client
 from app.db.database_service import countries_to_redis
+from app.db.database_service import fix_genre_ampersand
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
 from app.db.queries.get_countries_async_edgeql import get_countries
 from app.db.queries.get_genres_async_edgeql import get_genres
+from app.db.queries.insert_genres_async_edgeql import insert_genres
 from app.db.search import async_client
 from app.db.search import client
 from app.db.search import search_client_config
@@ -42,6 +45,8 @@ app = typer.Typer()
 async def edgedb_demo():
     genres = await get_genres(db_client)
     countries = await get_countries(db_client)
+
+    await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
 
     print("Genres:", genres, "\nCountries:", countries)
 
@@ -290,6 +295,7 @@ async def full_setup(
     popularity: float = 1, first_time: bool = False, chunk_size: int = 25000
 ):
     await insert_genres_to_cache(fetch_genres())
+    await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
     await providers_to_redis()
     await countries_to_redis()
     if get_settings().app_environment == Environment.DEVELOPMENT:

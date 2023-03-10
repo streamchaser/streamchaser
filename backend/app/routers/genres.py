@@ -1,7 +1,6 @@
-import json
-
-from app.db.cache import Genre
-from app.db.cache import redis
+from app.db.database import db_client
+from app.db.queries.get_genres_async_edgeql import get_genres
+from app.db.queries.get_genres_async_edgeql import GetGenresResult
 from fastapi import APIRouter
 
 
@@ -12,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[Genre])
-async def read_all_genres():
-    """Reads all genres, returns only name and value"""
-    return json.loads(await redis.get("genres"))
+@router.get("", response_model=GetGenresResult)
+async def _():
+    """Returns all genres from DB"""
+    return await get_genres(db_client)

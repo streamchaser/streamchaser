@@ -15,7 +15,13 @@ from tqdm import tqdm
 
 async def insert_genres_to_cache(genres: dict) -> None:
     """Turns a dict of genres into Genre-models, and feeds them to Redis"""
+    fixed_genres = fix_genre_ampersand(genres)
 
+    await redis.set("genres", json.dumps(fixed_genres))
+
+
+def fix_genre_ampersand(genres: dict) -> list[dict]:
+    print("in fix_ampersand", genres)
     fixed_genres = [
         Genre(
             label=genre,
@@ -26,9 +32,7 @@ async def insert_genres_to_cache(genres: dict) -> None:
         for genre in genres.values()
     ]
 
-    fixed_genres.sort(key=lambda genre: genre["label"])
-
-    await redis.set("genres", json.dumps(fixed_genres))
+    return sorted(fixed_genres, key=lambda genre: genre["label"])
 
 
 async def countries_to_redis():
