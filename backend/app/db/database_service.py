@@ -21,7 +21,6 @@ async def insert_genres_to_cache(genres: dict) -> None:
 
 
 def fix_genre_ampersand(genres: dict) -> list[dict]:
-    print("in fix_ampersand", genres)
     fixed_genres = [
         Genre(
             label=genre,
@@ -35,7 +34,7 @@ def fix_genre_ampersand(genres: dict) -> list[dict]:
     return sorted(fixed_genres, key=lambda genre: genre["label"])
 
 
-async def countries_to_redis():
+async def fetch_countries_with_providers() -> list[dict[str, str]]:
     countries_url = (
         f"{get_settings().tmdb_url}"
         f"configuration/countries?api_key={get_settings().tmdb_key}"
@@ -82,7 +81,7 @@ async def countries_to_redis():
         # Happens when running for the first time(empty meilisearch)
         print("First time running the setup(empty database)", e)
 
-    await redis.set("countries", json.dumps(sorted_countries))
+    return sorted_countries
 
 
 async def providers_to_redis():

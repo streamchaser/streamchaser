@@ -11,3 +11,6 @@ migration-create:
 
 db-ui:
   @echo https://localhost:5656/ui - Login information is on Discord
+
+generate-edgedb-python:
+  cd backend/ && poetry run edgedb-py -P 5656 --tls-security insecure --user edgedb --password secret && cd ../

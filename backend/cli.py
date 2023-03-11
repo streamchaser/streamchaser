@@ -19,13 +19,14 @@ from app.config import Environment
 from app.config import get_settings
 from app.db.cache import redis
 from app.db.database import db_client
-from app.db.database_service import countries_to_redis
+from app.db.database_service import fetch_countries_with_providers
 from app.db.database_service import fix_genre_ampersand
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
 from app.db.queries.get_countries_async_edgeql import get_countries
 from app.db.queries.get_genres_async_edgeql import get_genres
+from app.db.queries.insert_countries_async_edgeql import insert_countries
 from app.db.queries.insert_genres_async_edgeql import insert_genres
 from app.db.search import async_client
 from app.db.search import client
@@ -243,7 +244,11 @@ def update_media(
                 total=total_chunks,
                 desc=f"Updating {media[0]}",
             ):
-                client.post("http://internal:8888/update-media", json={"ids": id_chunk})
+                res = client.post(
+                    "http://internal:8888/update-media", json={"ids": id_chunk}
+                )
+                if res.status_code != 200:
+                    echo_warning(res.text)
 
 
 @app.command()
@@ -268,7 +273,8 @@ async def refresh_redis():
     await redis.flushdb()
     await insert_genres_to_cache(fetch_genres())
     await providers_to_redis()
-    await countries_to_redis()
+    # TODO: Remove when Go backend is delete
+    await redis.set("countries", json.dumps(fetch_countries_with_providers()))
 
 
 @app.command()
@@ -297,7 +303,10 @@ async def full_setup(
     await insert_genres_to_cache(fetch_genres())
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
     await providers_to_redis()
-    await countries_to_redis()
+    countries_json = json.dumps(await fetch_countries_with_providers())
+    # TODO: Is being phased out - Remove when go backend is dead
+    await redis.set("countries", countries_json)
+    await insert_countries(db_client, data=countries_json)
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
         search_client_config()
