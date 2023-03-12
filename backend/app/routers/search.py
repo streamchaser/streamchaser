@@ -76,7 +76,6 @@ def filter_from_queries(
         filter.append([f'type="{type}"' for type in types])
 
     if min_imdb:
-        print(min_imdb)
         filter.append([f"imdb_rating >= {min_imdb}"])
 
     return filter
@@ -130,8 +129,6 @@ async def search(
         only_providers=only_providers,
         min_imdb=min_imdb,
     )
-
-    print(filter)
 
     return await async_client.index("media").search(
         user_input,

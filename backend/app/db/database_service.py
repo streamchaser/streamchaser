@@ -15,7 +15,12 @@ from tqdm import tqdm
 
 async def insert_genres_to_cache(genres: dict) -> None:
     """Turns a dict of genres into Genre-models, and feeds them to Redis"""
+    fixed_genres = fix_genre_ampersand(genres)
 
+    await redis.set("genres", json.dumps(fixed_genres))
+
+
+def fix_genre_ampersand(genres: dict) -> list[dict]:
     fixed_genres = [
         Genre(
             label=genre,
@@ -26,12 +31,10 @@ async def insert_genres_to_cache(genres: dict) -> None:
         for genre in genres.values()
     ]
 
-    fixed_genres.sort(key=lambda genre: genre["label"])
-
-    await redis.set("genres", json.dumps(fixed_genres))
+    return sorted(fixed_genres, key=lambda genre: genre["label"])
 
 
-async def countries_to_redis():
+async def fetch_countries_with_providers() -> list[dict[str, str]]:
     countries_url = (
         f"{get_settings().tmdb_url}"
         f"configuration/countries?api_key={get_settings().tmdb_key}"
@@ -78,7 +81,7 @@ async def countries_to_redis():
         # Happens when running for the first time(empty meilisearch)
         print("First time running the setup(empty database)", e)
 
-    await redis.set("countries", json.dumps(sorted_countries))
+    return sorted_countries
 
 
 async def providers_to_redis():

@@ -2,6 +2,7 @@ import asyncio
 import csv
 import datetime
 import gzip
+import json
 import os
 import xml.etree.cElementTree as ET
 from math import ceil
@@ -11,16 +12,20 @@ import httpx
 import requests
 import typer
 from app.api import fetch_changed_media_ids
+from app.api import fetch_genres
 from app.api import fetch_jsongz_files
 from app.api import fetch_media_ids
-from app.api import get_genres
 from app.config import Environment
 from app.config import get_settings
 from app.db.cache import redis
-from app.db.database_service import countries_to_redis
+from app.db.database import db_client
+from app.db.database_service import fetch_countries_with_providers
+from app.db.database_service import fix_genre_ampersand
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
+from app.db.queries.insert_countries_async_edgeql import insert_countries
+from app.db.queries.insert_genres_async_edgeql import insert_genres
 from app.db.search import async_client
 from app.db.search import client
 from app.db.search import search_client_config
@@ -226,7 +231,11 @@ def update_media(
                 total=total_chunks,
                 desc=f"Updating {media[0]}",
             ):
-                client.post("http://internal:8888/update-media", json={"ids": id_chunk})
+                res = client.post(
+                    "http://internal:8888/update-media", json={"ids": id_chunk}
+                )
+                if res.status_code != 200:
+                    echo_warning(res.text)
 
 
 @app.command()
@@ -249,9 +258,10 @@ def remove_blacklisted_from_search():
 async def refresh_redis():
     """Flushes everything then adds genres and providers to Redis"""
     await redis.flushdb()
-    await insert_genres_to_cache(get_genres())
+    await insert_genres_to_cache(fetch_genres())
     await providers_to_redis()
-    await countries_to_redis()
+    # TODO: Remove when Go backend is delete
+    await redis.set("countries", json.dumps(fetch_countries_with_providers()))
 
 
 @app.command()
@@ -277,9 +287,13 @@ async def clean_stale_media():
 async def full_setup(
     popularity: float = 1, first_time: bool = False, chunk_size: int = 25000
 ):
-    await insert_genres_to_cache(get_genres())
+    await insert_genres_to_cache(fetch_genres())
+    await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
     await providers_to_redis()
-    await countries_to_redis()
+    countries_json = json.dumps(await fetch_countries_with_providers())
+    # TODO: Is being phased out - Remove when go backend is dead
+    await redis.set("countries", countries_json)
+    await insert_countries(db_client, data=countries_json)
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
         search_client_config()

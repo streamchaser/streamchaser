@@ -4,6 +4,7 @@ from app.config import Environment
 from app.config import get_settings
 from app.db.cache import redis
 from app.db.search import search_client_config
+from app.routers import countries
 from app.routers import country
 from app.routers import genres
 from app.routers import image
@@ -78,6 +79,7 @@ app.include_router(person.router)
 app.include_router(country.router)
 app.include_router(image.router)
 app.include_router(stats.router)
+app.include_router(countries.router)
 
 
 @app.get("/")
