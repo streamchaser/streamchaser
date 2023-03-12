@@ -4,10 +4,10 @@ full-setup popularity:
   docker-compose exec backend python3 cli.py full-setup --first-time --popularity {{popularity}}
 
 migrate:
-  edgedb --tls-security=insecure -P 5656 migrate
+  edgedb --tls-security=insecure -P 5656 --user edgedb --password migrate
 
 migration-create:
-  edgedb --tls-security=insecure -P 5656 migration create
+  edgedb --tls-security=insecure -P 5656 --user edgedb --password migration create
 
 db-ui:
   @echo https://localhost:5656/ui - Login information is on Discord
