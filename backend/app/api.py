@@ -124,32 +124,6 @@ def fetch_media_ids(
     return movie_ids, tv_ids, person_ids
 
 
-def fetch_changed_media_ids() -> Tuple[list[str], list[str]]:
-    tmdb_url = get_settings().tmdb_url
-    tmdb_key = get_settings().tmdb_key
-    today = datetime.today().strftime("%Y-%m-%d")
-    yesterday = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d")
-
-    with httpx.Client(http2=True) as client:
-        movie_res = client.get(
-            f"{tmdb_url}movie/changes?api_key={tmdb_key}&"
-            f"end_date={today}&start_date={yesterday}&page=1"
-        )
-        tv_res = client.get(
-            f"{tmdb_url}tv/changes?api_key={tmdb_key}&"
-            f"end_date={today}&start_date={yesterday}&page=1"
-        )
-
-    movie_ids = [
-        f"m{movie['id']}"
-        for movie in movie_res.json()["results"]
-        if not movie.get("adult")
-    ]
-    tv_ids = [f"t{tv['id']}" for tv in tv_res.json()["results"] if not tv.get("adult")]
-
-    return movie_ids, tv_ids
-
-
 def fetch_trending_movies(page: int) -> dict:
     url = f"{tmdb_url}trending/movie/week?api_key={tmdb_key}&page={page}"
     return requests.get(url).json()["results"]

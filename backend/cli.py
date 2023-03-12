@@ -11,7 +11,6 @@ from pathlib import Path
 import httpx
 import requests
 import typer
-from app.api import fetch_changed_media_ids
 from app.api import fetch_genres
 from app.api import fetch_jsongz_files
 from app.api import fetch_media_ids
@@ -33,8 +32,6 @@ from app.util import chunkify
 from app.util import coroutine
 from meilisearch.errors import MeiliSearchApiError
 from tqdm import tqdm
-
-# from app.api import fetch_changed_media_ids
 
 supported_country_codes = get_settings().supported_country_codes
 
@@ -212,7 +209,7 @@ def update_ids(ids: list[str]):
 
 
 @app.command()
-def update_media(chunk_size: int = 25000, popularity: float = 1):
+def update_media(chunk_size: int, popularity: float = 1):
     """Sends media ids to our internal update-media endpoint in chunks"""
     movie_ids, tv_ids, person_ids = fetch_media_ids(popularity)
 
@@ -285,9 +282,7 @@ async def clean_stale_media():
 
 @app.command()
 @coroutine
-async def full_setup(
-    popularity: float = 1, chunk_size: int = 25000
-):
+async def full_setup(popularity: float = 1, chunk_size: int = 25000):
     await insert_genres_to_cache(fetch_genres())
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
     await providers_to_redis()
