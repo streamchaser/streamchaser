@@ -24,8 +24,6 @@ from app.db.database_service import fix_genre_ampersand
 from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
-from app.db.queries.get_countries_async_edgeql import get_countries
-from app.db.queries.get_genres_async_edgeql import get_genres
 from app.db.queries.insert_countries_async_edgeql import insert_countries
 from app.db.queries.insert_genres_async_edgeql import insert_genres
 from app.db.search import async_client
@@ -39,17 +37,6 @@ from tqdm import tqdm
 supported_country_codes = get_settings().supported_country_codes
 
 app = typer.Typer()
-
-
-@app.command()
-@coroutine
-async def edgedb_demo():
-    genres = await get_genres(db_client)
-    countries = await get_countries(db_client)
-
-    await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
-
-    print("Genres:", genres, "\nCountries:", countries)
 
 
 @app.command()
