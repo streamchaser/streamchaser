@@ -23,6 +23,6 @@ func main() {
 
 	router.GET("/", DocsRedirect)
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	router.POST("/update-media", processIds)
+	router.POST("/update-media", processMedia)
 	router.Run(":8888")
 }

@@ -36,13 +36,13 @@ func DocsRedirect(c *gin.Context) {
 //	@Param    Ids body MediaIds true "ids to fetch"
 //	@Success	200
 //	@Router		/update-media [post]
-func processIds(c *gin.Context) {
+func fetchMedia(c *gin.Context) (chan Movie, chan TV, chan Person) {
 	media := MediaIds{}
 
 	c.Bind(&media)
 	if len(media.Ids) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"info": "Please provide id's to fetch"})
-		return
+		c.JSON(http.StatusBadRequest, gin.H{"info": "Please provide ids to fetch"})
+		log.Fatal("No ids provided")
 	}
 
 	var wg sync.WaitGroup
@@ -50,7 +50,6 @@ func processIds(c *gin.Context) {
 	tvCh := make(chan TV, len(media.Ids))
 	personCh := make(chan Person, len(media.Ids))
 	guardCh := make(chan int, 1000)
-	medias := []Media{}
 	for _, id := range media.Ids {
 		guardCh <- 1
 		wg.Add(1)
@@ -82,17 +81,13 @@ func processIds(c *gin.Context) {
 	close(tvCh)
 	close(personCh)
 
+	return movieCh, tvCh, personCh
+}
+
+func processMedia(c *gin.Context) {
+	movieCh, tvCh, personCh := fetchMedia(c)
 	failedMedia := 0
-	// TODO: make popularity an optional query parameter and default to 0
-	for tv := range tvCh {
-		if tv.Id == -1 {
-			failedMedia++
-			continue
-		}
-		if tv.Popularity > 1 {
-			medias = append(medias, *tv.toMedia())
-		}
-	}
+	medias := []Media{}
 	// TODO: make popularity an optional query parameter and default to 0
 	for movie := range movieCh {
 		if movie.Id == -1 {
@@ -101,6 +96,16 @@ func processIds(c *gin.Context) {
 		}
 		if movie.Popularity > 1 {
 			medias = append(medias, *movie.toMedia())
+		}
+	}
+	// TODO: make popularity an optional query parameter and default to 0
+	for tv := range tvCh {
+		if tv.Id == -1 {
+			failedMedia++
+			continue
+		}
+		if tv.Popularity > 1 {
+			medias = append(medias, *tv.toMedia())
 		}
 	}
 	// TODO: make popularity an optional query parameter and default to 0
