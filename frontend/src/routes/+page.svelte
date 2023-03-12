@@ -52,6 +52,9 @@
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
     let query = ""
+
+    // Sanitizes input by removing any character that is not a letter,
+    // number, whitespace or an ampersand and replaces them with a space
     let userInput = input.replace(/[^\w\d\s\&]/g, " ")
 
     // Searches for all(*) if empty input
