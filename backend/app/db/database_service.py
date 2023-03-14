@@ -43,6 +43,7 @@ async def fetch_countries_with_providers() -> list[dict[str, str]]:
         res = await client.get(countries_url)
 
     countries = res.json()
+    # print(json.dumps(countries, indent=2))
     for country in tqdm(countries, desc="Creating flags"):
         country_code = country["iso_3166_1"]
         unicode_flag = chr(ord(country_code[0]) + 127397) + chr(
@@ -118,6 +119,7 @@ async def providers_to_redis():
 
     async with httpx.AsyncClient(http2=True) as client:
         res = await client.get(countries_url)
+        # print(json.dumps(res.json(), indent=2))
         for country in res.json():
             providers.update({country["iso_3166_1"]: []})
 
