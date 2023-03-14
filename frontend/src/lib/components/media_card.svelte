@@ -72,9 +72,15 @@
   {/if}
   {#if providerAmounts[mediaIndex] === 0}
     <div class="card-body h-14">
-      <p class="text-center text-neutral-content">
-        <strong>No providers in {$currentCountry}</strong>
-      </p>
+      {#if media.id.charAt(0) == "p"}
+        <p class="text-center text-neutral-content">
+          <strong>{media.title}</strong>
+        </p>
+      {:else}
+        <p class="text-center text-neutral-content">
+          <strong>No providers in {$currentCountry}</strong>
+        </p>
+      {/if}
     </div>
   {:else if providerAmounts[mediaIndex] <= SHOWN_PROVIDERS}
     <div class="-space-x-4 avatar-group">

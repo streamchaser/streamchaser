@@ -12,7 +12,8 @@
 
   $: sortingAmount = Object.values($sorting.by).filter(v => v === true).length
   $: imdbAmount = $filters.minImdb != 0 ? 1 : 0
-  $: filterAmount = Object.values($filters).filter(v => v === false).length + imdbAmount
+  $: filterAmount =
+    Object.values($filters.checked).filter(v => v === true).length + imdbAmount
   $: totalAmount =
     sortingAmount + filterAmount + (sortingAmount ? ($sorting.asc ? 1 : 0) : 0)
 
@@ -118,11 +119,9 @@
               <input
                 type="checkbox"
                 class="toggle"
-                bind:checked={$filters.movieChecked}
+                bind:checked={$filters.checked.movie}
                 on:change={() => {
-                  if (!$filters.movieChecked) {
-                    $filters.tvChecked = true
-                  }
+                  $filters.checked.person = false
                   search()
                 }}
               />
@@ -132,10 +131,24 @@
               <input
                 type="checkbox"
                 class="toggle"
-                bind:checked={$filters.tvChecked}
+                bind:checked={$filters.checked.tv}
                 on:change={() => {
-                  if (!$filters.tvChecked) {
-                    $filters.movieChecked = true
+                  $filters.checked.person = false
+                  search()
+                }}
+              />
+            </label>
+            <label class="label cursor-pointer">
+              <span class="label-text">People</span>
+              <input
+                type="checkbox"
+                class="toggle"
+                bind:checked={$filters.checked.person}
+                on:change={() => {
+                  if ($filters.checked.person) {
+                    $filters.checked.tv = false
+                    $filters.checked.movie = false
+                    $filters.minImdb = 0
                   }
                   search()
                 }}
@@ -151,7 +164,10 @@
             min="0.0"
             max="10.0"
             step="0.1"
-            on:change={search}
+            on:change={() => {
+              $filters.checked.person = false
+              search()
+            }}
             bind:value={$filters.minImdb}
             class="range"
           />
@@ -160,8 +176,9 @@
             class="btn btn-xs {filterAmount ? 'btn-primary' : 'btn-disabled'}"
             on:click={() => {
               $filters.minImdb = 0
-              $filters.tvChecked = true
-              $filters.movieChecked = true
+              for (const key in $filters.checked) {
+                $filters.checked[key] = false
+              }
               search()
             }}>{filterAmount ? "Clear filters" : "No filters chosen"}</button
           >

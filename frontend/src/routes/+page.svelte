@@ -45,14 +45,27 @@
   }
 
   const search = async () => {
-    // Builds the optional query for genres
-    // Example: "?g=Action&g=Comedy&g=Drama"
-
     if (!currentMediaAmount) {
       setViewportToDefault()
     }
 
+    // Builds the optional query for genres
+    // Example: "?g=Action&g=Comedy&g=Drama"
     let query = ""
+
+    // Sanitizes input by removing any character that is not a letter,
+    // number, whitespace or an ampersand and replaces them with a space
+    let userInput = input.replace(/[^\w\d\s\&]/g, " ")
+
+    // Searches for all(*) if empty input
+    // Empty input will only return media with providers
+    if (input == "") {
+      userInput = "*"
+      if (!$filters.checked.person) {
+        query += "&only_providers=true"
+      }
+    }
+
     for (let i = 0; i < $currentGenres.length; i++) {
       query += `&g=${$currentGenres[i].value}`
     }
@@ -60,11 +73,14 @@
       query += `&p=${$currentProviders[i].value}`
     }
 
-    if ($filters.tvChecked && $filters.movieChecked) {
-    } else if ($filters.movieChecked) {
+    if ($filters.checked.movie) {
       query += "&t=movie"
-    } else {
+    }
+    if ($filters.checked.tv) {
       query += "&t=tv"
+    }
+    if ($filters.checked.person) {
+      query += "&t=person"
     }
 
     if ($filters.minImdb) {
@@ -78,27 +94,16 @@
     } else if ($sorting.by.imdbRating) {
       query += `&imdb_rating=${$sorting.asc ? "asc" : "desc"}`
     }
-    // Searches for all(*) if empty input
-    // Empty input will only return media with providers
-    const res =
-      input !== ""
-        ? await fetch(
-            SEARCH_URL +
-              input.replace(/[^\w\d\s\&]/g, " ") +
-              "?c=" +
-              $currentCountry +
-              query +
-              `&limit=${currentMediaAmount}`
-          )
-        : await fetch(
-            SEARCH_URL +
-              "*" +
-              "?c=" +
-              $currentCountry +
-              query +
-              `&limit=${currentMediaAmount}` +
-              "&only_providers=true"
-          )
+
+    const res = await fetch(
+      SEARCH_URL +
+        userInput +
+        "?c=" +
+        $currentCountry +
+        query +
+        `&limit=${currentMediaAmount}`
+    )
+
     $inputQuery = input
     meilisearch = await res.json()
     providerAmounts = hitProviderAmounts(meilisearch.hits, $currentCountry)
