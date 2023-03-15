@@ -1,9 +1,9 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
   import type { main_Country } from "$lib/generated/go"
-  import CountrySelector from "../country_selector.svelte"
-  import Auth from "../sign_in/auth.svelte"
-  import ThemeSelector from "../theme_selector.svelte"
+  import CountrySelector from "$lib/components/country_selector.svelte"
+  import Auth from "$lib/components/sign_in/auth.svelte"
+  import ThemeSelector from "$lib/components/theme_selector.svelte"
 
   export let countries: main_Country[]
 </script>
