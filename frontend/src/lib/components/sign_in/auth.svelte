@@ -2,8 +2,14 @@
   import { parseJwt } from "$lib/utils"
   import { auth } from "$lib/stores/stores"
   import { env } from "$env/dynamic/public"
+  import type { User } from "$lib/types"
 
   let isDropdownOpen = false
+  let user: User
+
+  $: if ($auth) {
+    user = parseJwt($auth)
+  }
 
   globalThis.handleCredentialResponse = async (response: any) => {
     $auth = response.credential
@@ -34,7 +40,7 @@
         on:keypress={handleDropdownClick}
       >
         <div class="w-10 rounded-full">
-          <img src={parseJwt($auth).picture} alt={parseJwt($auth).name} />
+          <img src={user.picture} alt={user.name} />
         </div>
       </div>
       <ul
