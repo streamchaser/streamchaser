@@ -4,7 +4,7 @@
   import CountrySelector from "$lib/components/country_selector.svelte"
   import ThemeSelector from "$lib/components/theme_selector.svelte"
   import { isBurgerMenuOpen } from "$lib/stores/stores"
-  import Auth from "../sign_in/auth.svelte"
+  import Auth from "$lib/components/sign_in/auth.svelte"
 
   export let countries: SelectCountriesResult[]
 
