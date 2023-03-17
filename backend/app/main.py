@@ -15,6 +15,8 @@ from app.routers import providers
 from app.routers import search
 from app.routers import stats
 from app.routers import tv
+from app.routers import user
+from app.routers import watch_list
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
@@ -80,6 +82,8 @@ app.include_router(country.router)
 app.include_router(image.router)
 app.include_router(stats.router)
 app.include_router(countries.router)
+app.include_router(user.router)
+app.include_router(watch_list.router)
 
 
 @app.get("/")

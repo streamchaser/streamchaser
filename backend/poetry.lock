@@ -505,7 +505,7 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11"
-content-hash = "2827e66678a38449bf61eb640b79353abab7fcff010089b28f7fb625a65282a8"
+content-hash = "7310e65150bfedec8b71733f363bbe36a050f35ce425325673ae785b11a56c98"
 
 [metadata.files]
 aiofiles = []

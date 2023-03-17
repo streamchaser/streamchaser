@@ -63,6 +63,8 @@ class Settings(BaseSettings):
     psql_user: str = "postgres"
     psql_pwd: str = "postgres"
 
+    auth_secret: str = "secret"
+
 
 @lru_cache
 def get_settings() -> Settings:
