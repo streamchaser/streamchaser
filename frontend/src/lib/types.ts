@@ -3,7 +3,7 @@ export interface Genre {
   value: string
 }
 
-export interface Profile {
+export interface User {
   aud: string
   azp: string
   email?: string
