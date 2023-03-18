@@ -3,6 +3,9 @@
   import { auth } from "$lib/stores/stores"
   import { env } from "$env/dynamic/public"
   import type { User } from "$lib/types"
+  import { page } from "$app/stores"
+
+  export let icon = true
 
   let isDropdownOpen = false
   let user: User
@@ -58,11 +61,15 @@
           <div
             on:keypress={() => {
               $auth = ""
-              location.reload()
+              $page.url.pathname == "/profile"
+                ? (window.location.href = "/")
+                : location.reload()
             }}
             on:click={() => {
               $auth = ""
-              location.reload()
+              $page.url.pathname == "/profile"
+                ? (window.location.href = "/")
+                : location.reload()
             }}
           >
             Logout
@@ -78,13 +85,24 @@
           data-client_id={env.PUBLIC_GOOGLE_CLIENT_ID}
           data-callback="handleCredentialResponse"
         />
-        <div
-          class="g_id_signin"
-          data-type="icon"
-          data-shape="square"
-          data-size="large"
-          data-theme="filled_black"
-        />
+        {#if icon}
+          <div
+            class="g_id_signin"
+            data-type="icon"
+            data-shape="square"
+            data-size="large"
+          />
+        {:else}
+          <div
+            class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="outline"
+            data-text="signin_with"
+            data-size="large"
+            data-logo_alignment="left"
+          />
+        {/if}
       </div>
     </div>
   {/if}
