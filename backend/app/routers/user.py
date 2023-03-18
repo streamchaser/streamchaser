@@ -1,9 +1,10 @@
-import jwt
-from app.config import get_settings
 from app.db.database import db_client
 from app.db.queries.insert_user_async_edgeql import insert_user
 from app.db.queries.insert_user_async_edgeql import InsertUserResult
+from app.models import GoogleAuth
+from app.util import decode_jwt
 from fastapi import APIRouter
+from fastapi import Depends
 
 
 router = APIRouter(
@@ -12,13 +13,8 @@ router = APIRouter(
 )
 
 
-# TODO: Needs some sort of validation - Depends middleware is great for this
 @router.post("", response_model=InsertUserResult)
-async def _(auth: str):
-    """Inserts user into EdgeDB"""
-    try:
-        decoded = jwt.decode(auth, get_settings().auth_secret, algorithms=["HS256"])
-    except Exception as e:
-        return f"Decode error: {e}"
+async def _(auth: GoogleAuth = Depends(decode_jwt)):
+    """Inserts user into EdgeDB if it isn't already there"""
 
-    return await insert_user(db_client, name=decoded["name"], email=decoded["email"])
+    return await insert_user(db_client, name=auth.name, email=auth.email)

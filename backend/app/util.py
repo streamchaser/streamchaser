@@ -5,7 +5,7 @@ from typing import Tuple
 
 import jwt
 from app.config import get_settings
-from app.models import DecodedJWT
+from app.models import GoogleAuth
 from fastapi import HTTPException
 
 
@@ -27,7 +27,7 @@ def coroutine(f):
 
 
 # FIXME: Idk how to return proper HTTPException's to the frontend
-def decode_jwt(encoded_jwt: str) -> DecodedJWT:
+def decode_jwt(encoded_jwt: str) -> GoogleAuth:
     try:
         decoded = jwt.decode(
             encoded_jwt, get_settings().auth_secret, algorithms=["HS256"]
@@ -35,4 +35,4 @@ def decode_jwt(encoded_jwt: str) -> DecodedJWT:
     except Exception as e:
         raise HTTPException(418, detail=e)
 
-    return DecodedJWT(**decoded)
+    return GoogleAuth(**decoded)

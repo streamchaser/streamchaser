@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class DecodedJWT(BaseModel):
+class GoogleAuth(BaseModel):
     email: str
     name: str
     iat: int
