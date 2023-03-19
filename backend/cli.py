@@ -20,6 +20,8 @@ from app.db.cache import redis
 from app.db.database import db_client
 from app.db.database_service import fetch_countries_with_providers
 from app.db.database_service import fix_genre_ampersand
+from app.db.database_service import insert_genres_to_cache
+from app.db.database_service import insert_providers_with_links
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
 from app.db.queries.generated import insert_countries
@@ -281,6 +283,7 @@ async def clean_stale_media():
 async def full_setup(popularity: float = 1, chunk_size: int = 25000):
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
     await providers_to_redis()
+    await insert_providers_with_links()
     countries_json = json.dumps(await fetch_countries_with_providers())
     # TODO: Is being phased out - Remove when go backend is dead
     await redis.set("countries", countries_json)

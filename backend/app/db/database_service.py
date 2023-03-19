@@ -1,5 +1,6 @@
 import asyncio
 import json
+from collections import namedtuple
 from datetime import date
 from datetime import timedelta
 
@@ -7,10 +8,64 @@ import httpx
 from app.config import get_settings
 from app.db.cache import Genre
 from app.db.cache import redis
+from app.db.database import db_client
+from app.db.queries.generated import insert_providers
+from app.db.queries.generated import select_countries
+from app.db.queries.generated import update_country_providers
 from app.db.search import async_client
 from app.db.search import client
 from meilisearch_python_async.errors import MeiliSearchApiError
 from tqdm import tqdm
+
+
+LocalProviders = namedtuple("LocalProviders", ["country_code", "providers"])
+
+
+async def fetch_local_providers(client: httpx.AsyncClient, country_code: str):
+    tmdb = get_settings().tmdb_url
+    key = get_settings().tmdb_key
+
+    url = f"{tmdb}watch/providers/movie?api_key={key}&watch_region="
+
+    res = await client.get(f"{url}{country_code}")
+
+    return LocalProviders(country_code, res.json())
+
+
+async def insert_providers_with_links():
+    countries = await select_countries(db_client)
+
+    local_providers = []
+    print("Fetching provider data. Amount:", len(countries))
+    async with httpx.AsyncClient() as client:
+        tasks = [fetch_local_providers(client, country.value) for country in countries]
+        local_providers: list[LocalProviders] = await asyncio.gather(*tasks)
+
+    for lp in tqdm(
+        local_providers, desc="Inserting provider data and updating country links"
+    ):
+        await insert_providers(db_client, data=json.dumps(lp.providers["results"]))
+
+        # Picks the local display priorities
+        local_display_priorities = [
+            {
+                "display_priority": provider["display_priorities"][lp.country_code],
+                "provider_id": provider["provider_id"],
+            }
+            for provider in lp.providers["results"]
+        ]
+        await update_country_providers(
+            db_client,
+            country_code=lp.country_code,
+            providers=json.dumps(local_display_priorities),
+        )
+
+
+async def insert_genres_to_cache(genres: dict) -> None:
+    """Turns a dict of genres into Genre-models, and feeds them to Redis"""
+    fixed_genres = fix_genre_ampersand(genres)
+
+    await redis.set("genres", json.dumps(fixed_genres))
 
 
 def fix_genre_ampersand(genres: dict) -> list[dict]:
