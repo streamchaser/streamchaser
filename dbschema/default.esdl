@@ -10,6 +10,10 @@ module default {
     required property label -> str;
     required property value -> str;
 
+    multi link providers -> Provider {
+      property display_priority -> int16;
+    };
+
     constraint exclusive on ( (.label, .value) );
   }
 
@@ -32,5 +36,13 @@ module default {
     };
 
     constraint exclusive on ( .email );
+  }
+
+  type Provider {
+    required property logo_path -> str;
+    required property provider_name -> str;
+    required property provider_id -> int16;
+
+    constraint exclusive on ( .provider_id );
   }
 };
