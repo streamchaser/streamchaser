@@ -63,7 +63,7 @@ class Settings(BaseSettings):
     psql_user: str = "postgres"
     psql_pwd: str = "postgres"
 
-    auth_secret: str = "secret"
+    google_client_id: str = ""
 
 
 @lru_cache

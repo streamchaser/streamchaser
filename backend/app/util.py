@@ -3,10 +3,10 @@ from functools import wraps
 from typing import Generator
 from typing import Tuple
 
-import jwt
 from app.config import get_settings
 from app.models import GoogleAuth
-from fastapi import HTTPException
+from google.auth.transport import requests
+from google.oauth2 import id_token
 
 
 def chunkify(lst: list, size: int) -> Tuple[Generator[list, None, None], int]:
@@ -27,12 +27,9 @@ def coroutine(f):
 
 
 # FIXME: Idk how to return proper HTTPException's to the frontend
-def decode_jwt(encoded_jwt: str) -> GoogleAuth:
-    try:
-        decoded = jwt.decode(
-            encoded_jwt, get_settings().auth_secret, algorithms=["HS256"]
-        )
-    except Exception as e:
-        raise HTTPException(418, detail=e)
+def decode_jwt(encoded_jwt: str):
+    idinfo = id_token.verify_oauth2_token(
+        encoded_jwt, requests.Request(), get_settings().google_client_id
+    )
 
-    return GoogleAuth(**decoded)
+    return GoogleAuth(**idinfo)
