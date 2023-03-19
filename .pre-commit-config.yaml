@@ -27,7 +27,7 @@ repos:
           [
             --max-line-length=88,
             "--ignore=E203,W503",
-            "--ignore=E501 backend/app/db/queries/generated.py",
+            "--extend-ignore=E501 backend/app/db/queries/generated.py",
           ]
 
   - repo: https://github.com/asottile/reorder_python_imports
