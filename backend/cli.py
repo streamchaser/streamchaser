@@ -259,7 +259,7 @@ async def refresh_redis():
     await insert_genres_to_cache(fetch_genres())
     await providers_to_redis()
     # TODO: Remove when Go backend is delete
-    await redis.set("countries", json.dumps(fetch_countries_with_providers()))
+    await redis.set("countries", json.dumps(await fetch_countries_with_providers()))
 
 
 @app.command()
