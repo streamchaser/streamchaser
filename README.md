@@ -34,7 +34,6 @@ Here's how to get the application up and running for development
   - `TMDB_KEY=<get one from https://www.themoviedb.org/signup>`
 - Frontend:
   - `VITE_API_PATH=http://api.localhost`
-  - `VITE_GO_API_PATH=http://apiv2.localhost`
 
 3. Build the container `docker-compose up --build -d`
 4. Run `docker-compose exec backend python3 cli.py full-setup --first-time --popularity <1-1000>`(the more the less amount of media)

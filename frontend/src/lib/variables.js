@@ -1,5 +1,4 @@
 export const PYTHON_API = import.meta.env.VITE_API_PATH
-export const GO_API = import.meta.env.VITE_GO_API_PATH
 
 export const STATIC_FILES = `${PYTHON_API}/static`
 export const IMG_W185 = "https://image.tmdb.org/t/p/w185/"

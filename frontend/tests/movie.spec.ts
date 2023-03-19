@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 
 test("test movie detail", async ({ page }) => {
-  await page.route("http://apiv2.localhost/countries", route =>
+  await page.route("http://api.localhost/countries", route =>
     route.fulfill({
       status: 200,
       path: "tests/test_data/countries.json",

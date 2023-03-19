@@ -60,32 +60,6 @@ services:
       - "traefik.http.routers.backend-secured.tls.certresolver=mytlschallenge"
       - "traefik.docker.network=traefik"
 
-  go_backend:
-    build:
-      context: ./go_backend
-      target: ${APP_ENVIRONMENT}
-    container_name: go_backend
-    restart: always
-    ports:
-      - 9001:9001
-    networks:
-      - traefik
-      - streamchaser
-    env_file:
-      - .env
-    volumes:
-      - ./go_backend:/app
-    depends_on:
-      - traefik
-      - redis
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.go-backend-web.rule=Host(`apiv2.${HOST_NAME}`)"
-      - "traefik.http.routers.go-backend-web.middlewares=${SECURE_REDIRECT}"
-      - "traefik.http.routers.go-backend-secured.rule=Host(`apiv2.${HOST_NAME}`)"
-      - "traefik.http.routers.go-backend-secured.tls.certresolver=mytlschallenge"
-      - "traefik.docker.network=traefik"
-
   internal:
     build:
       context: ./internal
