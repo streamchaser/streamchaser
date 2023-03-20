@@ -20,7 +20,6 @@ from app.db.cache import redis
 from app.db.database import db_client
 from app.db.database_service import fetch_countries_with_providers
 from app.db.database_service import fix_genre_ampersand
-from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
 from app.db.queries.insert_countries_async_edgeql import insert_countries
@@ -256,10 +255,7 @@ def remove_blacklisted_from_search():
 async def refresh_redis():
     """Flushes everything then adds genres and providers to Redis"""
     await redis.flushdb()
-    await insert_genres_to_cache(fetch_genres())
     await providers_to_redis()
-    # TODO: Remove when Go backend is delete
-    await redis.set("countries", json.dumps(await fetch_countries_with_providers()))
 
 
 @app.command()
@@ -283,7 +279,6 @@ async def clean_stale_media():
 @app.command()
 @coroutine
 async def full_setup(popularity: float = 1, chunk_size: int = 25000):
-    await insert_genres_to_cache(fetch_genres())
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
     await providers_to_redis()
     countries_json = json.dumps(await fetch_countries_with_providers())

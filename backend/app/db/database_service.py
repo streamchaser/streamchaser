@@ -13,13 +13,6 @@ from meilisearch_python_async.errors import MeiliSearchApiError
 from tqdm import tqdm
 
 
-async def insert_genres_to_cache(genres: dict) -> None:
-    """Turns a dict of genres into Genre-models, and feeds them to Redis"""
-    fixed_genres = fix_genre_ampersand(genres)
-
-    await redis.set("genres", json.dumps(fixed_genres))
-
-
 def fix_genre_ampersand(genres: dict) -> list[dict]:
     fixed_genres = [
         Genre(

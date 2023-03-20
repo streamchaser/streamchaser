@@ -1,15 +1,7 @@
 import asyncio
-import json
 
 from app.db.cache import redis
-from app.db.database_service import insert_genres_to_cache
 from pytest import fixture
-
-test_genre_dict = {
-    1: "NoAmpersands",
-    2: "One & Ampersand",
-    3: "A & Lot & of & Ampersands",
-}
 
 
 @fixture(scope="session")
@@ -36,20 +28,3 @@ async def reset_db():
     """
     yield
     await redis.flushdb()
-
-
-async def test_insert_genres_to_cache():
-    """
-    Test that the genre cache is created and populated correctly.
-    """
-    assert not await redis.get("genres")
-    await insert_genres_to_cache(test_genre_dict)
-    assert await redis.get("genres")
-
-    genres = json.loads(await redis.get("genres"))
-
-    assert genres
-    assert len(genres) == 3
-    assert "&" in genres[2]["label"]
-    for genre in genres:
-        assert "&" not in genre["value"]
