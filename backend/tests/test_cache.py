@@ -1,8 +1,7 @@
 import asyncio
-import json
 
 from app.db.cache import redis
-from app.db.database_service import insert_genres_to_cache
+from app.db.database_service import fix_genre_ampersand
 from pytest import fixture
 
 test_genre_dict = {
@@ -38,15 +37,8 @@ async def reset_db():
     await redis.flushdb()
 
 
-async def test_insert_genres_to_cache():
-    """
-    Test that the genre cache is created and populated correctly.
-    """
-    assert not await redis.get("genres")
-    await insert_genres_to_cache(test_genre_dict)
-    assert await redis.get("genres")
-
-    genres = json.loads(await redis.get("genres"))
+async def test_fix_genre_ampersand():
+    genres = fix_genre_ampersand(test_genre_dict)
 
     assert genres
     assert len(genres) == 3

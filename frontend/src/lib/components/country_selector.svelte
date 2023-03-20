@@ -1,11 +1,11 @@
 <script lang="ts">
   import { currentCountry } from "$lib/stores/preferences"
   import { isBurgerMenuOpen } from "$lib/stores/stores"
-  import type { main_Country } from "$lib/generated/go/index.js"
+  import type { GetCountriesResult } from "$lib/generated"
   import Select from "svelte-select"
   import { get } from "svelte/store"
 
-  export let countries: main_Country[]
+  export let countries: GetCountriesResult[]
 </script>
 
 <div>

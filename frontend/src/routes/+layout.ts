@@ -1,10 +1,10 @@
-import type { main_Country } from "$lib/generated/go"
+import type { GetCountriesResult } from "$lib/generated"
 import type { LayoutLoad } from "./$types"
-import { GO_API } from "$lib/variables"
+import { PYTHON_API } from "$lib/variables"
 
 export const load: LayoutLoad = async ({ fetch }) => {
-  const fetchCountries = async (): Promise<main_Country[]> => {
-    const res = await fetch(`${GO_API}/countries`)
+  const fetchCountries = async (): Promise<GetCountriesResult[]> => {
+    const res = await fetch(`${PYTHON_API}/countries`)
     return await res.json()
   }
 

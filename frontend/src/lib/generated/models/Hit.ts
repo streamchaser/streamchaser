@@ -6,8 +6,8 @@ import type { Providers } from "./Providers"
 
 export type Hit = {
   id: string
-  imdb_rating: string
   title: string
   poster_path: string
+  imdb_rating?: string
   providers?: Providers
 }

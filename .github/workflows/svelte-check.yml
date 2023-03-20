@@ -13,8 +13,7 @@ jobs:
         run: |
           cd frontend/
           touch .env
-          variables="VITE_API_PATH=http://api.localhost
-          VITE_GO_API_PATH=http://apiv2.localhost"
+          variables="VITE_API_PATH=http://api.localhost"
           echo "$variables" > .env
           yarn install
           yarn svelte-check --fail-on-warning --fail-on-hints

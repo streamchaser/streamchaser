@@ -1,11 +1,11 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
-  import type { main_Country } from "$lib/generated/go"
+  import type { GetCountriesResult } from "$lib/generated"
   import CountrySelector from "$lib/components/country_selector.svelte"
   import ThemeSelector from "$lib/components/theme_selector.svelte"
   import { isBurgerMenuOpen } from "$lib/stores/stores"
 
-  export let countries: main_Country[]
+  export let countries: GetCountriesResult[]
 
   const handleDropdownClick = () => {
     $isBurgerMenuOpen = !$isBurgerMenuOpen

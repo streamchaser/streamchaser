@@ -1,5 +1,5 @@
 import type { PageLoad } from "./$types"
-import { GO_API, PYTHON_API } from "$lib/variables.js"
+import { PYTHON_API } from "$lib/variables.js"
 import { currentCountry } from "$lib/stores/preferences"
 import type { Genre, Provider } from "$lib/generated"
 import { env } from "$env/dynamic/public"
@@ -7,7 +7,7 @@ import { env } from "$env/dynamic/public"
 // TODO: Kill this with fire, when https://github.com/sveltejs/kit/issues/5606 is fixed
 export const ssr = env.PUBLIC_ENV === "prod"
 
-const GENRE_URL = `${GO_API}/genres`
+const GENRE_URL = `${PYTHON_API}/genres`
 const PROVIDER_URL = `${PYTHON_API}/providers/`
 
 export const load: PageLoad = async ({ fetch }) => {

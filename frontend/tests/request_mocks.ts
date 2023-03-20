@@ -14,13 +14,13 @@ export const mockIndex = async (page: Page) => {
       path: "tests/test_data/providers.json",
     })
   )
-  await page.route("http://apiv2.localhost/genres", route =>
+  await page.route("http://api.localhost/genres", route =>
     route.fulfill({
       status: 200,
       path: "tests/test_data/genres.json",
     })
   )
-  await page.route("http://apiv2.localhost/countries", route =>
+  await page.route("http://api.localhost/countries", route =>
     route.fulfill({
       status: 200,
       path: "tests/test_data/countries.json",
