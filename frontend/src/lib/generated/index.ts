@@ -2,9 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type { Genre } from "./models/Genre"
+export type { ClientStats } from "./models/ClientStats"
+export type { GetCountriesResult } from "./models/GetCountriesResult"
+export type { GetGenresResult } from "./models/GetGenresResult"
 export type { Hit } from "./models/Hit"
 export type { HTTPValidationError } from "./models/HTTPValidationError"
+export type { IndexStats } from "./models/IndexStats"
 export type { Meilisearch } from "./models/Meilisearch"
 export type { Movie } from "./models/Movie"
 export { Order } from "./models/Order"

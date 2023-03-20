@@ -1,11 +1,11 @@
 <!-- https://daisyui.com/components/navbar -->
 <script lang="ts">
-  import type { main_Country } from "$lib/generated/go"
+  import type { GetCountriesResult } from "$lib/generated"
 
   import CountrySelector from "../country_selector.svelte"
   import ThemeSelector from "../theme_selector.svelte"
 
-  export let countries: main_Country[]
+  export let countries: GetCountriesResult[]
 </script>
 
 <div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16">
