@@ -14,3 +14,6 @@ db-ui:
 
 generate-edgedb-python:
   cd backend/ && poetry run edgedb-py -P 5656 --tls-security insecure --user edgedb --password secret && cd ../
+
+cli command="--help":
+  docker-compose exec backend python3 cli.py {{command}}
