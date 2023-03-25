@@ -113,7 +113,9 @@
     let selectedProviders = $currentProviders
     for (let i = 0; i < selectedProviders.length; i++) {
       if (
-        !data.providers.map(v => v.provider_name).includes(selectedProviders[i].value)
+        !data.providers[0].providers
+          .map(v => v.provider_name)
+          .includes(selectedProviders[i].value)
       ) {
         selectedProviders.splice(i, 1)
         i--
@@ -214,7 +216,7 @@
             : []
         }}
         value={$currentProviders.length ? $currentProviders : null}
-        items={data.providers.map(v => v.provider_name)}
+        items={data.providers[0].providers.map(v => v.provider_name)}
         isMulti={true}
         placeholder="Select providers..."
       />

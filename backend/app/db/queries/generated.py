@@ -2,10 +2,14 @@
 #     'backend/app/db/queries/insert_countries.edgeql'
 #     'backend/app/db/queries/insert_genres.edgeql'
 #     'backend/app/db/queries/insert_media.edgeql'
+#     'backend/app/db/queries/insert_providers.edgeql'
 #     'backend/app/db/queries/insert_user.edgeql'
 #     'backend/app/db/queries/select_countries.edgeql'
+#     'backend/app/db/queries/select_countries_with_providers.edgeql'
+#     'backend/app/db/queries/select_country_providers.edgeql'
 #     'backend/app/db/queries/select_genres.edgeql'
 #     'backend/app/db/queries/select_user_watch_list.edgeql'
+#     'backend/app/db/queries/update_country_providers.edgeql'
 #     'backend/app/db/queries/update_user_watch_list_add.edgeql'
 #     'backend/app/db/queries/update_user_watch_list_remove.edgeql'
 # WITH:
@@ -13,6 +17,7 @@
 from __future__ import annotations
 
 import dataclasses
+import typing
 import uuid
 
 import edgedb
@@ -44,6 +49,11 @@ class InsertMediaResult(NoPydanticValidation):
 
 
 @dataclasses.dataclass
+class InsertProvidersResult(NoPydanticValidation):
+    id: uuid.UUID
+
+
+@dataclasses.dataclass
 class InsertUserResult(NoPydanticValidation):
     id: uuid.UUID
 
@@ -53,6 +63,29 @@ class SelectCountriesResult(NoPydanticValidation):
     id: uuid.UUID
     label: str
     value: str
+
+
+@dataclasses.dataclass
+class SelectCountryProvidersResult(NoPydanticValidation):
+    id: uuid.UUID
+    label: str
+    value: str
+    providers: list[SelectCountryProvidersResultProvidersItem]
+
+
+@dataclasses.dataclass
+class SelectCountryProvidersResultProvidersItem(NoPydanticValidation):
+    id: uuid.UUID
+    provider_id: int
+    logo_path: str
+    provider_name: str
+
+    @typing.overload
+    def __getitem__(self, key: typing.Literal["@display_priority"]) -> int | None:
+        ...
+
+    def __getitem__(self, key: str) -> typing.Any:
+        raise NotImplementedError
 
 
 @dataclasses.dataclass
@@ -126,6 +159,28 @@ async def insert_media(
     )
 
 
+async def insert_providers(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    data: str,
+) -> list[InsertProvidersResult]:
+    return await executor.query(
+        """\
+        with
+          raw_data := <json>$data,
+        for item in json_array_unpack(raw_data) union (
+          insert Provider {
+            logo_path := <str>item['logo_path'],
+            provider_name := <str>item['provider_name'],
+            provider_id := <int16>item['provider_id']
+          }
+          unless conflict
+        )\
+        """,
+        data=data,
+    )
+
+
 async def insert_user(
     executor: edgedb.AsyncIOExecutor,
     *,
@@ -159,6 +214,50 @@ async def select_countries(
     )
 
 
+async def select_countries_with_providers(
+    executor: edgedb.AsyncIOExecutor,
+) -> list[SelectCountriesResult]:
+    return await executor.query(
+        """\
+        select Country {
+          id,
+          label,
+          value
+        }
+        filter exists(.providers)
+        # We sort by label, but need to split because
+        # of the unicode flag "🇩🇿 Algeria"
+        order by str_split(.label, " ")[1]\
+        """,
+    )
+
+
+async def select_country_providers(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    country_code: str,
+) -> list[SelectCountryProvidersResult]:
+    return await executor.query(
+        """\
+        select Country {
+          id,
+          label,
+          value,
+          providers: {
+            id,
+            provider_id,
+            logo_path,
+            provider_name,
+            @display_priority
+          }
+          order by @display_priority
+        }
+        filter .value = <str>$country_code\
+        """,
+        country_code=country_code,
+    )
+
+
 async def select_genres(
     executor: edgedb.AsyncIOExecutor,
 ) -> list[SelectGenresResult]:
@@ -189,6 +288,34 @@ async def select_user_watch_list(
         filter .email = <str>$email\
         """,
         email=email,
+    )
+
+
+async def update_country_providers(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    providers: str,
+    country_code: str,
+) -> list[InsertCountriesResult]:
+    return await executor.query(
+        """\
+        with
+          providers := <json>$providers
+        for provider in json_array_unpack(providers) union (
+          update Country
+          filter .value = <str>$country_code
+          set {
+            providers := (
+              select detached Provider {
+                @display_priority := <int16>provider["display_priority"]
+              }
+              filter .provider_id = <int16>provider["provider_id"]
+            )
+          }
+        )\
+        """,
+        providers=providers,
+        country_code=country_code,
     )
 
 

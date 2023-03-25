@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 /**
- * GetGenresResult(id: 'uuid.UUID', label: 'str', value: 'str')
+ * SelectGenresResult(id: 'uuid.UUID', label: 'str', value: 'str')
  */
-export type GetGenresResult = {
+export type SelectGenresResult = {
   id: string
   label: string
   value: string

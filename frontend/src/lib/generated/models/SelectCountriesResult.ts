@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 /**
- * GetCountriesResult(id: 'uuid.UUID', label: 'str', value: 'str')
+ * SelectCountriesResult(id: 'uuid.UUID', label: 'str', value: 'str')
  */
-export type GetCountriesResult = {
+export type SelectCountriesResult = {
   id: string
   label: string
   value: string

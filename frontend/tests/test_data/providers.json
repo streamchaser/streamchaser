@@ -1,284 +1,310 @@
 [
   {
-    "provider_name": "Acorn TV",
-    "display_priority": 16,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Amazon Prime Video",
-    "display_priority": 2,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Apple TV Plus",
-    "display_priority": 12,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Apple iTunes",
-    "display_priority": 7,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Blockbuster",
-    "display_priority": 20,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "BritBox",
-    "display_priority": 38,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "BroadwayHD",
-    "display_priority": 27,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "C More",
-    "display_priority": 5,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Classix",
-    "display_priority": 44,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Crunchyroll",
-    "display_priority": 16,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Cultpix",
-    "display_priority": 36,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Curiosity Stream",
-    "display_priority": 22,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "DOCSVILLE",
-    "display_priority": 23,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "DRTV",
-    "display_priority": 34,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Dansk Filmskat",
-    "display_priority": 33,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Dekkoo",
-    "display_priority": 29,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Disney Plus",
-    "display_priority": 1,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "DocAlliance Films",
-    "display_priority": 31,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Eventive",
-    "display_priority": 35,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "FilmBox+",
-    "display_priority": 37,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Filmstriben",
-    "display_priority": 19,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Filmzie",
-    "display_priority": 28,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Google Play Movies",
-    "display_priority": 8,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "GuideDoc",
-    "display_priority": 13,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "HBO Max",
-    "display_priority": 3,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Hayu",
-    "display_priority": 4,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Hoichoi",
-    "display_priority": 32,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Lionsgate Plus",
-    "display_priority": 42,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "MUBI",
-    "display_priority": 11,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Magellan TV",
-    "display_priority": 26,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Microsoft Store",
-    "display_priority": 10,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Netflix",
-    "display_priority": 0,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Netflix Kids",
-    "display_priority": 14,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Paramount Plus",
-    "display_priority": 9,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Pluto TV",
-    "display_priority": 39,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Rakuten TV",
-    "display_priority": 18,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "SF Anytime",
-    "display_priority": 21,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "SkyShowtime",
-    "display_priority": 40,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Spamflix",
-    "display_priority": 24,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Sun Nxt",
-    "display_priority": 43,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "TV 2",
-    "display_priority": 9,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Takflix",
-    "display_priority": 41,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "True Story",
-    "display_priority": 30,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "Viaplay",
-    "display_priority": 6,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "WAKANIM",
-    "display_priority": 17,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "WOW Presents Plus",
-    "display_priority": 25,
-    "provider_id": null,
-    "logo_path": null
-  },
-  {
-    "provider_name": "YouTube Premium",
-    "display_priority": 15,
-    "provider_id": null,
-    "logo_path": null
+    "id": "ed3a68f8-cb2a-11ed-b11a-a34ec1e9f602",
+    "label": "🇩🇰 Denmark",
+    "value": "DK",
+    "providers": [
+      {
+        "id": "edb3e73c-cb2a-11ed-b11a-e3a5a8daea7f",
+        "provider_id": 8,
+        "logo_path": "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
+        "provider_name": "Netflix",
+        "@display_priority": 0
+      },
+      {
+        "id": "edb3f7d6-cb2a-11ed-b11a-3fbaa7d3f433",
+        "provider_id": 337,
+        "logo_path": "/7rwgEs15tFwyR9NPQ5vpzxTj19Q.jpg",
+        "provider_name": "Disney Plus",
+        "@display_priority": 1
+      },
+      {
+        "id": "edb3ede0-cb2a-11ed-b11a-f3bc7f574c33",
+        "provider_id": 119,
+        "logo_path": "/emthp39XA2YScoYL1p0sdbAH2WA.jpg",
+        "provider_name": "Amazon Prime Video",
+        "@display_priority": 2
+      },
+      {
+        "id": "edc04d88-cb2a-11ed-b11a-cfb450696927",
+        "provider_id": 384,
+        "logo_path": "/Ajqyt5aNxNGjmF9uOfxArGrdf3X.jpg",
+        "provider_name": "HBO Max",
+        "@display_priority": 3
+      },
+      {
+        "id": "edd33074-cb2a-11ed-b11a-9b73f426213f",
+        "provider_id": 77,
+        "logo_path": "/pCIkSBek0aZfPQzOn9gfazuYaLV.jpg",
+        "provider_name": "C More",
+        "@display_priority": 5
+      },
+      {
+        "id": "edcb36e4-cb2a-11ed-b11a-ff5f325a0b66",
+        "provider_id": 76,
+        "logo_path": "/cvl65OJnz14LUlC3yGK1KHj8UYs.jpg",
+        "provider_name": "Viaplay",
+        "@display_priority": 6
+      },
+      {
+        "id": "edbca58e-cb2a-11ed-b11a-732ea0bb856b",
+        "provider_id": 2,
+        "logo_path": "/peURlLlr8jggOwK53fJ5wdQl05y.jpg",
+        "provider_name": "Apple TV",
+        "@display_priority": 7
+      },
+      {
+        "id": "edbca96c-cb2a-11ed-b11a-77304338af27",
+        "provider_id": 3,
+        "logo_path": "/tbEdFQDwx5LEVr8WpSeXQSIirVq.jpg",
+        "provider_name": "Google Play Movies",
+        "@display_priority": 8
+      },
+      {
+        "id": "edd33312-cb2a-11ed-b11a-07991193f918",
+        "provider_id": 383,
+        "logo_path": "/yBrCoCGMIiHPHuoyh1mg82Pwlhx.jpg",
+        "provider_name": "TV 2",
+        "@display_priority": 9
+      },
+      {
+        "id": "edc16f1a-cb2a-11ed-b11a-27b048234984",
+        "provider_id": 68,
+        "logo_path": "/shq88b09gTBYC4hA7K7MUL8Q4zP.jpg",
+        "provider_name": "Microsoft Store",
+        "@display_priority": 10
+      },
+      {
+        "id": "edb3f4e8-cb2a-11ed-b11a-8feea66dc693",
+        "provider_id": 11,
+        "logo_path": "/bVR4Z1LCHY7gidXAJF5pMa4QrDS.jpg",
+        "provider_name": "MUBI",
+        "@display_priority": 11
+      },
+      {
+        "id": "edbca7d2-cb2a-11ed-b11a-13911fea7432",
+        "provider_id": 350,
+        "logo_path": "/6uhKBfmtzFqOcLousHwZuzcrScK.jpg",
+        "provider_name": "Apple TV Plus",
+        "@display_priority": 12
+      },
+      {
+        "id": "edc17a82-cb2a-11ed-b11a-c354da624220",
+        "provider_id": 100,
+        "logo_path": "/iX0pvJ2GFATbVIH5IHMwG0ffIdV.jpg",
+        "provider_name": "GuideDoc",
+        "@display_priority": 13
+      },
+      {
+        "id": "edc17596-cb2a-11ed-b11a-67c4e6e57944",
+        "provider_id": 175,
+        "logo_path": "/j2OLGxyy0gKbPVI0DYFI2hJxP6y.jpg",
+        "provider_name": "Netflix Kids",
+        "@display_priority": 14
+      },
+      {
+        "id": "edc170b4-cb2a-11ed-b11a-7f413ba399e5",
+        "provider_id": 188,
+        "logo_path": "/6IPjvnYl6WWkIwN158qBFXCr2Ne.jpg",
+        "provider_name": "YouTube Premium",
+        "@display_priority": 15
+      },
+      {
+        "id": "edc2888c-cb2a-11ed-b11a-73ab9b33abab",
+        "provider_id": 87,
+        "logo_path": "/5P99DkK1jVs95KcE8bYG9MBtGQ.jpg",
+        "provider_name": "Acorn TV",
+        "@display_priority": 16
+      },
+      {
+        "id": "edbf0b30-cb2a-11ed-b11a-cfd0285883e2",
+        "provider_id": 35,
+        "logo_path": "/5GEbAhFW2S5T8zVc1MNvz00pIzM.jpg",
+        "provider_name": "Rakuten TV",
+        "@display_priority": 18
+      },
+      {
+        "id": "edd33506-cb2a-11ed-b11a-77601b2452a6",
+        "provider_id": 443,
+        "logo_path": "/vqybB1exnaQ3UOlKaw4t6OgzFIu.jpg",
+        "provider_name": "Filmstriben",
+        "@display_priority": 19
+      },
+      {
+        "id": "edd336be-cb2a-11ed-b11a-4f44acb4e469",
+        "provider_id": 423,
+        "logo_path": "/3QsJbibv5dFW2IYuXbTjxDmGGRZ.jpg",
+        "provider_name": "Blockbuster",
+        "@display_priority": 20
+      },
+      {
+        "id": "edd3390c-cb2a-11ed-b11a-eb74f144ebc5",
+        "provider_id": 426,
+        "logo_path": "/dNcz2AZHPEgt4BIKJe56r4visuK.jpg",
+        "provider_name": "SF Anytime",
+        "@display_priority": 21
+      },
+      {
+        "id": "edb3faba-cb2a-11ed-b11a-13c49a06c48c",
+        "provider_id": 190,
+        "logo_path": "/67Ee4E6qOkQGHeUTArdJ1qRxzR2.jpg",
+        "provider_name": "Curiosity Stream",
+        "@display_priority": 22
+      },
+      {
+        "id": "edc05b7a-cb2a-11ed-b11a-d3eee7f28a3d",
+        "provider_id": 475,
+        "logo_path": "/bvcdVO7SDHKEa6D40g1jntXKNj.jpg",
+        "provider_name": "DOCSVILLE",
+        "@display_priority": 23
+      },
+      {
+        "id": "edb3fd9e-cb2a-11ed-b11a-4f44e9fb7349",
+        "provider_id": 521,
+        "logo_path": "/xN97FFkFAdY1JvHhS4zyPD4URgD.jpg",
+        "provider_name": "Spamflix",
+        "@display_priority": 24
+      },
+      {
+        "id": "edb404ec-cb2a-11ed-b11a-673ae8c92644",
+        "provider_id": 546,
+        "logo_path": "/mgD0T960hnYU4gBxbPPBrcDfgWg.jpg",
+        "provider_name": "WOW Presents Plus",
+        "@display_priority": 25
+      },
+      {
+        "id": "edb401ea-cb2a-11ed-b11a-d3631a83badb",
+        "provider_id": 551,
+        "logo_path": "/gekkP93StjYdiMAInViVmrnldNY.jpg",
+        "provider_name": "Magellan TV",
+        "@display_priority": 26
+      },
+      {
+        "id": "edb40370-cb2a-11ed-b11a-5bf3e577e2b2",
+        "provider_id": 554,
+        "logo_path": "/xLu1rkZNOKuNnRNr70wySosfTBf.jpg",
+        "provider_name": "BroadwayHD",
+        "@display_priority": 27
+      },
+      {
+        "id": "edb407c6-cb2a-11ed-b11a-a7f5c605f340",
+        "provider_id": 559,
+        "logo_path": "/olmH7t5tEng8Yuq33KmvpvaaVIg.jpg",
+        "provider_name": "Filmzie",
+        "@display_priority": 28
+      },
+      {
+        "id": "edb40654-cb2a-11ed-b11a-2346bbb9036a",
+        "provider_id": 444,
+        "logo_path": "/u2H29LCxRzjZVUoZUQAHKm5P8Zc.jpg",
+        "provider_name": "Dekkoo",
+        "@display_priority": 29
+      },
+      {
+        "id": "edb4092e-cb2a-11ed-b11a-e310f069c8d5",
+        "provider_id": 567,
+        "logo_path": "/osREemsc9uUB2J8VTkQeAVk2fu9.jpg",
+        "provider_name": "True Story",
+        "@display_priority": 30
+      },
+      {
+        "id": "edc06232-cb2a-11ed-b11a-d76aca9f82fc",
+        "provider_id": 569,
+        "logo_path": "/aQ1ritN00jXc7RAFfUoQKGAAfp7.jpg",
+        "provider_name": "DocAlliance Films",
+        "@display_priority": 31
+      },
+      {
+        "id": "edb40c08-cb2a-11ed-b11a-eb2ce035040f",
+        "provider_id": 315,
+        "logo_path": "/d4vHcXY9rwnr763wQns2XJThclt.jpg",
+        "provider_name": "Hoichoi",
+        "@display_priority": 32
+      },
+      {
+        "id": "edd33b32-cb2a-11ed-b11a-0b38a80d50a0",
+        "provider_id": 621,
+        "logo_path": "/cInE5cdEs1yOKVbNaqlGbeZeAnN.jpg",
+        "provider_name": "Dansk Filmskat",
+        "@display_priority": 33
+      },
+      {
+        "id": "edd33ce0-cb2a-11ed-b11a-13768caba3b9",
+        "provider_id": 620,
+        "logo_path": "/dpqap8iY6bsSqQf4xrkAG2j43gS.jpg",
+        "provider_name": "DRTV",
+        "@display_priority": 34
+      },
+      {
+        "id": "edb40d70-cb2a-11ed-b11a-1ba24659ae03",
+        "provider_id": 677,
+        "logo_path": "/fadQYOyKL0tqfyj012nYJxm3N2I.jpg",
+        "provider_name": "Eventive",
+        "@display_priority": 35
+      },
+      {
+        "id": "edb40ee2-cb2a-11ed-b11a-3f841180d787",
+        "provider_id": 692,
+        "logo_path": "/59azlQKUgFdYq6QI5QEAxIeecyL.jpg",
+        "provider_name": "Cultpix",
+        "@display_priority": 36
+      },
+      {
+        "id": "edbcaf84-cb2a-11ed-b11a-1f992cfbcdd9",
+        "provider_id": 701,
+        "logo_path": "/4FqTBYsUSZgS9z9UGKgxSDBbtc8.jpg",
+        "provider_name": "FilmBox+",
+        "@display_priority": 37
+      },
+      {
+        "id": "edc277b6-cb2a-11ed-b11a-63f53ac0b20a",
+        "provider_id": 151,
+        "logo_path": "/aGIS8maihUm60A3moKYD9gfYHYT.jpg",
+        "provider_name": "BritBox",
+        "@display_priority": 38
+      },
+      {
+        "id": "edc0657a-cb2a-11ed-b11a-cf6d4222b32d",
+        "provider_id": 300,
+        "logo_path": "/t6N57S17sdXRXmZDAkaGP0NHNG0.jpg",
+        "provider_name": "Pluto TV",
+        "@display_priority": 39
+      },
+      {
+        "id": "edb4132e-cb2a-11ed-b11a-fbf8884a12ec",
+        "provider_id": 1773,
+        "logo_path": "/iieEQVJIEOSfDj477zG8sSTtr25.jpg",
+        "provider_name": "SkyShowtime",
+        "@display_priority": 40
+      },
+      {
+        "id": "edb411c6-cb2a-11ed-b11a-bb47e1b8188e",
+        "provider_id": 1771,
+        "logo_path": "/cnIHBy3uLWhHRR7VeWQhK3ZsYP0.jpg",
+        "provider_name": "Takflix",
+        "@display_priority": 41
+      },
+      {
+        "id": "edc0673c-cb2a-11ed-b11a-97b4c99c3ab3",
+        "provider_id": 1790,
+        "logo_path": "/ytSbyHt45x7igOgC8GVzR7RLJVo.jpg",
+        "provider_name": "Lionsgate Plus",
+        "@display_priority": 42
+      },
+      {
+        "id": "edb3f36c-cb2a-11ed-b11a-9faeeecfd61e",
+        "provider_id": 309,
+        "logo_path": "/uW4dPCcbXaaFTyfL5HwhuDt5akK.jpg",
+        "provider_name": "Sun Nxt",
+        "@display_priority": 43
+      },
+      {
+        "id": "edb3fc2c-cb2a-11ed-b11a-0b6ecb18a2a4",
+        "provider_id": 445,
+        "logo_path": "/iaMw6nOyxUzXSacrLQ0Au6CfZkc.jpg",
+        "provider_name": "Classix",
+        "@display_priority": 44
+      }
+    ]
   }
 ]
