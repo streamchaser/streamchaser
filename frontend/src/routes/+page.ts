@@ -1,12 +1,7 @@
 import type { PageLoad } from "./$types"
 import { PYTHON_API } from "$lib/variables.js"
 import { currentCountry } from "$lib/stores/preferences"
-import type {
-  Genre,
-  Provider,
-  SelectCountryProvidersResult,
-  SelectGenresResult,
-} from "$lib/generated"
+import type { SelectCountryProvidersResult, SelectGenresResult } from "$lib/generated"
 import { env } from "$env/dynamic/public"
 
 // TODO: Kill this with fire, when https://github.com/sveltejs/kit/issues/5606 is fixed

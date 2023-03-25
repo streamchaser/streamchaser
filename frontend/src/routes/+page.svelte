@@ -21,8 +21,6 @@
 
   export let data: PageData
 
-  console.log("hest data", data)
-
   const SEARCH_URL = `${PYTHON_API}/search/`
 
   let input = ""
@@ -115,7 +113,9 @@
     let selectedProviders = $currentProviders
     for (let i = 0; i < selectedProviders.length; i++) {
       if (
-        !data.providers.map(v => v.provider_name).includes(selectedProviders[i].value)
+        !data.providers[0].providers
+          .map(v => v.provider_name)
+          .includes(selectedProviders[i].value)
       ) {
         selectedProviders.splice(i, 1)
         i--

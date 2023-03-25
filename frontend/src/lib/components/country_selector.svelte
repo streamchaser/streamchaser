@@ -1,11 +1,11 @@
 <script lang="ts">
   import { currentCountry } from "$lib/stores/preferences"
   import { isBurgerMenuOpen } from "$lib/stores/stores"
-  import type { GetCountriesResult } from "$lib/generated"
+  import type { SelectCountriesResult } from "$lib/generated"
   import Select from "svelte-select"
   import { get } from "svelte/store"
 
-  export let countries: GetCountriesResult[]
+  export let countries: SelectCountriesResult[]
 </script>
 
 <div>
