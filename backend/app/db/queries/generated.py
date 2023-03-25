@@ -71,7 +71,6 @@ class SelectUserWatchListResult(NoPydanticValidation):
 @dataclasses.dataclass
 class SelectUserWatchListResultWatchListItem(NoPydanticValidation):
     id: uuid.UUID
-    title: str
     streamchaser_id: str
 
 
@@ -114,18 +113,15 @@ async def insert_genres(
 async def insert_media(
     executor: edgedb.AsyncIOExecutor,
     *,
-    title: str,
     streamchaser_id: str,
 ) -> InsertMediaResult | None:
     return await executor.query_single(
         """\
         insert Media {
-          title := <str>$title,
           streamchaser_id := <str>$streamchaser_id
         }
         unless conflict;\
         """,
-        title=title,
         streamchaser_id=streamchaser_id,
     )
 
@@ -187,7 +183,6 @@ async def select_user_watch_list(
         select User {
           watch_list: {
             id,
-            title,
             streamchaser_id
           }
         }
@@ -209,7 +204,11 @@ async def update_user_watch_list_add(
         filter .email = <str>$email
         set {
           watch_list += (
-            select Media filter .streamchaser_id = <str>$streamchaser_id
+            insert Media { streamchaser_id := <str>$streamchaser_id }
+            unless conflict on .streamchaser_id
+            else (
+              select Media filter .streamchaser_id = <str>$streamchaser_id
+            )
           )
         };\
         """,

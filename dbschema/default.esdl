@@ -14,7 +14,6 @@ module default {
   }
 
   type Media {
-    required property title -> str;
     required property streamchaser_id -> str;
 
     constraint exclusive on ( .streamchaser_id );
