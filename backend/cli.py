@@ -20,7 +20,6 @@ from app.db.cache import redis
 from app.db.database import db_client
 from app.db.database_service import fetch_countries_with_providers
 from app.db.database_service import fix_genre_ampersand
-from app.db.database_service import insert_genres_to_cache
 from app.db.database_service import insert_providers_with_links
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
