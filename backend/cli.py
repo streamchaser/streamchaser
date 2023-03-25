@@ -281,12 +281,11 @@ async def clean_stale_media():
 @coroutine
 async def full_setup(popularity: float = 1, chunk_size: int = 25000):
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
+    await insert_countries(
+        db_client, data=json.dumps(await fetch_countries_with_providers())
+    )
     await providers_to_redis()
     await insert_providers_with_links()
-    countries_json = json.dumps(await fetch_countries_with_providers())
-    # TODO: Is being phased out - Remove when go backend is dead
-    await redis.set("countries", countries_json)
-    await insert_countries(db_client, data=countries_json)
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
         search_client_config()
