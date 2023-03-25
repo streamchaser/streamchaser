@@ -209,9 +209,9 @@ def update_ids(ids: list[str]):
 
 
 @app.command()
-def update_media(chunk_size: int, popularity: float = 1):
+def update_media(chunk_size: int, popularity: float = 1, download_jsongz: bool = True):
     """Sends media ids to our internal update-media endpoint in chunks"""
-    movie_ids, tv_ids, person_ids = fetch_media_ids(popularity)
+    movie_ids, tv_ids, person_ids = fetch_media_ids(popularity, download_jsongz)
 
     print(
         f"\nAbout to update {len(movie_ids)} movies, {len(tv_ids)} "
@@ -282,7 +282,9 @@ async def clean_stale_media():
 
 @app.command()
 @coroutine
-async def full_setup(popularity: float = 1, chunk_size: int = 25000):
+async def full_setup(
+    popularity: float = 1, chunk_size: int = 25000, download_jsongz: bool = True
+):
     await insert_genres_to_cache(fetch_genres())
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
     await providers_to_redis()
@@ -293,7 +295,9 @@ async def full_setup(popularity: float = 1, chunk_size: int = 25000):
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production
         search_client_config()
-    update_media(chunk_size=chunk_size, popularity=popularity)
+    update_media(
+        chunk_size=chunk_size, popularity=popularity, download_jsongz=download_jsongz
+    )
     # Removes before indexing MeiliSearch
     remove_blacklisted_from_search()
 

@@ -96,9 +96,11 @@ def fetch_jsongz_files():
 
 def fetch_media_ids(
     popularity: float | None = 1,
+    download_jsongz=True,
 ) -> Tuple[list[str], list[str], list[str]]:
     """Fetches jsongz file from TMDB with all the relevant tv/movies"""
-    fetch_jsongz_files()
+    if download_jsongz:
+        fetch_jsongz_files()
 
     directory = "../json.gz_dumps"
     movie_ids = []

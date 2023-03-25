@@ -27,6 +27,18 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.15.13.tgz#64e8825bf0ce769dac94ee39d92ebe6272020dfc"
   integrity sha512-+BoyIm4I8uJmH/QDIH0fu7MG0AEx9OXEDXnqptXCwKOlOqZiS4iraH1Nr7/ObLMokW3sOCeBNyD68ATcV9b9Ag==
 
+"@floating-ui/core@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.2.4.tgz#89e6311b021190c9e121fcf20306e76ac66e4066"
+  integrity sha512-SQOeVbMwb1di+mVWWJLpsUTToKfqVNioXys011beCAhyOIFtS+GQoW4EQSneuxzmQKddExDwQ+X0hLl4lJJaSQ==
+
+"@floating-ui/dom@^1.2.4":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.2.5.tgz#c9ec259a24ce0958b1ea29674df4eee4455361a9"
+  integrity sha512-+sAUfpQ3Frz+VCbPCqj+cZzvEESy3fjSeT/pDWkYCWOBXYNNKZfuVsHuv8/JO2zze8+Eb/Q7a6hZVgzS81fLbQ==
+  dependencies:
+    "@floating-ui/core" "^1.2.4"
+
 "@iarna/toml@^2.2.5":
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.5.tgz#b32366c89b43c6f8cefbdefac778b9c828e3ba8c"
@@ -1635,6 +1647,14 @@ svelte-check@^2.10.2:
     sade "^1.7.4"
     svelte-preprocess "^4.0.0"
     typescript "*"
+
+svelte-floating-ui@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/svelte-floating-ui/-/svelte-floating-ui-1.5.2.tgz#51a203d431aaf243ba3017baaf725465a94fc143"
+  integrity sha512-nV50eno74CEsFfFJ6iyN/oNYDEOck1TZjGV3lmJksVRbiiUAVF6bHspyAhR7GZ7c/4qbRWp9UyX24J+UXdEpag==
+  dependencies:
+    "@floating-ui/core" "^1.2.4"
+    "@floating-ui/dom" "^1.2.4"
 
 svelte-hmr@^0.15.0:
   version "0.15.0"

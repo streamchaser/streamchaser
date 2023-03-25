@@ -41,6 +41,24 @@
   class="card compact w-auto bordered bg-neutral m-1 overflow-x-hidden
                            shadow-md hover:contrast-75 hover:ring-2 ring-primary"
 >
+  <!-- TODO: Unsure where to place on card and what colors -->
+  <div
+    class="absolute top-0 right-0 mx-1 mt-1 -mr-1 z-20"
+    on:click|preventDefault={() => console.log("lol")}
+    on:keypress|preventDefault={() => console.log("lol")}
+  >
+    <svg
+      width="24"
+      height="24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      ><path
+        d="M12 16c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3zm0 1c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm0-8c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3zm0 1c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2zm0-8c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3zm0 1c1.104 0 2 .896 2 2s-.896 2-2 2-2-.896-2-2 .896-2 2-2z"
+      /></svg
+    >
+  </div>
   {#if media.poster_path}
     <figure class="aspect-[342/513]">
       <img
