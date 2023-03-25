@@ -1,6 +1,6 @@
 from app.db.database import db_client
-from app.db.queries.get_genres_async_edgeql import get_genres
-from app.db.queries.get_genres_async_edgeql import GetGenresResult
+from app.db.queries.generated import select_genres
+from app.db.queries.generated import SelectGenresResult
 from fastapi import APIRouter
 
 
@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=GetGenresResult)
+@router.get("", response_model=SelectGenresResult)
 async def _():
     """Returns all genres from DB"""
-    return await get_genres(db_client)
+    return await select_genres(db_client)

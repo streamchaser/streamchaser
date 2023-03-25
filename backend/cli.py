@@ -22,8 +22,8 @@ from app.db.database_service import fetch_countries_with_providers
 from app.db.database_service import fix_genre_ampersand
 from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
-from app.db.queries.insert_countries_async_edgeql import insert_countries
-from app.db.queries.insert_genres_async_edgeql import insert_genres
+from app.db.queries.generated import insert_countries
+from app.db.queries.generated import insert_genres
 from app.db.search import async_client
 from app.db.search import client
 from app.db.search import search_client_config

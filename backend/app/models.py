@@ -1,6 +1,12 @@
 from pydantic import BaseModel
 
 
+class GoogleAuth(BaseModel):
+    email: str
+    name: str
+    iat: int
+
+
 class Media(BaseModel):
     id: str
     type: str
