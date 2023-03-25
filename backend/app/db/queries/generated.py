@@ -5,6 +5,7 @@
 #     'backend/app/db/queries/insert_providers.edgeql'
 #     'backend/app/db/queries/insert_user.edgeql'
 #     'backend/app/db/queries/select_countries.edgeql'
+#     'backend/app/db/queries/select_countries_with_providers.edgeql'
 #     'backend/app/db/queries/select_country_providers.edgeql'
 #     'backend/app/db/queries/select_genres.edgeql'
 #     'backend/app/db/queries/select_user_watch_list.edgeql'
@@ -200,6 +201,20 @@ async def insert_user(
 
 
 async def select_countries(
+    executor: edgedb.AsyncIOExecutor,
+) -> list[SelectCountriesResult]:
+    return await executor.query(
+        """\
+        select Country {
+          id,
+          label,
+          value
+        }\
+        """,
+    )
+
+
+async def select_countries_with_providers(
     executor: edgedb.AsyncIOExecutor,
 ) -> list[SelectCountriesResult]:
     return await executor.query(

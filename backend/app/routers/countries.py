@@ -1,5 +1,6 @@
 from app.db.database import db_client
 from app.db.queries.generated import select_countries
+from app.db.queries.generated import select_countries_with_providers
 from app.db.queries.generated import SelectCountriesResult
 from fastapi import APIRouter
 
@@ -11,7 +12,10 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=SelectCountriesResult)
-async def _():
+@router.get("", response_model=SelectCountriesResult | None)
+async def _(provider_filter=True):
     """Returns all countries from DB"""
+    if provider_filter:
+        return await select_countries_with_providers(db_client)
+
     return await select_countries(db_client)

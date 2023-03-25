@@ -21,6 +21,8 @@
 
   export let data: PageData
 
+  console.log("hest data", data)
+
   const SEARCH_URL = `${PYTHON_API}/search/`
 
   let input = ""
@@ -214,7 +216,7 @@
             : []
         }}
         value={$currentProviders.length ? $currentProviders : null}
-        items={data.providers.map(v => v.provider_name)}
+        items={data.providers[0].providers.map(v => v.provider_name)}
         isMulti={true}
         placeholder="Select providers..."
       />

@@ -18,10 +18,9 @@ from app.config import Environment
 from app.config import get_settings
 from app.db.cache import redis
 from app.db.database import db_client
-from app.db.database_service import fetch_countries_with_providers
+from app.db.database_service import fetch_countries
 from app.db.database_service import fix_genre_ampersand
 from app.db.database_service import insert_providers_with_links
-from app.db.database_service import providers_to_redis
 from app.db.database_service import remove_stale_media
 from app.db.queries.generated import insert_countries
 from app.db.queries.generated import insert_genres
@@ -256,7 +255,6 @@ def remove_blacklisted_from_search():
 async def refresh_redis():
     """Flushes everything then adds genres and providers to Redis"""
     await redis.flushdb()
-    await providers_to_redis()
 
 
 @app.command()
@@ -281,10 +279,7 @@ async def clean_stale_media():
 @coroutine
 async def full_setup(popularity: float = 1, chunk_size: int = 25000):
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
-    await insert_countries(
-        db_client, data=json.dumps(await fetch_countries_with_providers())
-    )
-    await providers_to_redis()
+    await insert_countries(db_client, data=json.dumps(await fetch_countries()))
     await insert_providers_with_links()
     if get_settings().app_environment == Environment.DEVELOPMENT:
         # Is ran at startup in production

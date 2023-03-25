@@ -1,7 +1,12 @@
 import type { PageLoad } from "./$types"
 import { PYTHON_API } from "$lib/variables.js"
 import { currentCountry } from "$lib/stores/preferences"
-import type { Genre, Provider } from "$lib/generated"
+import type {
+  Genre,
+  Provider,
+  SelectCountryProvidersResult,
+  SelectGenresResult,
+} from "$lib/generated"
 import { env } from "$env/dynamic/public"
 
 // TODO: Kill this with fire, when https://github.com/sveltejs/kit/issues/5606 is fixed
@@ -11,7 +16,7 @@ const GENRE_URL = `${PYTHON_API}/genres`
 const PROVIDER_URL = `${PYTHON_API}/providers/`
 
 export const load: PageLoad = async ({ fetch }) => {
-  const fetchProviders = async (): Promise<Provider[]> => {
+  const fetchProviders = async (): Promise<SelectCountryProvidersResult[]> => {
     let country: string
     currentCountry.subscribe((v: string) => (country = v))
 
@@ -19,7 +24,7 @@ export const load: PageLoad = async ({ fetch }) => {
     return await res.json()
   }
 
-  const fetchGenres = async (): Promise<Genre[]> => {
+  const fetchGenres = async (): Promise<SelectGenresResult[]> => {
     const res = await fetch(GENRE_URL)
     return await res.json()
   }

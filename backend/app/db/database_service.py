@@ -14,7 +14,6 @@ from app.db.queries.generated import select_countries
 from app.db.queries.generated import update_country_providers
 from app.db.search import async_client
 from app.db.search import client
-from meilisearch_python_async.errors import MeiliSearchApiError
 from tqdm import tqdm
 
 
@@ -82,7 +81,7 @@ def fix_genre_ampersand(genres: dict) -> list[dict]:
     return sorted(fixed_genres, key=lambda genre: genre["label"])
 
 
-async def fetch_countries_with_providers() -> list[dict[str, str]]:
+async def fetch_countries() -> list[dict[str, str]]:
     countries_url = (
         f"{get_settings().tmdb_url}"
         f"configuration/countries?api_key={get_settings().tmdb_key}"
@@ -90,7 +89,7 @@ async def fetch_countries_with_providers() -> list[dict[str, str]]:
     async with httpx.AsyncClient(http2=True) as client:
         res = await client.get(countries_url)
 
-    countries = res.json()
+    countries: list[dict[str, str]] = res.json()
     for country in tqdm(countries, desc="Creating flags"):
         country_code = country["iso_3166_1"]
         unicode_flag = chr(ord(country_code[0]) + 127397) + chr(
@@ -104,85 +103,7 @@ async def fetch_countries_with_providers() -> list[dict[str, str]]:
         country.pop("native_name", None)
         country.pop("iso_3166_1", None)
 
-    sorted_countries = sorted(countries, key=lambda country: country["label"])
-
-    try:
-        documents = await async_client.index("media").get_documents(
-            limit=1_000_000, fields=["supported_provider_countries", "id"]
-        )
-        # Gather and flatten supported country providers into set
-        supported_countries = {
-            country
-            for document in documents.results
-            if not document["id"][0] == "p"
-            for country in document["supported_provider_countries"]
-        }
-
-        # Filter out countries that are not supported by any media
-        sorted_countries = [
-            country
-            for country in sorted_countries
-            if country["value"] in supported_countries
-        ]
-        print("Successfully filtered supported countries")
-    except MeiliSearchApiError as e:
-        # Happens when running for the first time(empty meilisearch)
-        print("First time running the setup(empty database)", e)
-
-    return sorted_countries
-
-
-async def providers_to_redis():
-    providers = {}
-    countries_url = (
-        f"{get_settings().tmdb_url}"
-        f"configuration/countries?api_key={get_settings().tmdb_key}"
-    )
-    providers_movie_url = (
-        f"{get_settings().tmdb_url}"
-        f"watch/providers/movie?api_key={get_settings().tmdb_key}"
-    )
-    providers_tv_url = (
-        f"{get_settings().tmdb_url}"
-        f"watch/providers/tv?api_key={get_settings().tmdb_key}"
-    )
-
-    def __update_providers(fetched_providers: dict):
-        for provider in fetched_providers["results"]:
-            for country_code, display_priority in provider[
-                "display_priorities"
-            ].items():
-                if country_code in providers.keys():
-                    if provider["provider_name"] not in [
-                        provider["provider_name"]
-                        for provider in providers[country_code]
-                    ]:
-                        providers[country_code].append(
-                            {
-                                "provider_name": provider["provider_name"],
-                                "display_priority": display_priority,
-                            }
-                        )
-
-    async with httpx.AsyncClient(http2=True) as client:
-        res = await client.get(countries_url)
-        for country in res.json():
-            providers.update({country["iso_3166_1"]: []})
-
-        group = await asyncio.gather(
-            client.get(providers_movie_url), client.get(providers_tv_url)
-        )
-        for res in group:
-            __update_providers(res.json())
-
-    for country_code, provider_data in tqdm(
-        providers.items(), desc="Adding each country's providers to Redis"
-    ):
-        sorted_provider_data = sorted(provider_data, key=lambda k: k["provider_name"])
-        await redis.set(
-            f"{country_code}_providers",
-            json.dumps(sorted_provider_data),
-        )
+    return countries
 
 
 async def remove_stale_media(days_for_expiry=3):
