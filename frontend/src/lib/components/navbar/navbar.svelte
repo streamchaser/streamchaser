@@ -4,6 +4,7 @@
   import CountrySelector from "$lib/components/country_selector.svelte"
   import Auth from "$lib/components/sign_in/auth.svelte"
   import ThemeSelector from "$lib/components/theme_selector.svelte"
+  import { env } from "$env/dynamic/public"
 
   export let countries: SelectCountriesResult[]
 </script>
@@ -33,5 +34,7 @@
   <div class="sm:px-2">
     <CountrySelector {countries} />
   </div>
-  <Auth />
+  {#if env.PUBLIC_GOOGLE_ENABLED === "true"}
+    <Auth />
+  {/if}
 </div>

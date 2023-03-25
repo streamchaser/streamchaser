@@ -4,6 +4,7 @@
   import { env } from "$env/dynamic/public"
   import type { User } from "$lib/types"
   import { page } from "$app/stores"
+  import { PYTHON_API } from "$lib/variables"
 
   export let icon = true
 
@@ -12,6 +13,11 @@
 
   $: if ($auth) {
     user = parseJwt($auth)
+    fetch(PYTHON_API + "/user?encoded_jwt=" + $auth, { method: "POST" }).then(res => {
+      if (res.status !== 200) {
+        console.log("Error during sign in")
+      }
+    })
   }
 
   globalThis.handleCredentialResponse = async (response: any) => {
