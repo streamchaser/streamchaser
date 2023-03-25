@@ -7,7 +7,6 @@ from datetime import timedelta
 import httpx
 from app.config import get_settings
 from app.db.cache import Genre
-from app.db.cache import redis
 from app.db.database import db_client
 from app.db.queries.generated import insert_providers
 from app.db.queries.generated import select_countries
@@ -58,13 +57,6 @@ async def insert_providers_with_links():
             country_code=lp.country_code,
             providers=json.dumps(local_display_priorities),
         )
-
-
-async def insert_genres_to_cache(genres: dict) -> None:
-    """Turns a dict of genres into Genre-models, and feeds them to Redis"""
-    fixed_genres = fix_genre_ampersand(genres)
-
-    await redis.set("genres", json.dumps(fixed_genres))
 
 
 def fix_genre_ampersand(genres: dict) -> list[dict]:
