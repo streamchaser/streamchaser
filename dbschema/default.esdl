@@ -35,7 +35,28 @@ module default {
       property added -> datetime;
     };
 
+    multi link favorites -> Media {
+      property added -> datetime;
+    };
+
+    multi link custom_lists -> CustomList {
+      property created -> datetime;
+
+      # The idea is that a custom list belongs to an user
+      # We could share lists between users in the future maybe
+      on target delete delete source;
+      constraint exclusive;
+    };
+
     constraint exclusive on ( .email );
+  }
+
+  type CustomList {
+    required property name -> str;
+
+    multi link media -> Media {
+      property added -> datetime;
+    };
   }
 
   type Provider {
