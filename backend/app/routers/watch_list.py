@@ -26,7 +26,7 @@ async def _(auth: GoogleAuth = Depends(decode_jwt)):
 
 @router.post("", response_model=InsertUserResult | None)
 async def _(streamchaser_id: str, auth: GoogleAuth = Depends(decode_jwt)):
-    """Adds a media to user's watch list"""
+    """Adds a media to the user's watch list"""
 
     return await update_user_watch_list_add(
         db_client, email=auth.email, streamchaser_id=streamchaser_id
@@ -35,7 +35,7 @@ async def _(streamchaser_id: str, auth: GoogleAuth = Depends(decode_jwt)):
 
 @router.delete("", response_model=InsertUserResult | None)
 async def _(streamchaser_id: str, auth: GoogleAuth = Depends(decode_jwt)):
-    """Deletes a media to user's watch list"""
+    """Deletes a media from the user's watch list"""
 
     return await update_user_watch_list_remove(
         db_client, email=auth.email, streamchaser_id=streamchaser_id
