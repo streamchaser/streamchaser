@@ -1,11 +1,9 @@
+from fastapi import APIRouter, Depends
+
 from app.db.database import db_client
-from app.db.queries.generated import insert_user
-from app.db.queries.generated import InsertUserResult
+from app.db.queries.generated import InsertUserResult, insert_user
 from app.models import GoogleAuth
 from app.util import decode_jwt
-from fastapi import APIRouter
-from fastapi import Depends
-
 
 router = APIRouter(
     prefix="/user",

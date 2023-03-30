@@ -1,6 +1,5 @@
 from app.config import get_settings
 
-
 tmdb_key = get_settings().tmdb_key
 
 

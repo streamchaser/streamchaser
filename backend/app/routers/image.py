@@ -1,8 +1,8 @@
 import httpx
-from app.db.cache import redis
 from fastapi import APIRouter
 from fastapi.responses import Response
 
+from app.db.cache import redis
 
 router = APIRouter(
     prefix="/image",

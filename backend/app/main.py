@@ -1,30 +1,30 @@
 import time
 
-from app.config import Environment
-from app.config import get_settings
-from app.db.cache import redis
-from app.db.search import search_client_config
-from app.routers import countries
-from app.routers import country
-from app.routers import genres
-from app.routers import image
-from app.routers import media
-from app.routers import movie
-from app.routers import person
-from app.routers import providers
-from app.routers import search
-from app.routers import stats
-from app.routers import tv
-from app.routers import user
-from app.routers import watch_list
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from requests.sessions import Request
-from starlette_context import middleware
-from starlette_context import plugins
+from starlette_context import middleware, plugins
 
+from app.config import Environment, get_settings
+from app.db.cache import redis
+from app.db.search import search_client_config
+from app.routers import (
+    countries,
+    country,
+    genres,
+    image,
+    media,
+    movie,
+    person,
+    providers,
+    search,
+    stats,
+    tv,
+    user,
+    watch_list,
+)
 
 app = FastAPI()
 

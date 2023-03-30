@@ -11,24 +11,19 @@ from pathlib import Path
 import httpx
 import requests
 import typer
-from app.api import fetch_genres
-from app.api import fetch_jsongz_files
-from app.api import fetch_media_ids
-from app.config import Environment
-from app.config import get_settings
+from app.api import fetch_genres, fetch_jsongz_files, fetch_media_ids
+from app.config import Environment, get_settings
 from app.db.cache import redis
 from app.db.database import db_client
-from app.db.database_service import fetch_countries
-from app.db.database_service import fix_genre_ampersand
-from app.db.database_service import insert_providers_with_links
-from app.db.database_service import remove_stale_media
-from app.db.queries.generated import insert_countries
-from app.db.queries.generated import insert_genres
-from app.db.search import async_client
-from app.db.search import client
-from app.db.search import search_client_config
-from app.util import chunkify
-from app.util import coroutine
+from app.db.database_service import (
+    fetch_countries,
+    fix_genre_ampersand,
+    insert_providers_with_links,
+    remove_stale_media,
+)
+from app.db.queries.generated import insert_countries, insert_genres
+from app.db.search import async_client, client, search_client_config
+from app.util import chunkify, coroutine
 from meilisearch.errors import MeiliSearchApiError
 from tqdm import tqdm
 

@@ -1,20 +1,19 @@
 import asyncio
 import json
 from collections import namedtuple
-from datetime import date
-from datetime import timedelta
+from datetime import date, timedelta
 
 import httpx
 from app.config import get_settings
 from app.db.cache import Genre
 from app.db.database import db_client
-from app.db.queries.generated import insert_providers
-from app.db.queries.generated import select_countries
-from app.db.queries.generated import update_country_providers
-from app.db.search import async_client
-from app.db.search import client
+from app.db.queries.generated import (
+    insert_providers,
+    select_countries,
+    update_country_providers,
+)
+from app.db.search import async_client, client
 from tqdm import tqdm
-
 
 LocalProviders = namedtuple("LocalProviders", ["country_code", "providers"])
 
