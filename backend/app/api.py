@@ -1,20 +1,17 @@
 import gzip
 import json
 import os
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Tuple
 
 import httpx
 import requests
-from app.api_helpers import get_providers
-from app.config import get_settings
-from app.models import Movie
-from app.models import Person
-from app.models import TV
 from tqdm import tqdm
 
+from app.api_helpers import get_providers
+from app.config import get_settings
+from app.models import TV, Movie, Person
 
 tmdb_url = get_settings().tmdb_url
 tmdb_key = get_settings().tmdb_key

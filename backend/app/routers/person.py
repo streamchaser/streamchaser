@@ -1,10 +1,10 @@
 import json
 
+from fastapi import APIRouter
+
 from app.api import get_person_from_id
 from app.db.cache import redis
 from app.models import Person
-from fastapi import APIRouter
-
 
 router = APIRouter(
     prefix="/person",

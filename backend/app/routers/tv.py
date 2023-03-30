@@ -1,10 +1,10 @@
 import json
 
+from fastapi import APIRouter
+
 from app.api import get_tv_from_id
 from app.db.cache import redis
 from app.models import TV
-from fastapi import APIRouter
-
 
 router = APIRouter(
     prefix="/tv",

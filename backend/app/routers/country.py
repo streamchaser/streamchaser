@@ -1,9 +1,9 @@
 import httpx
-from app.config import Environment
-from app.config import get_settings
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from starlette_context import context
+
+from app.config import Environment, get_settings
 
 router = APIRouter(
     prefix="/country",

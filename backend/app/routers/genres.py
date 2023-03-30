@@ -1,8 +1,7 @@
-from app.db.database import db_client
-from app.db.queries.generated import select_genres
-from app.db.queries.generated import SelectGenresResult
 from fastapi import APIRouter
 
+from app.db.database import db_client
+from app.db.queries.generated import SelectGenresResult, select_genres
 
 router = APIRouter(
     prefix="/genres",

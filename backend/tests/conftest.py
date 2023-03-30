@@ -1,6 +1,5 @@
 import pytest
-from app.db.search import client
-from app.db.search import search_client_config
+from app.db.search import client, search_client_config
 
 test_data = [
     {

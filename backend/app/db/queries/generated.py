@@ -14,13 +14,13 @@
 #     'backend/app/db/queries/update_user_watch_list_remove.edgeql'
 # WITH:
 #     $ edgedb-py -P 5656 --tls-security insecure --user edgedb --password secret --file app/db/queries/generated.py
-from __future__ import annotations
 
+
+from __future__ import annotations
 import dataclasses
+import edgedb
 import typing
 import uuid
-
-import edgedb
 
 
 class NoPydanticValidation:

@@ -1,5 +1,6 @@
 from app.db.search import client
 from app.routers.search import filter_from_queries
+
 from tests.conftest import test_data
 
 

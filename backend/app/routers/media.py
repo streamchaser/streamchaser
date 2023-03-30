@@ -1,8 +1,8 @@
-from app.db.search import async_client
-from app.models import Meilisearch
 from fastapi import APIRouter
 from fastapi.param_functions import Query
 
+from app.db.search import async_client
+from app.models import Meilisearch
 
 router = APIRouter(
     prefix="/media",

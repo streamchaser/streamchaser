@@ -1,7 +1,7 @@
-from app.db.search import async_client
 from fastapi import APIRouter
 from meilisearch_python_async.models.client import ClientStats
 
+from app.db.search import async_client
 
 router = APIRouter(
     prefix="/stats",

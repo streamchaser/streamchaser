@@ -1,12 +1,12 @@
 import asyncio
 from functools import wraps
-from typing import Generator
-from typing import Tuple
+from typing import Generator, Tuple
+
+from google.auth.transport import requests
+from google.oauth2 import id_token
 
 from app.config import get_settings
 from app.models import GoogleAuth
-from google.auth.transport import requests
-from google.oauth2 import id_token
 
 
 def chunkify(lst: list, size: int) -> Tuple[Generator[list, None, None], int]:

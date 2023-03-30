@@ -1,8 +1,10 @@
-from app.db.database import db_client
-from app.db.queries.generated import select_country_providers
-from app.db.queries.generated import SelectCountryProvidersResult
 from fastapi import APIRouter
 
+from app.db.database import db_client
+from app.db.queries.generated import (
+    SelectCountryProvidersResult,
+    select_country_providers,
+)
 
 router = APIRouter(
     prefix="/providers",
