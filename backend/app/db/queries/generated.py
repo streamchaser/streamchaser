@@ -77,7 +77,7 @@ class SelectCountryProvidersResult(NoPydanticValidation):
 class SelectCountryProvidersResultProvidersItem(NoPydanticValidation):
     id: uuid.UUID
     provider_id: int
-    logo_path: str
+    logo_path: str | None
     provider_name: str
 
     @typing.overload

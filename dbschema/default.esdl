@@ -39,7 +39,7 @@ module default {
   }
 
   type Provider {
-    required property logo_path -> str;
+    property logo_path -> str;
     required property provider_name -> str;
     required property provider_id -> int16;
 
