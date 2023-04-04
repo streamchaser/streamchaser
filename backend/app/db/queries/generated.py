@@ -8,8 +8,16 @@
 #     'backend/app/db/queries/select_countries_with_providers.edgeql'
 #     'backend/app/db/queries/select_country_providers.edgeql'
 #     'backend/app/db/queries/select_genres.edgeql'
+#     'backend/app/db/queries/select_user_custom_lists.edgeql'
+#     'backend/app/db/queries/select_user_favorites.edgeql'
 #     'backend/app/db/queries/select_user_watch_list.edgeql'
 #     'backend/app/db/queries/update_country_providers.edgeql'
+#     'backend/app/db/queries/update_custom_list_add.edgeql'
+#     'backend/app/db/queries/update_custom_list_remove.edgeql'
+#     'backend/app/db/queries/update_user_custom_lists_add.edgeql'
+#     'backend/app/db/queries/update_user_custom_lists_remove.edgeql'
+#     'backend/app/db/queries/update_user_favorites_add.edgeql'
+#     'backend/app/db/queries/update_user_favorites_remove.edgeql'
 #     'backend/app/db/queries/update_user_watch_list_add.edgeql'
 #     'backend/app/db/queries/update_user_watch_list_remove.edgeql'
 # WITH:
@@ -96,15 +104,39 @@ class SelectGenresResult(NoPydanticValidation):
 
 
 @dataclasses.dataclass
-class SelectUserWatchListResult(NoPydanticValidation):
+class SelectUserCustomListsResult(NoPydanticValidation):
     id: uuid.UUID
-    watch_list: list[SelectUserWatchListResultWatchListItem]
+    custom_lists: list[SelectUserCustomListsResultCustomListsItem]
 
 
 @dataclasses.dataclass
-class SelectUserWatchListResultWatchListItem(NoPydanticValidation):
+class SelectUserCustomListsResultCustomListsItem(NoPydanticValidation):
+    id: uuid.UUID
+    name: str
+    media: list[SelectUserCustomListsResultCustomListsItemMediaItem]
+
+
+@dataclasses.dataclass
+class SelectUserCustomListsResultCustomListsItemMediaItem(NoPydanticValidation):
     id: uuid.UUID
     streamchaser_id: str
+
+
+@dataclasses.dataclass
+class SelectUserFavoritesResult(NoPydanticValidation):
+    id: uuid.UUID
+    favorites: list[SelectUserCustomListsResultCustomListsItemMediaItem]
+
+
+@dataclasses.dataclass
+class SelectUserWatchListResult(NoPydanticValidation):
+    id: uuid.UUID
+    watch_list: list[SelectUserCustomListsResultCustomListsItemMediaItem]
+
+
+@dataclasses.dataclass
+class UpdateCustomListAddResult(NoPydanticValidation):
+    id: uuid.UUID
 
 
 async def insert_countries(
@@ -272,6 +304,49 @@ async def select_genres(
     )
 
 
+async def select_user_custom_lists(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+) -> SelectUserCustomListsResult | None:
+    return await executor.query_single(
+        """\
+        select User {
+          id,
+          custom_lists: {
+            id,
+            name,
+            media: {
+              id,
+              streamchaser_id
+            }
+          }
+        }
+        filter .email = <str>$email;\
+        """,
+        email=email,
+    )
+
+
+async def select_user_favorites(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+) -> SelectUserFavoritesResult | None:
+    return await executor.query_single(
+        """\
+        select User {
+          favorites: {
+            id,
+            streamchaser_id
+          }
+        }
+        filter .email = <str>$email\
+        """,
+        email=email,
+    )
+
+
 async def select_user_watch_list(
     executor: edgedb.AsyncIOExecutor,
     *,
@@ -316,6 +391,140 @@ async def update_country_providers(
         """,
         providers=providers,
         country_code=country_code,
+    )
+
+
+async def update_custom_list_add(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    id: uuid.UUID,
+    streamchaser_id: str,
+) -> UpdateCustomListAddResult | None:
+    return await executor.query_single(
+        """\
+        update CustomList
+        filter .id = <uuid>$id
+        set {
+          media += (
+            insert Media { streamchaser_id := <str>$streamchaser_id }
+            unless conflict on .streamchaser_id
+            else (
+              select Media filter .streamchaser_id = <str>$streamchaser_id
+            )
+          )
+        };\
+        """,
+        id=id,
+        streamchaser_id=streamchaser_id,
+    )
+
+
+async def update_custom_list_remove(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    id: uuid.UUID,
+    streamchaser_id: str,
+) -> UpdateCustomListAddResult | None:
+    return await executor.query_single(
+        """\
+        update CustomList
+        filter .id = <uuid>$id
+        set {
+          media -= (
+            select Media filter .streamchaser_id = <str>$streamchaser_id
+          )
+        };\
+        """,
+        id=id,
+        streamchaser_id=streamchaser_id,
+    )
+
+
+async def update_user_custom_lists_add(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+    list_name: str,
+) -> InsertUserResult | None:
+    return await executor.query_single(
+        """\
+        update User
+        filter .email = <str>$email
+        set {
+           custom_lists += (
+            insert CustomList { name := <str>$list_name }
+          )
+        };\
+        """,
+        email=email,
+        list_name=list_name,
+    )
+
+
+async def update_user_custom_lists_remove(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+    id: uuid.UUID,
+) -> InsertUserResult | None:
+    return await executor.query_single(
+        """\
+        update User
+        filter .email = <str>$email
+        set {
+          custom_lists -= (
+            select CustomList filter .id = <uuid>$id
+          )
+        };\
+        """,
+        email=email,
+        id=id,
+    )
+
+
+async def update_user_favorites_add(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+    streamchaser_id: str,
+) -> InsertUserResult | None:
+    return await executor.query_single(
+        """\
+        update User
+        filter .email = <str>$email
+        set {
+          favorites += (
+            insert Media { streamchaser_id := <str>$streamchaser_id }
+            unless conflict on .streamchaser_id
+            else (
+              select Media filter .streamchaser_id = <str>$streamchaser_id
+            )
+          )
+        };\
+        """,
+        email=email,
+        streamchaser_id=streamchaser_id,
+    )
+
+
+async def update_user_favorites_remove(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+    streamchaser_id: str,
+) -> InsertUserResult | None:
+    return await executor.query_single(
+        """\
+        update User
+        filter .email = <str>$email
+        set {
+          favorites -= (
+            select Media filter .streamchaser_id = <str>$streamchaser_id
+          )
+        };\
+        """,
+        email=email,
+        streamchaser_id=streamchaser_id,
     )
 
 

@@ -13,6 +13,8 @@ from app.db.search import search_client_config
 from app.routers import (
     countries,
     country,
+    custom_lists,
+    favorites,
     genres,
     image,
     media,
@@ -84,6 +86,8 @@ app.include_router(stats.router)
 app.include_router(countries.router)
 app.include_router(user.router)
 app.include_router(watch_list.router)
+app.include_router(favorites.router)
+app.include_router(custom_lists.router)
 
 
 @app.get("/")
