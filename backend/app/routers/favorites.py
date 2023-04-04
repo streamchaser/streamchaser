@@ -1,13 +1,15 @@
+from fastapi import APIRouter, Depends
+
 from app.db.database import db_client
-from app.db.queries.generated import InsertUserResult
-from app.db.queries.generated import select_user_favorites
-from app.db.queries.generated import SelectUserFavoritesResult
-from app.db.queries.generated import update_user_favorites_add
-from app.db.queries.generated import update_user_favorites_remove
+from app.db.queries.generated import (
+    InsertUserResult,
+    SelectUserFavoritesResult,
+    select_user_favorites,
+    update_user_favorites_add,
+    update_user_favorites_remove,
+)
 from app.models import GoogleAuth
 from app.util import decode_jwt
-from fastapi import APIRouter
-from fastapi import Depends
 
 router = APIRouter(
     prefix="/favorites",

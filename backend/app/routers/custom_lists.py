@@ -1,18 +1,20 @@
 import uuid
 
+from fastapi import APIRouter, Depends
+
 from app.db.database import db_client
-from app.db.queries.generated import InsertUserResult
-from app.db.queries.generated import select_user_custom_lists
-from app.db.queries.generated import SelectUserCustomListsResult
-from app.db.queries.generated import update_custom_list_add
-from app.db.queries.generated import update_custom_list_remove
-from app.db.queries.generated import update_user_custom_lists_add
-from app.db.queries.generated import update_user_custom_lists_remove
-from app.db.queries.generated import UpdateCustomListAddResult
+from app.db.queries.generated import (
+    InsertUserResult,
+    SelectUserCustomListsResult,
+    UpdateCustomListAddResult,
+    select_user_custom_lists,
+    update_custom_list_add,
+    update_custom_list_remove,
+    update_user_custom_lists_add,
+    update_user_custom_lists_remove,
+)
 from app.models import GoogleAuth
 from app.util import decode_jwt
-from fastapi import APIRouter
-from fastapi import Depends
 
 router = APIRouter(
     prefix="/custom_lists",
