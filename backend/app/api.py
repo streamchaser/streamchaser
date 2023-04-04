@@ -121,16 +121,6 @@ def fetch_media_ids(
     return movie_ids, tv_ids, person_ids
 
 
-def fetch_trending_movies(page: int) -> dict:
-    url = f"{tmdb_url}trending/movie/week?api_key={tmdb_key}&page={page}"
-    return requests.get(url).json()["results"]
-
-
-def fetch_trending_tv(page: int) -> dict:
-    url = f"{tmdb_url}trending/tv/week?api_key={tmdb_key}&page={page}"
-    return requests.get(url).json()["results"]
-
-
 async def get_person_from_id(person_id: int):
     """Gets data of a person from an id"""
     # Here we make 3 api calls into 1 using the append_to_response header
