@@ -3,7 +3,7 @@ from functools import wraps
 from typing import Generator, Tuple
 
 from fastapi import HTTPException
-from google.auth.exceptions import InvalidValue
+from google.auth.exceptions import InvalidValue, MalformedError
 from google.auth.transport import requests
 from google.oauth2 import id_token
 from requests import status_codes
@@ -36,6 +36,11 @@ def decode_jwt(encoded_jwt: str):
         )
         return GoogleAuth(**idinfo)
 
-    except InvalidValue as error:
+    # Error for malformed jwt's
+    except MalformedError:
+        raise HTTPException(status_code=498, detail="Could not parse JWT")
+
+    # Error for f.x expiration
+    except InvalidValue as e:
         # Here we would refresh the token
-        raise HTTPException(status_code=498, detail=str(error))
+        raise HTTPException(status_code=498, detail=str(e))
