@@ -2,8 +2,11 @@ import asyncio
 from functools import wraps
 from typing import Generator, Tuple
 
+from fastapi import HTTPException
+from google.auth.exceptions import InvalidValue
 from google.auth.transport import requests
 from google.oauth2 import id_token
+from requests import status_codes
 
 from app.config import get_settings
 from app.models import GoogleAuth
@@ -26,10 +29,13 @@ def coroutine(f):
     return wrapper
 
 
-# FIXME: Idk how to return proper HTTPException's to the frontend
 def decode_jwt(encoded_jwt: str):
-    idinfo = id_token.verify_oauth2_token(
-        encoded_jwt, requests.Request(), get_settings().google_client_id
-    )
+    try:
+        idinfo = id_token.verify_oauth2_token(
+            encoded_jwt, requests.Request(), get_settings().google_client_id
+        )
+        return GoogleAuth(**idinfo)
 
-    return GoogleAuth(**idinfo)
+    except InvalidValue as error:
+        # Here we would refresh the token
+        raise HTTPException(status_code=498, detail=str(error))
