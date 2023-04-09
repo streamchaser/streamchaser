@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -121,6 +122,61 @@ func processMedia(c *gin.Context) {
 	task, err := meilisearchClient.Index("media").AddDocuments(&medias)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"info": fmt.Sprint(task.TaskUID) + ": " + err.Error()})
+	}
+
+	ctx := context.Background()
+	client, err := createClient(ctx)
+	if err != nil {
+		log.Fatal("Could not create an EdgeDB client:", err)
+	}
+	defer client.Close()
+
+	json, _ := json.Marshal(&medias)
+
+	query := `
+		for media in json_array_unpack(<json>$0) union (
+  		insert Media {
+    		streamchaser_id := <str>media['id'],
+    		imdb_id := <str>media['imdb_id'],
+    		type := <str>media['type'],
+    		title := <str>media['title'],
+    		original_title := <str>media['original_title'],
+    		overview := <str>media['overview'],
+    		release_date := <str>media['release_date'],
+    		genres := <array<str>>media['genres'],
+    		poster_path := <str>media['poster_path'],
+    		popularity := <float32>media['popularity'],
+    		supported_provider_countries := <array<str>>media['supported_provider_countries'],
+    		title_translations := <str>media['title_translations'],
+    		updated_at := <datetime>media['updated_at'],
+    		updated_at_unix := <int64>media['updated_at_unix'],
+  			providers := <json>media['providers']['results'],
+
+  		} unless conflict on .streamchaser_id else (
+
+  			update Media
+  			set {
+    			imdb_id := <str>media['imdb_id'],
+    			type := <str>media['type'],
+    			title := <str>media['title'],
+    			original_title := <str>media['original_title'],
+    			overview := <str>media['overview'],
+    			release_date := <str>media['release_date'],
+    			genres := <array<str>>media['genres'],
+    			poster_path := <str>media['poster_path'],
+    			popularity := <float32>media['popularity'],
+    			supported_provider_countries := <array<str>>media['supported_provider_countries'],
+    			title_translations := <str>media['title_translations'],
+    			updated_at := <datetime>media['updated_at'],
+    			updated_at_unix := <int64>media['updated_at_unix'],
+  				providers := <json>media['providers']['results'],
+  			}
+			)
+		)
+	`
+	err = client.Execute(ctx, query, json)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	c.JSON(http.StatusOK, gin.H{"info": fmt.Sprintf("Fetched and inserted %d media into meilisearch and skipped %d", len(medias), failedMedia)})

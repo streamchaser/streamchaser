@@ -19,6 +19,24 @@ module default {
 
   type Media {
     required property streamchaser_id -> str;
+    required property imdb_id -> str;
+    required property type -> str;
+    required property title -> str;
+    required property original_title -> str;
+    required property overview -> str;
+    required property release_date -> str;
+    required property genres -> array<str>;
+    required property poster_path -> str;
+    required property popularity -> float32;
+    required property supported_provider_countries -> array<str>;
+    required property title_translations -> str;
+    required property updated_at -> datetime;
+    required property updated_at_unix -> int64;
+
+    property providers -> json;
+
+    # TODO: An idea for later for if we want to get rid of the providers JSON
+    multi link local_providers -> LocalProviders;
 
     constraint exclusive on ( .streamchaser_id );
   }
@@ -57,6 +75,14 @@ module default {
     multi link media -> Media {
       property added -> datetime;
     };
+  }
+
+  # TODO: An idea for later for if we want to get rid of the providers JSON
+  type LocalProviders {
+    link country -> Country;
+
+    multi link flatrate_providers -> Provider;
+    multi link free_providers -> Provider;
   }
 
   type Provider {
