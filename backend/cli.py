@@ -24,7 +24,7 @@ from app.db.database_service import (
 from app.db.queries.generated import insert_countries, insert_genres
 from app.db.search import async_client, client, search_client_config
 from app.util import chunkify, coroutine
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 from tqdm import tqdm
 
 supported_country_codes = get_settings().supported_country_codes
@@ -304,7 +304,7 @@ def remove_media(media_id: str, blacklist: bool = True):
         typer.confirm(
             f"Are you sure you want to remove & blacklist [{media.title}]?", abort=True
         )
-    except MeiliSearchApiError as e:
+    except MeilisearchApiError as e:
         typer.echo(e)
         typer.confirm("Are you sure you want to continue?", abort=True)
 

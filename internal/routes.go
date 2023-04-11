@@ -118,7 +118,9 @@ func processMedia(c *gin.Context) {
 			medias = append(medias, *person.toMedia())
 		}
 	}
-	task, err := meilisearchClient.Index("media").AddDocuments(&medias)
+	// manually setting `id` to be the primary key as meilisearch cant infer it
+	// since we have two fields ending with `id`
+	task, err := meilisearchClient.Index("media").AddDocuments(&medias, "id")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"info": fmt.Sprint(task.TaskUID) + ": " + err.Error()})
 	}
