@@ -292,7 +292,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "meilisearch"
-version = "0.22.2"
+version = "0.26.0"
 description = "The python client for Meilisearch API."
 category = "main"
 optional = false
@@ -304,7 +304,7 @@ requests = "*"
 
 [[package]]
 name = "meilisearch-python-async"
-version = "0.29.2"
+version = "1.1.1"
 description = "A Python async client for the Meilisearch API"
 category = "main"
 optional = false
@@ -606,7 +606,7 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11"
-content-hash = "57425e57afdfdb7e66cb33e80898c9e22d65342e45f44c1aeb5a85bd3f4a98b7"
+content-hash = "6973d37ed72f0fdfefbb171823fafe0c89647959918ffdd83f950ca2ac3ccfb4"
 
 [metadata.files]
 aiofiles = []
@@ -618,7 +618,10 @@ cachetools = []
 camel-converter = []
 certifi = []
 charset-normalizer = []
-click = []
+click = [
+    {file = "click-8.1.3-py3-none-any.whl", hash = "sha256:bb4d8133cb15a609f44e8213d9b391b0809795062913b383c62be0ee95b1db48"},
+    {file = "click-8.1.3.tar.gz", hash = "sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"},
+]
 colorama = []
 edgedb = []
 fastapi = []
@@ -646,9 +649,15 @@ pytest = []
 pytest-asyncio = []
 redis = []
 requests = []
-rfc3986 = []
+rfc3986 = [
+    {file = "rfc3986-1.5.0-py2.py3-none-any.whl", hash = "sha256:a86d6e1f5b1dc238b218b012df0aa79409667bb209e58da56d0b94704e712a97"},
+    {file = "rfc3986-1.5.0.tar.gz", hash = "sha256:270aaf10d87d0d4e095063c65bf3ddbc6ee3d0b226328ce21e036f946e421835"},
+]
 rsa = []
-six = []
+six = [
+    {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
+    {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
 sniffio = []
 soupsieve = []
 starlette = []

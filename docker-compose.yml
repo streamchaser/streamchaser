@@ -85,7 +85,7 @@ services:
       - "traefik.docker.network=traefik"
 
   search:
-    image: getmeili/meilisearch:v0.30.5
+    image: getmeili/meilisearch:v1.1.0
     restart: always
     container_name: search
     environment:
