@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 /**
- * SelectCountryProvidersResultProvidersItem(id: 'uuid.UUID', provider_id: 'int', logo_path: 'str', provider_name: 'str')
+ * SelectCountryProvidersResultProvidersItem(id: 'uuid.UUID', provider_id: 'int', logo_path: 'str | None', provider_name: 'str')
  */
 export type SelectCountryProvidersResultProvidersItem = {
   id: string

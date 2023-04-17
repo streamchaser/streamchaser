@@ -2,13 +2,15 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Genre } from "./Genre"
+
 export type TV = {
   id: number
   name: string
   first_air_date?: string
   overview: string
   imdb_id?: string
-  genres?: Array<string>
+  genres?: Array<Genre>
   episode_run_time: Array<number>
   flatrate_providers?: Array<any>
   free_providers?: Array<any>

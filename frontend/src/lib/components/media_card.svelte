@@ -37,9 +37,8 @@
   out:fade|local={{ duration: 200 }}
   href={mediaIdToUrlConverter(media.id)}
   target="_self"
-  data-sveltekit-prefetch
-  class="card compact w-auto bordered bg-neutral m-1 overflow-x-hidden
-                           shadow-md hover:contrast-75 hover:ring-2 ring-primary"
+  data-sveltekit-preload-data
+  class="overflow-x-hidden m-1 w-auto shadow-md hover:ring-2 card compact bordered bg-neutral ring-primary hover:contrast-75"
 >
   {#if media.poster_path}
     <figure class="aspect-[342/513]">
@@ -51,14 +50,14 @@
     </figure>
   {:else}
     <figure class="grid place-items-center bg-slate-100 aspect-[342/513]">
-      <h2 class="text-center text-lg text-gray-900">
+      <h2 class="text-lg text-center text-gray-900">
         <strong>{media.title}</strong>
       </h2>
     </figure>
   {/if}
   {#if media.imdb_rating}
     <div class="absolute top-0 left-0 mx-1 -ml-1 opacity-85">
-      <div class="badge badge-sm rounded-l-none"><b>★&nbsp;</b>{media.imdb_rating}</div>
+      <div class="rounded-l-none badge badge-sm"><b>★&nbsp;</b>{media.imdb_rating}</div>
     </div>
   {/if}
   {#if media.id.charAt(0) == "t"}
@@ -67,11 +66,11 @@
         ? 'mt-5'
         : 'mt-1'}"
     >
-      <div class="badge badge-sm rounded-l-none">TV</div>
+      <div class="rounded-l-none badge badge-sm">TV</div>
     </div>
   {/if}
   {#if providerAmounts[mediaIndex] === 0}
-    <div class="card-body h-14">
+    <div class="h-14 card-body">
       {#if media.id.charAt(0) == "p"}
         <p class="text-center text-neutral-content">
           <strong>{media.title}</strong>

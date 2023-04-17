@@ -20,7 +20,7 @@
   }
 </script>
 
-<div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16">
+<div class="mb-2 max-h-16 shadow-lg navbar bg-neutral text-neutral-content">
   <div class="flex-none sm:px-2 sm:mx-2">
     <a href="/">
       <img
@@ -32,11 +32,19 @@
   </div>
   <div class="flex-1 px-2 mx-2" />
   <div class="flex-none pr-2">
-    <div class="items-stretch hidden sm:flex">
-      <a class="btn btn-ghost btn-sm rounded-btn" href="/about" data-sveltekit-prefetch>
+    <div class="hidden items-stretch sm:flex">
+      <a
+        class="btn btn-ghost btn-sm rounded-btn"
+        href="/about"
+        data-sveltekit-preload-data
+      >
         About
       </a>
-      <a class="btn btn-ghost btn-sm rounded-btn" href="/faq" data-sveltekit-prefetch>
+      <a
+        class="btn btn-ghost btn-sm rounded-btn"
+        href="/faq"
+        data-sveltekit-preload-data
+      >
         FAQ
       </a>
     </div>
@@ -44,7 +52,7 @@
     <div class="dropdown dropdown-end" on:focusout={handleDropdownFocusLost}>
       <div
         tabindex="-1"
-        class="btn btn-ghost btn-sm rounded-btn text-xl"
+        class="text-xl btn btn-ghost btn-sm rounded-btn"
         on:click={handleDropdownClick}
         on:keypress={handleDropdownClick}
       >
@@ -73,7 +81,7 @@
       </div>
       <ul
         tabindex="-1"
-        class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-56"
+        class="p-2 mt-3 w-56 shadow menu menu-compact dropdown-content bg-base-100 rounded-box"
         style:visibility={$isBurgerMenuOpen ? "visible" : "hidden"}
       >
         <CountrySelector {countries} />

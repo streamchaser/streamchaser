@@ -2,12 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { SelectUserWatchListResultWatchListItem } from "./SelectUserWatchListResultWatchListItem"
+import type { SelectUserCustomListsResultCustomListsItemMediaItem } from "./SelectUserCustomListsResultCustomListsItemMediaItem"
 
 /**
- * SelectUserWatchListResult(id: 'uuid.UUID', watch_list: 'list[SelectUserWatchListResultWatchListItem]')
+ * SelectUserWatchListResult(id: 'uuid.UUID', watch_list: 'list[SelectUserCustomListsResultCustomListsItemMediaItem]')
  */
 export type SelectUserWatchListResult = {
   id: string
-  watch_list: Array<SelectUserWatchListResultWatchListItem>
+  watch_list: Array<SelectUserCustomListsResultCustomListsItemMediaItem>
 }
