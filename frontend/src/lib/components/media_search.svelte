@@ -24,7 +24,8 @@
 
 {#if meilisearch && meilisearch.hits.length}
   <div
-    class="grid grid-cols-2 gap-2 pt-2 pb-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7"
+    class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
+                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-2 pb-4"
   >
     {#each meilisearch.hits as media, mediaIndex}
       <MediaCard {providerAmounts} {mediaIndex} {media} />
@@ -33,7 +34,7 @@
   {#if meilisearch.hits.length === meilisearch.limit}
     <InfiniteLoading on:infinite={loadMoreData} />
   {:else}
-    <p class="italic text-center">Showing {meilisearch.hits.length} results</p>
+    <p class="text-center italic">Showing {meilisearch.hits.length} results</p>
   {/if}
 {:else if meilisearch && meilisearch.hits.length === 0}
   <NoResults {currentProviders} {currentGenres} {input} />

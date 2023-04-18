@@ -9,7 +9,7 @@
   export let countries: SelectCountriesResult[]
 </script>
 
-<div class="mb-2 max-h-16 shadow-lg navbar bg-neutral text-neutral-content">
+<div class="navbar mb-2 shadow-lg bg-neutral text-neutral-content max-h-16">
   <div class="flex-none sm:px-2 sm:mx-2">
     <a href="/">
       <img
@@ -21,7 +21,7 @@
   </div>
   <div class="flex-1 px-2 mx-2" />
   <div class="flex-none">
-    <div class="hidden items-stretch sm:flex">
+    <div class="items-stretch hidden sm:flex">
       <a
         class="btn btn-ghost btn-sm rounded-btn"
         href="/about"

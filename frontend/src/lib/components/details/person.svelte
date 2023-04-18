@@ -25,16 +25,18 @@
 </script>
 
 {#if cast.length}
-  <h1 class="pt-5 text-3xl text-center">Cast</h1>
+  <h1 class="text-center text-3xl pt-5">Cast</h1>
   <div
-    class="grid grid-cols-3 gap-3 p-2 pt-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 xl:grid-cols-8 2xl:grid-cols-9"
+    class="grid grid-cols-3 2xl:grid-cols-9 xl:grid-cols-8 lg:grid-cols-7
+                md:grid-cols-5 sm:grid-cols-4 gap-3 p-2 pt-4"
   >
     {#each cast.slice(0, castItemAmount) as person}
       {#if person.profile_path}
         <a
           href={mediaIdToUrlConverter("p" + person.id)}
           data-sveltekit-preload-data
-          class="shadow-md hover:ring-2 card compact bordered bg-neutral ring-primary hover:contrast-75"
+          class="card compact bordered shadow-md bg-neutral
+                            hover:contrast-75 hover:ring-2 ring-primary"
         >
           <figure>
             <img src="{IMG_W342}{person.profile_path}" alt={person.name} />
@@ -48,7 +50,7 @@
       {/if}
     {/each}
   </div>
-  <div class="flex justify-center pt-5 space-x-1">
+  <div class="flex space-x-1 justify-center pt-5">
     {#if castItemAmount < cast.length}
       <button
         on:click={() => (castItemAmount += castItemStartAmount)}
