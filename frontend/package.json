@@ -27,7 +27,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@playwright/experimental-ct-svelte": "^1.28.1",
+    "@playwright/experimental-ct-svelte": "^1.32.3",
     "daisyui": "^2.38.1",
     "openapi-typescript-codegen": "^0.23.0",
     "playwright": "^1.28.1",
