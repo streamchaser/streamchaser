@@ -1,7 +1,7 @@
 <script lang="ts">
   import ReadMore from "./read_more.svelte"
-  import { Swiper, SwiperSlide } from "swiper/svelte"
-  import { Navigation, Lazy } from "swiper"
+  import { Navigation } from "swiper"
+  import { register } from "swiper/element/bundle"
   import { IMG_W342 } from "$lib/variables"
   import "swiper/css"
   import "swiper/css/free-mode"
@@ -9,27 +9,29 @@
   import type { TV } from "$lib/generated"
 
   export let seasons: TV["seasons"]
+
+  register()
 </script>
 
 <div class="container p-2">
   <div class="text-3xl p-4 flex justify-center">Seasons</div>
   <div class="swiper-container">
-    <Swiper
-      grabCursor={true}
+    <swiper-container
+      grab-cursor={true}
       resistance={false}
-      freeMode={true}
-      preloadImages={false}
+      free-mode={true}
+      preload-images={false}
       lazy={{
         enabled: true,
         checkInView: true,
         loadPrevNext: true,
       }}
-      watchSlidesProgress={true}
+      watch-slides-progress={true}
       style="
               --swiper-navigation-color: text-blue-500;
               --swiper-navigation-size: 25px;
             "
-      spaceBetween={10}
+      space-between={10}
       breakpoints={{
         320: { slidesPerView: 1.3 },
         360: { slidesPerView: 1.5 },
@@ -41,11 +43,11 @@
         1536: { slidesPerView: 6 },
       }}
       navigation={true}
-      modules={[Navigation, Lazy]}
-      initialSlide={seasons[0].name === "Specials" ? 1 : 0}
+      modules={[Navigation]}
+      initial-slide={seasons[0].name === "Specials" ? 1 : 0}
     >
       {#each seasons as season}
-        <SwiperSlide>
+        <swiper-slide>
           <div
             class="card h-[350px] aspect-[342/513] bg-base-100 image-full swiper-lazy"
           >
@@ -83,8 +85,8 @@
               </div>
             </div>
           </div>
-        </SwiperSlide>
+        </swiper-slide>
       {/each}
-    </Swiper>
+    </swiper-container>
   </div>
 </div>

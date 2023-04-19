@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Recommendation } from "$lib/types"
-  import { Swiper, SwiperSlide } from "swiper/svelte"
-  import { Navigation, Lazy } from "swiper"
+  import { register } from "swiper/element/bundle"
+  import { Navigation } from "swiper"
   import MediaCard from "$lib/components/media_card.svelte"
   import "swiper/css"
   import "swiper/css/free-mode"
@@ -14,6 +14,8 @@
 
   let loadedPage: boolean
 
+  register()
+
   onMount(() => {
     loadedPage = true
   })
@@ -25,20 +27,20 @@
     <Spinner timeout={false} />
   {:then lookup}
     <div class="swiper-container px-2 mx-2">
-      <Swiper
+      <swiper-container
         style="
         --swiper-navigation-color: text-blue-500;
         --swiper-navigation-size: 25px;
       "
-        grabCursor={true}
+        grab-cursor={true}
         resistance={false}
-        preloadImages={false}
+        preload-images={false}
         lazy={{
           enabled: true,
           checkInView: true,
           loadPrevNext: true,
         }}
-        watchSlidesProgress={true}
+        watch-slides-progress={true}
         breakpoints={{
           0: { slidesPerView: 2 },
           576: { slidesPerView: 3 },
@@ -48,15 +50,15 @@
           1280: { slidesPerView: 6 },
           1536: { slidesPerView: 7 },
         }}
-        modules={[Navigation, Lazy]}
+        modules={[Navigation]}
         loop={true}
         navigation={true}
-        freeMode={true}
-        touchEventsTarget={"container"}
+        free-mode={true}
+        touch-events-target={"container"}
       >
         {#each lookup.meilisearch.hits as hit, index}
           {#if hit.poster_path}
-            <SwiperSlide>
+            <swiper-slide>
               <div class="p-1 swiper-lazy">
                 <MediaCard
                   media={hit}
@@ -64,10 +66,10 @@
                   providerAmounts={lookup.providerAmounts}
                 />
               </div>
-            </SwiperSlide>
+            </swiper-slide>
           {/if}
         {/each}
-      </Swiper>
+      </swiper-container>
     </div>
   {/await}
 {/if}
