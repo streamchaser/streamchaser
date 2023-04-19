@@ -26,47 +26,53 @@
   {#await lookupMedia(recommendations, $currentCountry)}
     <Spinner timeout={false} />
   {:then lookup}
-    <div class="swiper-container px-2 mx-2">
-      <swiper-container
-        style="
+    <swiper-container
+      px-2
+      mx-2
+      style="
         --swiper-navigation-color: text-blue-500;
         --swiper-navigation-size: 25px;
       "
-        grab-cursor={true}
-        resistance={false}
-        lazy={{
-          enabled: true,
-          checkInView: true,
-          loadPrevNext: true,
-        }}
-        watch-slides-progress={true}
-        breakpoints={{
-          0: { slidesPerView: 2 },
-          576: { slidesPerView: 3 },
-          640: { slidesPerView: 3.3 },
-          768: { slidesPerView: 4 },
-          1024: { slidesPerView: 5 },
-          1280: { slidesPerView: 6 },
-          1536: { slidesPerView: 7 },
-        }}
-        modules={[Navigation]}
-        loop={true}
-        navigation={true}
-        touch-events-target={"container"}
-      >
-        {#each lookup.meilisearch.hits as hit, index}
-          {#if hit.poster_path}
-            <swiper-slide>
-              <MediaCard
-                media={hit}
-                mediaIndex={index}
-                providerAmounts={lookup.providerAmounts}
-              />
-              <div class="swiper-lazy-preloader" />
-            </swiper-slide>
-          {/if}
-        {/each}
-      </swiper-container>
-    </div>
+      grab-cursor={true}
+      resistance={false}
+      preload-images={false}
+      lazy={{
+        enabled: true,
+        checkInView: true,
+        loadPrevNext: true,
+      }}
+      watch-slides-progress={true}
+      breakpoints={{
+        0: { slidesPerView: 2 },
+        576: { slidesPerView: 3 },
+        640: { slidesPerView: 3.3 },
+        768: { slidesPerView: 4 },
+        1024: { slidesPerView: 5 },
+        1280: { slidesPerView: 6 },
+        1536: { slidesPerView: 7 },
+      }}
+      modules={[Navigation]}
+      loop={true}
+      free-mode={{
+        enabled: true,
+        sticky: true,
+      }}
+      navigation={true}
+      touch-events-target={"container"}
+      touch-start-prevent-default="true"
+    >
+      {#each lookup.meilisearch.hits as hit, index}
+        {#if hit.poster_path}
+          <swiper-slide>
+            <MediaCard
+              media={hit}
+              mediaIndex={index}
+              providerAmounts={lookup.providerAmounts}
+            />
+            <div class="swiper-lazy-preloader" />
+          </swiper-slide>
+        {/if}
+      {/each}
+    </swiper-container>
   {/await}
 {/if}
