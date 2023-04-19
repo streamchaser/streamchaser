@@ -47,6 +47,7 @@
         class="aspect-[342/513]"
         src="{IMG_W342}{media.poster_path}"
         alt={media.title}
+        loading="lazy"
       />
     </figure>
   {:else}

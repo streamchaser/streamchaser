@@ -34,7 +34,6 @@
       "
         grab-cursor={true}
         resistance={false}
-        preload-images={false}
         lazy={{
           enabled: true,
           checkInView: true,
@@ -53,19 +52,17 @@
         modules={[Navigation]}
         loop={true}
         navigation={true}
-        free-mode={true}
         touch-events-target={"container"}
       >
         {#each lookup.meilisearch.hits as hit, index}
           {#if hit.poster_path}
             <swiper-slide>
-              <div class="p-1 swiper-lazy">
-                <MediaCard
-                  media={hit}
-                  mediaIndex={index}
-                  providerAmounts={lookup.providerAmounts}
-                />
-              </div>
+              <MediaCard
+                media={hit}
+                mediaIndex={index}
+                providerAmounts={lookup.providerAmounts}
+              />
+              <div class="swiper-lazy-preloader" />
             </swiper-slide>
           {/if}
         {/each}
