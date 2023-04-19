@@ -37,6 +37,11 @@ class Providers(BaseModel):
     results: dict[str, dict[str, list[Provider] | None]]
 
 
+class Genre(BaseModel):
+    label: str
+    value: str
+
+
 class Hit(BaseModel):
     id: str
     title: str
@@ -60,7 +65,7 @@ class Movie(BaseModel):
     title: str
     release_date: str
     overview: str
-    genres: list[str] | None
+    genres: list[Genre] | None
     imdb_id: str | None
     runtime: int | None
     flatrate_providers: list[dict] | None
@@ -78,7 +83,7 @@ class TV(BaseModel):
     first_air_date: str | None
     overview: str
     imdb_id: str | None
-    genres: list[str] | None
+    genres: list[Genre] | None
     episode_run_time: list[int]
     flatrate_providers: list[dict] | None
     free_providers: list[dict] | None

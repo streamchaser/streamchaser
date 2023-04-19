@@ -98,7 +98,7 @@ export interface Cast {
   character: string
   credit_id: string
   gender: number
-  id: number
+  id: string
   known_for_department: string
   name: string
   order: number

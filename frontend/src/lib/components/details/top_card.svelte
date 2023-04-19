@@ -4,7 +4,7 @@
   import { lookupSingleMedia, uniqueProviders } from "$lib/utils"
   import { currentCountry, currentGenres, inputQuery } from "$lib/stores/preferences"
   import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "$lib/variables"
-  import type { Provider } from "$lib/generated"
+  import type { Provider, Genre } from "$lib/generated"
 
   const INITIAL_OVERVIEW_LENGTH: number = 550
 
@@ -12,7 +12,7 @@
   export let posterPath: string
   export let title: string
   export let overview: string
-  export let genres: string[]
+  export let genres: Genre[]
   export let freeProviders: Provider[]
   export let flatrateProviders: Provider[]
   export let runtime: number
@@ -24,9 +24,11 @@
 
   let currentOverviewLength: number = INITIAL_OVERVIEW_LENGTH
 
-  const changeGenreAndRedirectHome = (genre: string) => {
+  const changeGenreAndRedirectHome = (genre: Genre) => {
     // Needs to replace the &'s for the multiselects to find it
-    $currentGenres = [{ label: genre, value: genre.replace(" & ", "%20%26%20") }]
+    $currentGenres = [
+      { label: genre.label, value: genre.value.replace(" & ", "%20%26%20") },
+    ]
     $inputQuery = ""
     window.location.href = "/"
   }
@@ -133,7 +135,7 @@
               class="badge badge-primary mx-2 my-1 transform cursor-pointer
                                    hover:contrast-75"
             >
-              {genre}
+              {genre.label}
             </button>
           {/each}
         </div>

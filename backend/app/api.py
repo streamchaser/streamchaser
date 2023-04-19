@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from app.api_helpers import get_providers
 from app.config import get_settings
-from app.models import TV, Movie, Person
+from app.models import TV, Genre, Movie, Person
 
 tmdb_url = get_settings().tmdb_url
 tmdb_key = get_settings().tmdb_key
@@ -168,7 +168,10 @@ async def get_movie_from_id(movie_id: int, country_code: str = "DK") -> Movie:
             title=movie.get("title"),
             release_date=movie.get("release_date"),
             overview=movie.get("overview"),
-            genres=[genre.get("name") for genre in movie.get("genres")],
+            genres=[
+                Genre(label=genre.get("name"), value=genre.get("name"))
+                for genre in movie.get("genres")
+            ],
             imdb_id=movie.get("imdb_id"),
             runtime=movie.get("runtime"),
             flatrate_providers=get_providers(
@@ -203,7 +206,10 @@ async def get_tv_from_id(tv_id: int, country_code: str = "DK") -> TV:
             name=tv.get("name"),
             first_air_date=tv.get("first_air_date"),
             overview=tv.get("overview"),
-            genres=[genre.get("name") for genre in tv.get("genres")],
+            genres=[
+                Genre(label=genre.get("name"), value=genre.get("name"))
+                for genre in tv.get("genres")
+            ],
             episode_run_time=tv.get("episode_run_time"),
             flatrate_providers=get_providers(
                 "flatrate", tv.get("watch/providers"), country_code

@@ -1,5 +1,5 @@
-import type { Provider, Hit, Meilisearch } from "$lib/generated"
-import type { ViewPort, Media, FilmOrSeries, Recommendation } from "$lib/types"
+import type { Hit, Meilisearch, Provider } from "$lib/generated"
+import type { FilmOrSeries, Media, Recommendation, ViewPort } from "$lib/types"
 import { PYTHON_API } from "$lib/variables"
 
 // Generic Javascript Functions
@@ -14,26 +14,19 @@ export const getFixedGenreValues = (genres: {}) => {
 }
 
 // TODO: This should be 2 functions to type correctly
-export const mediaIdToUrlConverter = (
-  mediaId: string | number,
-  mediaType: string = undefined
-) => {
-  if (["movie", "tv", "person"].indexOf(mediaType) !== -1) {
-    return `/${mediaType}/${mediaId}`
-  } else {
-    const startingChar = mediaId[0]
-    const slicedId = mediaId.slice(1)
+export const mediaIdToUrlConverter = (mediaId: string) => {
+  const startingChar = mediaId[0]
+  const slicedId = mediaId.slice(1)
 
-    switch (startingChar) {
-      case "t":
-        return `/tv/${slicedId}`
-      case "m":
-        return `/movie/${slicedId}`
-      case "p":
-        return `/person/${slicedId}`
-      default:
-        return "/"
-    }
+  switch (startingChar) {
+    case "t":
+      return `/tv/${slicedId}`
+    case "m":
+      return `/movie/${slicedId}`
+    case "p":
+      return `/person/${slicedId}`
+    default:
+      return "/"
   }
 }
 

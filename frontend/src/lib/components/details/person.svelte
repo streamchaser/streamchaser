@@ -33,8 +33,8 @@
     {#each cast.slice(0, castItemAmount) as person}
       {#if person.profile_path}
         <a
-          href={mediaIdToUrlConverter(person.id, "person")}
-          data-sveltekit-prefetch
+          href={mediaIdToUrlConverter("p" + person.id)}
+          data-sveltekit-preload-data
           class="card compact bordered shadow-md bg-neutral
                             hover:contrast-75 hover:ring-2 ring-primary"
         >

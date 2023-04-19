@@ -33,10 +33,18 @@
   <div class="flex-1 px-2 mx-2" />
   <div class="flex-none pr-2">
     <div class="items-stretch hidden sm:flex">
-      <a class="btn btn-ghost btn-sm rounded-btn" href="/about" data-sveltekit-prefetch>
+      <a
+        class="btn btn-ghost btn-sm rounded-btn"
+        href="/about"
+        data-sveltekit-preload-data
+      >
         About
       </a>
-      <a class="btn btn-ghost btn-sm rounded-btn" href="/faq" data-sveltekit-prefetch>
+      <a
+        class="btn btn-ghost btn-sm rounded-btn"
+        href="/faq"
+        data-sveltekit-preload-data
+      >
         FAQ
       </a>
     </div>

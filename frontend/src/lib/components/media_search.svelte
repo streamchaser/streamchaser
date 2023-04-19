@@ -3,7 +3,7 @@
   import NoResults from "$lib/components/no_results.svelte"
   import Spinner from "$lib/components/loading/spinner.svelte"
   import MediaCard from "$lib/components/media_card.svelte"
-  import type { SelectGenresResult, Meilisearch } from "$lib/generated"
+  import type { Genre, Meilisearch } from "$lib/generated"
 
   export let meilisearch: Meilisearch
   export let providerAmounts: number[]
@@ -11,7 +11,7 @@
   export let mediaStartAmount: number
   export let currentMediaAmount: number
   export let input: string
-  export let currentGenres: SelectGenresResult[]
+  export let currentGenres: Genre[]
   export let search: Function
 
   const loadMoreData = async ({ detail: { loaded } }) => {
