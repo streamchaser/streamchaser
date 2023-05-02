@@ -228,8 +228,6 @@ def update_media(chunk_size: int, popularity: float = 1):
                 )
                 if res.status_code != 200:
                     echo_warning(res.text)
-                else:
-                    print(res.text)
 
 
 @app.command()

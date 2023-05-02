@@ -142,13 +142,13 @@ func fetchMovie(id string, movieCh chan Movie) {
 
 	defer res.Body.Close()
 
-	if res.StatusCode == 429 {
-		fmt.Println(res.Status, id, "- Will retry in 1 second")
+	if res.StatusCode == http.StatusTooManyRequests {
+		fmt.Println(res.Status, " movie ", id, "- Will retry in 1 second")
 		time.Sleep(1)
 		fetchMovie(id, movieCh)
 	}
 
-	if res.StatusCode != 200 {
+	if res.StatusCode != http.StatusOK {
 		log.Fatal("Ran into an unknown issue while fetching the movie: ", res.Status, id)
 	}
 
@@ -176,13 +176,13 @@ func fetchTV(id string, TVCh chan TV) {
 
 	defer res.Body.Close()
 
-	if res.StatusCode == 429 {
-		fmt.Println(res.Status, "- Will retry in 1 second")
+	if res.StatusCode == http.StatusTooManyRequests {
+		fmt.Println(res.Status, " tv ", id, "- Will retry in 1 second")
 		time.Sleep(1)
 		fetchTV(id, TVCh)
 	}
 
-	if res.StatusCode != 200 {
+	if res.StatusCode != http.StatusOK {
 		log.Fatal("Ran into an unknown issue while fetching the tv-series: ", res.Status, id)
 	}
 
@@ -210,13 +210,13 @@ func fetchPerson(id string, personCh chan Person) {
 
 	defer res.Body.Close()
 
-	if res.StatusCode == 429 {
-		fmt.Println(res.Status, "- Will retry in 1 second")
+	if res.StatusCode == http.StatusTooManyRequests {
+		fmt.Println(res.Status, " person ", id, "- Will retry in 1 second")
 		time.Sleep(1)
 		fetchPerson(id, personCh)
 	}
 
-	if res.StatusCode != 200 {
+	if res.StatusCode != http.StatusOK {
 		log.Fatal("Ran into an unknown issue while fetching the person: ", res.Status, id)
 	}
 
