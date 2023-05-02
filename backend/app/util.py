@@ -15,7 +15,8 @@ def chunkify(lst: list, size: int) -> Tuple[Generator[list, None, None], int]:
     for i in range(len(lst)):
         if not (i % size):
             chunks += 1
-    return (lst[i::chunks] for i in range(chunks)), chunks
+
+    return (lst[i : i + size] for i in range(0, len(lst), size)), chunks
 
 
 def coroutine(f):

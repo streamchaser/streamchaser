@@ -213,7 +213,7 @@ def update_media(chunk_size: int, popularity: float = 1):
         f"in chunks of {chunk_size}"
     )
 
-    with httpx.Client(http2=True, timeout=60) as client:
+    with httpx.Client(http2=True, timeout=300) as client:
         for media in zip(
             ["movies", "tv shows", "person"], [movie_ids, tv_ids, person_ids]
         ):
@@ -272,7 +272,7 @@ async def clean_stale_media():
 
 @app.command()
 @coroutine
-async def full_setup(popularity: float = 1, chunk_size: int = 25000):
+async def full_setup(popularity: float = 1, chunk_size: int = 5000):
     await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
     await insert_countries(db_client, data=json.dumps(await fetch_countries()))
     await insert_providers_with_links()
