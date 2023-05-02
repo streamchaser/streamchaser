@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/meilisearch/meilisearch-go"
@@ -49,7 +50,7 @@ func fetchMedia(c *gin.Context) (chan Movie, chan TV, chan Person) {
 	movieCh := make(chan Movie, len(media.Ids))
 	tvCh := make(chan TV, len(media.Ids))
 	personCh := make(chan Person, len(media.Ids))
-	guardCh := make(chan int, 1000)
+	guardCh := make(chan int, 20)
 	for _, id := range media.Ids {
 		guardCh <- 1
 		wg.Add(1)
@@ -114,7 +115,8 @@ func processMedia(c *gin.Context) {
 			failedMedia++
 			continue
 		}
-		if person.Popularity > 1 {
+		// HACK: We let less people through since there's so many and we are getting throttled
+		if person.Popularity > 3 {
 			medias = append(medias, *person.toMedia())
 		}
 	}
@@ -140,6 +142,16 @@ func fetchMovie(id string, movieCh chan Movie) {
 
 	defer res.Body.Close()
 
+	if res.StatusCode == http.StatusTooManyRequests {
+		fmt.Println(res.Status, " movie ", id, "- Will retry in 1 second")
+		time.Sleep(1)
+		fetchMovie(id, movieCh)
+	}
+
+	if res.StatusCode != http.StatusOK {
+		log.Fatal("Ran into an unknown issue while fetching the movie: ", res.Status, id)
+	}
+
 	movie := Movie{}
 	errDecode := json.NewDecoder(res.Body).Decode(&movie)
 	if errDecode != nil {
@@ -164,6 +176,16 @@ func fetchTV(id string, TVCh chan TV) {
 
 	defer res.Body.Close()
 
+	if res.StatusCode == http.StatusTooManyRequests {
+		fmt.Println(res.Status, " tv ", id, "- Will retry in 1 second")
+		time.Sleep(1)
+		fetchTV(id, TVCh)
+	}
+
+	if res.StatusCode != http.StatusOK {
+		log.Fatal("Ran into an unknown issue while fetching the tv-series: ", res.Status, id)
+	}
+
 	tv := TV{}
 	errDecode := json.NewDecoder(res.Body).Decode(&tv)
 	if errDecode != nil {
@@ -187,6 +209,16 @@ func fetchPerson(id string, personCh chan Person) {
 	}
 
 	defer res.Body.Close()
+
+	if res.StatusCode == http.StatusTooManyRequests {
+		fmt.Println(res.Status, " person ", id, "- Will retry in 1 second")
+		time.Sleep(1)
+		fetchPerson(id, personCh)
+	}
+
+	if res.StatusCode != http.StatusOK {
+		log.Fatal("Ran into an unknown issue while fetching the person: ", res.Status, id)
+	}
 
 	person := Person{}
 	errDecode := json.NewDecoder(res.Body).Decode(&person)

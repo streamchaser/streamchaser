@@ -206,7 +206,6 @@ func getSupportedProviderCountries(providers Provider) []string {
 			if len(providers.Results[countryCode].Flatrate) > 0 || len(providers.Results[countryCode].Free) > 0 {
 				supportedProviderCountries = append(supportedProviderCountries, countryCode)
 			}
-
 		}
 	}
 
