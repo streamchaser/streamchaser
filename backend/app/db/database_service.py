@@ -46,16 +46,21 @@ async def insert_providers_with_links():
 
             # Picks the local display priorities
             local_display_priorities = [
-            {
-                "display_priority": provider["display_priorities"][lp.country_code],
-                "provider_id": provider["provider_id"],
-            }
-            for provider in lp.providers["results"]
+                {
+                    "display_priority": provider["display_priorities"][lp.country_code],
+                    "provider_id": provider["provider_id"],
+                }
+                for provider in lp.providers["results"]
             ]
             await update_country_providers(
                 db_client,
                 country_code=lp.country_code,
                 providers=json.dumps(local_display_priorities),
+            )
+        else:
+            print(
+                f"Couldn't find providers in: {lp.country_code} "
+                f"in {insert_providers_with_links.__name__}"
             )
 
 
