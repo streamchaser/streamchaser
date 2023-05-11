@@ -41,21 +41,22 @@ async def insert_providers_with_links():
     for lp in tqdm(
         local_providers, desc="Inserting provider data and updating country links"
     ):
-        await insert_providers(db_client, data=json.dumps(lp.providers["results"]))
+        if local_providers := lp.providers.get("results"):
+            await insert_providers(db_client, data=json.dumps(local_providers))
 
-        # Picks the local display priorities
-        local_display_priorities = [
+            # Picks the local display priorities
+            local_display_priorities = [
             {
                 "display_priority": provider["display_priorities"][lp.country_code],
                 "provider_id": provider["provider_id"],
             }
             for provider in lp.providers["results"]
-        ]
-        await update_country_providers(
-            db_client,
-            country_code=lp.country_code,
-            providers=json.dumps(local_display_priorities),
-        )
+            ]
+            await update_country_providers(
+                db_client,
+                country_code=lp.country_code,
+                providers=json.dumps(local_display_priorities),
+            )
 
 
 def fix_genre_ampersand(genres: dict) -> list[dict]:
