@@ -142,6 +142,13 @@ func fetchMovie(id string, movieCh chan Movie) {
 
 	defer res.Body.Close()
 
+	if res.StatusCode == http.StatusNotFound {
+		fmt.Println(res.Status, " movie ", id, "- Will skip")
+		// Adds a dummy tv that will be filtered out when exhasting the channel
+		movieCh <- Movie{Id: -1}
+		return
+	}
+
 	if res.StatusCode == http.StatusTooManyRequests {
 		fmt.Println(res.Status, " movie ", id, "- Will retry in 1 second")
 		time.Sleep(1)
@@ -176,6 +183,13 @@ func fetchTV(id string, TVCh chan TV) {
 
 	defer res.Body.Close()
 
+	if res.StatusCode == http.StatusNotFound {
+		fmt.Println(res.Status, " tv ", id, "- Will skip")
+		// Adds a dummy tv that will be filtered out when exhasting the channel
+		TVCh <- TV{Id: -1}
+		return
+	}
+
 	if res.StatusCode == http.StatusTooManyRequests {
 		fmt.Println(res.Status, " tv ", id, "- Will retry in 1 second")
 		time.Sleep(1)
@@ -209,6 +223,13 @@ func fetchPerson(id string, personCh chan Person) {
 	}
 
 	defer res.Body.Close()
+
+	if res.StatusCode == http.StatusNotFound {
+		fmt.Println(res.Status, " tv ", id, "- Will skip")
+		// Adds a dummy tv that will be filtered out when exhasting the channel
+		personCh <- Person{Id: -1}
+		return
+	}
 
 	if res.StatusCode == http.StatusTooManyRequests {
 		fmt.Println(res.Status, " person ", id, "- Will retry in 1 second")
