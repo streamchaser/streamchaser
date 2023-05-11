@@ -137,32 +137,34 @@ func fetchMovie(id string, movieCh chan Movie) {
 		),
 	)
 	if err != nil {
-		log.Fatal("Ran into an issue while fetching the movie: ", id, err)
-	}
+		log.Println("Ran into an issue while fetching the person: ", err, " with ID: ", id, " - Will skip")
 
-	defer res.Body.Close()
-
-	if res.StatusCode == http.StatusNotFound {
-		fmt.Println(res.Status, " movie ", id, "- Will skip")
-		// Adds a dummy tv that will be filtered out when exhasting the channel
+		// Adds a dummy movie that will be filtered out when exhasting the channel
 		movieCh <- Movie{Id: -1}
 		return
 	}
 
+	defer res.Body.Close()
+
 	if res.StatusCode == http.StatusTooManyRequests {
-		fmt.Println(res.Status, " movie ", id, "- Will retry in 1 second")
+		log.Println(res.Status, " movie ", id, " - Will retry in 1 second")
 		time.Sleep(1)
 		fetchMovie(id, movieCh)
 	}
 
 	if res.StatusCode != http.StatusOK {
-		log.Fatal("Ran into an unknown issue while fetching the movie: ", res.Status, id)
+		log.Println("Ran into an issue while fetching a movie: ", res.Status, " with ID: ", id, " - Will skip")
+
+		// Adds a dummy movie that will be filtered out when exhasting the channel
+		movieCh <- Movie{Id: -1}
+		return
 	}
 
 	movie := Movie{}
 	errDecode := json.NewDecoder(res.Body).Decode(&movie)
 	if errDecode != nil {
-		fmt.Println("Failed to decode movie:", id, errDecode)
+		log.Println("Failed to decode person: ", errDecode, " with ID: ", id)
+
 		// Adds a dummy movie that will be filtered out when exhasting the channel
 		movieCh <- Movie{Id: -1}
 		return
@@ -178,32 +180,34 @@ func fetchTV(id string, TVCh chan TV) {
 		),
 	)
 	if err != nil {
-		log.Fatal("Ran into an issue while fetching the tv-series: ", id, err)
-	}
+		log.Println("Ran into an issue while fetching the tv-series: ", err, " with ID: ", id)
 
-	defer res.Body.Close()
-
-	if res.StatusCode == http.StatusNotFound {
-		fmt.Println(res.Status, " tv ", id, "- Will skip")
 		// Adds a dummy tv that will be filtered out when exhasting the channel
 		TVCh <- TV{Id: -1}
 		return
 	}
 
+	defer res.Body.Close()
+
 	if res.StatusCode == http.StatusTooManyRequests {
-		fmt.Println(res.Status, " tv ", id, "- Will retry in 1 second")
+		log.Println(res.Status, " tv ", id, " - Will retry in 1 second")
 		time.Sleep(1)
 		fetchTV(id, TVCh)
 	}
 
 	if res.StatusCode != http.StatusOK {
-		log.Fatal("Ran into an unknown issue while fetching the tv-series: ", res.Status, id)
+		log.Println("Ran into an issue while fetching a tv-series: ", res.Status, " with ID: ", id, " - Will skip")
+
+		// Adds a dummy movie that will be filtered out when exhasting the channel
+		TVCh <- TV{Id: -1}
+		return
 	}
 
 	tv := TV{}
 	errDecode := json.NewDecoder(res.Body).Decode(&tv)
 	if errDecode != nil {
-		fmt.Println("Failed to decode tv-series: ", id, errDecode)
+		log.Println("Failed to decode tv-series: ", errDecode, " with ID: ", id)
+
 		// Adds a dummy tv that will be filtered out when exhasting the channel
 		TVCh <- TV{Id: -1}
 		return
@@ -219,32 +223,33 @@ func fetchPerson(id string, personCh chan Person) {
 		),
 	)
 	if err != nil {
-		log.Fatal("Ran into an issue while fetching the person: ", id, err)
-	}
+		log.Println("Ran into an issue while fetching the person: ", err, " with ID: ", id)
 
-	defer res.Body.Close()
-
-	if res.StatusCode == http.StatusNotFound {
-		fmt.Println(res.Status, " tv ", id, "- Will skip")
-		// Adds a dummy tv that will be filtered out when exhasting the channel
+		// Adds a dummy movie that will be filtered out when exhasting the channel
 		personCh <- Person{Id: -1}
 		return
 	}
 
+	defer res.Body.Close()
+
 	if res.StatusCode == http.StatusTooManyRequests {
-		fmt.Println(res.Status, " person ", id, "- Will retry in 1 second")
+		log.Println(res.Status, " person ", id, " - Will retry in 1 second")
 		time.Sleep(1)
 		fetchPerson(id, personCh)
 	}
 
 	if res.StatusCode != http.StatusOK {
-		log.Fatal("Ran into an unknown issue while fetching the person: ", res.Status, id)
+		log.Println("Ran into an issue while fetching a person: ", res.Status, " with ID: ", id, " - Will skip")
+
+		// Adds a dummy movie that will be filtered out when exhasting the channel
+		personCh <- Person{Id: -1}
+		return
 	}
 
 	person := Person{}
 	errDecode := json.NewDecoder(res.Body).Decode(&person)
 	if errDecode != nil {
-		fmt.Println("Failed to decode person: ", id, errDecode)
+		fmt.Println("Failed to decode person: ", errDecode, " with ID: ", id)
 		// Adds a dummy tv that will be filtered out when exhasting the channel
 		personCh <- Person{Id: -1}
 		return
