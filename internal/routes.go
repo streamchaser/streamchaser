@@ -76,8 +76,8 @@ func fetchMedia(c *gin.Context) (chan Movie, chan TV, chan Person) {
 		default:
 			log.Println("Wrongly formatted media ID: ", id, " - skipping to next media")
 
-		    // Adds a dummy movie (the specific media-type isn't important) that will be filtered out when exhasting the channel
-		    movieCh <- Movie{Id: -1}
+			// Adds a dummy movie (the specific media-type isn't important) that will be filtered out when exhasting the channel
+			movieCh <- Movie{Id: -1}
 		}
 	}
 	wg.Wait()
