@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"log"
 	"os"
 
@@ -26,8 +27,10 @@ func main() {
 	if err != nil {
 		log.Println("there was an error with logs.txt: ", err)
 	}
+	defer logFile.Close()
 
-	log.SetOutput(logFile)
+	mw := io.MultiWriter(os.Stdout, logFile)
+	log.SetOutput(mw)
 
 	router := gin.Default()
 	docs.SwaggerInfo.BasePath = "/"
