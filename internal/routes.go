@@ -74,7 +74,7 @@ func fetchMedia(c *gin.Context) (chan Movie, chan TV, chan Person) {
 				<-guardCh
 			}(id, personCh)
 		default:
-			log.Fatal("This is not the movie type you seek")
+			log.Fatal("This is not the movie type you seek - skipping to next media")
 		}
 	}
 	wg.Wait()
@@ -163,7 +163,7 @@ func fetchMovie(id string, movieCh chan Movie) {
 	movie := Movie{}
 	errDecode := json.NewDecoder(res.Body).Decode(&movie)
 	if errDecode != nil {
-		log.Println("Failed to decode person: ", errDecode, " with ID: ", id)
+		log.Println("Failed to decode person: ", errDecode, " with ID: ", id, " - Will skip")
 
 		// Adds a dummy movie that will be filtered out when exhasting the channel
 		movieCh <- Movie{Id: -1}
@@ -180,7 +180,7 @@ func fetchTV(id string, TVCh chan TV) {
 		),
 	)
 	if err != nil {
-		log.Println("Ran into an issue while fetching the tv-series: ", err, " with ID: ", id)
+		log.Println("Ran into an issue while fetching the tv-series: ", err, " with ID: ", id, " - Will skip")
 
 		// Adds a dummy tv that will be filtered out when exhasting the channel
 		TVCh <- TV{Id: -1}
@@ -206,7 +206,7 @@ func fetchTV(id string, TVCh chan TV) {
 	tv := TV{}
 	errDecode := json.NewDecoder(res.Body).Decode(&tv)
 	if errDecode != nil {
-		log.Println("Failed to decode tv-series: ", errDecode, " with ID: ", id)
+		log.Println("Failed to decode tv-series: ", errDecode, " with ID: ", id, " - Will skip")
 
 		// Adds a dummy tv that will be filtered out when exhasting the channel
 		TVCh <- TV{Id: -1}
@@ -223,7 +223,7 @@ func fetchPerson(id string, personCh chan Person) {
 		),
 	)
 	if err != nil {
-		log.Println("Ran into an issue while fetching the person: ", err, " with ID: ", id)
+		log.Println("Ran into an issue while fetching the person: ", err, " with ID: ", id, " - Will skip")
 
 		// Adds a dummy movie that will be filtered out when exhasting the channel
 		personCh <- Person{Id: -1}
@@ -249,7 +249,7 @@ func fetchPerson(id string, personCh chan Person) {
 	person := Person{}
 	errDecode := json.NewDecoder(res.Body).Decode(&person)
 	if errDecode != nil {
-		fmt.Println("Failed to decode person: ", errDecode, " with ID: ", id)
+		log.Println("Failed to decode person: ", errDecode, " with ID: ", id, " - Will skip")
 		// Adds a dummy tv that will be filtered out when exhasting the channel
 		personCh <- Person{Id: -1}
 		return
