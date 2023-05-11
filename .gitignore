@@ -39,5 +39,6 @@ frontend/.svelte-kit
 /letsencrypt
 backend/json.gz_dumps
 internal/tmp
+internal/logs.txt
 internal/docs/*
 backend/static/sitemap*
