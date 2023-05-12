@@ -217,17 +217,28 @@ def update_media(chunk_size: int, popularity: float = 1):
         for media in zip(
             ["movies", "tv shows", "person"], [movie_ids, tv_ids, person_ids]
         ):
+            # Will be used to update the progress bar
+            successful = 0
+            skipped = 0
+
             id_chunks, total_chunks = chunkify(media[1], chunk_size)
-            for id_chunk in tqdm(
+            pbar = tqdm(
                 id_chunks,
                 total=total_chunks,
                 desc=f"Updating {media[0]}",
-            ):
+            )
+            for id_chunk in pbar:
                 res = client.post(
                     "http://internal:8888/update-media", json={"ids": id_chunk}
                 )
                 if res.status_code != 200:
                     echo_warning(res.text)
+                else:
+                    # Update progress bar with status
+                    json = res.json()
+                    successful += json["successful"]
+                    skipped += json["skipped"]
+                    pbar.set_postfix(successful=successful, skipped=skipped)
 
 
 @app.command()
