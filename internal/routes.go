@@ -131,9 +131,9 @@ func processMedia(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"info": fmt.Sprintf("Fetched and inserted %d media into meilisearch and skipped %d", len(medias), failedMedia),
+		"info":       fmt.Sprintf("Fetched and inserted %d media into meilisearch and skipped %d", len(medias), failedMedia),
 		"successful": len(medias),
-		"skipped": failedMedia,
+		"skipped":    failedMedia,
 	})
 }
 
