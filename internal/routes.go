@@ -130,7 +130,11 @@ func processMedia(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"info": fmt.Sprint(task.TaskUID) + ": " + err.Error()})
 	}
 
-	c.JSON(http.StatusOK, gin.H{"info": fmt.Sprintf("Fetched and inserted %d media into meilisearch and skipped %d", len(medias), failedMedia)})
+	c.JSON(http.StatusOK, gin.H{
+		"info":       fmt.Sprintf("Fetched and inserted %d media into meilisearch and skipped %d", len(medias), failedMedia),
+		"successful": len(medias),
+		"skipped":    failedMedia,
+	})
 }
 
 func fetchMovie(id string, movieCh chan Movie) {
