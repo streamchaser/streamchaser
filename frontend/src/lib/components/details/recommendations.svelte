@@ -22,7 +22,7 @@
 </script>
 
 {#if recommendations.length && loadedPage}
-  <h1 class="text-center text-3xl pt-5 pb-5">Recommendations</h1>
+  <h1 class="pt-5 pb-5 text-3xl text-center">Recommendations</h1>
   {#await lookupMedia(recommendations, $currentCountry)}
     <Spinner timeout={false} />
   {:then lookup}
@@ -36,11 +36,6 @@
       grab-cursor={true}
       resistance={false}
       preload-images={false}
-      lazy={{
-        enabled: true,
-        checkInView: true,
-        loadPrevNext: true,
-      }}
       watch-slides-progress={true}
       breakpoints={{
         0: { slidesPerView: 2 },
@@ -53,13 +48,9 @@
       }}
       modules={[Navigation]}
       loop={true}
-      free-mode={{
-        enabled: true,
-        sticky: true,
-      }}
       navigation={true}
       touch-events-target={"container"}
-      touch-start-prevent-default="true"
+      touch-start-force-prevent-default={true}
     >
       {#each lookup.meilisearch.hits as hit, index}
         {#if hit.poster_path}

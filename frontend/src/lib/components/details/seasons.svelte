@@ -14,17 +14,12 @@
 </script>
 
 <div class="container p-2">
-  <div class="text-3xl p-4 flex justify-center">Seasons</div>
+  <div class="flex justify-center p-4 text-3xl" tabindex="-1">Seasons</div>
   <swiper-container
     grab-cursor={true}
     resistance={false}
     free-mode={true}
-    lazy={{
-      enabled: true,
-      checkInView: true,
-      loadPrevNext: true,
-    }}
-    watchs-slides-progress={true}
+    watch-slides-progress={true}
     style="
               --swiper-navigation-color: text-blue-500;
               --swiper-navigation-size: 25px;
@@ -43,6 +38,7 @@
     navigation={true}
     modules={[Navigation]}
     initial-slide={seasons[0].name === "Specials" ? 1 : 0}
+    touch-start-force-prevent-default={true}
   >
     {#each seasons as season}
       <swiper-slide>
@@ -60,7 +56,7 @@
           {:else}
             <figure class="bg-base-100" />
           {/if}
-          <div class="card-body overflow-auto p-4">
+          <div class="overflow-auto p-4 card-body">
             <div class="card-title">{season.name}</div>
             <div class="text-xl text-neutral-content">
               {season.air_date ? season.air_date.split("-")[0] : "No air date"}
