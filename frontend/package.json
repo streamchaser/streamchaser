@@ -27,10 +27,10 @@
   },
   "type": "module",
   "dependencies": {
-    "@playwright/experimental-ct-svelte": "^1.28.1",
+    "@playwright/test": "^1.33.0",
     "daisyui": "^2.51.6",
     "openapi-typescript-codegen": "^0.23.0",
-    "playwright": "^1.28.1",
+    "playwright": "^1.33.0",
     "svelte-infinite-loading": "^1.3.8",
     "svelte-media-query": "^1.1.1",
     "svelte-select": "https://github.com/AndreasPB/svelte-select",
