@@ -13,7 +13,7 @@
     "svelte-check": "svelte-check"
   },
   "devDependencies": {
-    "@sveltejs/adapter-node": "^1.2.3",
+    "@sveltejs/adapter-node": "^1.2.4",
     "@sveltejs/adapter-vercel": "^2.4.1",
     "@sveltejs/kit": "^1.14.0",
     "@tsconfig/svelte": "^4.0.1",
