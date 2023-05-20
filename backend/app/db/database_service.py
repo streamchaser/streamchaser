@@ -38,9 +38,11 @@ async def insert_providers_with_links():
         tasks = [fetch_local_providers(client, country.value) for country in countries]
         local_providers: list[LocalProviders] = await asyncio.gather(*tasks)
 
-    for lp in tqdm(
+    skipped = 0
+    pbar = tqdm(
         local_providers, desc="Inserting provider data and updating country links"
-    ):
+    )
+    for lp in pbar:
         if local_providers := lp.providers.get("results"):
             await insert_providers(db_client, data=json.dumps(local_providers))
 
@@ -58,10 +60,8 @@ async def insert_providers_with_links():
                 providers=json.dumps(local_display_priorities),
             )
         else:
-            print(
-                f"Couldn't find providers in: {lp.country_code} "
-                f"in {insert_providers_with_links.__name__}"
-            )
+            skipped += 1
+            pbar.set_postfix(skipped=skipped)
 
 
 def fix_genre_ampersand(genres: dict) -> list[dict]:
