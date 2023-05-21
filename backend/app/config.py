@@ -62,8 +62,8 @@ class Settings(BaseSettings):
     # Postgres setting
     psql_user: str = "postgres"
     psql_pwd: str = "postgres"
-
     google_client_id: str = ""
+    discord_webhook_token: str = ""
 
 
 @lru_cache

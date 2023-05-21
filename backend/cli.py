@@ -4,6 +4,7 @@ import datetime
 import gzip
 import json
 import os
+import traceback
 import xml.etree.cElementTree as ET
 from math import ceil
 from pathlib import Path
@@ -284,27 +285,53 @@ async def clean_stale_media():
 @app.command()
 @coroutine
 async def full_setup(popularity: float = 1, chunk_size: int = 5000):
-    await insert_genres(db_client, data=json.dumps(fix_genre_ampersand(fetch_genres())))
-    await insert_countries(db_client, data=json.dumps(await fetch_countries()))
-    await insert_providers_with_links()
-    if get_settings().app_environment == Environment.DEVELOPMENT:
-        # Is ran at startup in production
-        search_client_config()
-    update_media(chunk_size=chunk_size, popularity=popularity)
-    # Removes before indexing MeiliSearch
-    remove_blacklisted_from_search()
+    try:
+        await insert_genres(
+            db_client, data=json.dumps(fix_genre_ampersand(fetch_genres()))
+        )
+        await insert_countries(db_client, data=json.dumps(await fetch_countries()))
+        await insert_providers_with_links()
+        if get_settings().app_environment == Environment.DEVELOPMENT:
+            # Is ran at startup in production
+            search_client_config()
+        update_media(chunk_size=chunk_size, popularity=popularity)
+        # Removes before indexing MeiliSearch
+        remove_blacklisted_from_search()
 
-    typer.echo("Waiting for indexing to finish...")
+        typer.echo("Waiting for indexing to finish...")
 
-    stats = await async_client.index("media").get_stats()
-
-    while stats.is_indexing:
-        await asyncio.sleep(1)
         stats = await async_client.index("media").get_stats()
 
-    echo_success("indexing finished")
+        while stats.is_indexing:
+            await asyncio.sleep(1)
+            stats = await async_client.index("media").get_stats()
 
-    add_imdb_ratings()
+        echo_success("indexing finished")
+
+        add_imdb_ratings()
+    except BaseException as e:
+        print("".join(traceback.TracebackException.from_exception(e).format()))
+        # Ping discord that it failed with stacktrace
+        if (
+            get_settings().app_environment == Environment.PRODUCTION
+            and get_settings().discord_webhook_token
+        ):
+            # Discord allows 2000 characters in the message
+            string_stacktrace = (
+                "```"
+                + "".join(traceback.TracebackException.from_exception(e).format())[
+                    :1900
+                ]
+                + "```"
+            )
+            with httpx.Client(http2=True) as client:
+                client.post(
+                    f"https://discord.com/api/webhooks/{get_settings().discord_webhook_token}",
+                    json={
+                        "content": "@everyone Daily full setup failed with the following stacktrace:\n"
+                        + string_stacktrace
+                    },
+                )
 
 
 @app.command()
