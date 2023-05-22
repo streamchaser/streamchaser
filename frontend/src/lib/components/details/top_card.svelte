@@ -53,7 +53,7 @@
                 text-neutral-content shadow-md"
   >
     {#if posterPath}
-      <figure class="pt-10 pr-10 pl-10 sm:p-6">
+      <figure class="pt-10 pr-10 pl-10 sm:p-6 aspect-auto">
         <img
           src="{IMG_W500}{posterPath}"
           class="object-contain sm:max-h-96 w-full rounded-box"
@@ -61,7 +61,7 @@
         />
       </figure>
     {:else}
-      <figure class="pt-10 pr-10 pl-10 sm:p-6">
+      <figure class="pt-10 pr-10 pl-10 sm:p-6 aspect-auto">
         <div
           class="h-96 bg-slate-100 object-contain sm:max-h-96 rounded-box
                 grid place-items-center"

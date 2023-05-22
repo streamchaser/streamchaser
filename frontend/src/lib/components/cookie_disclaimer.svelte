@@ -38,7 +38,7 @@
   }
 
   onMount(async () => {
-    setTimeout(() => (loadDisclaimer = true), 100)
+    setTimeout(() => (loadDisclaimer = true), 500)
   })
 </script>
 
