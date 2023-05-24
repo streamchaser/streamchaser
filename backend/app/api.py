@@ -12,6 +12,7 @@ from tqdm import tqdm
 from app.api_helpers import get_providers
 from app.config import get_settings
 from app.models import TV, Genre, Movie, Person
+from app.util import log
 
 tmdb_url = get_settings().tmdb_url
 tmdb_key = get_settings().tmdb_key
@@ -24,7 +25,7 @@ def fetch_jsongz_files():
     while no_data:
         date = datetime.now() - timedelta(day)
 
-        print(f"Downloading dumps: {date.date()}")
+        log.info(f"Downloading dumps: {date.date()}")
 
         directory = "../json.gz_dumps/"
         Path(directory).mkdir(exist_ok=True)
@@ -72,22 +73,26 @@ def fetch_jsongz_files():
 
             with open(movie_path, "wb") as f:
                 f.write(movie_response.raw.read())
-                print(f"[{movie_path}] downloaded succesfully".replace(directory, ""))
+                log.info(
+                    f"[{movie_path}] downloaded succesfully".replace(directory, "")
+                )
 
             with open(tv_path, "wb") as f:
                 f.write(tv_response.raw.read())
-                print(f"[{tv_path}] downloaded succesfully".replace(directory, ""))
+                log.info(f"[{tv_path}] downloaded succesfully".replace(directory, ""))
 
             with open(person_path, "wb") as f:
                 f.write(person_response.raw.read())
-                print(f"[{person_path}] downloaded succesfully".replace(directory, ""))
+                log.info(
+                    f"[{person_path}] downloaded succesfully".replace(directory, "")
+                )
         else:
             # if we have tried to get data for more than 30 days we give up
             if day >= 30:
-                print("No downloads for 30 days - giving up")
+                log.info("No downloads for 30 days - giving up")
                 exit(1)
 
-            print("Downloads failed - trying 1 day earlier")
+            log.info("Downloads failed - trying 1 day earlier")
             day += 1
 
 
@@ -116,7 +121,7 @@ def fetch_media_ids(
             elif "person" in file:
                 person_ids = list(map(lambda x: f"p{x['id']}", filtered))
             else:
-                print('Filename doesn\'t start with "movie", "tv" or "person"')
+                log.info('Filename doesn\'t start with "movie", "tv" or "person"')
 
     return movie_ids, tv_ids, person_ids
 

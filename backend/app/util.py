@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from functools import wraps
 from typing import Generator, Tuple
 
@@ -10,6 +11,13 @@ from requests import status_codes
 
 from app.config import get_settings
 from app.models import GoogleAuth
+
+log = logging
+log.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(filename)s:%(lineno)d] - %(message)s",
+    handlers=[logging.FileHandler("logs.txt"), logging.StreamHandler()],
+)
 
 
 def chunkify(lst: list, size: int) -> Tuple[Generator[list, None, None], int]:

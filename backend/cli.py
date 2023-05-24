@@ -23,7 +23,7 @@ from app.db.database_service import (
 )
 from app.db.queries.generated import insert_countries, insert_genres
 from app.db.search import async_client, client, search_client_config
-from app.util import chunkify, coroutine
+from app.util import chunkify, coroutine, log
 from meilisearch.errors import MeilisearchApiError
 from tqdm import tqdm
 
@@ -42,7 +42,8 @@ def add_imdb_ratings(min_votes: int = 50):
     imdb_ratings = {}
 
     if not res.status_code == 200:
-        echo_warning("Failed to download imdb file")
+        log.info("Failed to download IMDb file")
+        echo_warning("Failed to download IMDb file")
         return
 
     # First we remove the old files
@@ -207,7 +208,7 @@ def update_media(chunk_size: int, popularity: float = 1):
     """Sends media ids to our internal update-media endpoint in chunks"""
     movie_ids, tv_ids, person_ids = fetch_media_ids(popularity)
 
-    print(
+    log.info(
         f"\nAbout to update {len(movie_ids)} movies, {len(tv_ids)} "
         f"TV shows and {len(person_ids)} people "
         f"in chunks of {chunk_size}"
@@ -232,6 +233,7 @@ def update_media(chunk_size: int, popularity: float = 1):
                     "http://internal:8888/update-media", json={"ids": id_chunk}
                 )
                 if res.status_code != 200:
+                    log.info(res.text)
                     echo_warning(res.text)
                 else:
                     # Update progress bar with status
