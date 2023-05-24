@@ -42,7 +42,7 @@ def add_imdb_ratings(min_votes: int = 50):
     imdb_ratings = {}
 
     if not res.status_code == 200:
-        log.info("Failed to download IMDb file")
+        log.error("Failed to download IMDb file")
         echo_warning("Failed to download IMDb file")
         return
 
@@ -233,7 +233,7 @@ def update_media(chunk_size: int, popularity: float = 1):
                     "http://internal:8888/update-media", json={"ids": id_chunk}
                 )
                 if res.status_code != 200:
-                    log.info(res.text)
+                    log.error(res.text)
                     echo_warning(res.text)
                 else:
                     # Update progress bar with status

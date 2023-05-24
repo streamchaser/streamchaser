@@ -43,7 +43,7 @@ async def lookup_country():
         if country_code in get_settings().supported_country_codes:
             return country_code
 
-        log.info("Unsupported:", country_code)
+        log.warning("Unsupported:", country_code)
         return JSONResponse(
             status_code=400,
             content={

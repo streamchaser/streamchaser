@@ -15,7 +15,7 @@ from app.models import GoogleAuth
 log = logging
 log.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s [%(filename)s:%(lineno)d] - %(message)s",
+    format="%(asctime)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s",
     handlers=[logging.FileHandler("logs.txt"), logging.StreamHandler()],
 )
 

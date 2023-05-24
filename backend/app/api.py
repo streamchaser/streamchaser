@@ -89,10 +89,10 @@ def fetch_jsongz_files():
         else:
             # if we have tried to get data for more than 30 days we give up
             if day >= 30:
-                log.info("No downloads for 30 days - giving up")
+                log.error("No downloads for 30 days - giving up")
                 exit(1)
 
-            log.info("Downloads failed - trying 1 day earlier")
+            log.warning("Downloads failed - trying 1 day earlier")
             day += 1
 
 
@@ -121,7 +121,7 @@ def fetch_media_ids(
             elif "person" in file:
                 person_ids = list(map(lambda x: f"p{x['id']}", filtered))
             else:
-                log.info('Filename doesn\'t start with "movie", "tv" or "person"')
+                log.error('Filename doesn\'t start with "movie", "tv" or "person"')
 
     return movie_ids, tv_ids, person_ids
 
