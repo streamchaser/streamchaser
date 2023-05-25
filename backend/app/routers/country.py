@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from starlette_context import context
 
 from app.config import Environment, get_settings
+from app.util import log
 
 router = APIRouter(
     prefix="/country",
@@ -33,7 +34,7 @@ async def lookup_country():
 
     payload = res.json()
     if payload.get("code") == "RESERVED_IP_ADDRESS":
-        print("Reserved(probably a local address):", ip)
+        log.info("Reserved(probably a local address):", ip)
         return JSONResponse(status_code=400, content={"message": "Reserved address."})
 
     if payload.get("location"):
@@ -42,7 +43,7 @@ async def lookup_country():
         if country_code in get_settings().supported_country_codes:
             return country_code
 
-        print("Unsupported:", country_code)
+        log.warning("Unsupported:", country_code)
         return JSONResponse(
             status_code=400,
             content={

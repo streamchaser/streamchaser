@@ -38,6 +38,7 @@ frontend/build
 frontend/.svelte-kit
 /letsencrypt
 backend/json.gz_dumps
+backend/logs.txt
 internal/tmp
 internal/logs.txt
 internal/docs/*

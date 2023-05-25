@@ -13,6 +13,7 @@ from app.db.queries.generated import (
     update_country_providers,
 )
 from app.db.search import async_client, client
+from app.util import log
 from tqdm import tqdm
 
 LocalProviders = namedtuple("LocalProviders", ["country_code", "providers"])
@@ -33,7 +34,7 @@ async def insert_providers_with_links():
     countries = await select_countries(db_client)
 
     local_providers = []
-    print("Fetching provider data. Amount:", len(countries))
+    log.info(f"Fetching provider data. Amount: {len(countries)}")
     async with httpx.AsyncClient() as client:
         tasks = [fetch_local_providers(client, country.value) for country in countries]
         local_providers: list[LocalProviders] = await asyncio.gather(*tasks)
@@ -106,7 +107,7 @@ async def fetch_countries() -> list[dict[str, str]]:
 async def remove_stale_media(days_for_expiry=3):
     """Will remove all media that havn't been updated in 3 days
     (the ones that float around 1 popularity or have been removed by TMDB)"""
-    print(f"Removing media that hasn't been updated the last {days_for_expiry} days")
+    log.info(f"Removing media that hasn't been updated the last {days_for_expiry} days")
     expiry_date = (date.today() - timedelta(days_for_expiry)).strftime("%s")
 
     estimated_total_hits = 1000
