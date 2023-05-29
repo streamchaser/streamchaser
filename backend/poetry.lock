@@ -288,20 +288,20 @@ beautifulsoup4 = "*"
 
 [[package]]
 name = "google-auth"
-version = "2.18.1"
+version = "2.19.0"
 description = "Google Authentication Library"
 category = "main"
 optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
+python-versions = ">=3.6"
 files = [
-    {file = "google-auth-2.18.1.tar.gz", hash = "sha256:d7a3249027e7f464fbbfd7ee8319a08ad09d2eea51578575c4bd360ffa049ccb"},
-    {file = "google_auth-2.18.1-py2.py3-none-any.whl", hash = "sha256:55a395cdfd3f3dd3f649131d41f97c17b4ed8a2aac1be3502090c716314e8a37"},
+    {file = "google-auth-2.19.0.tar.gz", hash = "sha256:f39d528077ac540793dd3c22a8706178f157642a67d874db25c640b7fead277e"},
+    {file = "google_auth-2.19.0-py2.py3-none-any.whl", hash = "sha256:be617bfaf77774008e9d177573f782e109188c8a64ae6e744285df5cea3e7df6"},
 ]
 
 [package.dependencies]
 cachetools = ">=2.0.0,<6.0"
 pyasn1-modules = ">=0.2.1"
-rsa = {version = ">=3.1.4,<5", markers = "python_version >= \"3.6\""}
+rsa = ">=3.1.4,<5"
 six = ">=1.9.0"
 urllib3 = "<2.0"
 
@@ -964,4 +964,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "40e6117fe0b1dcb20ddd7dd10453bc1fd34789829af2941e6d8d3f121ff2e32a"
+content-hash = "6528efa2a92eeccf4ee9c65b83f1ee7c50bfe546e171ce1f0438f86b4a010058"
