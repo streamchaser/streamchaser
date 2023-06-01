@@ -6,7 +6,6 @@
   import type { TV } from "$lib/generated"
 
   export let seasons: TV["seasons"]
-  console.log("SEASONS:", seasons)
 </script>
 
 <div class="container p-2">
@@ -15,23 +14,26 @@
     options={{
       lazyLoad: "sequential",
       drag: "free",
+      snap: true,
+      focus: "center",
       pagination: false,
       gap: "1rem",
       start: 1,
       omitEnd: true,
       mediaQuery: "min",
       breakpoints: {
-        360: { perPage: 1 },
-        640: { perPage: 2 },
-        768: { perPage: 3 },
-        1024: { perPage: 4 },
-        1280: { perPage: 5 },
         1536: { perPage: 6 },
+        1280: { perPage: 5 },
+        1024: { perPage: 4 },
+        768: { perPage: 3 },
+        640: { perPage: 2 },
+        480: { perPage: 1 },
+        320: { perPage: 1 },
       },
     }}
   >
     {#each seasons as season}
-      <SplideSlide>
+      <SplideSlide class="splide-seasons">
         <div class="card h-[350px] aspect-[342/513] bg-base-100 image-full">
           {#if season.poster_path}
             <figure>
@@ -69,3 +71,12 @@
     {/each}
   </Splide>
 </div>
+
+<style global>
+  @media (min-width: 320px) {
+    :global(.splide-seasons) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+</style>
