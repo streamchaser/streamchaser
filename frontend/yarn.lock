@@ -290,10 +290,10 @@
     "@rollup/plugin-node-resolve" "^15.0.1"
     rollup "^3.7.0"
 
-"@sveltejs/adapter-vercel@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-3.0.0.tgz#901aacb533b731020637613506312cc56f74efd3"
-  integrity sha512-XHbgdYtEDM70tRAN3AV5mQAis/9yLka7mLEWjzuhMwo377U1jfwxBzq2YYZdL4OF3rQnegR3yf92fTWnkEILPQ==
+"@sveltejs/adapter-vercel@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-vercel/-/adapter-vercel-3.0.1.tgz#d266140f56721062fc1f4f977746f3548396605c"
+  integrity sha512-PBY3YRm7Q7Prax07mxD/rvcho2CntGkYncAIkz2DtG5NTcVG5JZ1RM627it5zYYtc2/RB3YjMkZuCMBqDCiPkA==
   dependencies:
     "@vercel/nft" "^0.22.6"
     esbuild "^0.17.18"
