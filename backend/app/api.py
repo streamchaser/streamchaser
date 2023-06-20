@@ -248,7 +248,8 @@ def fetch_genres() -> dict:
     return {**movie_genre_dict, **tv_genre_dict}
 
 
-def get_recommendations(recommendations: dict) -> list[dict]:
+def get_recommendations(recommendations: dict) -> list[dict] | None:
     """Gets list of recommended movies for a movie"""
 
-    return [result for result in recommendations["results"]]
+    if recommendations.get("results"):
+        return [result for result in recommendations["results"]]

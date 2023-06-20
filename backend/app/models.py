@@ -70,7 +70,7 @@ class Movie(BaseModel):
     runtime: int | None
     flatrate_providers: list[dict] | None
     free_providers: list[dict] | None
-    recommendations: list[dict]
+    recommendations: list[dict] | None
     poster_path: str | None
     popularity: int
     backdrop_path: str | None
