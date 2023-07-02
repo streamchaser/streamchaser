@@ -110,7 +110,7 @@ services:
 
   edgedb:
     container_name: edgedb
-    image: edgedb/edgedb
+    image: edgedb/edgedb:2.7
     environment:
       EDGEDB_SERVER_TLS_CERT_MODE: generate_self_signed
       EDGEDB_SERVER_ADMIN_UI: enabled
