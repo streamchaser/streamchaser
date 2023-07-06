@@ -5,6 +5,7 @@
   import Auth from "$lib/components/sign_in/auth.svelte"
   import ThemeSelector from "$lib/components/theme_selector.svelte"
   import { env } from "$env/dynamic/public"
+  import { page } from "$app/stores"
   import SearchDropdown from "../search_dropdown.svelte"
   import MediaQuery from "svelte-media-query"
 
@@ -22,7 +23,7 @@
     </a>
   </div>
   <MediaQuery query="(min-width: 1100px)" let:matches>
-    {#if matches}
+    {#if matches && $page.url.pathname != "/"}
       <SearchDropdown />
     {/if}
   </MediaQuery>
