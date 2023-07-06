@@ -24,7 +24,7 @@
   <SvelteSelectCss tailwind="w-96">
     <Select
       loadOptions={search}
-      placeholder="Seach..."
+      placeholder="Search..."
       clearable={false}
       on:input={e => {
         window.location.href = mediaIdToUrlConverter(e.detail.id)
