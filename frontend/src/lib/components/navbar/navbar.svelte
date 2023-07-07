@@ -5,6 +5,9 @@
   import Auth from "$lib/components/sign_in/auth.svelte"
   import ThemeSelector from "$lib/components/theme_selector.svelte"
   import { env } from "$env/dynamic/public"
+  import { page } from "$app/stores"
+  import SearchDropdown from "../search_dropdown.svelte"
+  import MediaQuery from "svelte-media-query"
 
   export let countries: SelectCountriesResult[]
 </script>
@@ -19,7 +22,12 @@
       />
     </a>
   </div>
-  <div class="flex-1 px-2 mx-2" />
+  <MediaQuery query="(min-width: 1100px)" let:matches>
+    {#if matches && $page.url.pathname != "/"}
+      <SearchDropdown />
+    {/if}
+  </MediaQuery>
+  <div class="flex-1 pr-2 mx-2" />
   <div class="flex-none">
     <div class="items-stretch hidden sm:flex">
       <a

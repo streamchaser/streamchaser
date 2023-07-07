@@ -127,6 +127,18 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz#8cfaf2ff603e9aabb910e9c0558c26cf32744061"
   integrity sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA==
 
+"@floating-ui/core@^1.1.0", "@floating-ui/core@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.3.1.tgz#4d795b649cc3b1cbb760d191c80dcb4353c9a366"
+  integrity sha512-Bu+AMaXNjrpjh41znzHqaz3r2Nr8hHuHZT6V2LBKMhyMl0FgKA62PNYbqnfgmzOhoWZj70Zecisbo4H1rotP5g==
+
+"@floating-ui/dom@^1.1.0", "@floating-ui/dom@^1.2.1":
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-1.4.3.tgz#0854a3297ea03894932381f3ea1403fab3a6e602"
+  integrity sha512-nB/68NyaQlcdY22L+Fgd1HERQ7UGv7XFN+tPxwrEfQL4nKtAP/jIZnZtpUlXbtV+VEGHh6W/63Gy2C5biWI3sA==
+  dependencies:
+    "@floating-ui/core" "^1.3.1"
+
 "@jridgewell/gen-mapping@^0.3.2":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.3.tgz#7e02e6eb5df901aaedb08514203b096614024098"
@@ -1606,6 +1618,14 @@ svelte-check@^3.3.2:
     svelte-preprocess "^5.0.3"
     typescript "^5.0.3"
 
+svelte-floating-ui@1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/svelte-floating-ui/-/svelte-floating-ui-1.2.8.tgz#1817473a1a26c17de6019da4603111b48ef8e7e8"
+  integrity sha512-8Ifi5CD2Ui7FX7NjJRmutFtXjrB8T/FMNoS2H8P81t5LHK4I9G4NIs007rLWG/nRl7y+zJUXa3tWuTjYXw/O5A==
+  dependencies:
+    "@floating-ui/core" "^1.1.0"
+    "@floating-ui/dom" "^1.1.0"
+
 svelte-hmr@^0.15.1:
   version "0.15.1"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.15.1.tgz#d11d878a0bbb12ec1cba030f580cd2049f4ec86b"
@@ -1632,9 +1652,13 @@ svelte-preprocess@^5.0.3:
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
 
-"svelte-select@https://github.com/AndreasPB/svelte-select":
-  version "4.4.7"
-  resolved "https://github.com/AndreasPB/svelte-select#b0bb0b6a66fbe2866d218a58ea18bf5afb3ece78"
+svelte-select@^5.6.1:
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/svelte-select/-/svelte-select-5.6.1.tgz#2626748c92ff3983c75f273d87afba59ffef3b29"
+  integrity sha512-Powj91VAWyaNMSSOQ0E29UMTw/ExWsHEsA83H7yQgfji2S2DhG6Rs5qZHslZ+ihbCPxXel5uEzwLsSqDABkQDw==
+  dependencies:
+    "@floating-ui/dom" "^1.2.1"
+    svelte-floating-ui "1.2.8"
 
 svelte@^3.59.1:
   version "3.59.1"

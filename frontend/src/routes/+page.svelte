@@ -4,6 +4,7 @@
   import Select from "svelte-select"
   import MediaSearch from "$lib/components/media_search.svelte"
   import Filters from "$lib/components/filters.svelte"
+  import SvelteSelectCSS from "$lib/components/svelte_select_css.svelte"
   import Head from "$lib/components/head.svelte"
   import {
     currentCountry,
@@ -163,65 +164,44 @@
     />
     <Filters {search} />
   </div>
-  <div
-    class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
-    style="
-             --borderRadius: var(--rounded-btn, .5rem);
-             --background: hsl(var(--b1));
-             --border: 1px solid hsl(var(--p));
-             --borderFocusColor: hsl(var(--p));
-             --borderHoverColor: hsl(var(--pf));
-             --multiItemBG: hsl(var(--p));
-             --multiItemColor: hsl(var(--pc));
-             --multiItemActiveBG: hsl(var(--pf));
-             --multiItemActiveColor: hsl(var(--bc));
-             --clearSelectHoverColor: hsl(var(--pf));
-             --itemIsActiveBG: hsl(var(--pc));
-             --itemColor: hsl(var(--nc));
-             --listBackground: hsl(var(--n));
-             --itemHoverBG: hsl(var(--p));
-             --itemHoverColor: hsl(var(--pc));
-             --inputColor: hsl(var(--bc));
-             --clearSelectFocusColor: hsl(var(--p));
-              "
-  >
+  <SvelteSelectCSS tailwind="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3">
     <div class="mb-2 sm:mb-0">
       <Select
-        on:select={e => {
+        on:input={e => {
           $currentGenres = e.detail ? e.detail : []
           setViewportToDefault()
           search()
         }}
-        on:clear={e => {
-          $currentGenres = e.detail
-            ? $currentGenres.splice($currentGenres.indexOf(e.detail.value))
-            : []
+        on:clear={() => {
+          $currentGenres = []
+          setViewportToDefault()
+          search()
         }}
-        value={$currentGenres.length ? $currentGenres : null}
         items={data.genres}
-        isMulti={true}
+        multiple={true}
+        value={$currentGenres}
         placeholder="Select genres..."
       />
     </div>
     <div>
       <Select
-        on:select={e => {
+        on:input={e => {
           $currentProviders = e.detail ? e.detail : []
           setViewportToDefault()
           search()
         }}
-        on:clear={e => {
-          $currentProviders = e.detail
-            ? $currentProviders.splice($currentProviders.indexOf(e.detail.value))
-            : []
+        on:clear={() => {
+          $currentProviders = []
+          setViewportToDefault()
+          search()
         }}
-        value={$currentProviders.length ? $currentProviders : null}
         items={data.providers[0].providers.map(v => v.provider_name)}
-        isMulti={true}
+        value={$currentProviders}
+        multiple={true}
         placeholder="Select providers..."
       />
     </div>
-  </div>
+  </SvelteSelectCSS>
 </div>
 <MediaSearch
   {meilisearch}
