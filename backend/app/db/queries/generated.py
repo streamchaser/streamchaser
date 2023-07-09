@@ -18,6 +18,8 @@
 #     'backend/app/db/queries/update_user_custom_lists_remove.edgeql'
 #     'backend/app/db/queries/update_user_favorites_add.edgeql'
 #     'backend/app/db/queries/update_user_favorites_remove.edgeql'
+#     'backend/app/db/queries/update_user_provider_add.edgeql'
+#     'backend/app/db/queries/update_user_provider_remove.edgeql'
 #     'backend/app/db/queries/update_user_watch_list_add.edgeql'
 #     'backend/app/db/queries/update_user_watch_list_remove.edgeql'
 # WITH:
@@ -525,6 +527,50 @@ async def update_user_favorites_remove(
         """,
         email=email,
         streamchaser_id=streamchaser_id,
+    )
+
+
+async def update_user_provider_add(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+    provider_id: int,
+) -> InsertUserResult | None:
+    return await executor.query_single(
+        """\
+        update User
+        filter .email = <str>$email
+        set {
+          providers += (
+            select Provider
+            filter .provider_id = <int16>$provider_id
+          )
+        };\
+        """,
+        email=email,
+        provider_id=provider_id,
+    )
+
+
+async def update_user_provider_remove(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+    provider_id: int,
+) -> InsertUserResult | None:
+    return await executor.query_single(
+        """\
+        update User
+        filter .email = <str>$email
+        set {
+          providers += (
+            select Provider
+            filter .provider_id = <int16>$provider_id
+          )
+        };\
+        """,
+        email=email,
+        provider_id=provider_id,
     )
 
 

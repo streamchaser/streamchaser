@@ -31,6 +31,8 @@ module default {
     # required property joined -> datetime;  # TODO: Could be kinda interesting
     # required property logged_in -> datetime;  # Maybe? Last time the user logged in
 
+    multi link providers -> Provider;
+
     multi link watch_list -> Media {
       property added -> datetime;
     };

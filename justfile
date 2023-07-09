@@ -10,7 +10,7 @@ db-ui:
   @echo https://localhost:5656/ui - Login information is on Discord
 
 generate-edgedb-python:
-  cd backend/ && poetry run edgedb-py -P 5656 --tls-security insecure --user edgedb --password secret && cd ../
+  cd backend/ && poetry run edgedb-py -P 5656 --tls-security insecure --user edgedb --password secret --file app/db/queries/generated.py && cd ../
 
 cli command="--help":
   docker-compose exec backend python3 cli.py {{command}}
