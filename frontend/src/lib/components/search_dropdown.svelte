@@ -1,19 +1,47 @@
 <script lang="ts">
-  import type { Meilisearch } from "$lib/generated"
+  import type { Hit, Meilisearch } from "$lib/generated"
+  import { auth } from "$lib/stores/stores"
   import { PYTHON_API } from "$lib/variables"
   import Select from "svelte-select"
   import { mediaIdToUrlConverter } from "$lib/utils"
   import SvelteSelectCss from "./svelte_select_css.svelte"
 
+  export let placeholder: string = "Search..."
+  export let listId: string = undefined
+  export let listType: string = undefined
+  export let mediaList: Hit[] = undefined
+
   let meilisearch: Meilisearch
 
+  const itemId = "id"
   const SEARCH_URL = `${PYTHON_API}/search/`
+
+  const addMediaToList = async (media: Hit, listId: string, listType: string) => {
+    const res = await fetch(
+      PYTHON_API +
+        `/${listType}${listType == "custom_lists" ? "/" + listId : ""}` +
+        "?streamchaser_id=" +
+        media.id +
+        "&encoded_jwt=" +
+        $auth,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    if (res.status == 498) {
+      $auth = ""
+    } else if (res.ok) {
+      mediaList = [...mediaList, media]
+    }
+  }
 
   const search = async (filterText: string) => {
     if (!filterText.length) {
       return Promise.resolve([])
     }
-
     const res = await fetch(SEARCH_URL + filterText + "?limit=10")
     meilisearch = await res.json()
     return meilisearch.hits
@@ -23,14 +51,24 @@
 <div>
   <SvelteSelectCss tailwind="w-96">
     <Select
+      {placeholder}
+      {itemId}
       loadOptions={search}
-      placeholder="Search..."
       clearable={false}
       on:input={e => {
-        window.location.href = mediaIdToUrlConverter(e.detail.id)
+        if (listId && listType) {
+          addMediaToList(e.detail, listId, listType)
+        } else {
+          window.location.href = mediaIdToUrlConverter(e.detail.id)
+        }
       }}
     >
-      <a slot="item" let:item href={mediaIdToUrlConverter(item.id)}>
+      <a
+        class="cursor-pointer"
+        slot="item"
+        let:item
+        href={listId && listType ? null : mediaIdToUrlConverter(item.id)}
+      >
         <div class="flex flex-1 items-center truncate">
           <div class="badge badge-secondary justify-center mr-2 w-8">
             {#if item.id.startsWith("p")}
