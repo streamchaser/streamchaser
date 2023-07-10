@@ -27,7 +27,7 @@ async def _(country_code):
 
 @router.post("", response_model=InsertUserResult | None)
 async def add_user_provider(provider_id: int, auth: GoogleAuth = Depends(decode_jwt)):
-    """Gets the user's custom lists"""
+    """Adds a provider to the user"""
 
     return await update_user_provider_add(
         db_client, email=auth.email, provider_id=provider_id
@@ -38,7 +38,7 @@ async def add_user_provider(provider_id: int, auth: GoogleAuth = Depends(decode_
 async def remove_user_provider(
     provider_id: int, auth: GoogleAuth = Depends(decode_jwt)
 ):
-    """Gets the user's custom lists"""
+    """Removes a provider from the user"""
 
     return await update_user_provider_remove(
         db_client, email=auth.email, provider_id=provider_id
