@@ -8,8 +8,10 @@
 #     'backend/app/db/queries/select_countries_with_providers.edgeql'
 #     'backend/app/db/queries/select_country_providers.edgeql'
 #     'backend/app/db/queries/select_genres.edgeql'
+#     'backend/app/db/queries/select_user.edgeql'
 #     'backend/app/db/queries/select_user_custom_lists.edgeql'
 #     'backend/app/db/queries/select_user_favorites.edgeql'
+#     'backend/app/db/queries/select_user_providers.edgeql'
 #     'backend/app/db/queries/select_user_watch_list.edgeql'
 #     'backend/app/db/queries/update_country_providers.edgeql'
 #     'backend/app/db/queries/update_custom_list_add.edgeql'
@@ -108,32 +110,57 @@ class SelectGenresResult(NoPydanticValidation):
 @dataclasses.dataclass
 class SelectUserCustomListsResult(NoPydanticValidation):
     id: uuid.UUID
-    custom_lists: list[SelectUserCustomListsResultCustomListsItem]
-
-
-@dataclasses.dataclass
-class SelectUserCustomListsResultCustomListsItem(NoPydanticValidation):
-    id: uuid.UUID
-    name: str
-    media: list[SelectUserCustomListsResultCustomListsItemMediaItem]
-
-
-@dataclasses.dataclass
-class SelectUserCustomListsResultCustomListsItemMediaItem(NoPydanticValidation):
-    id: uuid.UUID
-    streamchaser_id: str
+    custom_lists: list[SelectUserResultCustomListsItem]
 
 
 @dataclasses.dataclass
 class SelectUserFavoritesResult(NoPydanticValidation):
     id: uuid.UUID
-    favorites: list[SelectUserCustomListsResultCustomListsItemMediaItem]
+    favorites: list[SelectUserResultCustomListsItemMediaItem]
+
+
+@dataclasses.dataclass
+class SelectUserProvidersResult(NoPydanticValidation):
+    id: uuid.UUID
+    providers: list[SelectUserResultProvidersItem]
+
+
+@dataclasses.dataclass
+class SelectUserResult(NoPydanticValidation):
+    id: uuid.UUID
+    email: str
+    name: str
+    custom_lists: list[SelectUserResultCustomListsItem]
+    favorites: list[SelectUserResultCustomListsItemMediaItem]
+    watch_list: list[SelectUserResultCustomListsItemMediaItem]
+    providers: list[SelectUserResultProvidersItem]
+
+
+@dataclasses.dataclass
+class SelectUserResultCustomListsItem(NoPydanticValidation):
+    id: uuid.UUID
+    name: str
+    media: list[SelectUserResultCustomListsItemMediaItem]
+
+
+@dataclasses.dataclass
+class SelectUserResultCustomListsItemMediaItem(NoPydanticValidation):
+    id: uuid.UUID
+    streamchaser_id: str
+
+
+@dataclasses.dataclass
+class SelectUserResultProvidersItem(NoPydanticValidation):
+    id: uuid.UUID
+    provider_id: int
+    logo_path: str | None
+    provider_name: str
 
 
 @dataclasses.dataclass
 class SelectUserWatchListResult(NoPydanticValidation):
     id: uuid.UUID
-    watch_list: list[SelectUserCustomListsResultCustomListsItemMediaItem]
+    watch_list: list[SelectUserResultCustomListsItemMediaItem]
 
 
 @dataclasses.dataclass
@@ -306,6 +333,46 @@ async def select_genres(
     )
 
 
+async def select_user(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+) -> SelectUserResult | None:
+    return await executor.query_single(
+        """\
+        select User {
+          id,
+          email,
+          name,
+          custom_lists: {
+            id,
+            name,
+            media: {
+              id,
+              streamchaser_id
+              }
+            },
+          favorites: {
+            id,
+            streamchaser_id
+          },
+          watch_list: {
+            id,
+            streamchaser_id
+          },
+          providers: {
+            id,
+            provider_id,
+            logo_path,
+            provider_name
+          }
+        }
+        filter .email = <str>$email\
+        """,
+        email=email,
+    )
+
+
 async def select_user_custom_lists(
     executor: edgedb.AsyncIOExecutor,
     *,
@@ -341,6 +408,28 @@ async def select_user_favorites(
           favorites: {
             id,
             streamchaser_id
+          }
+        }
+        filter .email = <str>$email\
+        """,
+        email=email,
+    )
+
+
+async def select_user_providers(
+    executor: edgedb.AsyncIOExecutor,
+    *,
+    email: str,
+) -> SelectUserProvidersResult | None:
+    return await executor.query_single(
+        """\
+        select User {
+          id,
+          providers: {
+            id,
+            provider_id,
+            logo_path,
+            provider_name
           }
         }
         filter .email = <str>$email\

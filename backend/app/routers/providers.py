@@ -4,7 +4,9 @@ from app.db.database import db_client
 from app.db.queries.generated import (
     InsertUserResult,
     SelectCountryProvidersResult,
+    SelectUserProvidersResult,
     select_country_providers,
+    select_user_providers,
     update_user_provider_add,
     update_user_provider_remove,
 )
@@ -23,6 +25,13 @@ async def _(country_code):
     """Reads all the providers from the selected country (sorted by display_priority)"""
 
     return await select_country_providers(db_client, country_code=country_code)
+
+
+@router.get("", response_model=SelectUserProvidersResult | None)
+async def get_user_providers(auth: GoogleAuth = Depends(decode_jwt)):
+    """Gets the user's custom lists"""
+
+    return await select_user_providers(db_client, email=auth.email)
 
 
 @router.post("", response_model=InsertUserResult | None)
