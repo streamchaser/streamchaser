@@ -652,7 +652,7 @@ async def update_user_provider_remove(
         update User
         filter .email = <str>$email
         set {
-          providers += (
+          providers -= (
             select Provider
             filter .provider_id = <int16>$provider_id
           )
