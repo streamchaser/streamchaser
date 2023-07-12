@@ -11,6 +11,8 @@
   let isDropdownOpen = false
   let user: User
 
+  console.log($auth)
+
   $: if ($auth) {
     user = parseJwt($auth)
     fetch(PYTHON_API + "/user?encoded_jwt=" + $auth, { method: "POST" }).then(res => {

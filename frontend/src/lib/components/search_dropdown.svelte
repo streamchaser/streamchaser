@@ -51,6 +51,7 @@
 <div>
   <SvelteSelectCss tailwind="w-96">
     <Select
+      class="z-50"
       {placeholder}
       {itemId}
       loadOptions={search}

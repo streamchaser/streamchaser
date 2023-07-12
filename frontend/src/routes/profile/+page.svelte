@@ -1,19 +1,26 @@
 <script lang="ts">
   import { auth } from "$lib/stores/stores"
-  import { hitProviderAmounts, parseJwt, sleep } from "$lib/utils"
+  import { hitProviderAmounts, parseJwt } from "$lib/utils"
   import type { User } from "$lib/types"
+  import type { Provider } from "$lib/generated"
   import MediaCard from "$lib/components/media_card.svelte"
   import { currentCountry } from "$lib/stores/preferences"
   import { IMG_ORIGINAL, PYTHON_API } from "$lib/variables"
   import SearchDropdown from "$lib/components/search_dropdown.svelte"
+  import SearchProvidersDropdown from "$lib/components/search_providers_dropdown.svelte"
 
   let user: User
   let newListName: string
 
+  // Theese variables are used to replicate the state of
+  // the API in svelte. This is needed since
+  // we everything to be fast and smooth, and
+  // not need to reload all items on every change
   // TODO: Type theese
   let favoriteList: any
   let watchList: any
   let customLists: any
+  let userProviders: any
 
   $: if ($auth) {
     user = parseJwt($auth)
@@ -36,6 +43,37 @@
       }
     }
     return json
+  }
+
+  const getProviders = async () => {
+    const res = await fetch(PYTHON_API + "/providers?encoded_jwt=" + $auth)
+    const json = await res.json()
+
+    if (res.status == 498) {
+      $auth = ""
+    } else if (res.ok) {
+      userProviders = json.providers
+    }
+
+    return json
+  }
+
+  const deleteProvider = async (providerId: number) => {
+    const res = await fetch(
+      PYTHON_API + "/providers?provider_id=" + providerId + "&encoded_jwt=" + $auth,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+    if (res.status == 498) {
+      $auth = ""
+    } else if (res.ok) {
+      userProviders = userProviders.filter((i: Provider) => i.provider_id != providerId)
+    }
+    return await res.json()
   }
 
   const deleteCustomList = async (listId: string) => {
@@ -101,28 +139,6 @@
 
     return media.hits
   }
-
-  //TODO: This is temp data mocking what backend will return
-  const providers = [
-    {
-      provider_name: "Acorn TV",
-      display_priority: 16,
-      provider_id: 87,
-      logo_path: "/5P99DkK1jVs95KcE8bYG9MBtGQ.jpg",
-    },
-    {
-      provider_name: "C More",
-      display_priority: 5,
-      provider_id: 77,
-      logo_path: "/pCIkSBek0aZfPQzOn9gfazuYaLV.jpg",
-    },
-    {
-      provider_name: "Netflix",
-      display_priority: 0,
-      provider_id: 8,
-      logo_path: "/t2yyOv40HZeVlLjYsCsPHnWLk4W.jpg",
-    },
-  ]
 </script>
 
 <div class="flex justify-center pb-5">
@@ -138,13 +154,48 @@
 </div>
 
 <h1 class="text-center text-3xl pt-5 pb-5">My providers</h1>
+<div class="flex justify-center pb-5">
+  <SearchProvidersDropdown bind:providerList={userProviders} />
+</div>
 <div class="flex justify-center">
-  {#each providers as provider}
-    <img src="{IMG_ORIGINAL}{provider.logo_path}" alt={provider.provider_name} />
-  {/each}
+  {#await getProviders() then _}
+    <div class="avatar-group -space-x-6">
+      {#each userProviders as provider}
+        <div class="static avatar">
+          <div class="sm:w-24 w-20">
+            <img
+              src="{IMG_ORIGINAL}{provider.logo_path}"
+              alt={provider.provider_name}
+            />
+          </div>
+
+          <button
+            class="absolute ml-1 btn btn-circle btn-xs btn-error z-10"
+            on:click={async () => {
+              deleteProvider(provider.provider_id)
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              /></svg
+            >
+          </button>
+        </div>
+      {/each}
+    </div>
+  {/await}
 </div>
 
-<h1 class="text-center text-3xl pt-5 pb-5">Lists</h1>
+<h1 class="text-center text-3xl pt-5 pb-5">My lists</h1>
 {#await getList("favorites") then list}
   {#await getMedia(list.favorites, "favorites") then _}
     <div class="collapse collapse-arrow border border-neutral rounded-box bg-base-300">
@@ -160,12 +211,16 @@
         />
         <div
           class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
-                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-2 pb-4"
+                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-4 pb-4"
         >
           {#if favoriteList.favorites.length}
             {#each favoriteList.favorites as hit, index}
               <div class="p-1">
                 <MediaCard
+                  listId={list.id}
+                  listType={"favorites"}
+                  deleteButton={true}
+                  bind:mediaList={favoriteList.favorites}
                   media={hit}
                   mediaIndex={index}
                   providerAmounts={hitProviderAmounts(
@@ -204,12 +259,16 @@
         />
         <div
           class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
-                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-2 pb-4"
+                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-4 pb-4"
         >
           {#if watchList.watch_list.length}
             {#each watchList.watch_list as hit, index}
               <div class="p-1">
                 <MediaCard
+                  listId={list.id}
+                  listType={"watch_list"}
+                  deleteButton={true}
+                  bind:mediaList={watchList.watch_list}
                   media={hit}
                   mediaIndex={index}
                   providerAmounts={hitProviderAmounts(
@@ -251,12 +310,16 @@
           />
           <div
             class="grid grid-cols-2 2xl:grid-cols-7 xl:grid-cols-6 lg:grid-cols-5
-                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-2 pb-4"
+                    md:grid-cols-4 sm:grid-cols-3 gap-2 pt-4 pb-4"
           >
             {#if customLists.custom_lists[index].media.length}
               {#each customLists.custom_lists[index].media as hit, mediaIndex}
                 <div class="p-1">
                   <MediaCard
+                    listId={list.id}
+                    listType={"custom_lists"}
+                    deleteButton={true}
+                    bind:mediaList={customLists.custom_lists[index].media}
                     media={hit}
                     {mediaIndex}
                     providerAmounts={hitProviderAmounts(
