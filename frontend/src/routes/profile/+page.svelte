@@ -22,6 +22,8 @@
   let customLists: any
   let userProviders: any
 
+  let newListLoading = false
+
   $: if ($auth) {
     user = parseJwt($auth)
   }
@@ -146,7 +148,7 @@
     <div class="card-body">
       <h2 class="card-title">Hi there, {user.given_name} 👋</h2>
       <p>
-        This page is your's, and you will be able to create personal lists, choose your
+        This page is yours, and you will be able to create personal lists, choose your
         providers, and more.
       </p>
     </div>
@@ -365,9 +367,10 @@
           class="input input-bordered"
         />
         <button
-          class="btn btn-primary"
+          class="btn {newListLoading ? 'loading' : 'btn-primary'}"
           disabled={newListName ? false : true}
           on:click={async () => {
+            newListLoading = true
             const res = await createCustomList(newListName)
             customLists.custom_lists = [
               ...customLists.custom_lists,
@@ -378,8 +381,9 @@
               },
             ]
             newListName = ""
+            newListLoading = false
           }}
-          >+
+          >{newListLoading ? "" : "+"}
         </button>
       </div>
     </div>

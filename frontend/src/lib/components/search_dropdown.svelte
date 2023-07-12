@@ -49,7 +49,7 @@
 </script>
 
 <div>
-  <SvelteSelectCss tailwind="w-96">
+  <SvelteSelectCss tailwind="w-80 sm:w-96">
     <Select
       class="z-50"
       {placeholder}
