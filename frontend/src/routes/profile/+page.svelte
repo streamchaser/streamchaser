@@ -1,6 +1,7 @@
 <script lang="ts">
   import { auth } from "$lib/stores/stores"
   import { hitProviderAmounts, parseJwt } from "$lib/utils"
+  import Head from "$lib/components/head.svelte"
   import type { User } from "$lib/types"
   import type { Provider } from "$lib/generated"
   import MediaCard from "$lib/components/media_card.svelte"
@@ -142,6 +143,11 @@
     return media.hits
   }
 </script>
+
+<Head
+  title={user.given_name + " custom page"}
+  description={"This page is yours, and you will be able to create personal lists, choose your providers, and more."}
+/>
 
 <div class="flex justify-center pb-5">
   <div class="card w-96 bg-neutral shadow-xl">

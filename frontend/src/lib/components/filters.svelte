@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { filters, sorting } from "$lib/stores/preferences"
+  import { currentProviders, filters, sorting } from "$lib/stores/preferences"
+  import { auth } from "$lib/stores/stores"
+  import { PYTHON_API } from "$lib/variables"
 
   const contentTypes = ["Filters", "Sorting"]
 
@@ -172,6 +174,30 @@
             class="range"
           />
           <br />
+          {#if $auth}
+            <button
+              class="btn btn-xs btn-outline"
+              on:click={async () => {
+                const res = await fetch(PYTHON_API + "/providers?encoded_jwt=" + $auth)
+                const json = await res.json()
+
+                if (res.status == 498) {
+                  $auth = ""
+                } else if (res.ok) {
+                  $currentProviders = []
+                  for (let i = 0; i < json.providers.length; i++) {
+                    const item = {
+                      index: i,
+                      value: json.providers[i].provider_name,
+                      label: json.providers[i].provider_name,
+                    }
+                    $currentProviders = [...new Set([...$currentProviders, item])]
+                  }
+                }
+              }}>Apply my providers</button
+            >
+            <br />
+          {/if}
           <button
             class="btn btn-xs {filterAmount ? 'btn-primary' : 'btn-disabled'}"
             on:click={() => {
