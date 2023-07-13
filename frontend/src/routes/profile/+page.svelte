@@ -337,19 +337,41 @@
           </div>
 
           <div class="flex justify-center">
-            <button
-              class="btn btn-error"
-              on:click={async () => {
-                await deleteCustomList(list.id)
-                for (let i = 0; i < customLists.custom_lists.length; i++) {
-                  if (list.id == customLists.custom_lists[i].id) {
-                    customLists.custom_lists = customLists.custom_lists
-                      .slice(0, i)
-                      .concat(customLists.custom_lists.slice(i + 1))
-                  }
-                }
-              }}>Delete {list.name}</button
-            >
+            <label for="delete-modal" class="btn btn-error">Delete {list.name}</label>
+
+            <input type="checkbox" id="delete-modal" class="modal-toggle" />
+            <label for="delete-modal" class="modal cursor-pointer">
+              <label class="modal-box relative" for="">
+                <label
+                  for="delete-modal"
+                  class="btn btn-sm btn-circle absolute right-2 top-2">✕</label
+                >
+                <h3 class="text-lg font-bold">
+                  Are you sure you want to delete {list.name}?
+                </h3>
+                <p class="py-4">
+                  This cannot be undone, and will also remove the {customLists
+                    .custom_lists[index].media.length} media elements inside the list.
+                </p>
+                <div class="modal-action">
+                  <label for="delete-modal">
+                    <button
+                      class="btn btn-error"
+                      on:click={async () => {
+                        await deleteCustomList(list.id)
+                        for (let i = 0; i < customLists.custom_lists.length; i++) {
+                          if (list.id == customLists.custom_lists[i].id) {
+                            customLists.custom_lists = customLists.custom_lists
+                              .slice(0, i)
+                              .concat(customLists.custom_lists.slice(i + 1))
+                          }
+                        }
+                      }}>Delete</button
+                    >
+                  </label>
+                </div>
+              </label>
+            </label>
           </div>
         </div>
       </div>
