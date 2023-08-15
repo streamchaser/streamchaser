@@ -17,4 +17,5 @@ jobs:
           PUBLIC_ENV=test"
           echo "$variables" > .env
           yarn install
+          npx playwright install
           yarn test
