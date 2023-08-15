@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snapshot } from "./$types"
   import { calculateAmountOfShownItems, hitProviderAmounts } from "$lib/utils"
   import { PYTHON_API } from "$lib/variables.js"
   import Select from "svelte-select"
@@ -29,6 +30,20 @@
   let viewPortWidth: number
   let currentMediaAmount: number
   let mediaStartAmount: number
+
+  let scrollAmount = 0
+
+  export const snapshot: Snapshot = {
+    capture() {
+      return { scrollY: window.scrollY }
+    },
+    restore({ scrollY, currentMediaAmount }) {
+      mediaStartAmount = currentMediaAmount
+      scrollAmount = scrollY
+      console.log(meilisearch)
+      console.log(scrollAmount)
+    },
+  }
 
   const setViewportToDefault = () => {
     viewPortWidth = window.visualViewport.width
@@ -149,14 +164,14 @@
 
 <Head title="streamchaser" />
 
-<div class="bg-neutral shadow-md card pb-2 pt-6 px-2 sm:px-6">
+<div class="px-2 pt-6 pb-2 shadow-md sm:px-6 bg-neutral card">
   <div class="flex justify-between">
     <!-- svelte-ignore a11y-autofocus -->
     <input
       id="input-field"
       type="text"
       placeholder="Search in {$currentCountry}"
-      class="input input-bordered input-primary grow min-w-0 hover:border-primary-focus"
+      class="min-w-0 input input-bordered input-primary grow hover:border-primary-focus"
       bind:value={input}
       on:input={search}
       autofocus={viewPortWidth > 640}
@@ -164,7 +179,7 @@
     <Filters {search} />
   </div>
   <div
-    class="sm:grid sm:grid-cols-2 sm:gap-2 mt-2 mb-3"
+    class="mt-2 mb-3 sm:grid sm:grid-cols-2 sm:gap-2"
     style="
              --borderRadius: var(--rounded-btn, .5rem);
              --background: hsl(var(--b1));
