@@ -5,3 +5,6 @@ set {
     insert CustomList { name := <str>$list_name }
   )
 };
+select User {
+  custom_lists
+}

@@ -2,14 +2,20 @@
   import { fade } from "svelte/transition"
   import { mediaIdToUrlConverter, uniqueProviders } from "$lib/utils"
   import { currentCountry } from "$lib/stores/preferences"
-  import { IMG_ORIGINAL, IMG_W342 } from "$lib/variables"
+  import { IMG_ORIGINAL, IMG_W342, PYTHON_API } from "$lib/variables"
   import type { Hit } from "$lib/generated"
+  import { auth } from "$lib/stores/stores"
 
   const SHOWN_PROVIDERS: number = 5
 
   export let providerAmounts: number[]
   export let mediaIndex: number
   export let media: Hit
+
+  export let deleteButton = false
+  export let mediaList: Hit[] = undefined
+  export let listId: number = undefined
+  export let listType = ""
 
   const combineProviders = (media: Hit) => {
     const providers = []
@@ -30,7 +36,53 @@
     }
     return uniqueProviders(providers)
   }
+
+  const deleteMediaFromList = async () => {
+    let url = PYTHON_API + "/" + listType
+
+    if (listType == "custom_lists") {
+      url += "/" + listId + "?streamchaser_id=" + media.id + "&encoded_jwt=" + $auth
+    } else {
+      url += "?streamchaser_id=" + media.id + "&encoded_jwt=" + $auth
+    }
+
+    const res = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    if (res.status == 498) {
+      $auth = ""
+    } else if (res.ok) {
+      mediaList = mediaList.filter((i: Hit) => i.id != media.id)
+    }
+  }
 </script>
+
+{#if deleteButton}
+  <button
+    class="absolute -mt-2 -ml-2 btn btn-circle btn-xs btn-error z-10"
+    on:click={async () => {
+      await deleteMediaFromList()
+    }}
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      ><path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      /></svg
+    >
+  </button>
+{/if}
 
 <a
   in:fade

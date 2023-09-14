@@ -168,6 +168,12 @@ class UpdateCustomListAddResult(NoPydanticValidation):
     id: uuid.UUID
 
 
+@dataclasses.dataclass
+class UpdateUserCustomListsAddResult(NoPydanticValidation):
+    id: uuid.UUID
+    custom_lists: list[UpdateCustomListAddResult]
+
+
 async def insert_countries(
     executor: edgedb.AsyncIOExecutor,
     *,
@@ -536,8 +542,8 @@ async def update_user_custom_lists_add(
     *,
     email: str,
     list_name: str,
-) -> InsertUserResult | None:
-    return await executor.query_single(
+) -> list[UpdateUserCustomListsAddResult]:
+    return await executor.query(
         """\
         update User
         filter .email = <str>$email
@@ -545,7 +551,10 @@ async def update_user_custom_lists_add(
            custom_lists += (
             insert CustomList { name := <str>$list_name }
           )
-        };\
+        };
+        select User {
+          custom_lists
+        }\
         """,
         email=email,
         list_name=list_name,
