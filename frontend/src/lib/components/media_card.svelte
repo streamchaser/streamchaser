@@ -1,9 +1,12 @@
 <script lang="ts">
   import { fade } from "svelte/transition"
+  import { page } from "$app/stores"
   import { mediaIdToUrlConverter, uniqueProviders } from "$lib/utils"
-  import { currentCountry } from "$lib/stores/preferences"
+  import { currentCountry, filters, sorting } from "$lib/stores/preferences"
   import { IMG_ORIGINAL, IMG_W342 } from "$lib/variables"
   import type { Hit } from "$lib/generated"
+
+  console.log($page)
 
   const SHOWN_PROVIDERS: number = 5
 
@@ -58,7 +61,15 @@
   {/if}
   {#if media.imdb_rating}
     <div class="absolute top-0 left-0 mx-1 -ml-1 opacity-85">
-      <div class="badge badge-sm rounded-l-none"><b>★&nbsp;</b>{media.imdb_rating}</div>
+      <div
+        class="badge badge-sm rounded-l-none {($filters.minImdb ||
+          $sorting.by.imdbRating) &&
+        $page.url.pathname == '/'
+          ? 'ring-1 ring-primary'
+          : ''}"
+      >
+        <b>★&nbsp;</b>{media.imdb_rating}
+      </div>
     </div>
   {/if}
   {#if media.id.charAt(0) == "t"}
@@ -67,7 +78,15 @@
         ? 'mt-5'
         : 'mt-1'}"
     >
-      <div class="badge badge-sm rounded-l-none">TV</div>
+      <div
+        class="badge badge-sm rounded-l-none {$filters.tvChecked &&
+        !$filters.movieChecked &&
+        $page.url.pathname == '/'
+          ? 'ring-1 ring-primary'
+          : ''}"
+      >
+        TV
+      </div>
     </div>
   {/if}
   {#if providerAmounts[mediaIndex] === 0}
