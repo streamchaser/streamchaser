@@ -1,26 +1,26 @@
 ### BASE ###
-FROM node:16-alpine as base
+FROM oven/bun:1.0 as base
 
 # Install git
-RUN apk add --no-cache git
+# RUN apk add --no-cache git
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-
-RUN yarn --frozen-lockfile && yarn cache clean
-
+# COPY package.json bun.lockb ./
 COPY . .
+# RUN yarn --frozen-lockfile && yarn cache clean
+RUN bun install
+
 
 ### PROD ###
 FROM base as prod
 
-RUN yarn build
+RUN bun run build
 
-CMD node ./build/
+CMD bun ./build/index.js
 
 ### DEV ###
 FROM base as dev
 
 RUN echo "Starting the frontend as development"
-CMD yarn dev --host
+CMD bun dev
