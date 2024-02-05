@@ -70,13 +70,15 @@ def add_imdb_ratings(min_votes: int = 50):
     typer.echo("Adding ratings to meilisearch...")
 
     imdb_media = [
-        {
-            "id": media.id,
-            "imdb_rating": float(imdb_ratings[media.imdb_id].get("rating")),
-        }
-        if imdb_ratings.get(media.imdb_id)
-        and int(imdb_ratings[media.imdb_id]["votes"]) >= min_votes
-        else {"id": media.id, "imdb_rating": None}
+        (
+            {
+                "id": media.id,
+                "imdb_rating": float(imdb_ratings[media.imdb_id].get("rating")),
+            }
+            if imdb_ratings.get(media.imdb_id)
+            and int(imdb_ratings[media.imdb_id]["votes"]) >= min_votes
+            else {"id": media.id, "imdb_rating": None}
+        )
         for media in all_media.results
     ]
 
@@ -173,9 +175,9 @@ async def create_sitemap(sitemap_size: int = 49000):
 
     for i in range(count):
         doc = ET.SubElement(root, "sitemap")
-        ET.SubElement(
-            doc, "loc"
-        ).text = f"https://api.streamchaser.tv/static/sitemap{i+1}.xml"
+        ET.SubElement(doc, "loc").text = (
+            f"https://api.streamchaser.tv/static/sitemap{i+1}.xml"
+        )
 
     tree = ET.ElementTree(root)
     tree.write("./static/sitemap_index.xml", encoding="utf-8", xml_declaration=True)
