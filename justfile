@@ -19,7 +19,7 @@ generate password:
   cd backend/ && poetry run edgedb-py -P 5656 --tls-security insecure --user edgedb --password {{password}} --file app/db/queries/generated.py && black app/db/queries/generated.py && cd ../
 
 generate-types:
-  cd frontend && npx openapi-typescript-codegen --input http://api.localhost/openapi.json  --exportCore false --exportServices false --indent 2 --output ./src/lib/generated/ && yarn format
+  cd frontend && npx openapi-typescript-codegen --input http://api.localhost/openapi.json  --exportCore false --exportServices false --indent 2 --output ./src/lib/generated/ && bun format
 
 shell:
   cd backend/ && poetry shell && cd ../
