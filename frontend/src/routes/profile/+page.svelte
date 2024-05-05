@@ -115,6 +115,11 @@
   }
 
   const getMedia = async (idArray: any[], listType: string, listName: string = "") => {
+    // If no ids dont continue
+    if (!idArray.length) {
+      return
+    }
+
     let idString = ""
 
     for (let i = 0; i < idArray.length; i++) {
@@ -157,6 +162,8 @@
         This page is yours, and you will be able to create personal lists, choose your
         providers, and more.
       </p>
+      <br />
+      <p>This is currently in beta, and more features will be added down the line.</p>
     </div>
   </div>
 </div>
