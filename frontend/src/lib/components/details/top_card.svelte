@@ -2,7 +2,7 @@
   import ReadMore from "$lib/components/details/read_more.svelte"
   import { page } from "$app/stores"
   import { lookupSingleMedia, uniqueProviders } from "$lib/utils"
-  import { currentCountry, currentGenres, inputQuery } from "$lib/stores/preferences"
+  import { currentCountry, currentGenres } from "$lib/stores/preferences"
   import { IMG_ORIGINAL, IMG_W1280, IMG_W500 } from "$lib/variables"
   import type { Provider, Genre } from "$lib/generated"
 
@@ -29,7 +29,6 @@
     $currentGenres = [
       { label: genre.label, value: genre.value.replace(" & ", "%20%26%20") },
     ]
-    $inputQuery = ""
     window.location.href = "/"
   }
 

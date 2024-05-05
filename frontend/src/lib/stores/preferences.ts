@@ -90,11 +90,3 @@ confirmedCountry.subscribe(value => {
     localStorage.confirmedCountry = String(value)
   }
 })
-
-export const inputQuery = writable<string>((browser && sessionStorage.inputQuery) || "")
-
-inputQuery.subscribe(value => {
-  if (browser) {
-    sessionStorage.inputQuery = value
-  }
-})

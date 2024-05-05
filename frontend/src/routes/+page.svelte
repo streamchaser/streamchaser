@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Snapshot } from "./$types"
   import { calculateAmountOfShownItems, hitProviderAmounts } from "$lib/utils"
   import { PYTHON_API } from "$lib/variables.js"
   import Select from "svelte-select"
@@ -10,14 +11,12 @@
     currentCountry,
     currentProviders,
     currentGenres,
-    inputQuery,
     filters,
     sorting,
   } from "$lib/stores/preferences"
-  import { onMount } from "svelte"
   import type { Meilisearch } from "$lib/generated"
   import type { PageData } from "./$types"
-  import { invalidateAll } from "$app/navigation"
+  import { afterNavigate, invalidateAll } from "$app/navigation"
   import { browser } from "$app/environment"
 
   export let data: PageData
@@ -49,6 +48,13 @@
     if (!currentMediaAmount) {
       setViewportToDefault()
     }
+
+    if (isSnapshotLoad) {
+      isSnapshotLoad = false
+      return
+    }
+
+    console.log("search called")
 
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
@@ -105,7 +111,6 @@
         `&limit=${currentMediaAmount}`
     )
 
-    $inputQuery = input
     meilisearch = await res.json()
     providerAmounts = hitProviderAmounts(meilisearch.hits, $currentCountry)
   }
@@ -125,27 +130,51 @@
     $currentProviders = selectedProviders
   }
 
-  // Invalidates data (refetched) when the country changes
-  // The browser check is because of the messy viewport logic
-  $: if ($currentCountry && browser) {
-    setViewportToDefault() // TODO: There must be a nicer way
-    invalidateAll()
-    search()
+  let isSnapshotLoad = false
+  export const snapshot: Snapshot = {
+    capture() {
+      console.log("capturing")
+      console.log(scrollY)
+      console.log(meilisearch.hits.length)
+      return {
+        scrollY: scrollY,
+        mediaCount: currentMediaAmount,
+        providerCount: providerAmounts,
+        medias: meilisearch,
+        prevInput: input,
+      }
+    },
+    restore({ scrollY, mediaCount, providerCount, medias, prevInput }) {
+      console.log("restoring")
+      currentMediaAmount = mediaCount
+      meilisearch = medias
+      input = prevInput
+      providerAmounts = providerCount
+      isSnapshotLoad = true
+
+      console.log(scrollY)
+      console.log(medias)
+      console.log(medias.hits.length)
+      console.log(prevInput)
+
+      setTimeout(() => {
+        console.log("scrollTo called: " + scrollY)
+        scrollTo(0, scrollY)
+      }, 0)
+    },
   }
 
-  onMount(async () => {
-    const inputField = document.getElementById("input-field") as HTMLInputElement
-
-    setTimeout(() => {
-      inputField.select()
-    }, 20)
-
-    if ($inputQuery) {
-      input = $inputQuery
+  // Invalidates data (refetched) when the country changes
+  // The browser check is because of the messy viewport logic
+  $: if ($currentCountry) {
+    if (browser) {
+      setViewportToDefault() // TODO: There must be a nicer way
+      invalidateAll()
+      afterNavigate(() => {
+        search()
+      })
     }
-
-    await search()
-  })
+  }
 </script>
 
 <Head title="streamchaser" />
