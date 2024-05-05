@@ -98,7 +98,7 @@ func processMedia(c *gin.Context) {
 			failedMedia++
 			continue
 		}
-		if movie.Popularity > 1 {
+		if movie.Popularity > 1 && movie.PosterPath != "" {
 			medias = append(medias, *movie.toMedia())
 		}
 	}
@@ -108,7 +108,7 @@ func processMedia(c *gin.Context) {
 			failedMedia++
 			continue
 		}
-		if tv.Popularity > 1 {
+		if tv.Popularity > 1 && tv.PosterPath != "" {
 			medias = append(medias, *tv.toMedia())
 		}
 	}
@@ -119,7 +119,7 @@ func processMedia(c *gin.Context) {
 			continue
 		}
 		// HACK: We let less people through since there's so many and we are getting throttled
-		if person.Popularity > 3 {
+		if person.Popularity > 3 && person.ProfilePath != "" {
 			medias = append(medias, *person.toMedia())
 		}
 	}
