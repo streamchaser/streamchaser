@@ -7,17 +7,15 @@
     "Tired of not knowing where to watch that one movie? Streamchaser helps you keep track of where you can watch your favorite movies and TV series, through our optimized search engine. Search by streaming service or genre for even quicker results!"
   export let images: string[] = [`${STATIC_FILES}/main_logo_light_bg.png`]
   export let type = "video.other"
+
+  let isFrontOrFaq = title == "streamchaser" || "Faq"
+  let descriptionContent = `Where to watch and stream ${title} - streamchaser`
 </script>
 
 <svelte:head>
   <!-- HTML tags -->
   <title>{title == "streamchaser" ? title : title + " - streamchaser"}</title>
-  <meta
-    name="description"
-    content={title == "streamchaser" || "Faq"
-      ? description
-      : `Where to watch and stream ${title} - streamchaser`}
-  />
+  <meta name="description" content={isFrontOrFaq ? description : descriptionContent} />
 
   <!-- Facebook OG tags -->
   <meta property="og:type" content={type} />
@@ -25,9 +23,7 @@
   <meta property="og:title" content={title} />
   <meta
     property="og:description"
-    content={title == "streamchaser" || "Faq"
-      ? description
-      : `Where to watch and stream ${title} - streamchaser`}
+    content={isFrontOrFaq ? description : descriptionContent}
   />
   {#each images as image}
     <meta property="og:image" content={image} />
@@ -41,9 +37,8 @@
   <meta name="twitter:title" content={title} />
   <meta
     name="twitter:description"
-    content={title == "streamchaser" || "Faq"
-      ? description
-      : `Where to watch and stream ${title} - streamchaser`}
+    content={isFrontOrFaq ? description : descriptionContent}
+  />
   />
   {#each images as image}
     <meta name="twitter:image" content={image} />
