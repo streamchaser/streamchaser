@@ -54,8 +54,6 @@
       return
     }
 
-    console.log("search called")
-
     // Builds the optional query for genres
     // Example: "?g=Action&g=Comedy&g=Drama"
     let query = ""
@@ -133,9 +131,6 @@
   let isSnapshotLoad = false
   export const snapshot: Snapshot = {
     capture() {
-      console.log("capturing")
-      console.log(scrollY)
-      console.log(meilisearch.hits.length)
       return {
         scrollY: scrollY,
         mediaCount: currentMediaAmount,
@@ -145,20 +140,13 @@
       }
     },
     restore({ scrollY, mediaCount, providerCount, medias, prevInput }) {
-      console.log("restoring")
       currentMediaAmount = mediaCount
       meilisearch = medias
       input = prevInput
       providerAmounts = providerCount
       isSnapshotLoad = true
 
-      console.log(scrollY)
-      console.log(medias)
-      console.log(medias.hits.length)
-      console.log(prevInput)
-
       setTimeout(() => {
-        console.log("scrollTo called: " + scrollY)
         scrollTo(0, scrollY)
       }, 0)
     },
