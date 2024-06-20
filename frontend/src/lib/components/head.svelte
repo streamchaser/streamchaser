@@ -12,13 +12,23 @@
 <svelte:head>
   <!-- HTML tags -->
   <title>{title == "streamchaser" ? title : title + " - streamchaser"}</title>
-  <meta name="description" content={description} />
+  <meta
+    name="description"
+    content={title == "streamchaser" || "Faq"
+      ? description
+      : `Where to watch and stream ${title} - streamchaser`}
+  />
 
   <!-- Facebook OG tags -->
   <meta property="og:type" content={type} />
   <meta property="og:site_name" content="streamchaser" />
   <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
+  <meta
+    property="og:description"
+    content={title == "streamchaser" || "Faq"
+      ? description
+      : `Where to watch and stream ${title} - streamchaser`}
+  />
   {#each images as image}
     <meta property="og:image" content={image} />
   {/each}
@@ -29,7 +39,12 @@
   <meta property="twitter:domain" content="streamchaser.tv" />
   <meta property="twitter:url" content={$page.url.href} />
   <meta name="twitter:title" content={title} />
-  <meta name="twitter:description" content={description} />
+  <meta
+    name="twitter:description"
+    content={title == "streamchaser" || "Faq"
+      ? description
+      : `Where to watch and stream ${title} - streamchaser`}
+  />
   {#each images as image}
     <meta name="twitter:image" content={image} />
   {/each}
