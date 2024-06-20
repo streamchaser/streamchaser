@@ -39,7 +39,6 @@
     name="twitter:description"
     content={isFrontOrFaq ? description : descriptionContent}
   />
-  />
   {#each images as image}
     <meta name="twitter:image" content={image} />
   {/each}
