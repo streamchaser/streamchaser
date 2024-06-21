@@ -149,7 +149,7 @@
 
   // To make sure that the snapshot loads before trying to fetch data
   setTimeout(() => {
-    if (!isSnapshotLoad) {
+    if (!isSnapshotLoad && browser) {
       search()
       isSnapshotLoad = false
     }
