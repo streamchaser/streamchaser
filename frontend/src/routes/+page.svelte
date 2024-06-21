@@ -16,7 +16,7 @@
   } from "$lib/stores/preferences"
   import type { Meilisearch } from "$lib/generated"
   import type { PageData } from "./$types"
-  import { afterNavigate, invalidateAll } from "$app/navigation"
+  import { invalidateAll } from "$app/navigation"
   import { browser } from "$app/environment"
 
   export let data: PageData
@@ -47,11 +47,6 @@
   const search = async () => {
     if (!currentMediaAmount) {
       setViewportToDefault()
-    }
-
-    if (isSnapshotLoad) {
-      isSnapshotLoad = false
-      return
     }
 
     // Builds the optional query for genres
@@ -152,15 +147,24 @@
     },
   }
 
+  // To make sure that the snapshot loads before trying to fetch data
+  setTimeout(() => {
+    if (!isSnapshotLoad) {
+      search()
+      isSnapshotLoad = false
+    }
+  }, 50)
+
   // Invalidates data (refetched) when the country changes
   // The browser check is because of the messy viewport logic
-  $: if ($currentCountry) {
-    if (browser) {
-      setViewportToDefault() // TODO: There must be a nicer way
+  let previousCountry = $currentCountry
+  $: if ($currentCountry && browser) {
+    // Only search if the country changed
+    if (previousCountry != $currentCountry) {
       invalidateAll()
-      afterNavigate(() => {
-        search()
-      })
+      setViewportToDefault()
+      search()
+      previousCountry = $currentCountry
     }
   }
 </script>
