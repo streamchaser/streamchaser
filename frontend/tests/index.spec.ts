@@ -12,7 +12,7 @@ test("page loads", async ({ page }) => {
 })
 test("test go to movie", async ({ page }) => {
   await mockIndex(page)
-  await page.route(/http:\/\/api.localhost\/search\/Harry%20p\?c=DK&limit=.*/, route =>
+  await page.route(/http:\/\/api.localhost\/search\/Harry%20p\?c=US&limit=.*/, route =>
     route.fulfill({
       status: 200,
       path: "tests/test_data/harry_p_hits.json",

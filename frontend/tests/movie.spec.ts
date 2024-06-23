@@ -8,7 +8,7 @@ test("test movie detail", async ({ page }) => {
     })
   )
 
-  await page.route("http://api.localhost/movie/DK/674", route =>
+  await page.route("http://api.localhost/movie/US/674", route =>
     route.fulfill({
       status: 200,
       path: "tests/test_data/m674_moviedetail.json",
