@@ -6,7 +6,7 @@
       "poster_path": "/sdEOH0992YZ0QSxgXNIGLq1ToUi.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -31,7 +31,7 @@
       "poster_path": "/wuMc08IPKEatf9rnMNXvIDxqP4W.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -56,7 +56,7 @@
       "poster_path": "/z7uo9zmQdQwU5ZJHFpv2Upl30i1.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -81,7 +81,7 @@
       "poster_path": "/fECBtHlr0RB3foNHDiCBXeg9Bv9.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -106,7 +106,7 @@
       "poster_path": "/aWxwnYoe8p2d2fcxOqtvAtJ72Rw.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -131,7 +131,7 @@
       "poster_path": "/c54HpQmuwXjHq2C9wmoACjxoom3.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -156,7 +156,7 @@
       "poster_path": "/iGoXIpQb7Pot00EEdwpwPajheZ5.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -181,7 +181,7 @@
       "poster_path": "/5aOyriWkPec0zUDxmHFP9qMmBaj.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -206,7 +206,7 @@
       "poster_path": "/jntLBq0MLR3hrwKaTQswxACRPMs.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -225,7 +225,7 @@
       "poster_path": "/nxbQLpCm78w5UHOyLrnkFJVCY7p.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "Netflix",
@@ -244,7 +244,7 @@
       "poster_path": "/tEHHfzqHnfNJUp4L30wQeYl2xRo.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "HBO Max",
@@ -275,7 +275,7 @@
       "poster_path": "/3wkbKeowUp1Zpkw1KkBqMWbt0P9.jpg",
       "providers": {
         "results": {
-          "DK": {
+          "US": {
             "flatrate": [
               {
                 "provider_name": "C More",
@@ -300,7 +300,7 @@
       "poster_path": "/cmQuj67qbijnC9dAQZf8x4X1KEr.jpg",
       "providers": {
         "results": {
-          "DK": {}
+          "US": {}
         }
       }
     },
@@ -322,7 +322,7 @@
       "poster_path": "/l0W85fpnsfnpLSSF3D6bKKlH1dD.jpg",
       "providers": {
         "results": {
-          "DK": {}
+          "US": {}
         }
       }
     },
@@ -338,7 +338,7 @@
       "poster_path": "/mqwGpW0Ptrvz1GmfCnLAOA4cQ8g.jpg",
       "providers": {
         "results": {
-          "DK": {}
+          "US": {}
         }
       }
     }

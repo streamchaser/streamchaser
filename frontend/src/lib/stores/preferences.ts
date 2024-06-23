@@ -72,7 +72,7 @@ export const chosenTheme = writable<string>(
 export const currentCountry = writable<string>(
   (browser && localStorage.currentCountry) ||
     (browser && sessionStorage.currentCountry) ||
-    "DK"
+    "US"
 )
 
 currentCountry.subscribe(value => {
