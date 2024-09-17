@@ -154,3 +154,5 @@ export const parseJwt = (token: string) => {
   )
   return JSON.parse(jsonPayload)
 }
+
+export const sleep = async (ms: number) => await new Promise(r => setTimeout(r, ms))

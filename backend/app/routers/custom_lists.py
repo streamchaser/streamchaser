@@ -45,7 +45,7 @@ async def delete_custom_list(id: uuid.UUID, auth: GoogleAuth = Depends(decode_jw
     return await update_user_custom_lists_remove(db_client, email=auth.email, id=id)
 
 
-@router.post("{streamchaser_id}", response_model=UpdateCustomListAddResult | None)
+@router.post("/{list_id}", response_model=UpdateCustomListAddResult | None)
 async def post_media_to_custom_list(
     list_id: uuid.UUID, streamchaser_id: str, _: GoogleAuth = Depends(decode_jwt)
 ):
@@ -56,7 +56,7 @@ async def post_media_to_custom_list(
     )
 
 
-@router.delete("{streamchaser_id}", response_model=UpdateCustomListAddResult | None)
+@router.delete("/{list_id}", response_model=UpdateCustomListAddResult | None)
 async def delete_media_from_custom_list(
     list_id: uuid.UUID, streamchaser_id: str, _: GoogleAuth = Depends(decode_jwt)
 ):
