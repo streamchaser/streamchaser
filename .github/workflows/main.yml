@@ -17,6 +17,6 @@ jobs:
           echo "APP_ENVIRONMENT=prod" > .env
           docker network create traefik
           docker network create prometheus
-          docker-compose build
+          docker compose build
       - name: Run test suite
-        run: docker-compose run backend pytest -v tests
+        run: docker compose run backend pytest -v tests

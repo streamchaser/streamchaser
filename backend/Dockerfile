@@ -6,6 +6,7 @@ FROM python:3.11 as base
 WORKDIR /app
 
 RUN pip install poetry --no-cache-dir
+RUN pip install poetry-plugin-export --no-cache-dir
 COPY pyproject.toml poetry.lock* /app/
 
 EXPOSE 80
