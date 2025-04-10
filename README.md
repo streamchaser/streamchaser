@@ -35,10 +35,11 @@ Here's how to get the application up and running for development
 - Frontend:
   - `VITE_API_PATH=http://api.localhost`
 
-3. Build the container `docker-compose up --build -d`
-4. Run `docker-compose exec backend python3 cli.py full-setup --first-time --popularity <1-1000>`(the more the less amount of media)
-5. Go to http://localhost/ and search
-6. Optional: `docker-compose stop frontend && cd frontend && yarn dev` and go to http://localhost:3000 - Our workaround for hot-reloading
+3. Create Docker network `docker network create traefik`
+4. Build the container `docker-compose up --build -d`
+5. Run `docker-compose exec backend python3 cli.py full-setup --popularity <1-1000>`(the more the less amount of media)
+6. Go to http://localhost/ and search
+7. Optional: `docker-compose stop frontend && cd frontend && yarn dev` and go to http://localhost:3000 - Our workaround for hot-reloading
 
 # CLI
 
