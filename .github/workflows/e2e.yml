@@ -16,6 +16,6 @@ jobs:
           variables="VITE_API_PATH=http://api.localhost
           PUBLIC_ENV=test"
           echo "$variables" > .env
-          yarn install
+          bun install
           npx playwright install
-          yarn test
+          bun test
