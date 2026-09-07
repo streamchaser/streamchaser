@@ -67,12 +67,14 @@ async def insert_providers_with_links():
 
 def fix_genre_ampersand(genres: dict) -> list[dict]:
     fixed_genres = [
-        Genre(
-            label=genre,
-            value=genre.replace(" & ", "%20%26%20"),
-        ).dict()
-        if " & " in genre
-        else Genre(label=genre, value=genre).dict()
+        (
+            Genre(
+                label=genre,
+                value=genre.replace(" & ", "%20%26%20"),
+            ).dict()
+            if " & " in genre
+            else Genre(label=genre, value=genre).dict()
+        )
         for genre in genres.values()
     ]
 
