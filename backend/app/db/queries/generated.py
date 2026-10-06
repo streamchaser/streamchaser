@@ -93,8 +93,7 @@ class SelectCountryProvidersResultProvidersItem(NoPydanticValidation):
     provider_name: str
 
     @typing.overload
-    def __getitem__(self, key: typing.Literal["@display_priority"]) -> int | None:
-        ...
+    def __getitem__(self, key: typing.Literal["@display_priority"]) -> int | None: ...
 
     def __getitem__(self, key: str) -> typing.Any:
         raise NotImplementedError
